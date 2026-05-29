@@ -1,0 +1,90 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Primitives
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(ownerId) { return isSignedIn() && request.auth.token.email_verified == true && ownerId == request.auth.uid; }
+
+    // Validation definitions
+    function isValidSite(data) {
+      return data.keys().hasAll(['ownerId', 'name', 'url', 'status'])
+        && data.ownerId is string && data.ownerId.size() <= 128 && data.ownerId == request.auth.uid
+        && data.name is string && data.name.size() <= 128
+        && data.url is string && data.url.size() <= 128
+        && data.status is string && data.status.size() <= 32
+        && data.get('templateKey', '') is string
+        && data.get('previewUrl', '') is string
+        && data.get('createdAt', request.time) == request.time
+        && data.get('updatedAt', request.time) == request.time;
+    }
+
+    function isValidGlobalSettings(data) {
+      return data.keys().hasAll(['ownerId', 'businessName'])
+        && data.ownerId is string && data.ownerId == request.auth.uid
+        && data.businessName is string && data.businessName.size() <= 128
+        && data.get('supportEmail', '') is string
+        && data.get('defaultSeoDescription', '') is string
+        && data.get('updatedAt', request.time) == request.time;
+    }
+
+    function isValidMediaFile(data) {
+      return data.keys().hasAll(['ownerId', 'url', 'type'])
+        && data.ownerId is string && data.ownerId == request.auth.uid
+        && data.url is string && data.url.size() <= 1024
+        && data.type is string && data.type in ['image', 'video', 'doc']
+        && data.get('name', '') is string && data.get('name', '').size() <= 128
+        && data.get('createdAt', request.time) == request.time;
+    }
+
+    // Paths
+    match /sites/{siteId} {
+      allow get: if isOwner(existing().ownerId);
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isOwner(incoming().ownerId) && isValidId(siteId) && isValidSite(incoming());
+      allow update: if isOwner(existing().ownerId) 
+        && isOwner(incoming().ownerId)
+        && incoming().ownerId == existing().ownerId
+        && isValidSite(incoming())
+        && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'url', 'status', 'templateKey', 'previewUrl', 'updatedAt']);
+      allow delete: if isOwner(existing().ownerId);
+
+      match /cms/globalSettings {
+        // Relational Parent check not necessary because we restrict by ownerId inside globalSettings
+        allow get: if isOwner(existing().ownerId);
+        allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+        allow create: if isOwner(incoming().ownerId) && isValidGlobalSettings(incoming())
+          && exists(/databases/$(database)/documents/sites/$(siteId))
+          && get(/databases/$(database)/documents/sites/$(siteId)).data.ownerId == request.auth.uid;
+        allow update: if isOwner(existing().ownerId) && isOwner(incoming().ownerId)
+          && incoming().ownerId == existing().ownerId
+          && isValidGlobalSettings(incoming())
+          && incoming().diff(existing()).affectedKeys().hasOnly(['businessName', 'supportEmail', 'defaultSeoDescription', 'updatedAt']);
+        allow delete: if isOwner(existing().ownerId);
+      }
+
+      match /media/{mediaId} {
+        allow get: if isOwner(existing().ownerId);
+        allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+        allow create: if isOwner(incoming().ownerId) && isValidId(mediaId) && isValidMediaFile(incoming())
+          && exists(/databases/$(database)/documents/sites/$(siteId))
+          && get(/databases/$(database)/documents/sites/$(siteId)).data.ownerId == request.auth.uid;
+        allow update: if isOwner(existing().ownerId) && isOwner(incoming().ownerId)
+          && incoming().ownerId == existing().ownerId
+          && isValidMediaFile(incoming())
+          && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'url', 'type']);
+        allow delete: if isOwner(existing().ownerId);
+      }
+    }
+  }
+}

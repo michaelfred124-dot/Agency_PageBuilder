@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "site": {
+      "title": "Site",
+      "description": "User's website",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "url": { "type": "string" },
+        "status": { "type": "string" },
+        "templateKey": { "type": "string" },
+        "previewUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name", "url", "status"]
+    },
+    "globalSettings": {
+      "title": "Global Settings",
+      "description": "Global settings for a specific site CMS",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "businessName": { "type": "string" },
+        "supportEmail": { "type": "string" },
+        "defaultSeoDescription": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "businessName"]
+    },
+    "mediaFile": {
+      "title": "Media File",
+      "description": "Uploaded media for a specific site",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "url": { "type": "string" },
+        "type": { "type": "string", "enum": ["image", "video", "doc"] },
+        "name": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "url", "type"]
+    }
+  },
+  "firestore": {
+    "sites/{siteId}": {
+      "schema": "site",
+      "description": "User websites"
+    },
+    "sites/{siteId}/cms/globalSettings": {
+      "schema": "globalSettings",
+      "description": "CMS settings for the site"
+    },
+    "sites/{siteId}/media/{mediaId}": {
+      "schema": "mediaFile",
+      "description": "Media library for a site"
+    }
+  }
+}
