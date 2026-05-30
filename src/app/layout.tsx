@@ -14,18 +14,25 @@ export default function RootLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    const supabase = getSupabaseBrowserClient();
-    if (typeof window !== 'undefined' && localStorage.getItem('auth_flush_v3') !== 'true') {
-      supabase.auth.signOut().then(() => {
-        // Clear all cookies to wipe stale session remnants
-        document.cookie.split(";").forEach((c) => {
-          document.cookie = c
-            .replace(/^ +/, "")
-            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    try {
+      const supabase = getSupabaseBrowserClient();
+      if (typeof window !== 'undefined' && localStorage.getItem('auth_flush_v3') !== 'true') {
+        supabase.auth.signOut().then(() => {
+          // Clear all cookies to wipe stale session remnants
+          document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+              .replace(/^ +/, "")
+              .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+          });
+          localStorage.setItem('auth_flush_v3', 'true');
+          window.location.reload();
+        }).catch((err) => {
+          console.error("Signout error during flush:", err);
+          localStorage.setItem('auth_flush_v3', 'true');
         });
-        localStorage.setItem('auth_flush_v3', 'true');
-        window.location.reload();
-      });
+      }
+    } catch (err) {
+      console.error("Supabase client init or signout failed:", err);
     }
   }, []);
   
