@@ -989,7 +989,7 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
           textAlign: 'left',
           marginTop: '0px',
           marginBottom: '12px'
-        }
+        } as any
       };
       
       if (cleanElType === 'Container') {

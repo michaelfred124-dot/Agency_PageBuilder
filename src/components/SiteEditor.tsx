@@ -176,8 +176,8 @@ const CATEGORIES = [
 ];
 
 // Helper component to render a live thumbnail preview of a block
-function BlockPreview({ type }: { type: ComponentType }) {
-  const Renderer = Renderers[type];
+function BlockPreview({ type }: { type: ComponentType | string }) {
+  const Renderer = Renderers[type as ComponentType];
   const defaultProps = COMPONENT_SCHEMAS[type]?.defaultProps || {};
 
   if (!Renderer) return null;
@@ -199,7 +199,7 @@ function BlockPreview({ type }: { type: ComponentType }) {
 }
 
 // Draggable Sidebar Item for adding blocks
-function DraggableBlockItem({ type, description, onClick }: { type: ComponentType; description: string; onClick: () => void }) {
+function DraggableBlockItem({ type, description, onClick }: { type: ComponentType | string; description: string; onClick: () => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `new-block-${type}`,
     data: {
