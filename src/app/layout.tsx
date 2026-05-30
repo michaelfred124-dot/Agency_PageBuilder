@@ -1,8 +1,10 @@
 "use client";
 import './globals.css';
+import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { getSupabaseBrowserClient } from '@/lib/supabase';
 
 export default function RootLayout({
   children,
@@ -10,6 +12,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+
+  useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
+    if (typeof window !== 'undefined' && localStorage.getItem('auth_flush_v3') !== 'true') {
+      supabase.auth.signOut().then(() => {
+        // Clear all cookies to wipe stale session remnants
+        document.cookie.split(";").forEach((c) => {
+          document.cookie = c
+            .replace(/^ +/, "")
+            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        localStorage.setItem('auth_flush_v3', 'true');
+        window.location.reload();
+      });
+    }
+  }, []);
   
   const isTemplatePage = pathname?.startsWith('/work/');
   const isDashboardPage = pathname?.startsWith('/dashboard');

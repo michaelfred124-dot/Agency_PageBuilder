@@ -2,379 +2,392 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Check, UploadCloud, Link as LinkIcon, Briefcase, Image as ImageIcon, Type, Sparkles } from 'lucide-react';
-import { COLORS } from '@/constants';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { ArrowLeft, ArrowRight, Check, Sparkles, Globe, ShieldCheck, Mail, Phone, Settings, ChevronRight } from 'lucide-react';
+import { TEMPLATES, TEMPLATE_PAGES } from '@/lib/templates';
+import { getSupabaseBrowserClient } from '@/lib/supabase';
 
-const STEPS = [
-  'Welcome & Process',
-  'Basic Info',
-  'Project Details',
-  'Design & Vibes',
-  'Assets & Copy'
+const PRESETS = [
+  {
+    id: 'template-restaurant',
+    name: 'Osteria Bella Restaurant',
+    templateKey: 'restaurant',
+    image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=400&auto=format&fit=crop',
+    desc: 'Premium 5-page website design for fine dining and modern restaurants.'
+  },
+  {
+    id: 'template-lauren-wilson',
+    name: 'Lauren Wilson Photo',
+    templateKey: 'lauren',
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop',
+    desc: 'Perfect for photographer portfolios, creatives, and visual artists.'
+  },
+  {
+    id: 'template-greenscape-landscaping',
+    name: 'Greenscape Landscaping',
+    templateKey: 'greenscape',
+    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+    desc: 'Great for landscaping, lawn care, and home renovation services.'
+  },
+  {
+    id: 'template-northwood-coffee',
+    name: 'Northwood Coffee Co.',
+    templateKey: 'northwood',
+    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400&auto=format&fit=crop',
+    desc: 'Designed for coffee shops, cafes, local bakeries, and eateries.'
+  },
+  {
+    id: 'template-brighter-solar',
+    name: 'Brighter Solar',
+    templateKey: 'brighter_solar',
+    image: 'https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=400&q=80',
+    desc: 'Perfect for clean energy, solar installation, and tech businesses.'
+  },
+  {
+    id: 'template-volt-vikings',
+    name: 'Volt Vikings',
+    templateKey: 'voltvikings',
+    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400&auto=format&fit=crop',
+    desc: 'High-impact premium layout for local home service, electrician and contracting businesses.'
+  }
 ];
 
 function OnboardingForm() {
   const searchParams = useSearchParams();
-  const plan = searchParams.get('plan') || 'Standard Plan';
+  const router = useRouter();
   
-  const [currentStep, setCurrentStep] = useState(0);
+  const [step, setStep] = useState(1); // 1 = choose template, 2 = brand information, 3 = loading redirect
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+
+  // Auth gate check
+  React.useEffect(() => {
+    const checkUser = async () => {
+      const supabase = getSupabaseBrowserClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        // Redirect to login and preserve the target parameter redirect
+        router.push(`/login?redirect=/onboarding?plan=DIY%2520Template`);
+      }
+    };
+    checkUser();
+  }, [router]);
+  
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    businessName: '',
+    tagline: '',
+    phone: '',
     email: '',
-    companyName: '',
-    industry: '',
-    goals: '',
-    audience: '',
-    competitors: '',
-    colors: '',
-    vibe: '',
-    inspiration: '',
-    copywriting: ''
+    logoText: ''
   });
 
-  const updateForm = (key: string, value: string) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
+  const handleSelectTemplate = (key: string) => {
+    setSelectedTemplate(key);
+    const chosenPreset = PRESETS.find(p => p.templateKey === key);
+    setFormData(prev => ({
+      ...prev,
+      businessName: chosenPreset ? `My ${chosenPreset.name}` : 'My Business',
+      logoText: chosenPreset ? chosenPreset.name.split(' ')[0] : 'MyBrand'
+    }));
+    setStep(2); // Advance to basic information
   };
 
-  const nextStep = () => {
-    if (currentStep < STEPS.length - 1) {
-      setCurrentStep(curr => curr + 1);
-      window.scrollTo(0, 0);
-    }
+  const customizeSections = (sections: any[], data: typeof formData) => {
+    const cloned: any[] = JSON.parse(JSON.stringify(sections));
+    const name = data.businessName || 'My Business';
+    const tagline = data.tagline || 'Premium Quality & Professional Service';
+    const phone = data.phone || '(555) 123-4567';
+    const email = data.email || 'contact@mybusiness.com';
+    
+    return cloned.map(section => {
+      if (section.props) {
+        if (section.type === 'RHero' || section.type.includes('Hero')) {
+          if (section.props.title && section.type !== 'RHero') section.props.title = `${name}.\n${tagline}`;
+          if (section.props.description) {
+            section.props.description = section.props.description.replace(/Osteria Bella/g, name);
+          }
+        }
+        if (section.type === 'RFooter' || section.type.includes('Footer')) {
+          if (section.props.businessName) section.props.businessName = name;
+          if (section.props.tagline) section.props.tagline = tagline;
+          if (section.props.phone) section.props.phone = phone;
+          if (section.props.email) section.props.email = email;
+          if (section.props.desc) {
+            section.props.desc = section.props.desc.replace(/Osteria Bella/g, name);
+          }
+          if (section.props.text) {
+            section.props.text = `© 2026 ${name}. All rights reserved. Powered by Michaelfred Designs.`;
+          }
+        }
+        if (section.type === 'RHoursInfo' || section.type.includes('FindUs')) {
+          if (section.props.phone) section.props.phone = phone;
+          if (section.props.email) section.props.email = email;
+        }
+        if (section.type === 'RChef') {
+          if (section.props.bio1) {
+            section.props.bio1 = section.props.bio1.replace(/Osteria Bella/g, name);
+          }
+          if (section.props.bio2) {
+            section.props.bio2 = section.props.bio2.replace(/Osteria Bella/g, name);
+          }
+        }
+      }
+      return section;
+    });
   };
 
-  const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(curr => curr - 1);
-      window.scrollTo(0, 0);
-    }
+  const handleGenerateTemplate = (templateKey: string) => {
+    const rawTemplateData = TEMPLATES[templateKey];
+    if (!rawTemplateData) return [];
+    return customizeSections(rawTemplateData, formData);
   };
 
-  const isCustomPlan = plan.includes('Custom') || plan.includes('Full-Stack');
+  const handleSubmit = () => {
+    if (!formData.businessName.trim()) return alert('Please enter your business name.');
+    
+    setStep(3); // Loading screen
+ 
+    setTimeout(() => {
+      const templateKey = selectedTemplate || 'restaurant';
+      const newId = `site-${Date.now()}`;
+      
+      let pagesList = [];
+      if (TEMPLATE_PAGES[templateKey]) {
+        // Generate a 5-page website automatically
+        pagesList = TEMPLATE_PAGES[templateKey].map(page => ({
+          id: page.slug === '/' ? 'home' : `page-${page.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
+          name: page.name,
+          slug: page.slug,
+          sections: customizeSections(page.sections, formData)
+        }));
+      } else {
+        // Fallback to single page website
+        const customizedSections = handleGenerateTemplate(templateKey);
+        pagesList = [{ id: 'home', name: 'Home', slug: '/', sections: customizedSections }];
+      }
+
+      // Save pages structure to localStorage
+      localStorage.setItem(`site-pages-${newId}`, JSON.stringify(pagesList));
+ 
+      // Register new site in the client workspace sites list
+      const newSiteRecord = {
+        id: newId,
+        name: formData.businessName,
+        url: `${formData.businessName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'site'}.com`,
+        previewUrl: `/preview/${newId}`,
+        status: 'Draft',
+        image: PRESETS.find(p => p.templateKey === templateKey)?.image || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+        lastUpdate: 'Just now',
+        templateKey: templateKey,
+        planTier: 'DIY'
+      };
+ 
+      // Set current session status of DIY plan payment to false (asks for payment on publish)
+      localStorage.setItem('diy_plan_paid', 'false');
+      
+      const savedSites = localStorage.getItem('my-sites');
+      let currentSites = [];
+      if (savedSites) {
+        try {
+          currentSites = JSON.parse(savedSites);
+        } catch(e) {
+          console.error(e);
+        }
+      }
+      const updated = [...currentSites, newSiteRecord];
+      localStorage.setItem('my-sites', JSON.stringify(updated));
+ 
+      // Save pointer to trigger editor
+      sessionStorage.setItem('instant_edit_site_id', newId);
+      // Advance to success page step
+      setStep(4);
+    }, 1500);
+  };
 
   return (
-    <div className="min-h-screen bg-[#F8F5F2] flex flex-col font-sans text-black selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-[#F4F6F8] flex flex-col font-sans text-slate-800">
       {/* Header */}
-      <header className="px-6 lg:px-12 py-6 flex items-center justify-between border-b-4 border-black bg-white sticky top-0 z-50">
-        <div className="flex items-center gap-4">
-          <Link href="/pricing" className="w-10 h-10 rounded-full border-4 border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors">
-            <ArrowLeft className="w-5 h-5" strokeWidth={3} />
+      <header className="px-6 lg:px-12 py-5 flex items-center justify-between border-b border-slate-200 bg-white sticky top-0 z-50 shadow-sm">
+        <div className="flex items-center gap-3">
+          <Link href="/pricing" className="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors">
+            <ArrowLeft className="w-4 h-4 text-slate-600" />
           </Link>
-          <h1 className="text-xl font-black uppercase tracking-tighter">Project Kickoff</h1>
+          <span className="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">DIY Template Plan</span>
         </div>
-        <div className="hidden lg:flex items-center gap-2">
-          {STEPS.map((step, idx) => (
-            <React.Fragment key={step}>
-              <div className={`flex items-center gap-2 ${idx <= currentStep ? 'opacity-100' : 'opacity-40'}`}>
-                <div className={`w-8 h-8 rounded-full border-4 border-black flex items-center justify-center text-sm font-bold ${idx < currentStep ? 'bg-black text-white' : idx === currentStep ? 'bg-white text-black' : 'bg-transparent text-black'}`}>
-                  {idx < currentStep ? <Check className="w-4 h-4" strokeWidth={4} /> : (idx + 1)}
-                </div>
-                <span className="font-bold text-sm tracking-tight">{step}</span>
-              </div>
-              {idx < STEPS.length - 1 && (
-                <div className={`w-8 h-1 ${idx < currentStep ? 'bg-black' : 'bg-black/20'}`} />
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-        <div className="lg:hidden text-sm font-black uppercase tracking-widest">
-          Step {currentStep + 1} of {STEPS.length}
+        <div className="flex items-center gap-2">
+          <span className={`w-2.5 h-2.5 rounded-full ${step >= 1 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+          <span className={`w-2.5 h-2.5 rounded-full ${step >= 2 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+          <span className={`w-2.5 h-2.5 rounded-full ${step >= 3 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-4xl w-full mx-auto p-6 lg:p-12 pb-48 lg:pb-56">
+      {/* Main Container */}
+      <main className="flex-1 max-w-4xl w-full mx-auto p-6 lg:p-12 pb-32 flex flex-col justify-center">
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
+            key={step}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.25 }}
           >
-            {/* Step 0: Welcome & Process */}
-            {currentStep === 0 && (
-              <div className="space-y-12">
-                <div>
-                  <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter mb-4">Welcome to <br /> the beginning.</h2>
-                  <p className="text-xl lg:text-2xl font-medium text-black/70">
-                    You've selected the <span className="text-black font-bold border-b-4 border-black">{decodeURIComponent(plan)}</span>. We're stoked to work with you. Before we dive into the pixels, let's get on the same page.
+            {/* Step 1: Pick a Template Preset Style */}
+            {step === 1 && (
+              <div className="space-y-8">
+                <div className="text-center space-y-2 max-w-xl mx-auto">
+                  <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">Pick a visual theme style to customize.</h2>
+                  <p className="text-slate-500 text-sm">
+                    Select a layout direction designed for your industry. Don't worry, you can add sections and modify layouts later inside the builder.
                   </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6 pt-4">
-                  {[
-                    { title: "1. Discovery", desc: "This questionnaire helps us understand your brand, goals, and vibe.", icon: Briefcase },
-                    { title: "2. Content Sync", desc: "We gather all your copy, images, and brand assets to prepare for design.", icon: Type },
-                    { title: "3. Design & Build", desc: "We craft your site. Custom sites get wireframes, templates get tailored.", icon: Sparkles },
-                    { title: "4. Launch & Grow", desc: "We test everything, flip the switch, and provide ongoing support.", icon: Check }
-                  ].map((item, i) => (
-                    <div key={item.title} className="p-8 bg-white border-4 border-black rounded-[24px] shadow-[8px_8px_0px_rgba(0,0,0,1)]">
-                      <div className="w-12 h-12 rounded-full border-4 border-black flex items-center justify-center mb-6 bg-[#F8F5F2]">
-                        <item.icon className="w-6 h-6" strokeWidth={3} />
+                <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                  {PRESETS.map(preset => (
+                    <div 
+                      key={preset.templateKey}
+                      onClick={() => handleSelectTemplate(preset.templateKey)}
+                      className="group cursor-pointer bg-white border border-slate-200 hover:border-indigo-500 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                    >
+                      <div className="aspect-[16/10] relative overflow-hidden bg-slate-50 border-b border-slate-100">
+                        <img 
+                          src={preset.image} 
+                          alt={preset.name} 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                          referrerPolicy="no-referrer"
+                        />
                       </div>
-                      <h3 className="text-xl font-black uppercase tracking-tighter mb-2">{item.title}</h3>
-                      <p className="font-medium text-black/70">{item.desc}</p>
+                      <div className="p-5 flex items-center justify-between gap-4">
+                        <div>
+                          <h3 className="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors">{preset.name} Layout</h3>
+                          <p className="text-slate-400 text-[11px] font-medium mt-0.5 line-clamp-1">{preset.desc}</p>
+                        </div>
+                        <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 group-hover:bg-indigo-50 group-hover:border-indigo-300 flex items-center justify-center shrink-0 transition-colors">
+                          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Step 1: Basic Info */}
-            {currentStep === 1 && (
-              <div className="space-y-12">
-                <div>
-                  <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter mb-4">the specifics.</h2>
-                  <p className="text-xl font-medium text-black/70">Tell us about you and your business.</p>
+            {/* Step 2: Basic Info Seeding */}
+            {step === 2 && (
+              <div className="space-y-8 max-w-xl mx-auto">
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Brand details.</h2>
+                  <p className="text-slate-500 text-xs">Enter your business information to automatically map headers, text blocks, and footers.</p>
                 </div>
 
-                <div className="space-y-8 bg-white p-8 lg:p-12 border-4 border-black rounded-[32px] shadow-[12px_12px_0px_rgba(0,0,0,1)]">
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-2">
-                      <label className="font-black uppercase tracking-widest text-sm">First Name</label>
+                <div className="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm space-y-6">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Name</label>
+                    <input 
+                      type="text" 
+                      value={formData.businessName}
+                      onChange={e => setFormData(prev => ({ ...prev, businessName: e.target.value }))}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                      placeholder="e.g. Lauren Wilson Photo" 
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Short Tagline / Hero Subtitle</label>
+                    <input 
+                      type="text" 
+                      value={formData.tagline}
+                      onChange={e => setFormData(prev => ({ ...prev, tagline: e.target.value }))}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                      placeholder="e.g. Elegant local wedding photographer based in CO." 
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Email</label>
                       <input 
-                        type="text" 
-                        value={formData.firstName}
-                        onChange={e => updateForm('firstName', e.target.value)}
-                        className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg" 
-                        placeholder="Jane" 
+                        type="email" 
+                        value={formData.email}
+                        onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="hello@laurenphoto.co" 
                       />
                     </div>
-                    <div className="space-y-2">
-                      <label className="font-black uppercase tracking-widest text-sm">Last Name</label>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Phone Number</label>
                       <input 
                         type="text" 
-                        value={formData.lastName}
-                        onChange={e => updateForm('lastName', e.target.value)}
-                        className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg" 
-                        placeholder="Doe" 
+                        value={formData.phone}
+                        onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="(555) 123-4567" 
                       />
                     </div>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Email Address</label>
-                    <input 
-                      type="email" 
-                      value={formData.email}
-                      onChange={e => updateForm('email', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg" 
-                      placeholder="jane@example.com" 
-                    />
-                  </div>
 
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Company / Brand Name</label>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Logo Header Text</label>
                     <input 
                       type="text" 
-                      value={formData.companyName}
-                      onChange={e => updateForm('companyName', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg" 
-                      placeholder="Acme Corp" 
+                      value={formData.logoText}
+                      onChange={e => setFormData(prev => ({ ...prev, logoText: e.target.value }))}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                      placeholder="Lauren W." 
                     />
                   </div>
+                </div>
 
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Industry</label>
-                    <input 
-                      type="text" 
-                      value={formData.industry}
-                      onChange={e => updateForm('industry', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg" 
-                      placeholder="e.g. E-Commerce, Local Services, SaaS" 
-                    />
-                  </div>
+                <div className="flex items-center justify-between gap-4 pt-2">
+                  <button 
+                    onClick={() => setStep(1)}
+                    className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                  >
+                    Back to Styles
+                  </button>
+                  <button 
+                    onClick={handleSubmit}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 hover:shadow-indigo-600/10 hover:-translate-y-0.5"
+                  >
+                    Generate Workspace <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* Step 2: Project Details */}
-            {currentStep === 2 && (
-              <div className="space-y-12">
-                <div>
-                  <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter mb-4">The Strategy.</h2>
-                  <p className="text-xl font-medium text-black/70">What are we trying to achieve here?</p>
-                </div>
-
-                <div className="space-y-8 bg-white p-8 lg:p-12 border-4 border-black rounded-[32px] shadow-[12px_12px_0px_rgba(0,0,0,1)]">
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Primary Goals</label>
-                    <p className="text-sm font-medium text-black/60 mb-2">What does success look like? (e.g. more leads, sell products, brand awareness)</p>
-                    <textarea 
-                      rows={4}
-                      value={formData.goals}
-                      onChange={e => updateForm('goals', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg resize-none" 
-                      placeholder="We want to double our inbound leads..." 
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Target Audience</label>
-                    <p className="text-sm font-medium text-black/60 mb-2">Who are we building this for?</p>
-                    <textarea 
-                      rows={4}
-                      value={formData.audience}
-                      onChange={e => updateForm('audience', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg resize-none" 
-                      placeholder="Local homeowners between 30-50 looking for..." 
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Key Competitors</label>
-                    <p className="text-sm font-medium text-black/60 mb-2">Who else is in your space?</p>
-                    <textarea 
-                      rows={3}
-                      value={formData.competitors}
-                      onChange={e => updateForm('competitors', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg resize-none" 
-                      placeholder="Link or name your top 3 competitors..." 
-                    />
-                  </div>
+            {/* Step 3: Loading Screen */}
+            {step === 3 && (
+              <div className="max-w-md mx-auto py-12 text-center flex flex-col items-center justify-center space-y-4">
+                <div className="w-12 h-12 rounded-full border-4 border-slate-200 border-t-indigo-600 animate-spin" />
+                <div className="space-y-1">
+                  <h3 className="font-extrabold text-slate-800 text-base">Creating layout editor workspace...</h3>
+                  <p className="text-slate-400 text-xs">Injecting brand variables, styling colors, and mapping assets.</p>
                 </div>
               </div>
             )}
 
-            {/* Step 3: Design & Vibes */}
-            {currentStep === 3 && (
-              <div className="space-y-12">
-                <div>
-                  <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter mb-4">The Look.</h2>
-                  <p className="text-xl font-medium text-black/70">Let's narrow down the aesthetic.</p>
+            {/* Step 4: Onboarding Success Screen */}
+            {step === 4 && (
+              <div className="max-w-md mx-auto py-8 text-center space-y-6 flex flex-col items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-emerald-50 border-[4px] border-emerald-500 flex items-center justify-center text-emerald-500 shadow-sm animate-bounce">
+                  <Check className="w-8 h-8" strokeWidth={4} />
                 </div>
-
-                <div className="space-y-8 bg-white p-8 lg:p-12 border-4 border-black rounded-[32px] shadow-[12px_12px_0px_rgba(0,0,0,1)]">
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Overall Vibe / Mood</label>
-                    <p className="text-sm font-medium text-black/60 mb-2">Pick 3-5 words that describe how your brand should feel.</p>
-                    <input 
-                      type="text" 
-                      value={formData.vibe}
-                      onChange={e => updateForm('vibe', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg" 
-                      placeholder="e.g. Playful, Professional, Premium, Minimal..." 
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Color Preferences</label>
-                    <p className="text-sm font-medium text-black/60 mb-2">Do you have existing brand colors? Or colors you love/hate?</p>
-                    <input 
-                      type="text" 
-                      value={formData.colors}
-                      onChange={e => updateForm('colors', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg" 
-                      placeholder="Love forest green, hate bright red..." 
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Inspiration Links</label>
-                    <p className="text-sm font-medium text-black/60 mb-2">Paste links to websites you admire (and tell us what you like about them).</p>
-                    <textarea 
-                      rows={4}
-                      value={formData.inspiration}
-                      onChange={e => updateForm('inspiration', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg resize-none" 
-                      placeholder="1. stripe.com - love the animations&#10;2. apple.com - love the typography..." 
-                    />
-                  </div>
-                  
-                  {isCustomPlan && (
-                    <div className="p-6 bg-[#F8F5F2] border-4 border-black rounded-2xl flex items-start gap-4">
-                      <Sparkles className="w-6 h-6 text-[#FF9B71] shrink-0 mt-1" />
-                      <div>
-                        <h4 className="font-black uppercase tracking-tighter text-lg mb-1">Custom Design Tier</h4>
-                        <p className="font-medium text-black/70 text-sm">Since you selected a custom plan, we'll use this as a baseline to create 100% bespoke wireframes and concepts for you.</p>
-                      </div>
-                    </div>
-                  )}
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Branding generated!</h2>
+                  <p className="text-slate-500 text-xs max-w-sm mx-auto leading-relaxed">
+                    We've customized the layout style with your branding info. Next, you'll be redirected into our website builder to review and tweak the design.
+                  </p>
                 </div>
-              </div>
-            )}
-
-            {/* Step 4: Assets & Copy */}
-            {currentStep === 4 && (
-              <div className="space-y-12">
-                <div>
-                  <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter mb-4">The Goods.</h2>
-                  <p className="text-xl font-medium text-black/70">Upload your assets or let us know what you need.</p>
-                </div>
-
-                <div className="space-y-8 bg-white p-8 lg:p-12 border-4 border-black rounded-[32px] shadow-[12px_12px_0px_rgba(0,0,0,1)]">
-                  
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <button className="flex flex-col items-center justify-center gap-4 p-8 border-4 border-dashed border-black/30 bg-[#F8F5F2] hover:bg-black/5 hover:border-black rounded-2xl transition-all cursor-pointer group">
-                      <div className="w-16 h-16 rounded-full bg-white border-4 border-black flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <ImageIcon className="w-6 h-6" />
-                      </div>
-                      <div className="text-center">
-                        <span className="font-black uppercase tracking-widest text-sm block mb-1">Upload Logo</span>
-                        <span className="text-sm font-medium text-black/50">SVG, PNG, JPG</span>
-                      </div>
-                    </button>
-
-                    <button className="flex flex-col items-center justify-center gap-4 p-8 border-4 border-dashed border-black/30 bg-[#F8F5F2] hover:bg-black/5 hover:border-black rounded-2xl transition-all cursor-pointer group">
-                      <div className="w-16 h-16 rounded-full bg-white border-4 border-black flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <UploadCloud className="w-6 h-6" />
-                      </div>
-                      <div className="text-center">
-                        <span className="font-black uppercase tracking-widest text-sm block mb-1">Upload Brand Images</span>
-                        <span className="text-sm font-medium text-black/50">Photos of team, products, etc.</span>
-                      </div>
-                    </button>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="font-black uppercase tracking-widest text-sm">Specific Wording / Copy</label>
-                    <p className="text-sm font-medium text-black/60 mb-2">Drop in any mission statements, key taglines, or paragraphs you definitely want on the site.</p>
-                    <textarea 
-                      rows={6}
-                      value={formData.copywriting}
-                      onChange={e => updateForm('copywriting', e.target.value)}
-                      className="w-full bg-[#F8F5F2] border-4 border-black rounded-xl p-4 font-medium outline-none focus:bg-white transition-colors text-lg resize-none" 
-                      placeholder="Our slogan is 'Built to Last'. Make sure this is on the homepage..." 
-                    />
-                  </div>
-
-                </div>
+                
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-2xl text-xs font-bold shadow-md shadow-indigo-600/10 hover:-translate-y-0.5 transition-all flex items-center gap-1.5 font-sans"
+                >
+                  Start Customizing Site <ArrowRight className="w-4 h-4" strokeWidth={3} />
+                </button>
               </div>
             )}
           </motion.div>
         </AnimatePresence>
       </main>
-
-      {/* Floating Action Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-white border-t-4 border-black p-6 z-50">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <button 
-            onClick={prevStep}
-            className={`px-8 py-4 font-black uppercase tracking-widest text-sm flex items-center gap-2 transition-all ${currentStep === 0 ? 'opacity-0 pointer-events-none' : 'hover:-translate-x-1'}`}
-          >
-            <ArrowLeft className="w-4 h-4" strokeWidth={3} /> Back
-          </button>
-
-          {currentStep < STEPS.length - 1 ? (
-            <button 
-              onClick={nextStep}
-              className="px-8 py-4 bg-black text-white font-black uppercase tracking-widest rounded-xl text-sm flex items-center gap-2 hover:bg-black/80 hover:shadow-[6px_6px_0px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all"
-            >
-              Continue <ArrowRight className="w-4 h-4" strokeWidth={3} />
-            </button>
-          ) : (
-            <Link 
-              href="/dashboard"
-              className="px-8 py-4 bg-[#FF9B71] text-black border-4 border-black font-black uppercase tracking-widest rounded-xl text-sm flex items-center gap-2 hover:bg-[#FF8855] hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all"
-            >
-              Submit & Go to Dashboard <ArrowRight className="w-4 h-4" strokeWidth={3} />
-            </Link>
-          )}
-        </div>
-      </div>
     </div>
   );
 }

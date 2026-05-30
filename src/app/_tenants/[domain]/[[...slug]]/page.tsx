@@ -48,7 +48,13 @@ export default async function TenantPage({ params }: TenantPageProps) {
   const theme = pageData.theme_json || {};
 
   // 5. Build dynamic inline styles from theme
-  const themeStyle: React.CSSProperties = {};
+  const themeStyle: React.CSSProperties = {
+    ['--color-primary' as any]: theme.colorPrimary || '#3b82f6',
+    ['--color-secondary' as any]: theme.colorSecondary || '#10b981',
+    ['--color-accent' as any]: theme.colorAccent || '#f59e0b',
+    ['--color-text' as any]: theme.colorText || '#1a1a1a',
+    ['--color-card' as any]: theme.colorCard || '#ffffff',
+  };
   if (theme.fontFamily) {
     themeStyle.fontFamily = theme.fontFamily;
   }
@@ -73,7 +79,7 @@ export default async function TenantPage({ params }: TenantPageProps) {
           }
           return (
             <div key={section.id}>
-              {Renderer(section.props || {})}
+              {Renderer({ ...(section.props || {}), tenantId: tenant.id })}
             </div>
           );
         })}

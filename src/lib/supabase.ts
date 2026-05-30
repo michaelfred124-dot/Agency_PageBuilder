@@ -1,4 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
 // ---------------------------------------------------------------------------
 // Environment Variables
@@ -10,34 +11,6 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 // ---------------------------------------------------------------------------
 // Client Instances
 // ---------------------------------------------------------------------------
-
-// Custom cookie storage provider to sync authentication session with cookies
-const cookieStorage = {
-  getItem: (key: string) => {
-    if (typeof document === 'undefined') return null;
-    const name = key + '=';
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) === 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return null;
-  },
-  setItem: (key: string, value: string) => {
-    if (typeof document === 'undefined') return;
-    document.cookie = `${key}=${value}; path=/; max-age=31536000; SameSite=Lax; Secure`;
-  },
-  removeItem: (key: string) => {
-    if (typeof document === 'undefined') return;
-    document.cookie = `${key}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax; Secure`;
-  }
-};
 
 /**
  * Get the cookie name used by Supabase client based on the project URL.
@@ -59,15 +32,7 @@ export function getSupabaseBrowserClient(): SupabaseClient {
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
       console.warn('[Supabase] Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
     }
-    browserClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        storage: cookieStorage,
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true,
-        flowType: 'pkce',
-      }
-    });
+    browserClient = createBrowserClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   }
   return browserClient;
 }

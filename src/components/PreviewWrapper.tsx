@@ -7,12 +7,18 @@ export default function PreviewWrapper({
   children, 
   title, 
   onExit,
-  theme 
+  theme,
+  pages = [],
+  activePageSlug = '/',
+  onPageChange
 }: { 
   children: React.ReactNode; 
   title: string; 
   onExit?: () => void;
   theme?: { fontFamily?: string; buttonRoundedness?: string; pageBackground?: string };
+  pages?: { name: string; slug: string }[];
+  activePageSlug?: string;
+  onPageChange?: (slug: string) => void;
 }) {
   const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [scale, setScale] = useState(1);
@@ -81,14 +87,28 @@ export default function PreviewWrapper({
         }
       `}} />
 
-      <header className="px-6 py-4 bg-black text-white flex items-center justify-between z-50 shrink-0">
-         <div className="flex items-center gap-4">
+      <header className="px-6 py-4 bg-black text-white flex items-center justify-between z-50 shrink-0 gap-4">
+         <div className="flex items-center gap-4 shrink-0">
            <span className="font-black uppercase tracking-widest text-[10px] hidden sm:block">Preview Mode</span>
            <span className="text-white/40 hidden sm:block">•</span>
            <span className="text-xs font-bold uppercase tracking-widest">{title}</span>
          </div>
+
+         {pages && pages.length > 1 && onPageChange && (
+           <div className="flex items-center gap-1.5 bg-white/10 p-1 rounded-lg overflow-x-auto max-w-[50%] no-scrollbar">
+             {pages.map((p) => (
+               <button
+                 key={p.slug}
+                 onClick={() => onPageChange(p.slug)}
+                 className={`px-3 py-1 rounded text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap shrink-0 ${activePageSlug === p.slug ? 'bg-white text-black' : 'text-white/60 hover:text-white hover:bg-white/20'}`}
+               >
+                 {p.name}
+               </button>
+             ))}
+           </div>
+         )}
          
-         <div className="flex items-center gap-2 bg-white/10 p-1 rounded-lg">
+         <div className="flex items-center gap-2 bg-white/10 p-1 rounded-lg shrink-0">
            <button 
              onClick={() => setViewport('desktop')}
              className={`p-1.5 rounded transition-colors ${viewport === 'desktop' ? 'bg-white text-black' : 'text-white/60 hover:text-white hover:bg-white/20'}`}
@@ -150,6 +170,11 @@ export default function PreviewWrapper({
                  minHeight: '100%',
                  transform: `scale(${scale})`,
                  backgroundColor: theme?.pageBackground || '#ffffff',
+                 ['--color-primary' as any]: (theme as any)?.colorPrimary || '#3b82f6',
+                 ['--color-secondary' as any]: (theme as any)?.colorSecondary || '#10b981',
+                 ['--color-accent' as any]: (theme as any)?.colorAccent || '#f59e0b',
+                 ['--color-text' as any]: (theme as any)?.colorText || '#1a1a1a',
+                 ['--color-card' as any]: (theme as any)?.colorCard || '#ffffff',
                }}
              >
                 <div className="w-full h-8 bg-black/5 border-b-[4px] border-black flex items-center px-4 gap-2 shrink-0 bg-white">

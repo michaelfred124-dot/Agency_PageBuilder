@@ -1,18 +1,22 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'motion/react';
 import { Leaf, ArrowRight, Lock, Mail, Loader2 } from 'lucide-react';
 import { getSupabaseBrowserClient } from '@/lib/supabase';
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get the redirect query parameter (fallback to dashboard)
+  const redirectTo = searchParams.get('redirect') || searchParams.get('redirectTo') || '/dashboard';
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +39,7 @@ export default function LoginPage() {
         }
 
         if (data.session) {
-          router.push('/dashboard');
+          router.push(redirectTo);
         } else {
           alert('Check your email for the confirmation link!');
           setIsSignUp(false);
@@ -52,7 +56,7 @@ export default function LoginPage() {
           return;
         }
 
-        router.push('/dashboard');
+        router.push(redirectTo);
       }
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred.');
@@ -69,7 +73,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${location.origin}/auth/callback`,
+          redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
         },
       });
       if (error) throw error;
@@ -203,5 +207,17 @@ export default function LoginPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F8F5F2] flex items-center justify-center font-sans">
+        <Loader2 className="w-8 h-8 text-black animate-spin" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

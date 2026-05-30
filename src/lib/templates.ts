@@ -1,4 +1,4 @@
-import { SectionData } from './blocks';
+import type { SectionData } from './blocks';
 
 export const TEMPLATES: Record<string, SectionData[]> = {
   northwood: [
@@ -317,5 +317,693 @@ export const TEMPLATES: Record<string, SectionData[]> = {
       }
     }
   ],
+  restaurant: [
+    {
+      id: "r-hero-1",
+      type: "RHero",
+      props: {
+        badge: "Seasonal Menu Now Available",
+        title: "Where Every Meal Tells a Story",
+        description: "Modern Italian cuisine crafted with locally-sourced ingredients, served in a warm and welcoming atmosphere. Join us for an unforgettable dining experience.",
+        primaryBtnText: "Make a Reservation",
+        secondaryBtnText: "View Our Menu",
+        bgImage: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=2074&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "r-features-1",
+      type: "RFeatures",
+      props: {
+        tag: "The Experience",
+        title: "What Makes Us Special",
+        features: [
+          { title: "Farm to Table", desc: "We partner with local farms to bring you the freshest seasonal ingredients. Our menu changes with the harvest, ensuring every dish celebrates what's best right now." },
+          { title: "Handmade Pasta", desc: "Our pasta is made fresh daily using traditional techniques passed down through generations. Taste the difference that love and time make in every bite." },
+          { title: "Curated Wine List", desc: "Our sommelier has assembled an exceptional collection of Italian and local wines, each chosen to complement our dishes and enhance your dining experience." }
+        ]
+      }
+    },
+    {
+      id: "r-menu-preview-1",
+      type: "RMenuPreview",
+      props: {
+        tag: "Our Menu",
+        title: "A Taste of What Awaits",
+        subtitle: "A curated selection of our most beloved dishes. Visit us to experience the full menu.",
+        btnText: "View Full Menu",
+        category1Title: "Antipasti",
+        category1Items: [
+          { name: "Burrata Caprese", desc: "Creamy burrata, heirloom tomatoes, fresh basil, aged balsamic", price: "$18" },
+          { name: "Calamari Fritti", desc: "Crispy calamari, lemon aioli, marinara, fresh herbs", price: "$16" },
+          { name: "Charcuterie Board", desc: "Selection of cured meats, artisan cheeses, house pickles, grilled bread", price: "$24" }
+        ],
+        category2Title: "Pasta & Risotto",
+        category2Items: [
+          { name: "Tagliatelle Bolognese", desc: "Slow-braised beef and pork ragù, parmigiano-reggiano", price: "$26" },
+          { name: "Lobster Ravioli", desc: "Maine lobster, brown butter, sage, lemon zest", price: "$34" },
+          { name: "Wild Mushroom Risotto", desc: "Arborio rice, seasonal mushrooms, truffle oil, parmesan", price: "$28" }
+        ]
+      }
+    },
+    {
+      id: "r-chef-1",
+      type: "RChef",
+      props: {
+        tag: "Meet the Chef",
+        name: "Marco Benedetti",
+        title: "Executive Chef & Owner",
+        bio1: "Born in Tuscany and trained in Rome's finest kitchens, Chef Marco brings over 25 years of culinary expertise to Osteria Bella. His philosophy is simple: start with exceptional ingredients, honor traditional techniques, and add a touch of modern creativity.",
+        bio2: "After years working in Michelin-starred restaurants across Europe, Marco moved to the Pacific Northwest, drawn by the region's incredible produce and sustainable farming practices.",
+        quote: "Food is about connection. Every dish I create is meant to bring people together around the table.",
+        image: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=800&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "r-reviews-1",
+      type: "RReviews",
+      props: {
+        tag: "Reviews",
+        title: "What Our Guests Say",
+        reviews: [
+          { author: "Sarah M.", text: "The lobster ravioli was transcendent. Every bite was perfectly balanced. This is now our go-to spot for special occasions.", source: "OpenTable Review" },
+          { author: "James & Linda R.", text: "The atmosphere is romantic without being stuffy. Staff was incredibly knowledgeable about the wine pairings. Highly recommend!", source: "Google Review" },
+          { author: "Michael T.", text: "We celebrated our anniversary here and it exceeded all expectations. The homemade pasta rivals what we had in Italy. Chef Marco is a true artist.", source: "Yelp Review" }
+        ]
+      }
+    },
+    {
+      id: "r-cta-1",
+      type: "RCta",
+      props: {
+        title: "Ready to Join Us?",
+        subtitle: "Book your table today and experience modern Italian cuisine at its finest.",
+        btnText: "Make a Reservation",
+        bgImage: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?q=80&w=2000"
+      }
+    },
+    {
+      id: "r-footer-1",
+      type: "RFooter",
+      props: {
+        businessName: "Osteria Bella",
+        tagline: "Modern Italian",
+        desc: "Modern Italian cuisine crafted with love, served in a space designed for memorable moments.",
+        address: "456 Main Street, Portland, OR 97205",
+        phone: "(503) 555-0147",
+        email: "ciao@osteriabella.com"
+      }
+    }
+  ],
+  voltvikings: [
+    {
+      id: "vv-header-1",
+      type: "VVHeader",
+      props: {
+        businessName: "VOLT VIKINGS",
+        tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+        phone: "(520) 555-0199",
+        ctaText: "BOOK ONLINE",
+        navLinks: ["HOME", "SERVICES", "JOURNEY", "REVIEWS", "CORRIDOR"]
+      }
+    },
+    {
+      id: "vv-hero-1",
+      type: "VVHero",
+      props: {
+        badge: "Tucson's Rated #1 Electrician",
+        title: "Legendary Electrical Services for Tucson & Phoenix",
+        subtitle: "Licensed, bonded, and insured team of expert electricians delivering VoltGuard™ safety audits and maximum power reliability.",
+        ctaText: "GET A FAST QUOTE",
+        secondaryCtaText: "VOLTGUARD™ AUDIT",
+        bgImage: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "vv-stats-1",
+      type: "VVStats",
+      props: {
+        stats: [
+          { value: "2,500+", label: "Projects\nCompleted", icon: "VikingShieldIcon" },
+          { value: "5.0 Rating", label: "250+ Google\nReviews", icon: "Users" },
+          { value: "VoltGuard™", label: "Home Safety\nTechnology", icon: "Zap" },
+          { value: "Level-2 EV", label: "Fast Charger\nSpecialist", icon: "ShieldCheck" }
+        ]
+      }
+    },
+    {
+      id: "vv-services-1",
+      type: "VVServices",
+      props: {
+        title: "Tucson's Trusted Electrical Team",
+        subtitle: "Explore our residential, commercial, and specialty electrical contracting services.",
+        services: [
+          { title: "Residential Electrician", icon: "Home", desc: "Lighting upgrades, panel replacements, troubleshooting, safety checks, and complete rewires.", img: "https://images.unsplash.com/photo-1558223190-184852c035be?q=80&w=800" },
+          { title: "Commercial Contracting", icon: "Building2", desc: "High-voltage layout, tenant improvements, structural wiring, lighting systems, and service panels.", img: "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?q=80&w=800" },
+          { title: "Smart Panel Upgrades", icon: "Zap", desc: "Transition your home's breaker panel to 200A. Maximize current safety and smart home compatibility.", img: "https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?q=80&w=800" },
+          { title: "EV Charger Installation", icon: "ShieldCheck", desc: "Expert wall connector level-2 charging box setups for Tesla, Rivian, and all modern electric vehicles.", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=800" }
+        ]
+      }
+    },
+    {
+      id: "vv-process-1",
+      type: "VVProcess",
+      props: {
+        title: "Getting world class electrical services has never been easier",
+        steps: [
+          { title: "Get A Fast Quote", desc: "It’s never been easier. Just click the button and send us details of your project. We respond promptly.", icon: "Search" },
+          { title: "Set A Schedule", desc: "Get work done at a time that suits you with fast and easy scheduling. We arrive right on time.", icon: "Calendar" },
+          { title: "Sit Back & Relax", desc: "Our licensed, highly trained electricians handle everything safely. Get a legendary customer experience.", icon: "Shield" }
+        ]
+      }
+    },
+    {
+      id: "vv-testimonials-1",
+      type: "VVTestimonials",
+      props: {
+        title: "Legendary Service, Proven by Tucson Neighbors",
+        reviews: [
+          { name: "Carmine C.", role: "Retired Electrician", quote: "As a retired Electrician, I called Volt Vikings who I used previously on some HOAs I managed. They let you know when they will arrive, work extremely clean, and know their code inside and out. Excellent service and reasonable pricing.", img: "https://randomuser.me/api/portraits/men/44.jpg" },
+          { name: "Glen T.", role: "Commercial Owner", quote: "I own a 29,000 sq ft commercial building and several apartments. For the past 5 years I have been calling Volt Vikings for all my electrical needs, from new equipment installs to complex troubleshooting. Qualified, competent crews every single time.", img: "https://randomuser.me/api/portraits/men/32.jpg" }
+        ]
+      }
+    },
+    {
+      id: "vv-map-1",
+      type: "VVMap",
+      props: {
+        title: "Legendary Electrical Services Throughout Tucson & Phoenix Area",
+        desc: "No matter where you are, we've got your electrical needs covered. We provide rapid-response services across the region, giving everyone access to our highly experienced team. If you need electricians in Tucson, Mesa, Chandler, Tempe, or Phoenix, we are here for you!",
+        mapIframeUrl: "https://snazzymaps.com/embed/717236"
+      }
+    },
+    {
+      id: "vv-cta-1",
+      type: "VVCTA",
+      props: {
+        title: "Power Issues or Fast Project Upgrades?",
+        subtitle: "Get a free online quote estimate or schedule an onsite consultation in seconds.",
+        buttonText: "REQUEST ESTIMATE NOW"
+      }
+    },
+    {
+      id: "vv-footer-1",
+      type: "VVFooter",
+      props: {
+        businessName: "VOLT VIKINGS",
+        tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+        description: "Tucson's premier local electrical contractor service. Providing residential, commercial, and specialty services with legendary safety standards.",
+        licensing: "AZ ROC #341258 | Licensed, Bonded & Insured",
+        phone: "(520) 555-0199",
+        email: "dispatch@voltvikings.com",
+        address: "Tucson - Phoenix Area, AZ"
+      }
+    }
+  ],
   blank: []
+};
+
+export const TEMPLATE_PAGES: Record<string, { name: string; slug: string; sections: SectionData[] }[]> = {
+  restaurant: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.restaurant
+    },
+    {
+      name: 'About',
+      slug: '/about',
+      sections: [
+        {
+          id: "r-hero-about",
+          type: "RHero",
+          props: {
+            badge: "Our Story",
+            title: "Born in Tuscany, Crafted in Portland",
+            description: "Learn more about our heritage, our culinary philosophy, and the people behind Osteria Bella.",
+            primaryBtnText: "Meet the Chef",
+            secondaryBtnText: "View Gallery",
+            bgImage: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=2074&auto=format&fit=crop"
+          }
+        },
+        {
+          id: "r-chef-about",
+          type: "RChef",
+          props: {
+            tag: "Meet the Chef",
+            name: "Marco Benedetti",
+            title: "Executive Chef & Owner",
+            bio1: "Born in Tuscany and trained in Rome's finest kitchens, Chef Marco brings over 25 years of culinary expertise to Osteria Bella. His philosophy is simple: start with exceptional ingredients, honor traditional techniques, and add a touch of modern creativity.",
+            bio2: "After years working in Michelin-starred restaurants across Europe, Marco moved to the Pacific Northwest, drawn by the region's incredible produce and sustainable farming practices.",
+            quote: "Food is about connection. Every dish I create is meant to bring people together around the table.",
+            image: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=800&auto=format&fit=crop"
+          }
+        },
+        {
+          id: "r-features-about",
+          type: "RFeatures",
+          props: {
+            tag: "Our Philosophy",
+            title: "Excellence in Every Detail",
+            features: [
+              { title: "Honest Cooking", desc: "No pretension, just clean, classic Italian food executed with absolute precision." },
+              { title: "Local Partnerships", desc: "We source our seafood from regional fishmongers and organic produce from local community co-ops." },
+              { title: "Fine Hospitality", desc: "We believe dining is an art form. Our staff treats you like family from the moment you walk through our doors." }
+            ]
+          }
+        },
+        {
+          id: "r-footer-about",
+          type: "RFooter",
+          props: {
+            businessName: "Osteria Bella",
+            tagline: "Modern Italian",
+            desc: "Modern Italian cuisine crafted with love, served in a space designed for memorable moments.",
+            address: "456 Main Street, Portland, OR 97205",
+            phone: "(503) 555-0147",
+            email: "ciao@osteriabella.com"
+          }
+        }
+      ]
+    },
+    {
+      name: 'Menu',
+      slug: '/menu',
+      sections: [
+        {
+          id: "r-hero-menu",
+          type: "RHero",
+          props: {
+            badge: "Culinary Offerings",
+            title: "Honoring Tradition, Welcoming Change",
+            description: "Explore our dynamic menu of handmade pastas, artisanal starters, and curated wine pairings.",
+            primaryBtnText: "Book Table",
+            secondaryBtnText: "Wine List",
+            bgImage: "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2000"
+          }
+        },
+        {
+          id: "r-menu-menu",
+          type: "RMenuPreview",
+          props: {
+            tag: "Main Menu",
+            title: "Dinner Menu",
+            subtitle: "Available Tuesday through Sunday starting at 5:00 PM.",
+            btnText: "",
+            category1Title: "Antipasti",
+            category1Items: [
+              { name: "Burrata Caprese", desc: "Creamy burrata, heirloom tomatoes, fresh basil, aged balsamic", price: "$18" },
+              { name: "Calamari Fritti", desc: "Crispy calamari, lemon aioli, marinara, fresh herbs", price: "$16" },
+              { name: "Charcuterie Board", desc: "Selection of cured meats, artisan cheeses, house pickles, grilled bread", price: "$24" }
+            ],
+            category2Title: "Pasta & Risotto",
+            category2Items: [
+              { name: "Tagliatelle Bolognese", desc: "Slow-braised beef and pork ragù, parmigiano-reggiano", price: "$26" },
+              { name: "Lobster Ravioli", desc: "Maine lobster, brown butter, sage, lemon zest", price: "$34" },
+              { name: "Wild Mushroom Risotto", desc: "Arborio rice, seasonal mushrooms, truffle oil, parmesan", price: "$28" }
+            ]
+          }
+        },
+        {
+          id: "r-hours-menu",
+          type: "RHoursInfo",
+          props: {
+            address: "456 Main Street, Portland, OR 97205",
+            phone: "(503) 555-0147",
+            email: "ciao@osteriabella.com",
+            hours: [
+              { day: "Tue - Thu", time: "5pm - 10pm" },
+              { day: "Fri - Sat", time: "5pm - 11pm" },
+              { day: "Sunday", time: "4pm - 9pm" },
+              { day: "Monday", time: "Closed" }
+            ]
+          }
+        },
+        {
+          id: "r-footer-menu",
+          type: "RFooter",
+          props: {
+            businessName: "Osteria Bella",
+            tagline: "Modern Italian",
+            desc: "Modern Italian cuisine crafted with love, served in a space designed for memorable moments.",
+            address: "456 Main Street, Portland, OR 97205",
+            phone: "(503) 555-0147",
+            email: "ciao@osteriabella.com"
+          }
+        }
+      ]
+    },
+    {
+      name: 'Reservations',
+      slug: '/reservations',
+      sections: [
+        {
+          id: "r-hero-reservations",
+          type: "RHero",
+          props: {
+            badge: "Join Us",
+            title: "Reserve Your Table",
+            description: "We look forward to welcoming you to Osteria Bella. For parties larger than 6, please call us directly.",
+            primaryBtnText: "Call Us Now",
+            secondaryBtnText: "Private Events",
+            bgImage: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?q=80&w=2000"
+          }
+        },
+        {
+          id: "r-hours-reservations",
+          type: "RHoursInfo",
+          props: {
+            address: "456 Main Street, Portland, OR 97205",
+            phone: "(503) 555-0147",
+            email: "ciao@osteriabella.com",
+            hours: [
+              { day: "Tue - Thu", time: "5pm - 10pm" },
+              { day: "Fri - Sat", time: "5pm - 11pm" },
+              { day: "Sunday", time: "4pm - 9pm" },
+              { day: "Monday", time: "Closed" }
+            ]
+          }
+        },
+        {
+          id: "r-footer-reservations",
+          type: "RFooter",
+          props: {
+            businessName: "Osteria Bella",
+            tagline: "Modern Italian",
+            desc: "Modern Italian cuisine crafted with love, served in a space designed for memorable moments.",
+            address: "456 Main Street, Portland, OR 97205",
+            phone: "(503) 555-0147",
+            email: "ciao@osteriabella.com"
+          }
+        }
+      ]
+    },
+    {
+      name: 'Contact',
+      slug: '/contact',
+      sections: [
+        {
+          id: "r-hero-contact",
+          type: "RHero",
+          props: {
+            badge: "Contact & Location",
+            title: "Plan Your Visit",
+            description: "Located in the heart of Portland. Find our address, parking information, and contact details below.",
+            primaryBtnText: "Get Directions",
+            secondaryBtnText: "Send Email",
+            bgImage: "https://images.unsplash.com/photo-1414235077428-338989a2e210?q=80&w=2000"
+          }
+        },
+        {
+          id: "r-hours-contact",
+          type: "RHoursInfo",
+          props: {
+            address: "456 Main Street, Portland, OR 97205",
+            phone: "(503) 555-0147",
+            email: "ciao@osteriabella.com",
+            hours: [
+              { day: "Tue - Thu", time: "5pm - 10pm" },
+              { day: "Fri - Sat", time: "5pm - 11pm" },
+              { day: "Sunday", time: "4pm - 9pm" },
+              { day: "Monday", time: "Closed" }
+            ]
+          }
+        },
+        {
+          id: "r-atmosphere-contact",
+          type: "RAtmosphere",
+          props: {
+            tag: "The Space",
+            title: "Welcome to Our Table",
+            subtitle: "Explore the sights and spaces of Osteria Bella before you arrive.",
+            img1: "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=800&auto=format&fit=crop",
+            img2: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop",
+            img3: "https://images.unsplash.com/photo-1414235077428-338989a2e210?q=80&w=800&auto=format&fit=crop",
+            img4: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop",
+            img5: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop",
+            img6: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?q=80&w=800&auto=format&fit=crop"
+          }
+        },
+        {
+          id: "r-footer-contact",
+          type: "RFooter",
+          props: {
+            businessName: "Osteria Bella",
+            tagline: "Modern Italian",
+            desc: "Modern Italian cuisine crafted with love, served in a space designed for memorable moments.",
+            address: "456 Main Street, Portland, OR 97205",
+            phone: "(503) 555-0147",
+            email: "ciao@osteriabella.com"
+          }
+        }
+      ]
+    }
+  ],
+  voltvikings: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.voltvikings
+    },
+    {
+      name: 'Services',
+      slug: '/services',
+      sections: [
+        {
+          id: "vv-header-services",
+          type: "VVHeader",
+          props: {
+            businessName: "VOLT VIKINGS",
+            tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+            phone: "(520) 555-0199",
+            ctaText: "BOOK ONLINE",
+            navLinks: ["HOME", "SERVICES", "JOURNEY", "REVIEWS", "CORRIDOR"]
+          }
+        },
+        {
+          id: "vv-hero-services",
+          type: "VVHero",
+          props: {
+            badge: "Commercial & Residential Services",
+            title: "Expert Electrical Solutions",
+            subtitle: "From breaker upgrades to heavy commercial installations, our Tucson crews offer premium quality electrical work.",
+            ctaText: "REQUEST A QUOTE",
+            secondaryCtaText: "CALL DISPATCH",
+            bgImage: "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?q=80&w=2070"
+          }
+        },
+        {
+          id: "vv-services-services",
+          type: "VVServices",
+          props: {
+            title: "Tucson's Trusted Electrical Team",
+            subtitle: "Explore our residential, commercial, and specialty electrical contracting services.",
+            services: [
+              { title: "Residential Electrician", icon: "Home", desc: "Lighting upgrades, panel replacements, troubleshooting, safety checks, and complete rewires.", img: "https://images.unsplash.com/photo-1558223190-184852c035be?q=80&w=800" },
+              { title: "Commercial Contracting", icon: "Building2", desc: "High-voltage layout, tenant improvements, structural wiring, lighting systems, and service panels.", img: "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?q=80&w=800" },
+              { title: "Smart Panel Upgrades", icon: "Zap", desc: "Transition your home's breaker panel to 200A. Maximize current safety and smart home compatibility.", img: "https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?q=80&w=800" },
+              { title: "EV Charger Installation", icon: "ShieldCheck", desc: "Expert wall connector level-2 charging box setups for Tesla, Rivian, and all modern electric vehicles.", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=800" }
+            ]
+          }
+        },
+        {
+          id: "vv-cta-services",
+          type: "VVCTA",
+          props: {
+            title: "Need Custom Electrical Enhancements?",
+            subtitle: "Get a free online quote estimate or schedule an onsite consultation in seconds.",
+            buttonText: "GET ESTIMATE NOW"
+          }
+        },
+        {
+          id: "vv-footer-services",
+          type: "VVFooter",
+          props: {
+            businessName: "VOLT VIKINGS",
+            tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+            description: "Tucson's premier local electrical contractor service. Providing residential, commercial, and specialty services with legendary safety standards.",
+            licensing: "AZ ROC #341258 | Licensed, Bonded & Insured",
+            phone: "(520) 555-0199",
+            email: "dispatch@voltvikings.com",
+            address: "Tucson - Phoenix Area, AZ"
+          }
+        }
+      ]
+    },
+    {
+      name: 'Viking Journey',
+      slug: '/journey',
+      sections: [
+        {
+          id: "vv-header-journey",
+          type: "VVHeader",
+          props: {
+            businessName: "VOLT VIKINGS",
+            tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+            phone: "(520) 555-0199",
+            ctaText: "BOOK ONLINE",
+            navLinks: ["HOME", "SERVICES", "JOURNEY", "REVIEWS", "CORRIDOR"]
+          }
+        },
+        {
+          id: "vv-hero-journey",
+          type: "VVHero",
+          props: {
+            badge: "Seamless Customer Experience",
+            title: "Our Viking Journey Process",
+            subtitle: "We believe in clear scheduling, prompt arrival, clean execution, and guaranteed client satisfaction.",
+            ctaText: "BOOK AN APPOINTMENT",
+            secondaryCtaText: "OUR PLEDGE",
+            bgImage: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070"
+          }
+        },
+        {
+          id: "vv-process-journey",
+          type: "VVProcess",
+          props: {
+            title: "Getting world class electrical services has never been easier",
+            steps: [
+              { title: "Get A Fast Quote", desc: "It’s never been easier. Just click the button and send us details of your project. We respond promptly.", icon: "Search" },
+              { title: "Set A Schedule", desc: "Get work done at a time that suits you with fast and easy scheduling. We arrive right on time.", icon: "Calendar" },
+              { title: "Sit Back & Relax", desc: "Our licensed, highly trained electricians handle everything safely. Get a legendary customer experience.", icon: "Shield" }
+            ]
+          }
+        },
+        {
+          id: "vv-cta-journey",
+          type: "VVCTA",
+          props: {
+            title: "Ready to Upgrade Your Power System?",
+            subtitle: "Get a free online quote estimate or schedule an onsite consultation in seconds.",
+            buttonText: "GET ESTIMATE NOW"
+          }
+        },
+        {
+          id: "vv-footer-journey",
+          type: "VVFooter",
+          props: {
+            businessName: "VOLT VIKINGS",
+            tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+            description: "Tucson's premier local electrical contractor service. Providing residential, commercial, and specialty services with legendary safety standards.",
+            licensing: "AZ ROC #341258 | Licensed, Bonded & Insured",
+            phone: "(520) 555-0199",
+            email: "dispatch@voltvikings.com",
+            address: "Tucson - Phoenix Area, AZ"
+          }
+        }
+      ]
+    },
+    {
+      name: 'Reviews',
+      slug: '/reviews',
+      sections: [
+        {
+          id: "vv-header-reviews",
+          type: "VVHeader",
+          props: {
+            businessName: "VOLT VIKINGS",
+            tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+            phone: "(520) 555-0199",
+            ctaText: "BOOK ONLINE",
+            navLinks: ["HOME", "SERVICES", "JOURNEY", "REVIEWS", "CORRIDOR"]
+          }
+        },
+        {
+          id: "vv-hero-reviews",
+          type: "VVHero",
+          props: {
+            badge: "Verified Client Testimonials",
+            title: "Tucson Neighbors Speak",
+            subtitle: "Read about our 5.0 Star rated electricians from actual local home and business owners.",
+            ctaText: "READ MORE REVIEWS",
+            secondaryCtaText: "LEAVE A REVIEW",
+            bgImage: "https://images.unsplash.com/photo-1558223190-184852c035be?q=80&w=800"
+          }
+        },
+        {
+          id: "vv-testimonials-reviews",
+          type: "VVTestimonials",
+          props: {
+            title: "Legendary Service, Proven by Tucson Neighbors",
+            reviews: [
+              { name: "Carmine C.", role: "Retired Electrician", quote: "As a retired Electrician, I called Volt Vikings who I used previously on some HOAs I managed. They let you know when they will arrive, work extremely clean, and know their code inside and out. Excellent service and reasonable pricing.", img: "https://randomuser.me/api/portraits/men/44.jpg" },
+              { name: "Glen T.", role: "Commercial Owner", quote: "I own a 29,000 sq ft commercial building and several apartments. For the past 5 years I have been calling Volt Vikings for all my electrical needs, from new equipment installs to complex troubleshooting. Qualified, competent crews every single time.", img: "https://randomuser.me/api/portraits/men/32.jpg" }
+            ]
+          }
+        },
+        {
+          id: "vv-cta-reviews",
+          type: "VVCTA",
+          props: {
+            title: "Ready to Experience Legendary Service?",
+            subtitle: "Get a free online quote estimate or schedule an onsite consultation in seconds.",
+            buttonText: "GET ESTIMATE NOW"
+          }
+        },
+        {
+          id: "vv-footer-reviews",
+          type: "VVFooter",
+          props: {
+            businessName: "VOLT VIKINGS",
+            tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+            description: "Tucson's premier local electrical contractor service. Providing residential, commercial, and specialty services with legendary safety standards.",
+            licensing: "AZ ROC #341258 | Licensed, Bonded & Insured",
+            phone: "(520) 555-0199",
+            email: "dispatch@voltvikings.com",
+            address: "Tucson - Phoenix Area, AZ"
+          }
+        }
+      ]
+    },
+    {
+      name: 'Corridor',
+      slug: '/corridor',
+      sections: [
+        {
+          id: "vv-header-corridor",
+          type: "VVHeader",
+          props: {
+            businessName: "VOLT VIKINGS",
+            tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+            phone: "(520) 555-0199",
+            ctaText: "BOOK ONLINE",
+            navLinks: ["HOME", "SERVICES", "JOURNEY", "REVIEWS", "CORRIDOR"]
+          }
+        },
+        {
+          id: "vv-hero-corridor",
+          type: "VVHero",
+          props: {
+            badge: "Tucson & Phoenix Office locations",
+            title: "Viking Service Corridor",
+            subtitle: "Find our service coverage area across the Phoenix to Tucson desert corridor.",
+            ctaText: "VIEW OFFICE DETAILS",
+            secondaryCtaText: "GET DIRECTIONS",
+            bgImage: "https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?q=80&w=800"
+          }
+        },
+        {
+          id: "vv-map-corridor",
+          type: "VVMap",
+          props: {
+            title: "Legendary Electrical Services Throughout Tucson & Phoenix Area",
+            desc: "No matter where you are, we've got your electrical needs covered. We provide rapid-response services across the region, giving everyone access to our highly experienced team. If you need electricians in Tucson, Mesa, Chandler, Tempe, or Phoenix, we are here for you!",
+            mapIframeUrl: "https://snazzymaps.com/embed/717236"
+          }
+        },
+        {
+          id: "vv-footer-corridor",
+          type: "VVFooter",
+          props: {
+            businessName: "VOLT VIKINGS",
+            tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
+            description: "Tucson's premier local electrical contractor service. Providing residential, commercial, and specialty services with legendary safety standards.",
+            licensing: "AZ ROC #341258 | Licensed, Bonded & Insured",
+            phone: "(520) 555-0199",
+            email: "dispatch@voltvikings.com",
+            address: "Tucson - Phoenix Area, AZ"
+          }
+        }
+      ]
+    }
+  ]
 };

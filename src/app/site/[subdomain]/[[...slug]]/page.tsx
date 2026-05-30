@@ -45,7 +45,13 @@ export default async function SiteFallbackPage({ params }: SiteFallbackPageProps
     : [];
 
   const theme = pageData.theme_json || {};
-  const themeStyle: React.CSSProperties = {};
+  const themeStyle: React.CSSProperties = {
+    ['--color-primary' as any]: theme.colorPrimary || '#3b82f6',
+    ['--color-secondary' as any]: theme.colorSecondary || '#10b981',
+    ['--color-accent' as any]: theme.colorAccent || '#f59e0b',
+    ['--color-text' as any]: theme.colorText || '#1a1a1a',
+    ['--color-card' as any]: theme.colorCard || '#ffffff',
+  };
   if (theme.fontFamily) {
     themeStyle.fontFamily = theme.fontFamily;
   }
@@ -75,7 +81,7 @@ export default async function SiteFallbackPage({ params }: SiteFallbackPageProps
           }
           return (
             <div key={section.id}>
-              {Renderer(section.props || {})}
+              {Renderer({ ...(section.props || {}), tenantId: tenant.id })}
             </div>
           );
         })}

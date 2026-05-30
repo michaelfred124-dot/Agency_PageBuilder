@@ -2,7 +2,9 @@
 import { motion } from 'motion/react';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { COLORS } from '@/constants';
+import { getSupabaseBrowserClient } from '@/lib/supabase';
 
 const PLANS = [
   {
@@ -48,6 +50,19 @@ const PLANS = [
 ];
 
 export default function PricingPage() {
+  const router = useRouter();
+
+  const handleGetStarted = async (planName: string) => {
+    const supabase = getSupabaseBrowserClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    const onboardingUrl = `/onboarding?plan=${encodeURIComponent(planName)}`;
+    if (session) {
+      router.push(onboardingUrl);
+    } else {
+      router.push(`/login?redirect=${encodeURIComponent(onboardingUrl)}`);
+    }
+  };
+
   return (
     <div className="pt-24 lg:pt-32 bg-[#F1EDE1] min-h-screen">
       <section className="py-20 px-4 lg:px-6">
@@ -104,13 +119,13 @@ export default function PricingPage() {
                   </ul>
                 </div>
 
-                <Link 
-                  href={`/onboarding?plan=${encodeURIComponent(plan.name)}`}
+                <button 
+                  onClick={() => handleGetStarted(plan.name)}
                   className="w-full py-4 text-lg font-black uppercase tracking-widest rounded-xl border-4 border-black hover:bg-black hover:text-white transition-all shadow-[6px_6px_0px_rgba(34,34,34,1)] hover:shadow-[10px_10px_0px_rgba(34,34,34,1)] hover:-translate-y-1 mt-auto text-center block"
                   style={{ backgroundColor: plan.popular ? plan.color : 'white', color: plan.popular ? 'white' : 'black' }}
                 >
                   Get Started
-                </Link>
+                </button>
               </motion.div>
             ))}
           </div>
