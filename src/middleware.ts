@@ -74,7 +74,7 @@ export async function middleware(request: NextRequest) {
   const hostnameWithoutPort = hostname.split(':')[0];
 
   // If the request is to a root domain (agency site), pass through
-  if (ROOT_DOMAINS.includes(hostnameWithoutPort)) {
+  if (ROOT_DOMAINS.includes(hostnameWithoutPort) || hostnameWithoutPort.endsWith('.vercel.app')) {
     return supabaseResponse;
   }
 
