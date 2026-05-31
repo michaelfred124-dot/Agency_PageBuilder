@@ -51,6 +51,7 @@ export default async function SiteFallbackPage({ params }: SiteFallbackPageProps
     ['--color-accent' as any]: theme.colorAccent || '#f59e0b',
     ['--color-text' as any]: theme.colorText || '#1a1a1a',
     ['--color-card' as any]: theme.colorCard || '#ffffff',
+    backgroundColor: theme.pageBackground || '#ffffff',
   };
   if (theme.fontFamily) {
     themeStyle.fontFamily = theme.fontFamily;
@@ -72,7 +73,31 @@ export default async function SiteFallbackPage({ params }: SiteFallbackPageProps
         />
       )}
 
-      <main style={themeStyle}>
+      {/* Dynamic style overrides for builder features (button roundedness, custom font, body background) */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .is-tenant-site body {
+          background-color: ${theme.pageBackground || '#ffffff'} !important;
+        }
+        main button, main .btn, main a.inline-block {
+          border-radius: ${
+            theme?.buttonRoundedness === 'sharp' ? '0px !important' :
+            theme?.buttonRoundedness === 'rounded-xl' ? '12px !important' :
+            theme?.buttonRoundedness === 'rounded-full' ? '9999px !important' :
+            '12px !important'
+          };
+        }
+        main {
+          font-family: ${
+            theme?.fontFamily && theme.fontFamily !== 'System Default' ? `"${theme.fontFamily}", sans-serif !important` :
+            theme?.fontFamily === 'Space Grotesk' ? '"Space Grotesk", sans-serif !important' :
+            theme?.fontFamily === 'Serif' ? 'Georgia, serif !important' :
+            theme?.fontFamily === 'Mono' ? 'monospace !important' :
+            'inherit'
+          };
+        }
+      `}} />
+
+      <main style={themeStyle} className="@container min-h-screen">
         {sections.map((section: any) => {
           const Renderer = Renderers[section.type];
           if (!Renderer) {

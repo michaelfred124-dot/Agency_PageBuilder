@@ -41,17 +41,45 @@ export default function RootLayout({
   const isLoginPage = pathname === '/login';
   const isOnboardingPage = pathname === '/onboarding';
   const isPreviewPage = pathname?.startsWith('/preview/');
-  const isTenantPage = pathname?.startsWith('/_tenants/');
+  const isTenantPage = pathname?.startsWith('/tenants/');
   const isSiteFallbackPage = pathname?.startsWith('/site/');
 
   const shouldHideGlobalNav = isTemplatePage || isDashboardPage || isLoginPage || isOnboardingPage || isPreviewPage || isTenantPage || isSiteFallbackPage;
 
   return (
     <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var hostname = window.location.hostname;
+                  var isRoot = ['michaelfreddesigns.com', 'www.michaelfreddesigns.com', 'localhost', '127.0.0.1'].indexOf(hostname) !== -1 || hostname.endsWith('.vercel.app');
+                  var isSub = hostname.endsWith('.michaelfreddesigns.com') && hostname !== 'michaelfreddesigns.com' && hostname !== 'www.michaelfreddesigns.com';
+                  if (!isRoot || isSub) {
+                    document.documentElement.classList.add('is-tenant-site');
+                  }
+                } catch (e) {
+                  console.error(e);
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased selection:bg-black selection:text-white">
-        {!shouldHideGlobalNav && <Navbar />}
+        {!shouldHideGlobalNav && (
+          <div className="agency-global-nav">
+            <Navbar />
+          </div>
+        )}
         {children}
-        {!shouldHideGlobalNav && <Footer />}
+        {!shouldHideGlobalNav && (
+          <div className="agency-global-footer">
+            <Footer />
+          </div>
+        )}
       </body>
     </html>
   );

@@ -60,6 +60,7 @@ export interface Tenant {
   name: string;
   subdomain: string;
   custom_domain: string | null;
+  owner_id?: string | null;
   created_at: string;
 }
 

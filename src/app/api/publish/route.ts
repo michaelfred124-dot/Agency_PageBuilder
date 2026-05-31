@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createTenant, getTenantBySubdomain, upsertPageData } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/server';
 
 /**
  * API Route: POST /api/publish
@@ -18,8 +19,19 @@ import { createTenant, getTenantBySubdomain, upsertPageData } from '@/lib/supaba
  */
 export async function POST(request: NextRequest) {
   try {
+    // 1. Authenticate the user server-side
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Please log in first.' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
-    const { subdomain, siteName, pageSlug = 'index', canvasJson, themeJson, ownerId } = body;
+    const { subdomain, siteName, pageSlug = 'index', canvasJson, themeJson } = body;
 
     if (!subdomain || !siteName || !canvasJson) {
       return NextResponse.json(
@@ -37,14 +49,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 1. Check if tenant exists, create if not
+    // 2. Check if tenant exists, verify owner or create new
     let tenant = await getTenantBySubdomain(cleanSubdomain);
     if (!tenant) {
-      tenant = await createTenant(siteName, cleanSubdomain, undefined, ownerId);
+      // Create new tenant and bind it to the authenticated user's ID
+      tenant = await createTenant(siteName, cleanSubdomain, undefined, user.id);
       if (!tenant) {
         return NextResponse.json(
           { error: 'Failed to create tenant. The subdomain may already be taken.' },
           { status: 409 }
+        );
+      }
+    } else {
+      // If it exists, verify the authenticated user is the owner
+      if (tenant.owner_id && tenant.owner_id !== user.id) {
+        return NextResponse.json(
+          { error: 'Forbidden: You do not own this site and cannot publish changes to it.' },
+          { status: 403 }
         );
       }
     }

@@ -9,3 +9,13 @@ body {
   font-family: var(--font-sans);
   background-color: #F1EDE1;
 }
+
+/* Tenant-specific overrides to hide agency navigation and reset background */
+.is-tenant-site .agency-global-nav,
+.is-tenant-site .agency-global-footer {
+  display: none !important;
+}
+
+.is-tenant-site body {
+  background-color: #ffffff !important;
+}

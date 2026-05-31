@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/server';
 
 // Vercel API credentials
 const VERCEL_AUTH_TOKEN = process.env.VERCEL_AUTH_TOKEN;
@@ -13,6 +14,13 @@ const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
  */
 export async function GET(request: NextRequest) {
   try {
+    // Authenticate user
+    const supabaseClient = await createClient();
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized: Please log in first.' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const searchQuery = searchParams.get('search');
     const domain = searchParams.get('domain');
@@ -70,28 +78,27 @@ export async function GET(request: NextRequest) {
     }
 
     // 2. Handle metadata & verification retrieval
-    if (!domain) {
-      return NextResponse.json({ error: 'Missing domain or search parameter' }, { status: 400 });
+    if (!domain || !tenantId) {
+      return NextResponse.json({ error: 'Missing domain or tenantId' }, { status: 400 });
+    }
+
+    // Verify tenant ownership
+    const supabase = getSupabaseServerClient();
+    const { data: tenant, error: tenantError } = await supabase
+      .from('tenants')
+      .select('owner_id, domain_info')
+      .eq('id', tenantId)
+      .single();
+
+    if (tenantError || !tenant || tenant.owner_id !== user.id) {
+      return NextResponse.json({ error: 'Forbidden: You do not own this site.' }, { status: 403 });
     }
 
     // Sanitize domain: strip http://, https://, www., and trailing slashes
     let cleanDomain = domain.trim().toLowerCase();
     cleanDomain = cleanDomain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
 
-    const supabase = getSupabaseServerClient();
-    let dbDomainInfo = null;
-
-    if (tenantId) {
-      const { data, error } = await supabase
-        .from('tenants')
-        .select('domain_info')
-        .eq('id', tenantId)
-        .single();
-      
-      if (!error && data) {
-        dbDomainInfo = data.domain_info;
-      }
-    }
+    const dbDomainInfo = tenant.domain_info;
 
     let verified = false;
     let status = 'Pending Configuration';
@@ -146,10 +153,29 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate user
+    const supabaseClient = await createClient();
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized: Please log in first.' }, { status: 401 });
+    }
+
     const { tenantId, domain, isPurchase } = await request.json();
 
     if (!tenantId || !domain) {
       return NextResponse.json({ error: 'Missing tenantId or domain' }, { status: 400 });
+    }
+
+    // Verify tenant ownership
+    const supabase = getSupabaseServerClient();
+    const { data: tenant, error: tenantError } = await supabase
+      .from('tenants')
+      .select('owner_id')
+      .eq('id', tenantId)
+      .single();
+
+    if (tenantError || !tenant || tenant.owner_id !== user.id) {
+      return NextResponse.json({ error: 'Forbidden: You do not own this site.' }, { status: 403 });
     }
 
     // Sanitize domain: strip http://, https://, www., and trailing slashes
@@ -228,7 +254,6 @@ export async function POST(request: NextRequest) {
     };
 
     // 4. Update tenant settings in Supabase
-    const supabase = getSupabaseServerClient();
     const { error: dbError } = await supabase
       .from('tenants')
       .update({ 
@@ -265,13 +290,30 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   try {
+    // Authenticate user
+    const supabaseClient = await createClient();
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized: Please log in first.' }, { status: 401 });
+    }
+
     const { tenantId, domainInfo } = await request.json();
 
     if (!tenantId || !domainInfo) {
       return NextResponse.json({ error: 'Missing tenantId or domainInfo' }, { status: 400 });
     }
 
+    // Verify tenant ownership
     const supabase = getSupabaseServerClient();
+    const { data: tenant, error: tenantError } = await supabase
+      .from('tenants')
+      .select('owner_id')
+      .eq('id', tenantId)
+      .single();
+
+    if (tenantError || !tenant || tenant.owner_id !== user.id) {
+      return NextResponse.json({ error: 'Forbidden: You do not own this site.' }, { status: 403 });
+    }
     const { error: dbError } = await supabase
       .from('tenants')
       .update({ domain_info: domainInfo })
@@ -294,10 +336,29 @@ export async function PUT(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
+    // Authenticate user
+    const supabaseClient = await createClient();
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized: Please log in first.' }, { status: 401 });
+    }
+
     const { tenantId, domain } = await request.json();
 
     if (!tenantId || !domain) {
       return NextResponse.json({ error: 'Missing tenantId or domain' }, { status: 400 });
+    }
+
+    // Verify tenant ownership
+    const supabase = getSupabaseServerClient();
+    const { data: tenant, error: tenantError } = await supabase
+      .from('tenants')
+      .select('owner_id')
+      .eq('id', tenantId)
+      .single();
+
+    if (tenantError || !tenant || tenant.owner_id !== user.id) {
+      return NextResponse.json({ error: 'Forbidden: You do not own this site.' }, { status: 403 });
     }
 
     // Sanitize domain: strip http://, https://, www., and trailing slashes
@@ -320,7 +381,6 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Clear tenant settings in Supabase
-    const supabase = getSupabaseServerClient();
     const { error: dbError } = await supabase
       .from('tenants')
       .update({ 
