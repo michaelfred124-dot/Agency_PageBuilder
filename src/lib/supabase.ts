@@ -96,14 +96,16 @@ export async function getTenantBySubdomain(subdomain: string): Promise<Tenant | 
  */
 export async function getTenantByCustomDomain(domain: string): Promise<Tenant | null> {
   const supabase = getSupabaseServerClient();
+  const cleanDomain = domain.replace(/^www\./, '');
+  
   const { data, error } = await supabase
     .from('tenants')
     .select('*')
-    .eq('custom_domain', domain)
-    .single();
+    .or(`custom_domain.eq.${domain},custom_domain.eq.${cleanDomain}`)
+    .limit(1);
 
-  if (error || !data) return null;
-  return data as Tenant;
+  if (error || !data || data.length === 0) return null;
+  return data[0] as Tenant;
 }
 
 // ---------------------------------------------------------------------------
