@@ -58,6 +58,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const liveUrl = tenant.custom_domain 
+      ? tenant.custom_domain
+      : `${cleanSubdomain}.michaelfreddesigns.com`;
+
     return NextResponse.json({
       success: true,
       tenant: {
@@ -71,7 +75,7 @@ export async function POST(request: NextRequest) {
         page_slug: pageData.page_slug,
         updated_at: pageData.updated_at,
       },
-      liveUrl: `${cleanSubdomain}.michaelfreddesigns.com`,
+      liveUrl: liveUrl,
       devUrl: `/site/${cleanSubdomain}`,
     });
   } catch (error: any) {
