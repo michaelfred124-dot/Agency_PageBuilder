@@ -1,6 +1,7 @@
 "use client";
 import { motion } from 'motion/react';
 import { COLORS } from '@/constants';
+import { Quote } from 'lucide-react';
 
 const TESTIMONIALS = [
   {
@@ -45,12 +46,12 @@ import AnimatedSquiggles from './AnimatedSquiggles';
 
 export default function Testimonials() {
   return (
-    <section className="py-20 lg:py-32 bg-white px-4 lg:px-6 border-t-[6px] lg:border-t-8 border-black relative overflow-hidden">
+    <section className="py-20 lg:py-32 bg-[#F7F8FA] px-4 lg:px-6 border-t border-zinc-200/50 relative overflow-hidden">
       <AnimatedSquiggles />
       <div className="max-w-[1400px] mx-auto relative z-10">
         <div className="mb-16 lg:mb-24 text-center">
-          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-black/40">Wall of Love</span>
-          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-black mt-4 leading-[0.9]">
+          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Wall of Love</span>
+          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 mt-4 leading-none">
             Client <span style={{ color: COLORS.purple }}>Praise</span>
           </h2>
         </div>
@@ -63,29 +64,29 @@ export default function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -8, x: -8, boxShadow: `18px 18px 0px ${COLORS.black}` }}
-              className="p-8 lg:p-10 border-[6px] border-black rounded-[24px] lg:rounded-[32px] bg-white relative flex flex-col justify-between transition-all duration-300 group"
-              style={{ boxShadow: `10px 10px 0px ${COLORS.black}` }}
+              whileHover={{ y: -4, x: -4, boxShadow: `6px 6px 0px rgba(9,9,11,1)` }}
+              className="p-8 lg:p-10 border-2 border-zinc-950 rounded-3xl bg-white relative flex flex-col justify-between transition-all duration-300 group"
+              style={{ boxShadow: `4px 4px 0px rgba(9,9,11,1)` }}
             >
               <div>
                 <div 
-                  className="text-6xl font-black mb-4 absolute -top-8 left-8 px-2 bg-white border-[6px] border-black rounded-full w-16 h-16 flex items-center justify-center leading-none z-10 group-hover:scale-110 transition-transform duration-300"
-                  style={{ color: t.color }}
+                  className="w-10 h-10 border-2 border-zinc-950 shadow-[2px_2px_0px_rgba(9,9,11,1)] rounded-xl flex items-center justify-center absolute -top-5 left-8 z-10 group-hover:scale-105 transition-transform duration-300"
+                  style={{ backgroundColor: t.color }}
                 >
-                  <span className="mt-8">"</span>
+                  <Quote className="w-4 h-4 text-zinc-950 fill-zinc-950" />
                 </div>
-                <p className="text-xl lg:text-2xl font-bold leading-relaxed mb-8 mt-4 uppercase tracking-tighter text-black">
-                  {t.quote}
+                <p className="text-lg lg:text-xl font-bold leading-relaxed mb-8 mt-4 uppercase tracking-tight text-zinc-900">
+                  "{t.quote}"
                 </p>
               </div>
-              <div className="flex items-center gap-4 border-t-[6px] border-black/10 pt-6">
+              <div className="flex items-center gap-4 border-t border-zinc-200 pt-6">
                 <div 
-                  className="w-12 h-12 rounded-full border-4 border-black flex-shrink-0"
+                  className="w-10 h-10 rounded-full border-2 border-zinc-950 flex-shrink-0 shadow-[1.5px_1.5px_0px_rgba(9,9,11,1)]"
                   style={{ backgroundColor: t.color }}
                 />
                 <div>
-                  <div className="font-black uppercase tracking-widest text-sm">{t.author}</div>
-                  <div className="text-black/50 font-bold uppercase text-xs tracking-widest mt-1">{t.role}</div>
+                  <div className="font-extrabold uppercase tracking-wider text-xs text-zinc-900">{t.author}</div>
+                  <div className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest mt-1">{t.role}</div>
                 </div>
               </div>
             </motion.div>

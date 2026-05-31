@@ -33,11 +33,11 @@ const PRICING_PLANS = [
 
 export default function Pricing() {
   return (
-    <section className="py-20 lg:py-32 bg-[#F1EDE1] px-4 lg:px-6 relative overflow-hidden border-t-[6px] lg:border-t-8 border-black z-10">
+    <section className="py-20 lg:py-32 bg-[#F7F8FA] px-4 lg:px-6 relative overflow-hidden border-t border-zinc-200/50 z-10">
       <div className="max-w-[1200px] mx-auto relative z-10">
         <div className="text-center mb-16 lg:mb-24">
-          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-black/40">Pricing</span>
-          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-black mt-4">
+          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Pricing</span>
+          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 mt-4">
             Simple <span style={{ color: COLORS.blue }}>Plans</span>
           </h2>
         </div>
@@ -50,56 +50,56 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -8, x: -8, boxShadow: `16px 16px 0px ${COLORS.black}` }}
-              className={`p-8 lg:p-12 border-[6px] border-black rounded-[32px] bg-white relative flex flex-col transition-all duration-300`}
-              style={{ boxShadow: `10px 10px 0px ${COLORS.black}` }}
+              whileHover={{ y: -4, x: -4, boxShadow: `6px 6px 0px rgba(9,9,11,1)` }}
+              className={`p-8 lg:p-12 border-2 border-zinc-950 rounded-3xl bg-white relative flex flex-col transition-all duration-300`}
+              style={{ boxShadow: `4px 4px 0px rgba(9,9,11,1)` }}
             >
               {plan.popular && (
                 <div 
-                  className="absolute -top-6 right-8 px-4 py-2 border-4 border-black rounded-full font-black uppercase tracking-widest text-sm bg-black text-white"
+                  className="absolute -top-4 right-8 px-4 py-1.5 border-2 border-zinc-950 rounded-full font-bold uppercase tracking-widest text-xs text-white shadow-[2px_2px_0px_rgba(9,9,11,1)]"
                   style={{ backgroundColor: COLORS.orange }}
                 >
                   Most Popular
                 </div>
               )}
-              <h3 className="text-3xl font-black uppercase tracking-tighter mb-2 text-black" style={{ color: plan.color }}>
+              <h3 className="text-2xl font-extrabold uppercase tracking-tight mb-2" style={{ color: plan.color }}>
                 {plan.name}
               </h3>
-              <p className="text-black/60 font-bold mb-8 uppercase tracking-wider text-sm">{plan.description}</p>
+              <p className="text-zinc-500 font-semibold uppercase tracking-wider text-xs">{plan.description}</p>
               
-              <div className="mb-8 flex items-baseline gap-2">
-                <span className="text-6xl font-black tracking-tighter text-black">{plan.price}</span>
-                <span className="text-black/50 font-bold uppercase tracking-widest">/month</span>
+              <div className="mb-8 flex items-baseline gap-2 mt-4">
+                <span className="text-5xl font-black tracking-tight text-zinc-950">{plan.price}</span>
+                <span className="text-zinc-400 font-bold uppercase tracking-wider text-xs">/month</span>
               </div>
 
               <div className="space-y-4 mb-10 flex-grow">
                 {plan.features.map((feature, j) => (
                   <div key={j} className="flex items-start gap-4">
-                    <div className="w-6 h-6 rounded-full bg-black/5 flex items-center justify-center shrink-0 mt-0.5 border-2 border-black">
-                      <Check className="w-4 h-4 text-black" strokeWidth={4} />
+                    <div className="w-5 h-5 rounded-full bg-zinc-50 flex items-center justify-center shrink-0 mt-0.5 border-2 border-zinc-950 shadow-[1.5px_1.5px_0px_rgba(9,9,11,1)]">
+                      <Check className="w-3.5 h-3.5 text-zinc-950" strokeWidth={3} />
                     </div>
-                    <span className="font-bold text-black">{feature}</span>
+                    <span className="font-semibold text-sm text-zinc-700">{feature}</span>
                   </div>
                 ))}
               </div>
 
-              <button className="w-full py-4 border-[4px] border-black rounded-2xl font-black uppercase tracking-widest hover:bg-black hover:text-white transition-colors text-black">
+              <button className="w-full py-3 border-2 border-zinc-950 rounded-full font-bold uppercase tracking-wider text-xs hover:bg-zinc-950 hover:text-white transition-colors text-zinc-950 bg-white shadow-[2px_2px_0px_rgba(9,9,11,1)] cursor-pointer">
                 Get Started
               </button>
             </motion.div>
           ))}
         </div>
 
-        <div className="max-w-4xl mx-auto mt-12 text-center p-6 border-[4px] border-black rounded-[24px] bg-[#F1EDE1]" style={{ boxShadow: `6px 6px 0px ${COLORS.black}` }}>
-          <h4 className="text-2xl font-black uppercase tracking-tighter text-black mb-2">Own Your Code</h4>
-          <p className="text-black/80 font-medium">
+        <div className="max-w-4xl mx-auto mt-16 p-8 border border-zinc-200 rounded-2xl bg-white shadow-xl shadow-zinc-150/50">
+          <h4 className="text-xl font-extrabold uppercase tracking-tight text-zinc-950 mb-2">Own Your Code</h4>
+          <p className="text-zinc-650 font-normal text-sm leading-relaxed">
             We don't hold your website hostage. After 1 year of continuous payments, you have the option to choose whether you want to stay with our managed services for ongoing support and hosting, or export your code entirely. Once exported, the website is 100% yours to manage, host, and modify as you please. No hard feelings—we know things change, and we're still friends. We can even help you set up new hosting and configuration.
           </p>
         </div>
 
         <div className="mt-24 max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black">
+            <h3 className="text-2xl md:text-4xl font-extrabold uppercase tracking-tight text-zinc-950">
               Add-on <span style={{ color: COLORS.orange }}>Services</span>
             </h3>
           </div>
@@ -117,15 +117,15 @@ export default function Pricing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -4, x: -4, boxShadow: `8px 8px 0px ${COLORS.black}` }}
-                className="p-6 border-[4px] border-black rounded-[24px] bg-white transition-all cursor-default"
-                style={{ boxShadow: `4px 4px 0px ${COLORS.black}` }}
+                whileHover={{ y: -2, x: -2, boxShadow: `4px 4px 0px rgba(9,9,11,1)` }}
+                className="p-6 border-2 border-zinc-950 rounded-2xl bg-white transition-all cursor-default"
+                style={{ boxShadow: `2.5px 2.5px 0px rgba(9,9,11,1)` }}
               >
                 <div className="flex justify-between items-start mb-2">
-                  <h4 className="text-xl font-black uppercase tracking-tighter text-black">{addon.name}</h4>
-                  <span className="font-bold text-black border-2 border-black rounded-full px-3 py-1 text-sm bg-black/5">{addon.price}</span>
+                  <h4 className="text-lg font-extrabold uppercase tracking-tight text-zinc-950">{addon.name}</h4>
+                  <span className="font-bold text-zinc-950 border border-zinc-950 rounded-full px-3 py-0.5 text-xs bg-zinc-50 shadow-[1.5px_1.5px_0px_rgba(9,9,11,1)]">{addon.price}</span>
                 </div>
-                <p className="text-black/60 font-medium text-sm">{addon.description}</p>
+                <p className="text-zinc-500 font-normal text-xs leading-relaxed">{addon.description}</p>
               </motion.div>
             ))}
           </div>

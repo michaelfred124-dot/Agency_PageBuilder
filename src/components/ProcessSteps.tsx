@@ -48,14 +48,14 @@ const PROCESS_STEPS = [
 
 export default function ProcessSteps() {
   return (
-    <section id="process" className="py-20 lg:py-32 bg-white px-4 lg:px-6 overflow-hidden">
+    <section id="process" className="py-20 lg:py-32 bg-transparent px-4 lg:px-6 overflow-hidden">
       <div className="max-w-[1400px] mx-auto relative">
         <div className="flex flex-col mb-16 lg:mb-24 text-center items-center">
-          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-black/40 mb-4">The Process</span>
-          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-black leading-[0.9] max-w-4xl">
+          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400 mb-4">The Process</span>
+          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 leading-none max-w-4xl">
             How We <br />Work
           </h2>
-          <p className="max-w-2xl text-black/60 text-lg lg:text-xl leading-relaxed font-medium mt-6">
+          <p className="max-w-2xl text-zinc-600 text-base md:text-lg leading-relaxed font-normal mt-6">
             We offer an alternative to unpredictable freelancers and expensive traditional agencies. Pay a flat monthly fee and get unlimited design and development requests delivered sequentially.
           </p>
         </div>
@@ -66,11 +66,11 @@ export default function ProcessSteps() {
              <svg width="100%" height="100%">
               <defs>
                 <pattern id="swirl" x="0" y="0" width="64" height="128" patternUnits="userSpaceOnUse">
-                  <path d="M 32 0 Q 64 32 32 64 T 32 128" fill="none" stroke="black" strokeWidth="6" strokeLinecap="round" />
+                  <path d="M 32 0 Q 64 32 32 64 T 32 128" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" />
                 </pattern>
               </defs>
               <rect x="0" y="0" width="64" height="100%" fill="url(#swirl)" />
-            </svg>
+             </svg>
           </div>
 
           <div className="flex flex-col space-y-16 lg:space-y-24">
@@ -78,8 +78,8 @@ export default function ProcessSteps() {
               <div key={step.num} className={`relative flex flex-col lg:flex-row items-center w-full gap-6 lg:gap-0 ${i % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
                 
                 {/* Timeline Dot (Desktop Only) */}
-                <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border-[6px] border-black bg-white z-10 items-center justify-center">
-                  <div className="w-5 h-5 rounded-full" style={{ backgroundColor: step.color }} />
+                <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-8 h-8 rounded-full border-2 border-zinc-950 bg-white z-10 items-center justify-center shadow-[1.5px_1.5px_0px_rgba(9,9,11,1)]">
+                  <div className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: step.color }} />
                 </div>
 
                 {/* Image and Number Wrapper */}
@@ -90,7 +90,7 @@ export default function ProcessSteps() {
                   transition={{ duration: 0.8 }}
                   className={`flex-1 w-full flex ${i % 2 !== 0 ? 'lg:justify-start lg:pl-16' : 'lg:justify-end lg:pr-16'} justify-center relative z-20 h-[300px] lg:h-[450px]`}
                 >
-                  <div className="relative w-full max-w-[500px] h-full rounded-[32px] overflow-hidden border-[6px] lg:border-8 border-black shadow-[12px_12px_0px_rgba(0,0,0,1)] group">
+                  <div className="relative w-full max-w-[500px] h-full rounded-3xl overflow-hidden border-2 border-zinc-950 shadow-[4px_4px_0px_rgba(9,9,11,1)] group">
                     <img 
                       src={(step.image) || undefined} 
                       alt={step.title} 
@@ -99,8 +99,8 @@ export default function ProcessSteps() {
                     />
                     <div className="absolute inset-0 bg-black/20" />
                     <span
-                      className="absolute bottom-4 left-4 lg:bottom-8 lg:left-8 text-[80px] lg:text-[120px] font-black leading-[0.8] drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] lg:drop-shadow-[6px_6px_0px_rgba(0,0,0,1)] uppercase tracking-tighter z-10"
-                      style={{ color: step.color, WebkitTextStroke: '2px #222' }}
+                      className="absolute bottom-4 left-4 lg:bottom-8 lg:left-8 text-[70px] lg:text-[100px] font-black leading-[0.8] drop-shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] uppercase tracking-tighter z-10"
+                      style={{ color: step.color, WebkitTextStroke: '1.5px #222' }}
                     >
                       {step.num}
                     </span>
@@ -116,15 +116,15 @@ export default function ProcessSteps() {
                   className={`flex-1 w-full z-20 flex ${i % 2 !== 0 ? 'lg:justify-end lg:pr-8' : 'lg:justify-start lg:pl-8'}`}
                 >
                   <div 
-                    className="p-8 lg:p-10 border-[6px] border-black rounded-[24px] lg:rounded-[32px] bg-white w-full max-w-lg transition-transform hover:-translate-y-2 duration-300"
+                    className="p-8 lg:p-10 border-2 border-zinc-950 rounded-3xl bg-white w-full max-w-lg transition-transform hover:-translate-y-1 duration-300"
                     style={{
-                      boxShadow: `10px 10px 0px ${COLORS.black}`,
+                      boxShadow: `4px 4px 0px rgba(9,9,11,1)`,
                     }}
                   >
-                    <h3 className="text-2xl lg:text-4xl font-black uppercase tracking-tighter mb-4 text-black leading-none">
+                    <h3 className="text-xl lg:text-3xl font-extrabold uppercase tracking-tight mb-4 text-zinc-950 leading-none">
                       {step.title}
                     </h3>
-                    <p className="text-black/70 font-medium text-base lg:text-lg leading-relaxed">
+                    <p className="text-zinc-650 font-normal text-sm lg:text-base leading-relaxed">
                       {step.description}
                     </p>
                   </div>
@@ -139,9 +139,8 @@ export default function ProcessSteps() {
         <div className="mt-32 flex justify-center pb-20">
           <Link href="/pricing">
             <motion.div
-              whileHover={{ scale: 1.05, translateY: -5 }}
-              className="px-12 lg:px-16 py-6 border-8 border-black text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-[10px_10px_0px_rgba(34,34,34,1)] hover:shadow-[20px_20px_0px_rgba(34,34,34,1)] transition-all inline-block w-fit text-center text-lg lg:text-xl"
-              style={{ backgroundColor: COLORS.purple }}
+              whileHover={{ scale: 1.03, translateY: -2 }}
+              className="px-10 py-4 border-2 border-zinc-950 text-zinc-950 hover:bg-zinc-950 hover:text-white font-bold uppercase tracking-widest rounded-full shadow-[4px_4px_0px_rgba(9,9,11,1)] hover:shadow-[6px_6px_0px_rgba(9,9,11,1)] transition-all inline-block w-fit text-center text-sm cursor-pointer bg-white"
             >
               Get Started
             </motion.div>

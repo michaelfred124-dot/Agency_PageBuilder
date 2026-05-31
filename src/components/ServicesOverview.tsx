@@ -4,52 +4,55 @@ import * as LucideIcons from 'lucide-react';
 import { SERVICES, COLORS } from '@/constants';
 import Link from 'next/link';
 
-import AnimatedSquiggles from './AnimatedSquiggles';
-
 export default function ServicesOverview() {
   return (
-    <section id="services" className="py-20 lg:py-32 bg-white px-4 lg:px-6 relative overflow-hidden">
-      <AnimatedSquiggles />
+    <section id="services" className="py-20 lg:py-32 bg-[#F7F8FA] px-6 relative overflow-hidden border-b border-zinc-200/50">
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
+      
       <div className="max-w-[1400px] mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 lg:mb-24 gap-8 lg:gap-12">
           <div className="flex flex-col space-y-4">
-            <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-black/40">Services</span>
-            <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-black leading-[0.9]">
+            <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Services</span>
+            <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 leading-none">
               What We <br />Offer
             </h2>
           </div>
-          <p className="max-w-xl text-black/60 text-lg lg:text-xl leading-relaxed font-medium">
-            We provide high-end, bespoke web design and development. No templates, no off-the-shelf solutions. Every pixel is crafted with intention to make you stand out.
+          <p className="max-w-xl text-zinc-600 text-base md:text-lg leading-relaxed font-normal">
+            We deliver top-tier, custom visual interfaces. No generic templates, no technical compromises. Every feature is crafted headlessly to ensure maximum performance and SEO compliance.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Blueprint-style thin border grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {SERVICES.map((skill, i) => {
             const Icon = (LucideIcons as any)[skill.icon];
             return (
               <motion.div 
                 key={skill.title}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -6, x: -6, boxShadow: `14px 14px 0px ${COLORS.black}` }}
-                className="p-8 lg:p-10 rounded-[24px] lg:rounded-[32px] border-4 lg:border-[6px] border-black transition-all duration-300 group scroll-mt-32"
-                style={{ 
-                  backgroundColor: COLORS.offWhite,
-                  boxShadow: `8px 8px 0px ${COLORS.black}`,
-                }}
+                transition={{ delay: i * 0.05 }}
+                className="p-8 rounded-2xl border border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.02)] transition-all duration-300 relative group"
               >
+                {/* Simulated glow backdrop on hover */}
                 <div 
-                  className="mb-8 p-4 rounded-2xl w-fit border-[4px] border-black group-hover:scale-110 transition-transform shadow-[4px_4px_0px_rgba(0,0,0,1)] group-hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] duration-300"
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none blur-xl"
+                  style={{
+                    background: `radial-gradient(circle at 50% 50%, ${skill.color}05, transparent 50%)`
+                  }}
+                />
+                
+                <div 
+                  className="mb-6 p-3 rounded-xl w-fit border-2 border-zinc-950 shadow-[3px_3px_0px_rgba(9,9,11,1)] group-hover:scale-105 transition-transform duration-300"
                   style={{ backgroundColor: skill.color }}
                 >
-                  {Icon && <Icon className="w-8 h-8 text-black" />}
+                  {Icon && <Icon className="w-5 h-5 text-zinc-950" />}
                 </div>
-                <h3 className="text-2xl font-black mb-4 uppercase tracking-tighter text-black">
+                <h3 className="text-lg font-bold mb-3 text-zinc-900">
                   {skill.title}
                 </h3>
-                <p className="text-black/70 font-medium leading-relaxed">
+                <p className="text-sm text-zinc-650 leading-relaxed font-normal">
                   {skill.description}
                 </p>
               </motion.div>
@@ -57,17 +60,18 @@ export default function ServicesOverview() {
           })}
         </div>
 
-        <div className="mt-20 flex justify-center">
+        <div className="mt-16 flex justify-center">
           <Link href="/process">
-            <motion.div
-              whileHover={{ scale: 1.05, translateY: -5 }}
-              className="px-12 py-5 bg-black text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-[10px_10px_0px_rgba(34,34,34,0.2)] hover:shadow-[15px_15px_0px_rgba(34,34,34,0.3)] transition-all inline-block"
+            <button
+              className="px-8 py-3.5 bg-zinc-950 hover:bg-zinc-900 text-white font-semibold uppercase tracking-widest text-xs rounded-full transition-all cursor-pointer"
             >
               See Our Process
-            </motion.div>
+            </button>
           </Link>
         </div>
       </div>
     </section>
   );
 }
+
+

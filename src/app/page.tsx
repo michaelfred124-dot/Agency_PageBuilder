@@ -1,7 +1,7 @@
 "use client";
 import Hero from '@/components/Hero';
-import TrustedBy from '@/components/TrustedBy';
 import ServicesOverview from '@/components/ServicesOverview';
+import BuilderFeatures from '@/components/BuilderFeatures';
 import SwirlyDivider from '@/components/SwirlyDivider';
 import FeaturedSites from '@/components/FeaturedSites';
 import Testimonials from '@/components/Testimonials';
@@ -14,8 +14,8 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <TrustedBy />
       <ServicesOverview />
+      <BuilderFeatures />
       <SwirlyDivider />
       <FeaturedSites />
       <Testimonials />
@@ -26,3 +26,4 @@ export default function Home() {
     </>
   );
 }
+

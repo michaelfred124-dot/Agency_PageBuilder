@@ -5,7 +5,7 @@ import AgencyAdvantages from '@/components/AgencyAdvantages';
 
 export default function ProcessPage() {
   return (
-    <div className="pt-24 lg:pt-32 min-h-screen bg-[#F1EDE1]">
+    <div className="pt-24 lg:pt-32 min-h-screen bg-[#F7F8FA]">
       <ProcessSteps />
       <SwirlyDivider />
       <AgencyAdvantages />

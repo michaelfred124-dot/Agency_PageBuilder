@@ -89,18 +89,18 @@ export default function FeaturedSites() {
         {/* Header / Intro absolute on top of the carousel */}
         <div className="absolute top-6 lg:top-12 left-4 lg:left-12 z-20 flex flex-col md:flex-row justify-between items-start md:items-end w-[calc(100%-2rem)] lg:w-[calc(100%-6rem)] pointer-events-none">
           <div className="flex flex-col space-y-4">
-            <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-black/40">Portfolio</span>
-            <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-black leading-[0.9]">
+            <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Portfolio</span>
+            <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 leading-none">
               Featured <span style={{ color: COLORS.blue }}>Work</span>
             </h2>
           </div>
           <Link 
             href="/work"
-            className="group mt-8 md:mt-0 flex items-center gap-4 text-black hover:text-[#00B1FF] transition-colors pointer-events-auto"
+            className="group mt-8 md:mt-0 flex items-center gap-4 text-zinc-900 hover:text-[#00B1FF] transition-colors pointer-events-auto"
           >
             <span className="font-bold uppercase tracking-widest text-sm lg:text-base">View All Work</span>
-            <div className="w-12 h-12 rounded-full border-[3px] border-current flex items-center justify-center group-hover:scale-110 transition-transform">
-              <ArrowUpRight className="w-6 h-6" strokeWidth={3} />
+            <div className="w-10 h-10 rounded-full border-2 border-current flex items-center justify-center group-hover:scale-105 transition-transform">
+              <ArrowUpRight className="w-5 h-5" strokeWidth={2.5} />
             </div>
           </Link>
         </div>
