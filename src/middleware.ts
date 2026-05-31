@@ -24,7 +24,7 @@ const AGENCY_PATHS = [
   '/site',       // local dev fallback
   '/api',
   '/_next',
-  '/_tenants',
+  '/tenants',
   '/favicon.ico',
 ];
 
@@ -105,7 +105,7 @@ export async function middleware(request: NextRequest) {
   // e.g. acme.michaelfreddesigns.com/about → /_tenants/acme/about
   const slug = pathname === '/' ? '' : pathname;
   const rewriteUrl = request.nextUrl.clone();
-  rewriteUrl.pathname = `/_tenants/${tenantIdentifier}${slug}`;
+  rewriteUrl.pathname = `/tenants/${tenantIdentifier}${slug}`;
   
   const response = NextResponse.rewrite(rewriteUrl);
   
