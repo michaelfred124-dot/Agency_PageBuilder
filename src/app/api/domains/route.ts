@@ -74,6 +74,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Missing domain or search parameter' }, { status: 400 });
     }
 
+    // Sanitize domain: strip http://, https://, www., and trailing slashes
+    let cleanDomain = domain.trim().toLowerCase();
+    cleanDomain = cleanDomain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
+
     const supabase = getSupabaseServerClient();
     let dbDomainInfo = null;
 
@@ -94,7 +98,7 @@ export async function GET(request: NextRequest) {
 
     if (VERCEL_AUTH_TOKEN && VERCEL_PROJECT_ID) {
       try {
-        const url = `https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains/${domain}${VERCEL_TEAM_ID ? `?teamId=${VERCEL_TEAM_ID}` : ''}`;
+        const url = `https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains/${cleanDomain}${VERCEL_TEAM_ID ? `?teamId=${VERCEL_TEAM_ID}` : ''}`;
         const vercelRes = await fetch(url, {
           method: 'GET',
           headers: {
@@ -148,6 +152,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing tenantId or domain' }, { status: 400 });
     }
 
+    // Sanitize domain: strip http://, https://, www., and trailing slashes
+    let cleanDomain = domain.trim().toLowerCase();
+    cleanDomain = cleanDomain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
+
     // 1. Purchase domain via Vercel Registrar (If isPurchase is true and auth is set)
     if (isPurchase && VERCEL_AUTH_TOKEN) {
       try {
@@ -159,7 +167,7 @@ export async function POST(request: NextRequest) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: domain,
+            name: cleanDomain,
             renew: true
           })
         });
@@ -186,7 +194,7 @@ export async function POST(request: NextRequest) {
             Authorization: `Bearer ${VERCEL_AUTH_TOKEN}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: domain }),
+          body: JSON.stringify({ name: cleanDomain }),
         });
         if (vercelRes.ok) {
           vercelLinked = true;
@@ -224,7 +232,7 @@ export async function POST(request: NextRequest) {
     const { error: dbError } = await supabase
       .from('tenants')
       .update({ 
-        custom_domain: domain,
+        custom_domain: cleanDomain,
         domain_info: domainInfo
       })
       .eq('id', tenantId);
@@ -232,7 +240,7 @@ export async function POST(request: NextRequest) {
     if (dbError) {
       const { error: fallbackError } = await supabase
         .from('tenants')
-        .update({ custom_domain: domain })
+        .update({ custom_domain: cleanDomain })
         .eq('id', tenantId);
       
       if (fallbackError) {
@@ -242,7 +250,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      domain,
+      domain: cleanDomain,
       domainInfo
     });
   } catch (error: any) {
@@ -292,10 +300,14 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Missing tenantId or domain' }, { status: 400 });
     }
 
+    // Sanitize domain: strip http://, https://, www., and trailing slashes
+    let cleanDomain = domain.trim().toLowerCase();
+    cleanDomain = cleanDomain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
+
     // Try Vercel removal
     if (VERCEL_AUTH_TOKEN && VERCEL_PROJECT_ID) {
       try {
-        const url = `https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains/${domain}${VERCEL_TEAM_ID ? `?teamId=${VERCEL_TEAM_ID}` : ''}`;
+        const url = `https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains/${cleanDomain}${VERCEL_TEAM_ID ? `?teamId=${VERCEL_TEAM_ID}` : ''}`;
         await fetch(url, {
           method: 'DELETE',
           headers: {
