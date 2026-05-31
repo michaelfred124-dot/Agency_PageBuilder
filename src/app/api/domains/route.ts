@@ -106,6 +106,9 @@ export async function GET(request: NextRequest) {
           const vercelData = await vercelRes.json();
           verified = vercelData.verified;
           status = vercelData.verified ? 'Valid Configuration' : 'Invalid Configuration';
+        } else {
+          const errData = await vercelRes.json();
+          console.error('Vercel GET domain metadata failed:', errData);
         }
       } catch (err) {
         console.error('Vercel API error, using fallback:', err);
@@ -187,6 +190,9 @@ export async function POST(request: NextRequest) {
         });
         if (vercelRes.ok) {
           vercelLinked = true;
+        } else {
+          const errData = await vercelRes.json();
+          console.error('Vercel POST domain link failed:', errData);
         }
       } catch (e) {
         console.error('Failed to link domain to Vercel project:', e);
