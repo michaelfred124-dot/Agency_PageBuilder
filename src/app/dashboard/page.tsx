@@ -277,6 +277,27 @@ export default function DashboardLayout() {
     }
   };
 
+  const loadLocalSites = () => {
+    if (typeof window === 'undefined') return [];
+
+    const saved = localStorage.getItem('my-sites');
+    if (!saved) return [];
+
+    try {
+      return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  };
+
+  const mergeSitesById = (localSites: any[], remoteSites: any[]) => {
+    const siteMap = new Map<string, any>();
+    localSites.forEach(site => siteMap.set(String(site.id), site));
+    remoteSites.forEach(site => siteMap.set(String(site.id), { ...siteMap.get(String(site.id)), ...site }));
+    return Array.from(siteMap.values());
+  };
+
   useEffect(() => {
     if (user) {
       setProfileName(user.user_metadata?.full_name || user.user_metadata?.name || '');
@@ -313,24 +334,19 @@ export default function DashboardLayout() {
   };
 
   useEffect(() => {
-     const saved = localStorage.getItem('my-sites');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setMySites(parsed);
-        if (parsed.length > 0) setSelectedSite(parsed[0]);
-        
-        // Auto-launch editor on onboarding redirect
-        const instantEditId = sessionStorage.getItem('instant_edit_site_id');
-        if (instantEditId) {
-          const matchedSite = parsed.find((s: any) => s.id === instantEditId);
-          if (matchedSite) {
-            setEditingSite(matchedSite);
-            sessionStorage.removeItem('instant_edit_site_id');
-          }
-        }
-      } catch (e) {
-        console.error(e);
+    const localSites = loadLocalSites();
+    if (localSites.length === 0) return;
+
+    setMySites(localSites);
+    setSelectedSite(prev => prev || localSites[0]);
+    
+    // Auto-launch editor on onboarding redirect
+    const instantEditId = sessionStorage.getItem('instant_edit_site_id');
+    if (instantEditId) {
+      const matchedSite = localSites.find((s: any) => s.id === instantEditId);
+      if (matchedSite) {
+        setEditingSite(matchedSite);
+        sessionStorage.removeItem('instant_edit_site_id');
       }
     }
   }, []);
@@ -359,6 +375,53 @@ export default function DashboardLayout() {
       subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchSupabaseSites = async () => {
+      try {
+        const supabase = getSupabaseBrowserClient();
+        const { data, error } = await supabase
+          .from('tenants')
+          .select('*')
+          .eq('owner_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const remoteSites = (data || []).map((tenant: any) => ({
+          id: tenant.id,
+          tenantId: tenant.id,
+          name: tenant.name,
+          url: tenant.custom_domain || `${tenant.subdomain}.michaelfreddesigns.com`,
+          previewUrl: `/site/${tenant.subdomain}`,
+          status: 'Live',
+          image: tenant.image || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+          lastUpdate: tenant.updated_at || tenant.created_at || 'Just now',
+          subdomain: tenant.subdomain,
+          customDomain: tenant.custom_domain,
+          planTier: tenant.plan_tier || 'DIY',
+        }));
+
+        setMySites(prev => {
+          const localSites = loadLocalSites();
+          const mergedSites = mergeSitesById(localSites.length ? localSites : prev, remoteSites);
+          localStorage.setItem('my-sites', JSON.stringify(mergedSites));
+          setSelectedSite(current => {
+            if (!mergedSites.length) return current;
+            if (!current) return mergedSites[0];
+            return mergedSites.find((site: any) => site.id === current.id || site.tenantId === current.tenantId) || mergedSites[0];
+          });
+          return mergedSites;
+        });
+      } catch (err) {
+        console.error('Error fetching Supabase sites:', err);
+      }
+    };
+
+    fetchSupabaseSites();
+  }, [user]);
 
   const handleDeleteSite = async (siteId: string | number) => {
     if (!window.confirm("Are you sure you want to delete this site? This action cannot be undone.")) return;
