@@ -1,6 +1,5 @@
 "use client";
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowUpRight } from 'lucide-react';
@@ -69,91 +68,84 @@ const SITES = [
   }
 ];
 
-const CAROUSEL_SITES = [...SITES, ...SITES, ...SITES, ...SITES];
-
-import AnimatedSquiggles from './AnimatedSquiggles';
-
 export default function FeaturedSites() {
   const router = useRouter();
-  const containerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef });
-  
-  // Mapping the scroll progress to a horizontal shift along the rotated axis
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
 
   return (
-    <section ref={containerRef} className="relative h-[350vh] bg-white">
-      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
-        <AnimatedSquiggles />
-        
-        {/* Header / Intro absolute on top of the carousel */}
-        <div className="absolute top-6 lg:top-12 left-4 lg:left-12 z-20 flex flex-col md:flex-row justify-between items-start md:items-end w-[calc(100%-2rem)] lg:w-[calc(100%-6rem)] pointer-events-none">
-          <div className="flex flex-col space-y-4">
-            <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Portfolio</span>
-            <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 leading-none">
-              Featured <span style={{ color: COLORS.blue }}>Work</span>
-            </h2>
+    <section className="py-24 lg:py-32 bg-white relative overflow-hidden border-b border-zinc-200/50">
+      
+      {/* Huge subtle background text behind carousel */}
+      <div className="absolute top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none z-0 text-center w-full hidden md:block">
+        <span className="text-[14vw] font-black text-zinc-100/60 tracking-tighter uppercase leading-none block">
+          Featured Work
+        </span>
+      </div>
+
+      {/* Infinite Autoplay Loop Wrapper (circling on top of background) */}
+      <div className="w-full overflow-hidden py-12 relative flex items-center justify-center z-10 mask-marquee">
+        {/* Subtle diagonal tilt for design flair */}
+        <div className="w-full flex items-center rotate-[-2.5deg] origin-center scale-[1.02] overflow-visible">
+          <div className="mercury-marquee flex gap-8 lg:gap-10 px-6">
+            {/* Render double length to ensure seamless infinite looping */}
+            {[...SITES, ...SITES].map((site, i) => (
+              <div 
+                key={i} 
+                onClick={() => site.link && router.push(site.link)}
+                className="group relative w-[320px] md:w-[460px] aspect-[16/10] bg-zinc-900 border-2 border-zinc-950 rounded-3xl overflow-hidden shadow-[4px_4px_0px_rgba(9,9,11,1)] hover:shadow-[8px_8px_0px_rgba(9,9,11,1)] transition-all duration-500 hover:-translate-y-2 cursor-pointer shrink-0"
+              >
+                <img 
+                  src={site.image} 
+                  alt={site.title} 
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-zinc-950/20 group-hover:bg-transparent transition-colors duration-500" />
+                
+                {/* Overlay Content */}
+                <div className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-8 flex justify-between items-end opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
+                  <div className="text-left">
+                    <span 
+                      className="px-3 py-1 text-[9px] font-bold uppercase rounded-full tracking-wider mb-2 inline-block text-zinc-950 shadow-[1.5px_1.5px_0px_rgba(9,9,11,1)] border border-zinc-950"
+                      style={{ backgroundColor: site.color }}
+                    >
+                      {site.category}
+                    </span>
+                    <h3 className="text-xl md:text-3xl font-extrabold uppercase tracking-tight text-white leading-none drop-shadow-md">
+                      {site.title}
+                    </h3>
+                  </div>
+                  {site.link && (
+                    <div className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-full bg-white flex items-center justify-center -rotate-45 group-hover:rotate-0 transition-transform duration-500 shadow-[2px_2px_0px_rgba(9,9,11,1)] border-2 border-zinc-950">
+                      <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-zinc-950" strokeWidth={2.5} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
-          <Link 
-            href="/work"
-            className="group mt-8 md:mt-0 flex items-center gap-4 text-zinc-900 hover:text-[#00B1FF] transition-colors pointer-events-auto"
-          >
-            <span className="font-bold uppercase tracking-widest text-sm lg:text-base">View All Work</span>
-            <div className="w-10 h-10 rounded-full border-2 border-current flex items-center justify-center group-hover:scale-105 transition-transform">
-              <ArrowUpRight className="w-5 h-5" strokeWidth={2.5} />
-            </div>
+        </div>
+      </div>
+
+      {/* Centered Header Block (below the carousel) */}
+      <div className="max-w-[1400px] mx-auto px-6 relative z-10 text-center flex flex-col items-center mt-16 lg:mt-20">
+        <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Portfolio</span>
+        <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 mt-4 leading-none">
+          Featured Work
+        </h2>
+        <p className="max-w-xl text-zinc-650 text-sm md:text-base font-normal mt-4 leading-relaxed">
+          Explore some of our recent custom website designs and dynamic application interfaces, built headlessly for speed, design parity, and local search authority.
+        </p>
+
+        {/* Action Button - Centered Below Title & Text */}
+        <div className="mt-12 flex justify-center">
+          <Link href="/work">
+            <button className="px-8 py-3.5 bg-white text-zinc-950 border-2 border-zinc-950 rounded-full font-semibold uppercase tracking-widest text-xs shadow-[3px_3px_0px_rgba(9,9,11,1)] hover:shadow-[5px_5px_0px_rgba(9,9,11,1)] hover:bg-zinc-50 active:translate-y-0.5 transition-all cursor-pointer">
+              View All Projects
+            </button>
           </Link>
         </div>
-
-        {/* Diagonal Carousel Wrapper */}
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[100vw] h-[100vh] flex items-center justify-center overflow-visible pointer-events-none">
-          <div className="w-full flex items-center rotate-[-8deg] origin-center scale-[1.1] md:scale-[1.05]">
-            <motion.div 
-              style={{ x }} 
-              className="flex gap-4 md:gap-8 lg:gap-10 w-max px-[30vw] md:px-[50vw] pointer-events-auto"
-            >
-              {CAROUSEL_SITES.map((site, i) => (
-                <motion.div 
-                  key={i} 
-                  initial={{ opacity: 0.3, scale: 0.85, filter: 'grayscale(100%) brightness(0.4)' }}
-                  whileInView={{ opacity: 1, scale: 1, filter: 'grayscale(0%) brightness(1)' }}
-                  viewport={{ margin: "0px -15% 0px -15%" }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                  onClick={() => site.link && router.push(site.link)}
-                  className="group relative w-[80vw] md:w-[60vw] lg:w-[50vw] aspect-[16/10] bg-zinc-900 rounded-[24px] lg:rounded-[40px] overflow-hidden transition-all duration-500 hover:shadow-[0px_20px_40px_rgba(0,0,0,0.5)] hover:-translate-y-3 cursor-pointer"
-                >
-                  <img 
-                    src={(site.image) || undefined} 
-                    alt={site.title} 
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
-                  
-                  {/* Overlay Content */}
-                  <div className="absolute bottom-4 left-4 lg:bottom-10 lg:left-10 right-4 lg:right-10 flex flex-col md:flex-row justify-between items-start md:items-end opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
-                    <div>
-                      <span 
-                        className="px-4 py-2 text-[10px] lg:text-xs font-bold uppercase rounded-full tracking-widest mb-4 inline-block text-black"
-                        style={{ backgroundColor: site.color }}
-                      >
-                        {site.category}
-                      </span>
-                      <h3 className="text-3xl lg:text-5xl font-black uppercase tracking-tighter text-white leading-none drop-shadow-lg">
-                        {site.title}
-                      </h3>
-                    </div>
-                    <div className="mt-4 md:mt-0 w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 rounded-full bg-white flex items-center justify-center -rotate-45 group-hover:rotate-0 transition-transform duration-500 shadow-xl">
-                      <ArrowUpRight className="w-6 h-6 lg:w-8 lg:h-8 text-black" strokeWidth={4} />
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-
       </div>
+
     </section>
   );
 }
