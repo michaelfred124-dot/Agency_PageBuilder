@@ -67,6 +67,15 @@ export default function PreviewWrapper({
 
   return (
     <div className="fixed inset-0 flex flex-col bg-[#F8F5F2] font-sans overflow-hidden">
+      {/* Inject Google Font if specified */}
+      {theme?.fontFamily && theme.fontFamily !== 'System Default' && (
+        // eslint-disable-next-line @next/next/no-page-custom-font
+        <link
+          rel="stylesheet"
+          href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme.fontFamily)}:wght@300;400;500;650;700;800;900&display=swap`}
+        />
+      )}
+
       {/* Dynamic style tag for preview canvas overrides */}
       <style dangerouslySetInnerHTML={{ __html: `
         #preview-canvas button, #preview-canvas .btn {
@@ -79,11 +88,25 @@ export default function PreviewWrapper({
         }
         #preview-canvas {
           font-family: ${
+            theme?.fontFamily && theme.fontFamily !== 'System Default' ? `"${theme.fontFamily}", sans-serif !important` :
             theme?.fontFamily === 'Space Grotesk' ? '"Space Grotesk", sans-serif !important' :
             theme?.fontFamily === 'Serif' ? 'Georgia, serif !important' :
             theme?.fontFamily === 'Mono' ? 'monospace !important' :
             '"Space Grotesk", sans-serif !important'
           };
+        }
+        #preview-canvas [data-custom-bg="true"] > section, 
+        #preview-canvas [data-custom-bg="true"] > div {
+          background-color: transparent !important;
+        }
+        #preview-canvas [data-custom-align="left"] * {
+          text-align: left !important;
+        }
+        #preview-canvas [data-custom-align="center"] * {
+          text-align: center !important;
+        }
+        #preview-canvas [data-custom-align="right"] * {
+          text-align: right !important;
         }
       `}} />
 
@@ -177,14 +200,14 @@ export default function PreviewWrapper({
                  ['--color-card' as any]: (theme as any)?.colorCard || '#ffffff',
                }}
              >
-                <div className="w-full h-8 bg-black/5 border-b-[4px] border-black flex items-center px-4 gap-2 shrink-0 bg-white">
-                   <div className="w-3 h-3 rounded-full bg-red-500 border-2 border-black" />
-                   <div className="w-3 h-3 rounded-full bg-yellow-500 border-2 border-black" />
-                   <div className="w-3 h-3 rounded-full bg-green-500 border-2 border-black" />
-                </div>
-                <div className="w-full h-full bg-white pointer-events-auto">
-                  {children}
-                </div>
+                 <div className="w-full h-8 bg-white border-b-[4px] border-black flex items-center px-4 gap-2 shrink-0">
+                    <div className="w-3 h-3 rounded-full bg-red-500 border-2 border-black" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500 border-2 border-black" />
+                    <div className="w-3 h-3 rounded-full bg-green-500 border-2 border-black" />
+                 </div>
+                 <div className="w-full flex-1 bg-transparent pointer-events-auto">
+                   {children}
+                 </div>
              </div>
           </div>
         </div>

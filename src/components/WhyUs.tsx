@@ -104,53 +104,38 @@ export default function WhyUs() {
               </div>
             </div>
 
-            <div className="flex-grow grid sm:grid-cols-2 gap-6 relative z-10">
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-zinc-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_rgba(9,9,11,1)]">
-                    <Check className="w-4 h-4 text-zinc-950" strokeWidth={3} />
-                  </div>
-                  <span className="font-bold text-sm text-zinc-950">100% Custom Design & Dev</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-zinc-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_rgba(9,9,11,1)]">
-                    <Check className="w-4 h-4 text-zinc-950" strokeWidth={3} />
-                  </div>
-                  <span className="font-bold text-sm text-zinc-950">Launch in 1-2 Weeks</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-zinc-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_rgba(9,9,11,1)]">
-                    <Check className="w-4 h-4 text-zinc-950" strokeWidth={3} />
-                  </div>
-                  <span className="font-bold text-sm text-zinc-950">Hosting & Security Included</span>
-                </li>
+            <div className="flex-grow grid sm:grid-cols-2 gap-8 items-center relative z-10">
+              {/* Left Column: Positives List */}
+              <ul className="space-y-3.5">
+                {[
+                  "100% Custom Design & Dev",
+                  "Launch in 1-2 Weeks",
+                  "Hosting & Security Included",
+                  "Unlimited Edits & Updates",
+                  "Technical SEO Built-in",
+                  "You Own the Codebase",
+                  "Cancel or Pause Anytime"
+                ].map((benefit, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-full bg-white border-2 border-zinc-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_rgba(9,9,11,1)]">
+                      <Check className="w-4 h-4 text-zinc-950" strokeWidth={3} />
+                    </div>
+                    <span className="font-bold text-sm text-zinc-950">{benefit}</span>
+                  </li>
+                ))}
               </ul>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-zinc-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_rgba(9,9,11,1)]">
-                    <Check className="w-4 h-4 text-zinc-950" strokeWidth={3} />
-                  </div>
-                  <span className="font-bold text-sm text-zinc-950">Unlimited Edits & Updates</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-zinc-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_rgba(9,9,11,1)]">
-                    <Check className="w-4 h-4 text-zinc-950" strokeWidth={3} />
-                  </div>
-                  <span className="font-bold text-sm text-zinc-950">Technical SEO Built-in</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-zinc-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_rgba(9,9,11,1)]">
-                    <Check className="w-4 h-4 text-zinc-950" strokeWidth={3} />
-                  </div>
-                  <span className="font-bold text-sm text-zinc-950">You Own the Codebase</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-zinc-950 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_rgba(9,9,11,1)]">
-                    <Check className="w-4 h-4 text-zinc-950" strokeWidth={3} />
-                  </div>
-                  <span className="font-bold text-sm text-zinc-950">Cancel or Pause Anytime</span>
-                </li>
-              </ul>
+
+              {/* Right Column: Visual Mockup for Positives */}
+              <div className="flex justify-center sm:justify-end">
+                <div className="w-full max-w-[340px] aspect-[4/3] bg-zinc-950 border-2 border-zinc-950 rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(255,255,255,1)] hover:shadow-[6px_6px_0px_rgba(255,255,255,1)] hover:-translate-y-1 transition-all duration-300">
+                  <img 
+                    src="/positives_preview.png" 
+                    alt="Web speed and growth performance positives illustration" 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="mt-10 pt-8 border-t border-zinc-950/10 relative z-10 flex justify-center text-center">

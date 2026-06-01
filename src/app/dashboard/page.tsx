@@ -159,6 +159,34 @@ export default function DashboardLayout() {
   const [requestFiles, setRequestFiles] = useState<string[]>([]);
   const [requestStatusMsg, setRequestStatusMsg] = useState('');
 
+  // Unified Agency Hub States
+  const [tickets, setTickets] = useState<any[]>([
+    { id: 'TKT-2041', title: 'Update Holiday Hours on Store Page', status: 'In Progress', date: 'Just now', type: 'Content Update', description: 'Change hours of operation for Sundays.', files: [] },
+    { id: 'TKT-2032', title: 'Add Staff Member Bio and Photos', status: 'Completed', date: 'Oct 10', type: 'Design Update', description: 'Add team bios.', files: [] },
+    { id: 'TKT-1988', title: 'Domain DNS Verification Pointing Issue', status: 'Completed', date: 'Sep 05', type: 'Technical', description: 'Point subdomain DNS.', files: [] }
+  ]);
+
+  const [agencyNotifications, setAgencyNotifications] = useState<any[]>([
+    { id: 'ann-1', title: 'Google Analytics Integration Ready', content: 'We have configured Google Analytics 4 tracking for all your active sites. You can view reports in the Analytics tab.', date: '2 hours ago', read: false },
+    { id: 'ann-2', title: 'Scheduled Server Maintenance', content: 'Our servers will undergo a routine optimization update this Saturday at 2:00 AM EST. Expected downtime is less than 5 minutes.', date: '1 day ago', read: true },
+    { id: 'ann-3', title: 'New Neo-Brutalist Layout Presets Released', content: 'Three new brutalist hero presets are now available in your website builder. Try them out in the Hero section layout options!', date: '3 days ago', read: true }
+  ]);
+
+  const [chatMessages, setChatMessages] = useState<any[]>([
+    { id: 'msg-1', sender: 'agency', initials: 'A', name: 'Michaelfred Designs Partner', text: 'Hey! We received your onboarding details. The assets look great. We are getting started on the layout styling today.', date: 'Monday, 9:00 AM' },
+    { id: 'msg-2', sender: 'client', initials: 'M', name: 'You', text: 'Awesome. Let me know if you need any more photos of the storefront or custom copy.', date: 'Monday, 10:15 AM' },
+    { id: 'msg-3', sender: 'agency', initials: 'A', name: 'Michaelfred Designs Partner', text: 'Will do! The layouts should be ready for your review by Wednesday. I will drop a preview link right here.', date: 'Monday, 10:20 AM' }
+  ]);
+  const [newChatMessage, setNewChatMessage] = useState('');
+
+  // Call Scheduler Form States
+  const [callType, setCallType] = useState('Phone Call');
+  const [callTime, setCallTime] = useState('Morning (9am - 12pm)');
+  const [callReason, setCallReason] = useState('');
+  const [callStatusMsg, setCallStatusMsg] = useState('');
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
   // Tier-Based Onboarding States
   const [selectedPlanTier, setSelectedPlanTier] = useState<'DIY' | 'DFY'>('DIY'); // DIY = $20/mo, DFY = Agency Managed
   const [onboardingTemplateKey, setOnboardingTemplateKey] = useState<string | null>(null);
@@ -179,6 +207,15 @@ export default function DashboardLayout() {
       setIsOnboardedPaid(paid);
     }
   }, []);
+
+  // Auto-play Top Banner Carousel
+  useEffect(() => {
+    if (activeSection !== 'Overview') return;
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev === 2 ? 0 : prev + 1));
+    }, 7000);
+    return () => clearInterval(interval);
+  }, [activeSection]);
 
   // User Profile Settings State
   const [profileName, setProfileName] = useState('');
@@ -343,6 +380,17 @@ export default function DashboardLayout() {
       }
       return next;
     });
+  };
+
+  const handleUpdatePlanTier = (siteId: string, newTier: 'DIY' | 'DFY') => {
+    const updatedSites = mySites.map(s => 
+      s.id === siteId ? { ...s, planTier: newTier } : s
+    );
+    setMySites(updatedSites);
+    localStorage.setItem('my-sites', JSON.stringify(updatedSites));
+    if (selectedSite?.id === siteId) {
+      setSelectedSite((prev: any) => prev ? { ...prev, planTier: newTier } : null);
+    }
   };
 
   // Fetch Contact Form Submissions for Selected Site
@@ -803,6 +851,283 @@ export default function DashboardLayout() {
               </div>
             </div>
 
+            {/* Top Carousel Banner */}
+            {selectedSite && (
+              <div className="relative rounded-3xl overflow-hidden text-white min-h-[340px] flex flex-col group shadow-[0_0_60px_rgba(79,70,229,0.15)] border border-white/5">
+                
+                {/* Carousel Slides Container */}
+                <div className="flex-1 flex flex-col">
+                  <AnimatePresence mode="wait">
+                    {currentSlide === 0 && (
+                      <motion.div
+                        key="slide-0"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative flex-1 min-h-[340px] flex flex-col"
+                      >
+                        {/* Full-bleed background image */}
+                        <img
+                          src="/agency_hero_bg.png"
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 w-full h-full object-cover object-center"
+                        />
+                        {/* Dark overlay gradients */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-slate-950/30" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                        {/* Indigo tint */}
+                        <div className="absolute inset-0 bg-indigo-950/30" />
+
+                        {/* Content */}
+                        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8 p-8 md:p-10 flex-1">
+                          <div className="space-y-4 max-w-xl md:w-[58%]">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
+                                (selectedSite.planTier || 'DIY') === 'DIY' ? 'bg-amber-400 text-slate-900' : 'bg-indigo-600 text-white'
+                              }`}>
+                                {(selectedSite.planTier || 'DIY') === 'DIY' ? 'DIY Plan' : 'Done-For-You Plan'}
+                              </span>
+                              <span className="text-[10px] text-indigo-200 font-bold flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Agency Online & Ready
+                              </span>
+                            </div>
+                            
+                            <h3 className="text-2xl md:text-3xl font-black tracking-tight leading-tight drop-shadow-lg">
+                              {(selectedSite.planTier || 'DIY') === 'DIY' ? (
+                                <>Let our agency build it for you — copy, design & dev all handled.</>
+                              ) : (
+                                <>Premium managed tier. All support lines unlocked and prioritised.</>
+                              )}
+                            </h3>
+                            
+                            <p className="text-indigo-100/85 text-sm leading-relaxed max-w-lg font-medium">
+                              {(selectedSite.planTier || 'DIY') === 'DIY' ? (
+                                <>Upgrade to <strong className="text-white">Done-For-You ($50/mo)</strong> and our senior developers handle all custom updates, copy, images, and layout edits for you — no blocks, no hassle.</>
+                              ) : (
+                                <>Need a new page, layout changes, or copy updates? Message your account manager and get changes built and launched live within 24 hours.</>
+                              )}
+                            </p>
+
+                            <div className="flex items-center gap-3 pt-1">
+                              {(selectedSite.planTier || 'DIY') === 'DIY' ? (
+                                <button
+                                  onClick={() => {
+                                    setIsUpgrading(true);
+                                    setActiveSection('Contact Agency');
+                                    setTimeout(() => {
+                                      setIsUpgrading(false);
+                                      handleUpdatePlanTier(selectedSite.id, 'DFY');
+                                      alert("💳 Stripe Invoice Paid! Done-For-You portal is now active. Your dedicated developer is ready.");
+                                    }, 1500);
+                                  }}
+                                  className="bg-white text-indigo-700 hover:bg-indigo-50 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2"
+                                >
+                                  <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-pulse" /> Upgrade to DFY — $50/mo
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => setActiveSection('Contact Agency')}
+                                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2"
+                                >
+                                  <MessageSquare className="w-3.5 h-3.5" /> Contact Developer
+                                </button>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Right floating card */}
+                          <div className="hidden md:flex flex-col justify-between md:w-[36%] h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl self-center gap-4">
+                            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                              <div className="flex items-center gap-2">
+                                <div className="relative">
+                                  <div className="w-10 h-10 rounded-full bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center font-bold text-xs text-indigo-200">
+                                    {selectedSite.planTier === 'DFY' ? 'SJ' : 'DEV'}
+                                  </div>
+                                  <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-slate-900 ${
+                                    selectedSite.planTier === 'DFY' ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'
+                                  }`} />
+                                </div>
+                                <div>
+                                  <h4 className="text-xs font-bold text-white">{selectedSite.planTier === 'DFY' ? 'Sarah Jenkins' : 'Agency Dev Team'}</h4>
+                                  <p className="text-[9px] text-indigo-300/70 font-semibold uppercase tracking-wider">{selectedSite.planTier === 'DFY' ? 'Dedicated Lead Dev' : 'Premium Tier Only'}</p>
+                                </div>
+                              </div>
+                              <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${
+                                selectedSite.planTier === 'DFY' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-slate-700/50 text-slate-400 border-slate-600/50'
+                              }`}>
+                                {selectedSite.planTier === 'DFY' ? 'ACTIVE' : 'LOCKED'}
+                              </span>
+                            </div>
+                            {selectedSite.planTier === 'DFY' ? (
+                              <div className="flex items-start gap-2 bg-white/5 p-3 rounded-xl border border-white/8">
+                                <span className="text-base">💬</span>
+                                <p className="text-xs leading-snug font-medium text-slate-300">"Hey! Ready for your edits. Message me when you have a request!"</p>
+                              </div>
+                            ) : (
+                              <div className="flex items-start gap-2 bg-amber-500/8 p-3 rounded-xl border border-amber-500/15">
+                                <span className="text-base">🔒</span>
+                                <p className="text-xs leading-snug font-medium text-amber-200/80">Unlock 24h developer access and direct email & phone support.</p>
+                              </div>
+                            )}
+                            <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider text-right pt-1 border-t border-white/5">
+                              {selectedSite.planTier === 'DFY' ? '⚡ Response: Under 30 mins' : 'Stripe billing active'}
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {currentSlide === 1 && (
+                      <motion.div
+                        key="slide-1"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative flex-1 min-h-[340px] flex flex-col"
+                      >
+                        {/* Full-bleed background image */}
+                        <img
+                          src="/dfy_addons_promo.png"
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 w-full h-full object-cover object-center"
+                        />
+                        {/* Dark overlay gradients */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/98 via-slate-950/80 to-slate-950/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+
+                        {/* Content */}
+                        <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-8 p-8 md:p-10 flex-1">
+                          <div className="space-y-4 max-w-xl md:w-[58%]">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-amber-400 text-slate-900">
+                                Premium Addons
+                              </span>
+                              <span className="text-[10px] text-amber-200 font-bold flex items-center gap-1">
+                                <Sparkles className="w-3 h-3 text-amber-300 animate-pulse" /> Grow Your Business
+                              </span>
+                            </div>
+                            
+                            <h3 className="text-2xl md:text-3xl font-black tracking-tight leading-tight drop-shadow-lg">
+                              Ready to take your business to the next level? Check out our Done-For-You Addons!
+                            </h3>
+                            
+                            <p className="text-indigo-100/85 text-sm leading-relaxed max-w-lg font-medium">
+                              Supercharge your site with premium custom modules managed entirely by us — booking engines, SEO audits, API webhooks, and live shopping carts.
+                            </p>
+
+                            <div className="pt-1">
+                              <button
+                                onClick={() => {
+                                  setActiveSection('Contact Agency');
+                                  setTimeout(() => {
+                                    const chatInput = document.querySelector('input[placeholder*="team"]');
+                                    if (chatInput) {
+                                      (chatInput as HTMLInputElement).value = "Hi! I'm interested in adding custom DFY Addons to my website. Can you tell me more about it?";
+                                    }
+                                  }, 150);
+                                }}
+                                className="bg-amber-400 hover:bg-amber-300 text-slate-900 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2 w-fit"
+                              >
+                                <Sparkles className="w-3.5 h-3.5" /> Browse Addons
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {currentSlide === 2 && (
+                      <motion.div
+                        key="slide-2"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative flex-1 min-h-[340px] flex flex-col"
+                      >
+                        {/* Full-bleed background image */}
+                        <img
+                          src="/automation_hero_bg.png"
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 w-full h-full object-cover object-center"
+                        />
+                        {/* Dark overlay gradients */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-slate-950/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-indigo-950/25" />
+
+                        {/* Content */}
+                        <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-8 p-8 md:p-10 flex-1">
+                          <div className="space-y-4 max-w-xl md:w-[58%]">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-indigo-600 text-white">
+                                Growth & Automations
+                              </span>
+                              <span className="text-[10px] text-indigo-200 font-bold flex items-center gap-1.5">
+                                <Zap className="w-3 h-3 text-indigo-300" /> Marketing Integration
+                              </span>
+                            </div>
+                            
+                            <h3 className="text-2xl md:text-3xl font-black tracking-tight leading-tight drop-shadow-lg">
+                              Connect Shopify & Klaviyo Automations
+                            </h3>
+                            
+                            <p className="text-indigo-100/85 text-sm leading-relaxed max-w-lg font-medium">
+                              Win-Back loops, abandoned cart SMS, and order follow-up email drips. We configure, connect, and optimize all 6 automation tools for your business.
+                            </p>
+
+                            <div className="pt-1">
+                              <button
+                                onClick={() => setActiveSection('Marketing')}
+                                className="bg-white text-indigo-800 hover:bg-slate-50 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2 w-fit"
+                              >
+                                <Zap className="w-3.5 h-3.5" /> Explore Automations
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Carousel Navigation dots */}
+                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20">
+                  {[0, 1, 2].map((slideIdx) => (
+                    <button
+                      key={slideIdx}
+                      onClick={() => setCurrentSlide(slideIdx)}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        currentSlide === slideIdx 
+                          ? 'bg-white w-6' 
+                          : 'bg-white/40 hover:bg-white/60 w-2'
+                      }`}
+                      aria-label={`Go to slide ${slideIdx + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Left/Right Arrows */}
+                <button
+                  onClick={() => setCurrentSlide(prev => (prev === 0 ? 2 : prev - 1))}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white/80 hover:text-white flex items-center justify-center border border-white/20 transition-all text-base opacity-0 group-hover:opacity-100 z-20 backdrop-blur-sm"
+                >
+                  ‹
+                </button>
+                <button
+                  onClick={() => setCurrentSlide(prev => (prev === 2 ? 0 : prev + 1))}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white/80 hover:text-white flex items-center justify-center border border-white/20 transition-all text-base opacity-0 group-hover:opacity-100 z-20 backdrop-blur-sm"
+                >
+                  ›
+                </button>
+              </div>
+            )}
+
             {/* Wix-style Main Site Hero card */}
             {selectedSite ? (
               <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col md:flex-row">
@@ -832,6 +1157,36 @@ export default function DashboardLayout() {
                     <p className="text-xs text-slate-500 max-w-xl leading-relaxed">
                       {globalSettings.defaultSeoDescription || 'Manage this website layout, cms content tables, view site reports, or connect customer support.'}
                     </p>
+                    
+                    {/* Plan-specific Conversion/Status Banner */}
+                    {selectedSite && (
+                      <div className={`mt-4 border rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs leading-normal ${
+                        (selectedSite.planTier || 'DIY') === 'DIY'
+                          ? 'bg-amber-50/50 border-amber-200'
+                          : 'bg-indigo-50/40 border-indigo-150'
+                      }`}>
+                        <div className="flex items-center gap-2">
+                          <span className={`w-2 h-2 rounded-full shrink-0 ${
+                            (selectedSite.planTier || 'DIY') === 'DIY' ? 'bg-amber-500' : 'bg-indigo-600 animate-pulse'
+                          }`} />
+                          <span className="font-semibold text-slate-700">
+                            {(selectedSite.planTier || 'DIY') === 'DIY' ? (
+                              <>You are building on the <strong className="text-slate-900">DIY Website Builder Plan ($20/mo)</strong>.</>
+                            ) : (
+                              <>Premium <strong className="text-indigo-700">Done-For-You (DFY) Agency Plan ($50/mo)</strong> Active.</>
+                            )}
+                          </span>
+                        </div>
+                        {(selectedSite.planTier || 'DIY') === 'DIY' && (
+                          <button
+                            onClick={() => setActiveSection('Contact Agency')}
+                            className="bg-indigo-650 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all shadow-sm hover:shadow-indigo-600/10 active:translate-y-0.5 shrink-0 self-start sm:self-center"
+                          >
+                            Upgrade to Done-For-You
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-slate-100">
@@ -842,7 +1197,7 @@ export default function DashboardLayout() {
                       Edit Site
                     </button>
                     <button 
-                      onClick={() => setActiveSection('Request Update')}
+                      onClick={() => setActiveSection('Contact Agency')}
                       className="bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2"
                     >
                       Request Design Update
@@ -879,7 +1234,7 @@ export default function DashboardLayout() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               
               {/* Traffic Widget */}
-              <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
+              <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="font-bold text-slate-900 text-base">Visitor Statistics</h3>
@@ -916,48 +1271,81 @@ export default function DashboardLayout() {
                   </ResponsiveContainer>
                 </div>
               </div>
+            </div>
 
-              {/* Dedicated Support Box */}
-              <div className="bg-slate-900 text-slate-100 rounded-2xl p-6 shadow-sm relative overflow-hidden flex flex-col justify-between">
-                <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-                  <HelpCircle className="w-32 h-32" />
+            {/* Quick Help & Agency Support Desk Row */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-150 pb-3.5">
+                <div>
+                  <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                    <LifeBuoy className="w-5 h-5 text-indigo-650" /> Agency Support Desk
+                  </h3>
+                  <p className="text-slate-400 text-xs mt-0.5">Quick access to your agency partners. Open tickets or chat directly.</p>
                 </div>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5 text-indigo-400" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Partner Agency Support</span>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-slate-100 text-lg leading-snug">Michaelfred Designs</h3>
-                    <p className="text-slate-400 text-xs mt-1">Your dedicated developer team is online.</p>
-                  </div>
-                  
-                  {/* Account Manager Profiles */}
-                  <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-200 font-bold overflow-hidden">
-                      <img src="https://i.pravatar.cc/100?u=michaelfred" alt="Account Manager" className="w-full h-full object-cover" />
+                <div className="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider self-start sm:self-center shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Developers Online
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Support Card 1: Live Chat */}
+                <div className="border border-slate-150 rounded-xl p-4 space-y-3 hover:border-slate-350 transition-all flex flex-col justify-between group">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-650 flex items-center justify-center font-bold text-xs"><MessageSquare className="w-4 h-4" /></div>
+                      <span className={`text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
+                        (selectedSite?.planTier || 'DIY') === 'DIY' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-emerald-50 text-emerald-700'
+                      }`}>
+                        {(selectedSite?.planTier || 'DIY') === 'DIY' ? 'Upgrade Lock' : 'Unlocked'}
+                      </span>
                     </div>
-                    <div>
-                      <p className="text-xs font-bold text-slate-200">Michael Fred</p>
-                      <p className="text-[10px] text-slate-400 font-medium">Average Response: &lt; 2 hours</p>
-                    </div>
+                    <h4 className="font-bold text-slate-850 text-sm group-hover:text-indigo-650 transition-colors">Developer Live Chat</h4>
+                    <p className="text-slate-500 text-xs leading-relaxed">Chat directly with programmers for custom layout tweaks, styling adjustments, or advice.</p>
                   </div>
+                  <button 
+                    onClick={() => setActiveSection('Contact Agency')}
+                    className="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-750 font-bold py-2 rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    Open Chat Desk
+                  </button>
                 </div>
 
-                <div className="space-y-2 pt-6">
+                {/* Support Card 2: Log Site Fix Request */}
+                <div className="border border-slate-150 rounded-xl p-4 space-y-3 hover:border-slate-350 transition-all flex flex-col justify-between group">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-650 flex items-center justify-center font-bold text-xs"><FileText className="w-4 h-4" /></div>
+                      <span className={`text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
+                        (selectedSite?.planTier || 'DIY') === 'DIY' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-emerald-50 text-emerald-700'
+                      }`}>
+                        {(selectedSite?.planTier || 'DIY') === 'DIY' ? 'Upgrade Lock' : 'Unlocked'}
+                      </span>
+                    </div>
+                    <h4 className="font-bold text-slate-855 text-sm group-hover:text-indigo-650 transition-colors">Submit Site Fix Request</h4>
+                    <p className="text-slate-500 text-xs leading-relaxed">Submit a ticket for page copy updates, layout modifications, image swaps, or general bugs.</p>
+                  </div>
                   <button 
-                    onClick={() => setActiveSection('Communications')} 
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center justify-center gap-2"
+                    onClick={() => setActiveSection('Contact Agency')}
+                    className="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-750 font-bold py-2 rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5"
                   >
-                    <MessageSquare className="w-3.5 h-3.5" /> Start Live Chat
+                    Submit Fix Ticket
                   </button>
-                  <button 
-                    onClick={() => setActiveSection('Support Tickets')} 
-                    className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2"
-                  >
-                    <LifeBuoy className="w-3.5 h-3.5" /> Open Support Ticket
-                  </button>
+                </div>
+
+                {/* Support Card 3: Direct Email & Phone Desk */}
+                <div className="border border-slate-150 rounded-xl p-4 space-y-3 hover:border-slate-350 transition-all flex flex-col justify-between bg-slate-50/50">
+                  <div className="space-y-2">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-650 flex items-center justify-center font-bold text-xs"><Phone className="w-4 h-4" /></div>
+                    <h4 className="font-bold text-slate-855 text-sm">Direct Phone & Email</h4>
+                    <div className="text-xs space-y-1.5 font-sans pt-1">
+                      <p className="text-slate-655 font-medium">Phone: <a href="tel:+17205550100" className="font-black text-indigo-650 hover:underline">+1 (720) 555-0100</a></p>
+                      <p className="text-slate-655 font-medium">Email: <a href="mailto:agency@michaelfreddesigns.com" className="font-black text-indigo-650 hover:underline">agency@michaelfreddesigns.com</a></p>
+                    </div>
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-bold pt-2 border-t border-slate-200">
+                    Office Hours: Mon-Fri, 9am - 6pm EST
+                  </div>
                 </div>
               </div>
             </div>
@@ -1211,7 +1599,7 @@ export default function DashboardLayout() {
                         Edit Site
                       </button>
                       <button 
-                        onClick={() => { setSelectedSite(site); setActiveSection('Request Update'); }}
+                        onClick={() => { setSelectedSite(site); setActiveSection('Contact Agency'); }}
                         className="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-700 py-2 rounded-xl text-xs font-bold border border-slate-200 transition-colors text-center"
                       >
                         Request Update
@@ -1309,114 +1697,406 @@ export default function DashboardLayout() {
           </div>
         );
 
+      case 'Contact Agency':
       case 'Communications':
-        return (
-          <div className="max-w-4xl mx-auto h-[calc(100vh-140px)] flex flex-col">
-            <div className="mb-4 shrink-0">
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Communications</h1>
-              <p className="text-slate-500 text-xs mt-0.5">Direct chat channel with your development partners.</p>
-            </div>
-            
-            <div className="flex-1 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
-              <div className="p-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">A</div>
-                  <div>
-                    <h3 className="font-bold text-slate-800 text-xs leading-none">Michaelfred Designs Partner</h3>
-                    <span className="text-[10px] font-semibold text-emerald-600 mt-1 block">Live &bull; Active</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50/20">
-                <div className="flex gap-3 max-w-[80%]">
-                  <div className="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">A</div>
-                  <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-3.5 shadow-sm">
-                    <p className="text-xs text-slate-700 leading-normal">Hey Michael! We received your onboarding form. The assets look great. We are getting started on the wireframes today.</p>
-                    <span className="text-[9px] font-bold text-slate-400 mt-2 block">Monday, 9:00 AM</span>
-                  </div>
-                </div>
-                <div className="flex gap-3 max-w-[80%] ml-auto flex-row-reverse">
-                  <div className="w-7 h-7 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">M</div>
-                  <div className="bg-indigo-600 text-white rounded-2xl rounded-tr-none p-3.5 shadow-sm">
-                    <p className="text-xs leading-normal">Awesome. Let me know if you need any more photos of the storefront or custom copy.</p>
-                    <span className="text-[9px] font-bold text-indigo-200 mt-2 block">Monday, 10:15 AM</span>
-                  </div>
-                </div>
-                <div className="flex gap-3 max-w-[80%]">
-                  <div className="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">A</div>
-                  <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-3.5 shadow-sm">
-                    <p className="text-xs text-slate-700 leading-normal">Will do! The wireframes should be ready for your review by Wednesday. I will drop a preview link right here.</p>
-                    <span className="text-[9px] font-bold text-slate-400 mt-2 block">Monday, 10:20 AM</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-4 border-t border-slate-200 bg-white">
-                <div className="relative flex items-center">
-                  <input 
-                    type="text" 
-                    placeholder="Type a message to your team..." 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-12 py-3 text-xs outline-none focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all font-medium"
-                  />
-                  <button className="absolute right-2 p-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors">
-                    <Send className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
       case 'Support Tickets':
         return (
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="flex items-center justify-between">
+          <div className="max-w-6xl mx-auto space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Support Tickets</h1>
-                <p className="text-slate-500 text-xs mt-0.5">Submit and monitor requests for site maintenance.</p>
+                <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Agency Collaboration Hub</h1>
+                <p className="text-slate-500 text-xs mt-0.5">Submit fix requests, track support tickets, and chat directly with your dedicated developers.</p>
               </div>
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5">
-                <Plus className="w-4 h-4" /> New Ticket
-              </button>
+              <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-2 shadow-sm text-xs shrink-0">
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="font-bold text-slate-700">Dedicated Team Online</span>
+              </div>
             </div>
-            
-            <div className="space-y-4">
-              {[
-                { id: '#TKT-2041', title: 'Update Holiday Hours on Store Page', status: 'In Progress', date: 'Oct 23', type: 'Content Update' },
-                { id: '#TKT-2032', title: 'Add Staff Member Bio and Photos', status: 'Completed', date: 'Oct 10', type: 'Design Update' },
-                { id: '#TKT-1988', title: 'Domain DNS Verification Pointing Issue', status: 'Completed', date: 'Sep 05', type: 'Technical' }
-              ].map(ticket => (
-                <div 
-                  key={ticket.id} 
-                  className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${ticket.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-indigo-600'}`}>
-                      {ticket.status === 'Completed' ? <CheckCircle2 className="w-5 h-5" /> : <Clock3 className="w-5 h-5" />}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-[10px] font-bold text-slate-400">{ticket.id}</span>
-                        <span className="text-slate-300 text-[10px]">&bull;</span>
-                        <span className="text-[9px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">{ticket.type}</span>
+
+            {/* Main Hub Grid */}
+            <div className="relative">
+              <div className={`grid grid-cols-1 lg:grid-cols-12 gap-6 transition-all duration-300 ${
+                (selectedSite?.planTier || 'DIY') === 'DIY' ? 'blur-[4px] select-none pointer-events-none opacity-40' : ''
+              }`}>
+              {/* Left Column: Chat & Broadcasts (7 cols) */}
+              <div className="lg:col-span-7 space-y-6 flex flex-col">
+                {/* 1. Live Chat */}
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-[460px]">
+                  <div className="px-5 py-3.5 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm shadow-indigo-600/20">A</div>
+                      <div>
+                        <h3 className="font-bold text-slate-800 text-xs leading-none">Developer Chat Desk</h3>
+                        <span className="text-[9px] font-semibold text-emerald-600 mt-1 block">Live &bull; Typical reply under 15m</span>
                       </div>
-                      <h3 className="font-bold text-slate-800 text-sm">{ticket.title}</h3>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center gap-6 border-t border-slate-100 sm:border-t-0 pt-4 sm:pt-0 justify-between sm:justify-start">
-                    <div className="text-left sm:text-right">
-                      <p className="text-[10px] text-slate-400 font-bold mb-0.5">Status</p>
-                      <p className="text-xs font-semibold text-slate-700">{ticket.status}</p>
+
+                  {/* Scrollable messages */}
+                  <div className="flex-grow p-5 space-y-4 overflow-y-auto bg-slate-50/20 max-h-[350px]">
+                    {chatMessages.map((msg) => {
+                      const isClient = msg.sender === 'client';
+                      return (
+                        <div key={msg.id} className={`flex gap-3 max-w-[85%] ${isClient ? 'ml-auto flex-row-reverse' : ''}`}>
+                          <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5 shadow-sm ${
+                            isClient ? 'bg-slate-700 text-white' : 'bg-indigo-100 text-indigo-700'
+                          }`}>
+                            {msg.initials}
+                          </div>
+                          <div className={`p-3 rounded-2xl shadow-sm ${
+                            isClient 
+                              ? 'bg-indigo-600 text-white rounded-tr-none' 
+                              : 'bg-white border border-slate-200 text-slate-700 rounded-tl-none'
+                          }`}>
+                            <p className="text-xs leading-relaxed font-medium">{msg.text}</p>
+                            <span className={`text-[8px] font-bold mt-1.5 block ${
+                              isClient ? 'text-indigo-200' : 'text-slate-400'
+                            }`}>
+                              {msg.date}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Chat Input */}
+                  <div className="p-3 border-t border-slate-200 bg-white">
+                    <form 
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (!newChatMessage.trim()) return;
+                        const newMsg = {
+                          id: `msg-${Date.now()}`,
+                          sender: 'client',
+                          initials: profileName ? profileName.charAt(0) : 'C',
+                          name: 'You',
+                          text: newChatMessage.trim(),
+                          date: 'Just now'
+                        };
+                        setChatMessages(prev => [...prev, newMsg]);
+                        setNewChatMessage('');
+                      }}
+                      className="relative flex items-center"
+                    >
+                      <input 
+                        type="text" 
+                        value={newChatMessage}
+                        onChange={(e) => setNewChatMessage(e.target.value)}
+                        placeholder="Type a message to your development team..." 
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-12 py-3 text-xs outline-none focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all font-medium"
+                      />
+                      <button 
+                        type="submit"
+                        className="absolute right-2 p-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors shadow-sm"
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                      </button>
+                    </form>
+                  </div>
+                </div>
+
+                {/* 2. Agency Notifications / Announcements */}
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <Bell className="w-4 h-4 text-slate-500" /> Agency Notifications
+                    </h3>
+                    <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
+                      {agencyNotifications.filter(n => !n.read).length} Unread
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {agencyNotifications.map((ann) => (
+                      <div 
+                        key={ann.id}
+                        onClick={() => {
+                          setAgencyNotifications(prev => prev.map(n => n.id === ann.id ? { ...n, read: true } : n));
+                        }}
+                        className={`p-3.5 border rounded-xl transition-all cursor-pointer flex gap-3 ${
+                          ann.read 
+                            ? 'border-slate-100 bg-slate-50/30 opacity-70 hover:opacity-100' 
+                            : 'border-indigo-100 bg-indigo-50/20 hover:bg-indigo-50/40'
+                        }`}
+                      >
+                        <div className="mt-0.5 shrink-0">
+                          {ann.read ? (
+                            <CheckCircle2 className="w-4 h-4 text-slate-400" />
+                          ) : (
+                            <div className="w-4 h-4 rounded-full bg-indigo-600 flex items-center justify-center text-white text-[8px] font-black animate-pulse">!</div>
+                          )}
+                        </div>
+                        <div className="flex-1 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-xs font-bold text-slate-800 leading-tight">{ann.title}</h4>
+                            <span className="text-[9px] font-bold text-slate-400 whitespace-nowrap">{ann.date}</span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 leading-relaxed font-medium">{ann.content}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Ticket Submission & Active List (5 cols) */}
+              <div className="lg:col-span-5 space-y-6">
+                {/* 1. Ticket Submission Form */}
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4">
+                  <div className="border-b border-slate-100 pb-3">
+                    <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <LifeBuoy className="w-4 h-4 text-slate-500" /> Submit Site Fix Request
+                    </h3>
+                    <p className="text-slate-400 text-[10px] mt-0.5">Need a change or something fixed? Log it here directly.</p>
+                  </div>
+
+                  <div className="space-y-3.5">
+                    <div className="space-y-1">
+                      <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Target Page</label>
+                      <select 
+                        value={requestPage}
+                        onChange={(e) => setRequestPage(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold focus:bg-white focus:border-indigo-400 focus:outline-none"
+                      >
+                        <option value="Home">Home Page</option>
+                        <option value="Services">Services</option>
+                        <option value="About">About Us</option>
+                        <option value="Contact">Contact</option>
+                        <option value="Entire Site">Entire Site / Global</option>
+                        <option value="Custom Page">Custom / Other Page</option>
+                      </select>
                     </div>
-                    <div className="text-right">
-                      <p className="text-[10px] text-slate-400 font-bold mb-0.5">Created</p>
-                      <p className="text-xs font-semibold text-slate-700">{ticket.date}</p>
+
+                    <div className="space-y-1">
+                      <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Request Type</label>
+                      <select 
+                        value={requestType}
+                        onChange={(e) => setRequestType(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold focus:bg-white focus:border-indigo-400 focus:outline-none"
+                      >
+                        <option value="Content Update">Text / Copy Update</option>
+                        <option value="Image Update">Swap / Add Images</option>
+                        <option value="Design Change">Styling / Layout Change</option>
+                        <option value="Technical Fix">Bug / Technical Issue</option>
+                        <option value="Custom Request">Custom / Other Request</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Describe the change / issue</label>
+                      <textarea 
+                        value={requestDescription}
+                        onChange={(e) => setRequestDescription(e.target.value)}
+                        placeholder="e.g. Please update our contact number to 555-0199 and fix the text alignment of the sub-header."
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none min-h-[90px] leading-relaxed font-medium"
+                      />
+                    </div>
+
+                    {/* Upload button wrapper */}
+                    <div className="space-y-1">
+                      <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Reference Assets</label>
+                      <div 
+                        onClick={() => {
+                          const mockUrl = window.prompt("Upload assets. Enter an image URL or reference text file:", "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600");
+                          if (mockUrl) setRequestFiles(prev => [...prev, mockUrl]);
+                        }}
+                        className="border border-dashed border-slate-200 rounded-xl p-4 text-center bg-slate-50 hover:bg-slate-100/50 cursor-pointer transition-colors"
+                      >
+                        <Upload className="w-5 h-5 text-slate-400 mx-auto mb-1" />
+                        <p className="text-[10px] font-bold text-slate-600">Click to upload files</p>
+                      </div>
+                      
+                      {requestFiles.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {requestFiles.map((file, i) => (
+                            <div key={i} className="bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1 flex items-center gap-1.5">
+                              <span className="text-[8px] font-bold text-slate-650 truncate max-w-[100px]">{file}</span>
+                              <button 
+                                onClick={() => setRequestFiles(prev => prev.filter((_, idx) => idx !== i))}
+                                className="text-rose-500 hover:text-rose-700 text-[10px] font-black"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <button 
+                      onClick={() => {
+                        if (!requestDescription.trim()) return alert("Please specify the change description.");
+                        setRequestStatusMsg("submitting...");
+                        setTimeout(() => {
+                          const newTkt = {
+                            id: `TKT-${Math.floor(1000 + Math.random() * 9000)}`,
+                            title: requestDescription.length > 40 ? requestDescription.substring(0, 40) + '...' : requestDescription,
+                            status: 'In Progress',
+                            date: 'Just now',
+                            type: requestType,
+                            description: requestDescription,
+                            files: requestFiles
+                          };
+                          setTickets(prev => [newTkt, ...prev]);
+                          setRequestDescription('');
+                          setRequestFiles([]);
+                          setRequestStatusMsg("✓ Ticket submitted successfully!");
+                          setTimeout(() => setRequestStatusMsg(''), 4000);
+                        }, 800);
+                      }}
+                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-xs font-bold shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/20 hover:-translate-y-0.5 transition-all"
+                    >
+                      {requestStatusMsg || "Log Ticket with Agency"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Ticket Tracking List */}
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4">
+                  <div className="border-b border-slate-100 pb-3 flex justify-between items-center">
+                    <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider">
+                      My Support Tickets
+                    </h3>
+                    <span className="text-[10px] font-bold text-slate-500">
+                      {tickets.length} total
+                    </span>
+                  </div>
+
+                  <div className="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar font-sans">
+                    {tickets.map(ticket => (
+                      <div 
+                        key={ticket.id} 
+                        className="p-3 bg-slate-50/50 border border-slate-100 rounded-xl hover:border-slate-200 transition-all flex items-center justify-between gap-3"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${ticket.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+                            {ticket.status === 'Completed' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Clock3 className="w-3.5 h-3.5" />}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[8px] font-bold text-slate-400">{ticket.id}</span>
+                              <span className="text-slate-300 text-[8px]">&bull;</span>
+                              <span className="text-[8px] font-bold text-indigo-600 uppercase tracking-wider">{ticket.type}</span>
+                            </div>
+                            <h4 className="font-bold text-slate-700 text-xs truncate mt-0.5 leading-tight">{ticket.title}</h4>
+                          </div>
+                        </div>
+                        
+                        <div className="text-right shrink-0">
+                          <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full ${
+                            ticket.status === 'Completed' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {ticket.status}
+                          </span>
+                          <span className="text-[8px] text-slate-400 font-bold block mt-1">{ticket.date}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. Direct Agency Contact Desk */}
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-5">
+                  <div className="border-b border-slate-100 pb-3">
+                    <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <Phone className="w-4 h-4 text-slate-500" /> Direct Agency Contact Desk
+                    </h3>
+                    <p className="text-slate-400 text-[10px] mt-0.5">Reach our desk directly via phone or email.</p>
+                  </div>
+
+                  {/* Contact Info Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 border border-slate-100 p-3.5 rounded-xl font-sans">
+                    <div className="space-y-1">
+                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Direct Phone</p>
+                      <a href="tel:+17205550100" className="font-black text-indigo-650 hover:underline flex items-center gap-1">
+                        +1 (720) 555-0100
+                      </a>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Direct Email</p>
+                      <a href="mailto:agency@michaelfreddesigns.com" className="font-black text-indigo-650 hover:underline flex items-center gap-1">
+                        agency@michaelfreddesigns.com
+                      </a>
+                    </div>
+                    <div className="sm:col-span-2 pt-2 border-t border-slate-200/50 mt-1">
+                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Office Hours</p>
+                      <p className="font-bold text-slate-700 mt-0.5">Mon - Fri, 9:00 AM - 6:00 PM EST</p>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+              
+              {/* Closing of grid relative container, plus the upgrade portal overlay */}
+              </div>
+
+              {(selectedSite?.planTier || 'DIY') === 'DIY' && (
+                <div className="absolute inset-0 flex items-center justify-center p-4 bg-slate-900/10 backdrop-blur-[2px] z-20 rounded-2xl">
+                  <div className="bg-white/95 backdrop-blur border border-slate-250 shadow-2xl rounded-2xl max-w-lg w-full p-8 text-center space-y-6 transform hover:scale-[1.01] transition-transform">
+                    {isUpgrading ? (
+                      <div className="py-12 space-y-4 flex flex-col items-center justify-center">
+                        <div className="w-12 h-12 rounded-full border-4 border-slate-205 border-t-indigo-600 animate-spin" />
+                        <div className="space-y-1">
+                          <h3 className="font-extrabold text-slate-800 text-sm">Processing Premium Upgrade...</h3>
+                          <p className="text-slate-400 text-xs">Securing Stripe checkout & activating Done-For-You features.</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="w-14 h-14 bg-indigo-50 text-indigo-650 rounded-2xl flex items-center justify-center mx-auto shadow-sm border border-indigo-100">
+                          <Sparkles className="w-6 h-6 animate-pulse" />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <h2 className="text-lg font-black text-slate-900 tracking-tight uppercase">Let Our Agency Do It For You</h2>
+                          <p className="text-slate-500 text-xs max-w-sm mx-auto leading-relaxed font-medium">
+                            Upgrade to our <strong className="text-indigo-650">Done-For-You (DFY) Plan</strong> for just $50/mo. Get unlimited site edits, custom copy, new layouts, and priority developer syncs.
+                          </p>
+                        </div>
+
+                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left space-y-3 font-sans">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200 pb-1.5">Done-For-You Privileges</p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5">
+                            {[
+                              { label: 'Live Dev Chat', desc: 'Direct desk line to programmers' },
+                              { label: 'Unlimited Tweaks', desc: 'Request text, image & layout changes' },
+                              { label: 'SEO & Analytics', desc: 'Google Analytics & ranking setup' },
+                              { label: '24h Fast Delivery', desc: 'All updates built & deployed' }
+                            ].map(feat => (
+                              <div key={feat.label} className="flex items-start gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                                <div>
+                                  <p className="text-xs font-bold text-slate-805 leading-tight">{feat.label}</p>
+                                  <p className="text-[9px] text-slate-400 leading-tight mt-0.5">{feat.desc}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2.5 pt-2">
+                          <button
+                            onClick={() => {
+                              setIsUpgrading(true);
+                              setTimeout(() => {
+                                setIsUpgrading(false);
+                                handleUpdatePlanTier(selectedSite.id, 'DFY');
+                                alert("💳 Stripe Invoice Paid! Done-For-You portal is now active. Your dedicated developer is ready.");
+                              }, 1500);
+                            }}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/20 active:translate-y-0.5"
+                          >
+                            Upgrade to Done-For-You ($50/mo)
+                          </button>
+                          <p className="text-[10px] text-slate-400 font-semibold">
+                            Only an extra $30/mo over your current DIY plan. Cancel or downgrade anytime.
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -1851,7 +2531,7 @@ export default function DashboardLayout() {
                     <p className="text-indigo-200 text-xs font-semibold">/month managed</p>
                   </div>
                   <button
-                    onClick={() => setActiveSection('Communications')}
+                    onClick={() => setActiveSection('Contact Agency')}
                     className="bg-white text-indigo-700 hover:bg-indigo-50 px-6 py-3 rounded-xl font-black text-sm transition-all shadow-lg flex items-center justify-center gap-2"
                   >
                     <MessageSquare className="w-4 h-4" /> Talk to Us
@@ -1891,120 +2571,6 @@ export default function DashboardLayout() {
         );
 
       case 'Request Update':
-        return (
-          <div className="max-w-3xl mx-auto space-y-8">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Request Design Update</h1>
-              <p className="text-slate-500 text-sm mt-0.5">Submit your content changes or styling requests directly to our design team.</p>
-            </div>
-            
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8 shadow-sm space-y-6">
-              <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 flex gap-3">
-                <ShieldCheck className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-slate-800">Done-For-You Management</h4>
-                  <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                    Simply describe what needs changing, drop any new photos or text, and our agency team will apply and optimize it on your live website.
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Target Page</label>
-                    <select 
-                      value={requestPage}
-                      onChange={(e) => setRequestPage(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-semibold focus:bg-white focus:border-indigo-400 focus:outline-none"
-                    >
-                      <option value="Home">Home Page</option>
-                      <option value="Services">Services</option>
-                      <option value="About">About Us</option>
-                      <option value="Contact">Contact</option>
-                      <option value="Entire Site">Entire Site / Global</option>
-                    </select>
-                  </div>
-                  
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Request Type</label>
-                    <select 
-                      value={requestType}
-                      onChange={(e) => setRequestType(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-semibold focus:bg-white focus:border-indigo-400 focus:outline-none"
-                    >
-                      <option value="Content Update">Text / Copy Update</option>
-                      <option value="Image Update">Swap / Add Images</option>
-                      <option value="Design Change">Styling / Layout Change</option>
-                      <option value="New Feature">E-commerce / Automation Setup</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">What would you like us to update?</label>
-                  <textarea 
-                    value={requestDescription}
-                    onChange={(e) => setRequestDescription(e.target.value)}
-                    placeholder="e.g. Please update our business hours to close at 6 PM on Sundays, and swap out the main header photo with the new team image uploaded below."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none min-h-[140px] leading-relaxed"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Upload Design Assets (Images, Copy Docs)</label>
-                  <div 
-                    onClick={() => {
-                      const mockUrl = window.prompt("Upload assets. Enter an image URL or reference text file:", "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600");
-                      if (mockUrl) setRequestFiles(prev => [...prev, mockUrl]);
-                    }}
-                    className="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center bg-slate-50 hover:bg-slate-100/50 cursor-pointer transition-colors"
-                  >
-                    <Upload className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-                    <p className="text-xs font-bold text-slate-700">Click to upload files</p>
-                    <p className="text-[10px] text-slate-400 mt-1">Accepts JPG, PNG, PDF, or Word documents up to 50MB</p>
-                  </div>
-                  
-                  {requestFiles.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {requestFiles.map((file, i) => (
-                        <div key={i} className="bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-slate-600 truncate max-w-[150px]">{file}</span>
-                          <button 
-                            onClick={() => setRequestFiles(prev => prev.filter((_, idx) => idx !== i))}
-                            className="text-rose-500 hover:text-rose-700 text-xs font-black"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="pt-4 flex items-center justify-between">
-                  {requestStatusMsg && <span className="text-xs text-indigo-600 font-semibold">{requestStatusMsg}</span>}
-                  <button 
-                    onClick={() => {
-                      if (!requestDescription.trim()) return alert("Please specify the change description.");
-                      setRequestStatusMsg("submitting...");
-                      setTimeout(() => {
-                        setRequestDescription('');
-                        setRequestFiles([]);
-                        setRequestStatusMsg("✓ Design request logged successfully! Your team has been notified.");
-                        setTimeout(() => setRequestStatusMsg(''), 4000);
-                      }, 1000);
-                    }}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors ml-auto"
-                  >
-                    Submit Request to Agency
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
       case 'Inbox Messages': {
         const filteredSubmissions = submissions.filter(sub => {
           const matchesSearch = 
@@ -2522,8 +3088,7 @@ export default function DashboardLayout() {
               { icon: LayoutDashboard, label: 'Overview' },
               { icon: Globe, label: 'My Sites' },
               { icon: Database, label: 'CMS Collections' },
-              { icon: Mail, label: 'Inbox Messages' },
-              { icon: FileText, label: 'Request Update' }
+              { icon: Mail, label: 'Inbox Messages' }
             ].map((link) => (
               <button
                 key={link.label}
@@ -2570,8 +3135,7 @@ export default function DashboardLayout() {
             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-2">Agency Operations</p>
             {[
               { icon: Clock3, label: 'Project Timeline' },
-              { icon: MessageSquare, label: 'Communications' },
-              { icon: LifeBuoy, label: 'Support Tickets' }
+              { icon: MessageSquare, label: 'Contact Agency' }
             ].map((link) => (
               <button
                 key={link.label}
@@ -2629,11 +3193,36 @@ export default function DashboardLayout() {
               <Menu className="w-5 h-5" />
             </button>
             
-            {/* Selected site indicator */}
-            <div className="hidden sm:flex items-center gap-2">
+            {/* Selected site indicator & Plan Tier Switcher */}
+            <div className="hidden sm:flex items-center gap-3">
               <span className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5 text-indigo-500" /> {selectedSite?.name || 'No Selected Site'}
               </span>
+              
+              {selectedSite && (
+                <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-sm shrink-0">
+                  <button
+                    onClick={() => handleUpdatePlanTier(selectedSite.id, 'DIY')}
+                    className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${
+                      (selectedSite.planTier || 'DIY') === 'DIY'
+                        ? 'bg-white text-slate-800 shadow-sm'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    DIY ($20)
+                  </button>
+                  <button
+                    onClick={() => handleUpdatePlanTier(selectedSite.id, 'DFY')}
+                    className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${
+                      selectedSite.planTier === 'DFY'
+                        ? 'bg-indigo-600 text-white shadow-sm'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    Done-For-You ($50)
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -2745,7 +3334,23 @@ export default function DashboardLayout() {
                           }, 1000);
                         } else {
                           // DFY Tier Flow - Agency orders preset
-                          alert(`🎉 Thank you! We have received your order for the "${site.name}" custom theme. Your dedicated account manager Michael will clone and customize this layout for you. Redirecting to Timeline.`);
+                          const newId = `site-${Date.now()}`;
+                          const newSiteRecord = {
+                            id: newId,
+                            name: `${site.name} (DFY)`,
+                            url: `${site.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'site'}.com`,
+                            previewUrl: `/preview/${site.id}`,
+                            status: 'Live',
+                            image: site.image,
+                            lastUpdate: 'Just now',
+                            templateKey: site.templateKey,
+                            planTier: 'DFY'
+                          };
+                          const updatedSites = [...mySites, newSiteRecord];
+                          setMySites(updatedSites);
+                          setSelectedSite(newSiteRecord);
+                          localStorage.setItem('my-sites', JSON.stringify(updatedSites));
+                          alert(`🎉 Thank you! We have received your order for the "${site.name}" custom theme. Your dedicated account manager Michael has set up your premium Done-For-You workspace. Redirecting to Timeline.`);
                           setIsTemplateModalOpen(false);
                           setActiveSection('Project Timeline');
                         }
