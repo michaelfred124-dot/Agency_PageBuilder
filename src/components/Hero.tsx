@@ -17,10 +17,15 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="min-h-screen flex flex-col justify-start items-center px-6 relative overflow-hidden bg-[#F7F8FA] pt-36 lg:pt-40 pb-20 border-b border-zinc-200/50">
+    <section id="home" className="min-h-screen flex flex-col justify-start items-center px-6 relative overflow-hidden bg-slate-50/50 pt-36 lg:pt-40 pb-24 border-b border-zinc-200/30">
       
-      {/* Background radial soft glows backing the dashboard mockup */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-r from-[#DCD7FC]/40 via-[#F5D8F0]/30 to-transparent rounded-full blur-[90px] pointer-events-none z-0" />
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none z-0" />
+      
+      {/* Background radial soft glows backing the dashboard mockup - Apple style aurora mesh */}
+      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(220,215,252,0.45),rgba(224,242,254,0.25),transparent)] rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute top-[20%] right-[-10%] w-[60%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(245,216,240,0.45),rgba(254,226,226,0.25),transparent)] rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[60%] bg-[radial-gradient(circle_at_center,rgba(67,83,255,0.08),rgba(220,215,252,0.2),transparent)] rounded-full blur-[150px] pointer-events-none z-0" />
 
       <div className="max-w-[1200px] mx-auto w-full z-10 flex flex-col items-center text-center">
         
@@ -81,7 +86,7 @@ export default function Hero() {
           className="w-full max-w-[940px] mt-16 relative flex justify-center"
         >
           {/* Simulated Browser Frame Mockup */}
-          <div className="w-full bg-white border border-zinc-200 rounded-t-2xl shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden">
+          <div className="w-full bg-white border border-zinc-200 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.08)] overflow-hidden">
             
             {/* Mockup Header tab-bar */}
             <div className="bg-[#F4F5F7] border-b border-zinc-200 px-4 py-3 flex items-center justify-between">
@@ -114,16 +119,16 @@ export default function Hero() {
                 <div className="w-full h-24 pt-2">
                   <svg viewBox="0 0 100 20" className="w-full h-full text-[#4353FF]" preserveAspectRatio="none">
                     <path 
-                      d="M0 16 Q15 6, 30 11 T60 4 T85 9 T100 2" 
+                      d="M0 15 C15 15, 25 12, 40 12 C55 12, 60 4, 75 4 C85 4, 90 16, 95 16 C97 16, 99 10, 100 6" 
                       fill="none" 
                       stroke="currentColor" 
-                      strokeWidth="2" 
+                      strokeWidth="2.5" 
                       strokeLinecap="round" 
                     />
                     <path 
-                      d="M0 16 Q15 6, 30 11 T60 4 T85 9 T100 2 L100 20 L0 20 Z" 
+                      d="M0 15 C15 15, 25 12, 40 12 C55 12, 60 4, 75 4 C85 4, 90 16, 95 16 C97 16, 99 10, 100 6 L100 20 L0 20 Z" 
                       fill="url(#gradient-chart)" 
-                      opacity="0.06"
+                      opacity="0.08"
                     />
                     <defs>
                       <linearGradient id="gradient-chart" x1="0" y1="0" x2="0" y2="1">
