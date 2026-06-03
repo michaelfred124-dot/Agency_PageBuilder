@@ -376,6 +376,23 @@ export default function DashboardLayout() {
     };
   }, []);
 
+  // Redirect admin users to CRM portal client-side
+  useEffect(() => {
+    if (user) {
+      const isAdmin = 
+        user.email?.toLowerCase() === 'michaelfreddesigns@gmail.com' ||
+        user.email?.toLowerCase() === 'michaelfred124@gmail.com' ||
+        user.user_metadata?.is_admin === true || 
+        user.app_metadata?.is_admin === true ||
+        user.user_metadata?.role === 'admin' ||
+        user.app_metadata?.role === 'admin';
+        
+      if (isAdmin) {
+        router.push('/admin');
+      }
+    }
+  }, [user, router]);
+
   useEffect(() => {
     if (!user) return;
 

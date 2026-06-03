@@ -50,12 +50,25 @@ export async function middleware(request: NextRequest) {
       loginUrl.pathname = '/login';
       return NextResponse.redirect(loginUrl);
     }
+
+    // Redirect admin users to the CRM admin dashboard
+    const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || [];
+    if (user.email && adminEmails.includes(user.email.toLowerCase())) {
+      const adminUrl = request.nextUrl.clone();
+      adminUrl.pathname = '/admin';
+      return NextResponse.redirect(adminUrl);
+    }
   }
 
   if (pathname === '/login') {
     if (user) {
+      const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || [];
       const dashUrl = request.nextUrl.clone();
-      dashUrl.pathname = '/dashboard';
+      if (user.email && adminEmails.includes(user.email.toLowerCase())) {
+        dashUrl.pathname = '/admin';
+      } else {
+        dashUrl.pathname = '/dashboard';
+      }
       return NextResponse.redirect(dashUrl);
     }
   }

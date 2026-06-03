@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, LogOut, LayoutDashboard, Globe, User as UserIcon, Settings, ChevronDown } from 'lucide-react';
+import { Menu, X, LogOut, LayoutDashboard, Globe, User as UserIcon, Settings, ChevronDown, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { NAV_LINKS, COLORS } from '@/constants';
@@ -17,6 +17,15 @@ export default function Navbar() {
   const [activeSite, setActiveSite] = useState<any>(null);
   const router = useRouter();
   const popoutRef = useRef<HTMLDivElement>(null);
+
+  const isAdmin = user && (
+    user.email?.toLowerCase() === 'michaelfreddesigns@gmail.com' ||
+    user.email?.toLowerCase() === 'michaelfred124@gmail.com' ||
+    user.user_metadata?.is_admin === true || 
+    user.app_metadata?.is_admin === true ||
+    user.user_metadata?.role === 'admin' ||
+    user.app_metadata?.role === 'admin'
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -206,6 +215,16 @@ export default function Navbar() {
                         <LayoutDashboard className="w-4 h-4 text-blue-500" /> Go to Dashboard
                       </Link>
 
+                      {isAdmin && (
+                        <Link 
+                          href="/admin"
+                          onClick={() => setShowPopout(false)}
+                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-zinc-50 transition-colors text-zinc-700 hover:text-black"
+                        >
+                          <ShieldCheck className="w-4 h-4 text-indigo-500" /> Go to CRM Portal
+                        </Link>
+                      )}
+
                       {liveUrl ? (
                         <a 
                           href={liveUrl}
@@ -303,6 +322,15 @@ export default function Navbar() {
                     >
                       <LayoutDashboard className="w-5 h-5 text-blue-500" /> Dashboard
                     </Link>
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setIsOpen(false)}
+                        className="text-base font-medium text-zinc-700 hover:text-black flex items-center gap-2"
+                      >
+                        <ShieldCheck className="w-5 h-5 text-indigo-500" /> CRM Portal
+                      </Link>
+                    )}
                     {liveUrl && (
                       <a
                         href={liveUrl}

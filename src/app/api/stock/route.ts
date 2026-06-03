@@ -326,8 +326,43 @@ export async function GET(request: Request) {
   const rawQuery = searchParams.get('query') || '';
   const query = rawQuery.trim().toLowerCase();
 
-  const accessKey = process.env.UNSPLASH_ACCESS_KEY || process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
+  // 1. Try Pexels API
+  const pexelsKey = process.env.PEXELS_API_KEY || process.env.NEXT_PUBLIC_PEXELS_API_KEY;
+  if (pexelsKey) {
+    try {
+      let photosData: any[] = [];
+      const searchUrl = query 
+        ? `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=24`
+        : `https://api.pexels.com/v1/curated?per_page=24`;
+        
+      const res = await fetch(searchUrl, {
+        headers: {
+          Authorization: pexelsKey
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        photosData = data.photos || [];
+        if (photosData.length > 0) {
+          const mapped = photosData.map((photo: any) => ({
+            id: `pexels-${photo.id}`,
+            url: photo.src?.large2x || photo.src?.large || photo.src?.original,
+            thumb: photo.src?.medium || photo.src?.small,
+            author: photo.photographer || 'Pexels',
+            link: photo.url || 'https://www.pexels.com'
+          }));
+          return NextResponse.json({ photos: mapped, isLive: true, source: 'pexels' });
+        }
+      } else {
+        console.error('Pexels API error status:', res.status);
+      }
+    } catch (error) {
+      console.error('Pexels API connection failed:', error);
+    }
+  }
 
+  // 2. Try Unsplash API
+  const accessKey = process.env.UNSPLASH_ACCESS_KEY || process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
   if (accessKey) {
     try {
       let photosData: any[] = [];
@@ -343,7 +378,6 @@ export async function GET(request: Request) {
           photosData = data.results || [];
         } else {
           console.error('Unsplash search API error status:', res.status);
-          throw new Error(`Unsplash search API responded with status ${res.status}`);
         }
       } else {
         const listUrl = `https://api.unsplash.com/photos?per_page=24`;
@@ -356,51 +390,46 @@ export async function GET(request: Request) {
           photosData = await res.json();
         } else {
           console.error('Unsplash list API error status:', res.status);
-          throw new Error(`Unsplash list API responded with status ${res.status}`);
         }
       }
 
       if (photosData && photosData.length > 0) {
         const mapped = photosData.map((photo: any) => ({
-          id: photo.id,
+          id: `unsplash-${photo.id}`,
           url: photo.urls?.regular || photo.urls?.full,
           thumb: photo.urls?.small || photo.urls?.thumb,
           author: photo.user?.name || 'Unsplash',
           link: photo.links?.html || 'https://unsplash.com'
         }));
-        return NextResponse.json({ photos: mapped, isLive: true });
+        return NextResponse.json({ photos: mapped, isLive: true, source: 'unsplash' });
       }
     } catch (error) {
-      console.error('Unsplash API connection failed, falling back to local seeds:', error);
+      console.error('Unsplash API connection failed:', error);
     }
   }
 
+  // 3. Fallback to Lorem Flickr for instant keyless search queries
+  if (query) {
+    try {
+      const generatedPhotos = Array.from({ length: 24 }).map((_, i) => ({
+        id: `mock-${query}-${i}`,
+        url: `https://loremflickr.com/800/600/${encodeURIComponent(query)}?lock=${i + 1}`,
+        thumb: `https://loremflickr.com/400/300/${encodeURIComponent(query)}?lock=${i + 1}`,
+        author: `Lorem Flickr (${query})`,
+        link: `https://loremflickr.com`
+      }));
+      return NextResponse.json({ photos: generatedPhotos, isLive: false, source: 'loremflickr' });
+    } catch (error) {
+      console.error('Error generating mockup photos:', error);
+    }
+  }
+
+  // 4. Default pre-seeded static fallback (when there's no query)
   try {
-    // If query is empty, return a diverse subset of photos
-    if (!query) {
-      const defaultPhotos = STOCK_PHOTOS.slice(0, 16);
-      return NextResponse.json({ photos: defaultPhotos, isLive: false });
-    }
-
-    // Filter local seed photos matching the query term
-    const matchedPhotos = STOCK_PHOTOS.filter(photo => {
-      return (
-        photo.category.toLowerCase().includes(query) ||
-        photo.author.toLowerCase().includes(query) ||
-        photo.keywords.some(keyword => keyword.toLowerCase().includes(query))
-      );
-    });
-
-    // If no direct matches, return fallback mixed results so grid is never empty
-    if (matchedPhotos.length === 0) {
-      // Return first 12 mixed photos
-      const fallbackPhotos = STOCK_PHOTOS.slice(0, 12);
-      return NextResponse.json({ photos: fallbackPhotos, isLive: false });
-    }
-
-    return NextResponse.json({ photos: matchedPhotos, isLive: false });
+    const defaultPhotos = STOCK_PHOTOS.slice(0, 16);
+    return NextResponse.json({ photos: defaultPhotos, isLive: false, source: 'static' });
   } catch (error) {
-    console.error('Error serving stock photos:', error);
+    console.error('Error serving static stock photos:', error);
     return NextResponse.json({ error: 'Server error serving stock photos' }, { status: 500 });
   }
 }

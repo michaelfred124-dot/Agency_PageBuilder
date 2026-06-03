@@ -61,7 +61,14 @@ export interface Tenant {
   subdomain: string;
   custom_domain: string | null;
   owner_id?: string | null;
+  status?: string;
+  template_key?: string;
+  preview_url?: string;
+  image?: string;
+  plan_tier?: 'DIY' | 'DFY';
+  notes?: string;
   created_at: string;
+  domain_info?: any;
 }
 
 export interface SitePageData {
