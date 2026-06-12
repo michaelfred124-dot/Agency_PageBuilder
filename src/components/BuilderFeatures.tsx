@@ -47,12 +47,6 @@ export default function BuilderFeatures() {
       desc: "Embed high-conversion widgets in one click: Google Maps locations, Calendly meeting calendars, Mailchimp email collections, and Instagram feeds.",
       color: COLORS.yellow,
     },
-    {
-      icon: Database,
-      title: "CMS Collection Bindings",
-      desc: "Connect local databases dynamically. Design layout elements once, then bind services, menus, or customer reviews directly from CMS records.",
-      color: COLORS.purple,
-    },
   ];
 
   const getSimulatedThemeBg = () => {

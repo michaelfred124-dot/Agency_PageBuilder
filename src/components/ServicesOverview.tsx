@@ -1,10 +1,37 @@
 "use client";
+import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import * as LucideIcons from 'lucide-react';
-import { SERVICES, COLORS } from '@/constants';
+import { SERVICES as fallbackServices } from '@/constants';
 import Link from 'next/link';
+import { getSupabaseBrowserClient } from '@/lib/supabase';
 
 export default function ServicesOverview() {
+  const [services, setServices] = useState<any[]>(fallbackServices);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      const supabase = getSupabaseBrowserClient();
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+        
+      if (!error && data && data.length > 0) {
+        // Map DB services to the expected format
+        const mappedServices = data.map(s => ({
+          title: s.title,
+          description: s.description,
+          icon: s.icon || 'Star', // Default icon if none provided
+          color: '#E0E7FF' // Generic color fallback
+        }));
+        setServices(mappedServices);
+      }
+    };
+    fetchServices();
+  }, []);
+
   return (
     <section id="services" className="py-20 lg:py-32 bg-[#F7F8FA] px-6 relative overflow-hidden border-b border-zinc-200/50">
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
@@ -24,8 +51,8 @@ export default function ServicesOverview() {
 
         {/* Blueprint-style thin border grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SERVICES.map((skill, i) => {
-            const Icon = (LucideIcons as any)[skill.icon];
+          {services.map((skill, i) => {
+            const Icon = (LucideIcons as any)[skill.icon] || LucideIcons.Star;
             return (
               <motion.div 
                 key={skill.title}
@@ -47,7 +74,7 @@ export default function ServicesOverview() {
                   className="mb-6 p-3 rounded-xl w-fit border-2 border-zinc-950 shadow-[3px_3px_0px_rgba(9,9,11,1)] group-hover:scale-105 transition-transform duration-300"
                   style={{ backgroundColor: skill.color }}
                 >
-                  {Icon && <Icon className="w-5 h-5 text-zinc-950" />}
+                  <Icon className="w-5 h-5 text-zinc-950" />
                 </div>
                 <h3 className="text-lg font-bold mb-3 text-zinc-900">
                   {skill.title}

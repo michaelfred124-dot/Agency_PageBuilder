@@ -1,11 +1,12 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowUpRight } from 'lucide-react';
 import { COLORS } from '@/constants';
+import { getSupabaseBrowserClient } from '@/lib/supabase';
 
-const SITES = [
+const FALLBACK_SITES = [
   {
     title: 'Northwood Coffee',
     category: 'Featured Template',
@@ -70,6 +71,32 @@ const SITES = [
 
 export default function FeaturedSites() {
   const router = useRouter();
+  const [sites, setSites] = useState<any[]>(FALLBACK_SITES);
+
+  useEffect(() => {
+    const fetchSites = async () => {
+      const supabase = getSupabaseBrowserClient();
+      const { data, error } = await supabase
+        .from('portfolio_items')
+        .select('*')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false });
+        
+      if (!error && data && data.length > 0) {
+        // Map DB portfolio items to the expected format
+        const mappedSites = data.map(p => ({
+          title: p.title,
+          category: p.category || 'Featured Work',
+          image: p.image_url || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop',
+          tags: ['Portfolio'],
+          color: COLORS.blue,
+          link: p.slug ? `/work/${p.slug}` : undefined
+        }));
+        setSites(mappedSites);
+      }
+    };
+    fetchSites();
+  }, []);
 
   return (
     <section className="py-24 lg:py-32 bg-white relative overflow-hidden border-b border-zinc-200/50">
@@ -87,7 +114,7 @@ export default function FeaturedSites() {
         <div className="w-full flex items-center rotate-[-2.5deg] origin-center scale-[1.02] overflow-visible">
           <div className="mercury-marquee flex gap-8 lg:gap-10 px-6">
             {/* Render double length to ensure seamless infinite looping */}
-            {[...SITES, ...SITES].map((site, i) => (
+            {[...sites, ...sites].map((site, i) => (
               <div 
                 key={i} 
                 onClick={() => site.link && router.push(site.link)}

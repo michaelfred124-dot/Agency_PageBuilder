@@ -13,6 +13,7 @@ import { updateSession } from './utils/supabase/middleware';
 // Routes that belong to the agency — never rewrite these
 const AGENCY_PATHS = [
   '/dashboard',
+  '/admin',
   '/login',
   '/onboarding',
   '/services',
@@ -43,33 +44,74 @@ export async function middleware(request: NextRequest) {
   // 1. Update/Refresh session and get user info using Supabase SSR utility
   const { supabaseResponse, user } = await updateSession(request);
 
+  // Helper to preserve cookies on redirect
+  const redirectWithCookies = (url: URL | string) => {
+    const response = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach(cookie => {
+      response.cookies.set(cookie.name, cookie.value, {
+        path: cookie.path,
+        domain: cookie.domain,
+        maxAge: cookie.maxAge,
+        secure: cookie.secure,
+        sameSite: cookie.sameSite,
+        httpOnly: cookie.httpOnly,
+        expires: cookie.expires
+      });
+    });
+    return response;
+  };
+
   // 2. Session-based route protection
   if (pathname.startsWith('/dashboard')) {
     if (!user) {
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = '/login';
-      return NextResponse.redirect(loginUrl);
+      return redirectWithCookies(loginUrl);
     }
 
     // Redirect admin users to the CRM admin dashboard
     const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || [];
-    if (user.email && adminEmails.includes(user.email.toLowerCase())) {
+    const userEmail = user.email?.toLowerCase();
+    const isAdmin = 
+      userEmail && (
+        adminEmails.includes(userEmail) || 
+        userEmail === 'michaelfreddesigns@gmail.com' ||
+        userEmail === 'michaelfred124@gmail.com' ||
+        user.user_metadata?.is_admin === true ||
+        user.app_metadata?.is_admin === true ||
+        user.user_metadata?.role === 'admin' ||
+        user.app_metadata?.role === 'admin'
+      );
+
+    if (isAdmin) {
       const adminUrl = request.nextUrl.clone();
       adminUrl.pathname = '/admin';
-      return NextResponse.redirect(adminUrl);
+      return redirectWithCookies(adminUrl);
     }
   }
 
   if (pathname === '/login') {
     if (user) {
       const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || [];
+      const userEmail = user.email?.toLowerCase();
+      const isAdmin = 
+        userEmail && (
+          adminEmails.includes(userEmail) || 
+          userEmail === 'michaelfreddesigns@gmail.com' ||
+          userEmail === 'michaelfred124@gmail.com' ||
+          user.user_metadata?.is_admin === true ||
+          user.app_metadata?.is_admin === true ||
+          user.user_metadata?.role === 'admin' ||
+          user.app_metadata?.role === 'admin'
+        );
+        
       const dashUrl = request.nextUrl.clone();
-      if (user.email && adminEmails.includes(user.email.toLowerCase())) {
+      if (isAdmin) {
         dashUrl.pathname = '/admin';
       } else {
         dashUrl.pathname = '/dashboard';
       }
-      return NextResponse.redirect(dashUrl);
+      return redirectWithCookies(dashUrl);
     }
   }
 

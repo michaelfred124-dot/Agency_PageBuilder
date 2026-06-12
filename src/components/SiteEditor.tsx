@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ArrowLeft, Save, Plus, Trash2, GripVertical, Settings, LayoutTemplate, X, SlidersHorizontal, Monitor, Tablet, Smartphone, Search, ChevronDown, AlignLeft, AlignCenter, AlignRight, Type, Paintbrush, Globe, ShoppingBag, Database, Image as ImageIcon, Upload, Eye, Key, FolderOpen, ChevronRight, Rocket, Layers, LayoutGrid, Undo, Redo, Cloud, Edit3, AlertCircle, Copy, ChevronUp, Keyboard, MoveUp, MoveDown, Heading, AlignJustify, Square, SeparatorHorizontal, Minus, Video, Star } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import PreviewWrapper from './PreviewWrapper';
 import {
@@ -72,13 +73,25 @@ const GOOGLE_FONTS = [
 
 // --- Add-Element Panel configs ---
 const ELEMENT_TYPE_CONFIGS = [
-  { type: 'Heading', label: 'Heading', icon: 'H', color: 'bg-blue-100 text-blue-700', desc: 'Title text' },
-  { type: 'Paragraph', label: 'Paragraph', icon: '¶', color: 'bg-gray-100 text-gray-700', desc: 'Body copy' },
-  { type: 'Button', label: 'Button', icon: '⬛', color: 'bg-indigo-100 text-indigo-700', desc: 'Call to action' },
-  { type: 'Image', label: 'Image', icon: '🖼', color: 'bg-green-100 text-green-700', desc: 'Photo or asset' },
-  { type: 'Divider', label: 'Divider', icon: '—', color: 'bg-orange-100 text-orange-700', desc: 'Horizontal line' },
-  { type: 'Spacer', label: 'Spacer', icon: '↕', color: 'bg-purple-100 text-purple-700', desc: 'Empty space' },
-  { type: 'Container', label: 'Container', icon: '📦', color: 'bg-slate-100 text-slate-700', desc: 'Group elements together' },
+  { type: 'Heading', label: 'Heading', icon: 'Heading', color: 'bg-blue-100 text-blue-700', desc: 'Title text' },
+  { type: 'Paragraph', label: 'Paragraph', icon: 'AlignLeft', color: 'bg-gray-100 text-gray-700', desc: 'Body copy' },
+  { type: 'Button', label: 'Button', icon: 'Square', color: 'bg-indigo-100 text-indigo-700', desc: 'Call to action' },
+  { type: 'Image', label: 'Image', icon: 'Image', color: 'bg-green-100 text-green-700', desc: 'Photo or asset' },
+  { type: 'Divider', label: 'Divider', icon: 'Minus', color: 'bg-orange-100 text-orange-700', desc: 'Horizontal line' },
+  { type: 'Spacer', label: 'Spacer', icon: 'SeparatorHorizontal', color: 'bg-purple-100 text-purple-700', desc: 'Empty space' },
+  { type: 'Container', label: 'Container', icon: 'FolderOpen', color: 'bg-slate-100 text-slate-700', desc: 'Group elements' },
+  { type: 'Video', label: 'Video', icon: 'Video', color: 'bg-red-100 text-red-700', desc: 'YouTube / Vimeo' },
+  { type: 'GoogleMap', label: 'Google Maps', icon: 'MapPin', color: 'bg-emerald-100 text-emerald-700', desc: 'Interactive map' },
+  { type: 'StarRating', label: 'Star Rating', icon: 'Star', color: 'bg-yellow-100 text-yellow-700', desc: 'Reviews stars' },
+  { type: 'Icon', label: 'Icon', icon: 'Sparkles', color: 'bg-cyan-100 text-cyan-700', desc: 'Lucide icon' },
+  { type: 'ImageBox', label: 'Image Box', icon: 'LayoutGrid', color: 'bg-sky-100 text-sky-700', desc: 'Card with image' },
+  { type: 'IconBox', label: 'Icon Box', icon: 'Layers', color: 'bg-teal-100 text-teal-700', desc: 'Feature list box' },
+  { type: 'Counter', label: 'Counter', icon: 'Smile', color: 'bg-amber-100 text-amber-700', desc: 'Fun fact tracker' },
+  { type: 'Testimonial', label: 'Testimonial', icon: 'MessageSquare', color: 'bg-pink-100 text-pink-700', desc: 'Client quote' },
+  { type: 'Alert', label: 'Alert', icon: 'AlertCircle', color: 'bg-rose-100 text-rose-700', desc: 'Notification message' },
+  { type: 'Accordion', label: 'Accordion', icon: 'Menu', color: 'bg-indigo-100 text-indigo-700', desc: 'Collapsible QA' },
+  { type: 'ProgressBar', label: 'Progress Bar', icon: 'SlidersHorizontal', color: 'bg-violet-100 text-violet-700', desc: 'Skill stats metric' },
+  { type: 'SocialIcons', label: 'Social Icons', icon: 'Share2', color: 'bg-blue-100 text-blue-700', desc: 'Profile links' },
 ];
 
 // --- Undo/Redo History Hook ---
@@ -1103,8 +1116,30 @@ export default function SiteEditor({
                elType === 'Paragraph' ? { text: 'New Paragraph Text goes here...' } :
                elType === 'Button' ? { text: 'Click Here', link: '#', buttonStyle: 'filled' } :
                elType === 'Image' ? { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800', alt: 'Image' } :
-               elType === 'Spacer' ? { height: '24px' } : {},
-        styleOverrides: {
+               elType === 'Spacer' ? { height: '24px' } :
+               elType === 'Container' ? { elements: [] } :
+               elType === 'Video' ? { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' } :
+               elType === 'GoogleMap' ? { address: '1600 Amphitheatre Pkwy, Mountain View, CA', zoom: '14' } :
+               elType === 'StarRating' ? { rating: 5, color: '#f59e0b', size: '20px' } :
+               elType === 'Icon' ? { name: 'Sparkles', color: '#3b82f6', size: '36px' } :
+               elType === 'ImageBox' ? { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=600', title: 'Card Title', text: 'Card body text description goes here...' } :
+               elType === 'IconBox' ? { icon: 'Sparkles', title: 'Feature Title', text: 'Feature description text...' } :
+               elType === 'Counter' ? { target: '99', suffix: '+', text: 'Satisfied Clients' } :
+               elType === 'Testimonial' ? { quote: 'This tool changed our lives.', author: 'Jane Doe', designation: 'Product Owner', avatar: 'https://i.pravatar.cc/100?u=rating' } :
+               elType === 'Alert' ? { alertType: 'success', title: 'Alert Title', text: 'Alert description text.' } :
+               elType === 'Accordion' ? { items: [{ title: 'Item 1 title', content: 'Item 1 description.' }, { title: 'Item 2 title', content: 'Item 2 description.' }] } :
+               elType === 'ProgressBar' ? { title: 'My Metric', percent: '75', color: '#3b82f6' } :
+               elType === 'SocialIcons' ? { platforms: [{ name: 'facebook', link: '#' }, { name: 'twitter', link: '#' }, { name: 'instagram', link: '#' }] } : {},
+        styleOverrides: elType === 'Container' ? {
+          paddingTop: '16px',
+          paddingBottom: '16px',
+          paddingLeft: '16px',
+          paddingRight: '16px',
+          backgroundColor: '#f9fafb',
+          borderWidth: '1px',
+          borderColor: '#e5e7eb',
+          borderRadius: '8px'
+        } : {
           color: '',
           fontSize: '',
           textAlign: 'left',
@@ -1171,7 +1206,9 @@ export default function SiteEditor({
   const handleSelectMedia = (url: string) => {
     if (!mediaSelectorTarget) return;
     const { id, propName, index, fieldName } = mediaSelectorTarget;
-    if (index !== undefined && fieldName !== undefined) {
+    if (selectedElementColIdx !== null && selectedElementIdx !== null && selectedElementIdx !== -1) {
+      handleUpdateElementProp(id, selectedElementColIdx, selectedElementIdx, propName, url);
+    } else if (index !== undefined && fieldName !== undefined) {
       handleUpdateArrayProp(id, propName, index, fieldName, url);
     } else {
       handleUpdateProp(id, propName, url);
@@ -2387,7 +2424,7 @@ export default function SiteEditor({
                             <div 
                               className="w-full h-28 bg-gray-100 rounded-xl border border-gray-200 overflow-hidden relative group cursor-pointer flex items-center justify-center hover:border-blue-400 transition-colors"
                               onClick={() => {
-                                setMediaSelectorTarget({ id: selectedSection.id, propName: 'columns', index: selectedElementColIdx!, fieldName: 'url' });
+                                setMediaSelectorTarget({ id: selectedSection.id, propName: 'url' });
                                 setActiveLeftTool('media');
                               }}
                             >
@@ -2417,6 +2454,454 @@ export default function SiteEditor({
                             />
                           </div>
                         </>
+                      )}
+                      {selectedElement.type === 'Video' && (
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Video Link URL</label>
+                          <input 
+                            type="text"
+                            value={selectedElement.props.url || ''}
+                            onChange={(e) => updateProp('url', e.target.value)}
+                            placeholder="https://www.youtube.com/watch?v=..."
+                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                          />
+                        </div>
+                      )}
+                      {selectedElement.type === 'GoogleMap' && (
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Address Query</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.address || ''}
+                              onChange={(e) => updateProp('address', e.target.value)}
+                              placeholder="e.g. 1600 Amphitheatre Pkwy, Mountain View, CA"
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Zoom Level (1-20)</label>
+                            <input 
+                              type="number"
+                              min="1"
+                              max="20"
+                              value={selectedElement.props.zoom || '14'}
+                              onChange={(e) => updateProp('zoom', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'StarRating' && (
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Rating (0 - 5)</label>
+                            <input 
+                              type="number"
+                              min="0"
+                              max="5"
+                              step="0.1"
+                              value={selectedElement.props.rating ?? 5}
+                              onChange={(e) => updateProp('rating', parseFloat(e.target.value) || 5)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Star Color</label>
+                            <div className="flex gap-2 items-center">
+                              <input 
+                                type="color"
+                                value={selectedElement.props.color || '#f59e0b'}
+                                onChange={(e) => updateProp('color', e.target.value)}
+                                className="w-8 h-8 rounded border border-gray-300 cursor-pointer p-0 bg-transparent shrink-0"
+                              />
+                              <input 
+                                type="text"
+                                value={selectedElement.props.color || '#f59e0b'}
+                                onChange={(e) => updateProp('color', e.target.value)}
+                                className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs font-mono text-gray-800 focus:bg-white focus:border-blue-400"
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Star Size</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.size || '20px'}
+                              onChange={(e) => updateProp('size', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                              placeholder="e.g. 20px"
+                            />
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'Icon' && (
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Icon Name (Lucide)</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.name || 'Sparkles'}
+                              onChange={(e) => updateProp('name', e.target.value)}
+                              placeholder="e.g. Sparkles, Star, Heart..."
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Icon Color</label>
+                            <div className="flex gap-2 items-center">
+                              <input 
+                                type="color"
+                                value={selectedElement.props.color || '#3b82f6'}
+                                onChange={(e) => updateProp('color', e.target.value)}
+                                className="w-8 h-8 rounded border border-gray-300 cursor-pointer p-0 bg-transparent shrink-0"
+                              />
+                              <input 
+                                type="text"
+                                value={selectedElement.props.color || '#3b82f6'}
+                                onChange={(e) => updateProp('color', e.target.value)}
+                                className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs font-mono text-gray-800 focus:bg-white focus:border-blue-400"
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Icon Size</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.size || '36px'}
+                              onChange={(e) => updateProp('size', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                              placeholder="e.g. 36px"
+                            />
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'ImageBox' && (
+                        <>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans">Card Image</label>
+                            <div 
+                              className="w-full h-28 bg-gray-100 rounded-xl border border-gray-200 overflow-hidden relative group cursor-pointer flex items-center justify-center hover:border-blue-400 transition-colors"
+                              onClick={() => {
+                                setMediaSelectorTarget({ id: selectedSection.id, propName: 'url' });
+                                setActiveLeftTool('media');
+                              }}
+                            >
+                              {selectedElement.props.url ? (
+                                <>
+                                  <img src={selectedElement.props.url} className="w-full h-full object-cover" alt="Preview" />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                    <span className="text-white text-[10px] font-semibold bg-black/50 px-2.5 py-1 rounded">Swap Image</span>
+                                  </div>
+                                </>
+                              ) : (
+                                <div className="text-gray-400 flex flex-col items-center">
+                                  <ImageIcon className="w-6 h-6 mb-1 opacity-50" />
+                                  <span className="text-[9px] font-semibold">Select from Library</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Card Title</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.title || ''}
+                              onChange={(e) => updateProp('title', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Card Body Text</label>
+                            <textarea 
+                              value={selectedElement.props.text || ''}
+                              onChange={(e) => updateProp('text', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none min-h-[60px]"
+                            />
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'IconBox' && (
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Icon Name (Lucide)</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.icon || 'Sparkles'}
+                              onChange={(e) => updateProp('icon', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Box Title</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.title || ''}
+                              onChange={(e) => updateProp('title', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Box Body Text</label>
+                            <textarea 
+                              value={selectedElement.props.text || ''}
+                              onChange={(e) => updateProp('text', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none min-h-[60px]"
+                            />
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'Counter' && (
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Target Value</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.target || ''}
+                              onChange={(e) => updateProp('target', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Suffix</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.suffix || ''}
+                              onChange={(e) => updateProp('suffix', e.target.value)}
+                              placeholder="e.g. +, %"
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Label Text</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.text || ''}
+                              onChange={(e) => updateProp('text', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                            />
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'Testimonial' && (
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Client Quote</label>
+                            <textarea 
+                              value={selectedElement.props.quote || ''}
+                              onChange={(e) => updateProp('quote', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 min-h-[60px]"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Author Name</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.author || ''}
+                              onChange={(e) => updateProp('author', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Designation</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.designation || ''}
+                              onChange={(e) => updateProp('designation', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans">Author Avatar</label>
+                            <div 
+                              className="w-16 h-16 bg-gray-100 rounded-full border border-gray-200 overflow-hidden relative group cursor-pointer flex items-center justify-center hover:border-blue-400 transition-colors"
+                              onClick={() => {
+                                setMediaSelectorTarget({ id: selectedSection.id, propName: 'avatar' });
+                                setActiveLeftTool('media');
+                              }}
+                            >
+                              {selectedElement.props.avatar ? (
+                                <>
+                                  <img src={selectedElement.props.avatar} className="w-full h-full object-cover" alt="Preview" />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                    <span className="text-white text-[8px] font-semibold bg-black/50 px-1 rounded text-center">Swap</span>
+                                  </div>
+                                </>
+                              ) : (
+                                <div className="text-gray-400 flex flex-col items-center">
+                                  <ImageIcon className="w-4 h-4 opacity-50" />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'Alert' && (
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Alert Type</label>
+                            <select 
+                              value={selectedElement.props.alertType || 'success'}
+                              onChange={(e) => updateProp('alertType', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-800 focus:outline-none focus:border-blue-400"
+                            >
+                              <option value="success">Success (Green)</option>
+                              <option value="info">Info (Blue)</option>
+                              <option value="warning">Warning (Amber)</option>
+                              <option value="danger">Danger (Rose)</option>
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Alert Title</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.title || ''}
+                              onChange={(e) => updateProp('title', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Alert Message</label>
+                            <textarea 
+                              value={selectedElement.props.text || ''}
+                              onChange={(e) => updateProp('text', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 min-h-[60px]"
+                            />
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'Accordion' && (
+                        <div className="space-y-4">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans">Accordion Items</label>
+                          {((selectedElement.props.items || []) as any[]).map((item, idx) => (
+                            <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group space-y-2">
+                              <button 
+                                onClick={() => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems.splice(idx, 1);
+                                  updateProp('items', newItems);
+                                }}
+                                className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                              <div className="text-[9px] font-bold text-gray-400 uppercase">Item {idx + 1}</div>
+                              <input 
+                                type="text"
+                                value={item.title || ''}
+                                onChange={(e) => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems[idx] = { ...newItems[idx], title: e.target.value };
+                                  updateProp('items', newItems);
+                                }}
+                                placeholder="Item title"
+                                className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                              />
+                              <textarea
+                                value={item.content || ''}
+                                onChange={(e) => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems[idx] = { ...newItems[idx], content: e.target.value };
+                                  updateProp('items', newItems);
+                                }}
+                                placeholder="Item content"
+                                className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-[11px] text-gray-900 focus:outline-none min-h-[50px]"
+                              />
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const newItems = [...(selectedElement.props.items || []), { title: 'New Item Title', content: 'New item content goes here...' }];
+                              updateProp('items', newItems);
+                            }}
+                            className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                          >
+                            + Add Accordion Item
+                          </button>
+                        </div>
+                      )}
+                      {selectedElement.type === 'ProgressBar' && (
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Progress Metric Title</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.title || ''}
+                              onChange={(e) => updateProp('title', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Percentage (0 - 100)</label>
+                            <input 
+                              type="number"
+                              min="0"
+                              max="100"
+                              value={selectedElement.props.percent || '50'}
+                              onChange={(e) => updateProp('percent', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Fill Color</label>
+                            <div className="flex gap-2 items-center">
+                              <input 
+                                type="color"
+                                value={selectedElement.props.color || '#3b82f6'}
+                                onChange={(e) => updateProp('color', e.target.value)}
+                                className="w-8 h-8 rounded border border-gray-300 cursor-pointer p-0 bg-transparent shrink-0"
+                              />
+                              <input 
+                                type="text"
+                                value={selectedElement.props.color || '#3b82f6'}
+                                onChange={(e) => updateProp('color', e.target.value)}
+                                className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs font-mono text-gray-800 focus:bg-white focus:border-blue-400"
+                              />
+                            </div>
+                          </div>
+                        </>
+                      )}
+                      {selectedElement.type === 'SocialIcons' && (
+                        <div className="space-y-4">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans font-black">Social Channels</label>
+                          {((selectedElement.props.platforms || []) as any[]).map((p, idx) => (
+                            <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group space-y-2">
+                              <button 
+                                onClick={() => {
+                                  const newPlatforms = [...selectedElement.props.platforms];
+                                  newPlatforms.splice(idx, 1);
+                                  updateProp('platforms', newPlatforms);
+                                }}
+                                className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                              <div className="text-[9px] font-bold text-gray-400 uppercase">{p.name}</div>
+                              <input 
+                                type="text"
+                                value={p.link || ''}
+                                onChange={(e) => {
+                                  const newPlatforms = [...selectedElement.props.platforms];
+                                  newPlatforms[idx] = { ...newPlatforms[idx], link: e.target.value };
+                                  updateProp('platforms', newPlatforms);
+                                }}
+                                placeholder="Channel URL (e.g. https://facebook.com/...)"
+                                className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                              />
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const platformName = window.prompt("Enter social platform name (facebook, twitter, instagram, youtube, linkedin, etc.):", "facebook");
+                              if (!platformName) return;
+                              const newPlatforms = [...(selectedElement.props.platforms || []), { name: platformName.toLowerCase(), link: '#' }];
+                              updateProp('platforms', newPlatforms);
+                            }}
+                            className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                          >
+                            + Add Social Link
+                          </button>
+                        </div>
                       )}
                       {selectedElement.type === 'Spacer' && (
                         <div className="space-y-1.5">
@@ -2508,25 +2993,6 @@ export default function SiteEditor({
                                     );
                                   })}
                                 </div>
-                              ) : field.name === 'collectionBinding' ? (
-                                <select
-                                  id={`inspector-input-${field.name}`}
-                                  value={selectedSection.props[field.name] || ''}
-                                  onChange={(e) => updateProp(field.name, e.target.value)}
-                                  className="w-full bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1.5 text-xs text-gray-900 focus:bg-white focus:border-blue-400 focus:outline-none transition-colors"
-                                >
-                                  <option value="">None (Use Static Content)</option>
-                                  {typeof window !== 'undefined' && (() => {
-                                    try {
-                                      const collections = JSON.parse(localStorage.getItem('cms_collections') || '{}');
-                                      return Object.keys(collections).map(key => (
-                                        <option key={key} value={key}>{key}</option>
-                                      ));
-                                    } catch (e) {
-                                      return null;
-                                    }
-                                  })()}
-                                </select>
                               ) : isImageField ? (
                                 <div className="flex flex-col gap-2">
                                   <div 
@@ -3270,7 +3736,7 @@ export default function SiteEditor({
                 className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95"
                 onClick={() => onPublish(pages, globalTheme)}
               >
-                <Globe className="w-3.5 h-3.5" /> {planTier === 'DIY' ? 'Connect Domain to Publish' : 'Publish'}
+                <Globe className="w-3.5 h-3.5" /> Publish Site
               </button>
             )}
           </div>
@@ -3559,8 +4025,11 @@ export default function SiteEditor({
                       onClick={() => handleAddElementOfType(el.type)}
                       className="group flex flex-col items-center gap-2.5 p-4 rounded-xl border-2 border-gray-100 hover:border-blue-400 hover:bg-blue-50/40 transition-all duration-150 active:scale-95"
                     >
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl font-black ${el.color} group-hover:scale-110 transition-transform`}>
-                        {el.icon}
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${el.color} group-hover:scale-110 transition-transform`}>
+                        {(() => {
+                          const IconComp = (LucideIcons as any)[el.icon] || LucideIcons.HelpCircle;
+                          return <IconComp className="w-5 h-5" />;
+                        })()}
                       </div>
                       <div className="text-center">
                         <div className="font-bold text-xs text-gray-800 group-hover:text-blue-700">{el.label}</div>

@@ -14,7 +14,7 @@ const PROCESS_STEPS = [
     title: 'Subscribe & Request',
     description: 'Choose a plan and gain immediate access to your dedicated project board. Invite your team and start adding as many design and development requests as you need.',
     color: COLORS.green,
-    image: 'https://images.unsplash.com/photo-1542744094-24638ea0b56c?q=80&w=2070&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=2070&auto=format&fit=crop'
   },
   {
     num: '02',

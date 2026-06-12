@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
     const searchQuery = searchParams.get('search');
     const domain = searchParams.get('domain');
     const tenantId = searchParams.get('tenantId');
+    const action = searchParams.get('action');
 
     // 1. Handle Domain Availability Search
     if (searchQuery) {
@@ -77,7 +78,51 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true, results });
     }
 
-    // 2. Handle metadata & verification retrieval
+    // 2. Handle EPP Auth Code Retrieval for Transfer Out
+    if (action === 'auth-code' && domain && tenantId) {
+      // Verify tenant ownership
+      const supabase = getSupabaseServerClient();
+      const { data: tenant, error: tenantError } = await supabase
+        .from('tenants')
+        .select('owner_id')
+        .eq('id', tenantId)
+        .single();
+
+      if (tenantError || !tenant || tenant.owner_id !== user.id) {
+        return NextResponse.json({ error: 'Forbidden: You do not own this site.' }, { status: 403 });
+      }
+
+      // Sanitize domain
+      let cleanDomain = domain.trim().toLowerCase();
+      cleanDomain = cleanDomain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
+
+      if (!VERCEL_AUTH_TOKEN) {
+        return NextResponse.json({ success: true, authCode: 'sandbox_epp_code_12345' });
+      }
+
+      // Fetch EPP Transfer Code from Vercel
+      const authCodeRes = await fetch(
+        `https://api.vercel.com/v4/domains/${cleanDomain}/auth-code${
+          VERCEL_TEAM_ID ? `?teamId=${VERCEL_TEAM_ID}` : ''
+        }`,
+        {
+          headers: { Authorization: `Bearer ${VERCEL_AUTH_TOKEN}` }
+        }
+      );
+
+      if (authCodeRes.ok) {
+        const data = await authCodeRes.json();
+        return NextResponse.json({ success: true, authCode: data.authCode });
+      } else {
+        const errData = await authCodeRes.json();
+        return NextResponse.json(
+          { error: errData.error?.message || 'Failed to fetch domain transfer code.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // 3. Handle metadata & verification retrieval
     if (!domain || !tenantId) {
       return NextResponse.json({ error: 'Missing domain or tenantId' }, { status: 400 });
     }

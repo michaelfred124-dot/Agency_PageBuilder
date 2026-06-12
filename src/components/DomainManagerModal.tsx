@@ -46,9 +46,11 @@ interface DomainManagerModalProps {
   site: any;
   onClose: () => void;
   onDomainUpdated: (siteId: string, newDomain: string | null) => void;
+  inline?: boolean;
+  onContinue?: () => void;
 }
 
-export default function DomainManagerModal({ site, onClose, onDomainUpdated }: DomainManagerModalProps) {
+export default function DomainManagerModal({ site, onClose, onDomainUpdated, inline, onContinue }: DomainManagerModalProps) {
   const [domainInput, setDomainInput] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -89,6 +91,10 @@ export default function DomainManagerModal({ site, onClose, onDomainUpdated }: D
   // Domain Transfer Form State
   const [transferAuthCode, setTransferAuthCode] = useState('');
   const [transferRequestStatus, setTransferRequestStatus] = useState<'none' | 'submitting' | 'submitted'>('none');
+
+  // Domain Transfer-Out Form State
+  const [eppCode, setEppCode] = useState<string | null>(null);
+  const [isFetchingEpp, setIsFetchingEpp] = useState(false);
 
   useEffect(() => {
     const fetchDomain = async () => {
@@ -148,29 +154,24 @@ export default function DomainManagerModal({ site, onClose, onDomainUpdated }: D
     setCheckoutStep('loading');
     
     try {
-      const res = await fetch('/api/domains', {
+      const res = await fetch('/api/checkout/domain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           tenantId: site.tenantId, 
-          domain: selectedBuyDomain,
-          isPurchase: true 
+          domain: selectedBuyDomain
         })
       });
       
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      setCurrentDomain(selectedBuyDomain);
-      onDomainUpdated(site.id, selectedBuyDomain);
-      setVerificationStatus('Valid Configuration'); 
-      if (data.domainInfo) {
-        setDomainInfo(data.domainInfo);
+      if (data.url) {
+        window.location.href = data.url;
       }
-      setCheckoutStep('completed');
     } catch (err: any) {
       setCheckoutStep('none');
-      alert(`Domain purchase failed: ${err.message}`);
+      alert(`Domain checkout failed: ${err.message}`);
     }
   };
 
@@ -357,28 +358,42 @@ export default function DomainManagerModal({ site, onClose, onDomainUpdated }: D
     }
   };
 
-  return (
-    <motion.div 
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
-      onClick={onClose}
+  const handleGetEppCode = async () => {
+    setIsFetchingEpp(true);
+    setEppCode(null);
+    try {
+      const res = await fetch(`/api/domains?domain=${currentDomain}&tenantId=${site.tenantId}&action=auth-code`);
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setEppCode(data.authCode);
+      } else {
+        throw new Error(data.error || 'Failed to retrieve EPP code.');
+      }
+    } catch (err: any) {
+      alert(`Could not retrieve transfer code: ${err.message}`);
+    } finally {
+      setIsFetchingEpp(false);
+    }
+  };
+
+  const content = (
+    <div 
+      className={`bg-[#F8F5F2] ${inline ? '' : 'border-[4px] border-black rounded-2xl shadow-[16px_16px_0px_rgba(0,0,0,1)]'} p-6 md:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto`}
+      onClick={e => e.stopPropagation()}
     >
-      <motion.div 
-        initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-[#F8F5F2] border-[4px] border-black rounded-2xl p-6 md:p-8 max-w-2xl w-full shadow-[16px_16px_0px_rgba(0,0,0,1)] max-h-[90vh] overflow-y-auto"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="flex justify-between items-center mb-6 pb-4 border-b-[4px] border-black/10">
-          <div>
-            <h2 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-2">
-              <Globe className="w-8 h-8 text-indigo-600" /> Domain Manager
-            </h2>
-            <p className="font-bold text-black/40 uppercase tracking-widest text-[10px] mt-1">Configure and manage custom URLs for {site.name}</p>
-          </div>
+      <div className="flex justify-between items-center mb-6 pb-4 border-b-[4px] border-black/10">
+        <div>
+          <h2 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-2">
+            <Globe className="w-8 h-8 text-indigo-600" /> Connect Domain
+          </h2>
+          <p className="font-bold text-black/40 uppercase tracking-widest text-[10px] mt-1">Configure and manage custom URLs for {site.name}</p>
+        </div>
+        {!inline && (
           <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full transition-colors border border-transparent hover:border-black">
             <CloseIcon className="w-6 h-6" />
           </button>
-        </div>
+        )}
+      </div>
 
         {/* ================= IF DOMAIN IS NOT CONNECTED / REGISTERED ================= */}
         {!currentDomain && (
@@ -846,11 +861,83 @@ export default function DomainManagerModal({ site, onClose, onDomainUpdated }: D
                     </button>
                   </form>
                 )}
+
+                {/* Transfer Out Section (Only show if domain was registered through us) */}
+                {domainInfo?.registered_through_us && (
+                  <div className="border-t border-black/10 pt-6 mt-6 space-y-4">
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-800 uppercase tracking-tight flex items-center gap-1.5">
+                        <ArrowRightLeft className="w-4 h-4 text-rose-500" /> Transfer Domain Out (Move Away)
+                      </h4>
+                      <p className="text-[10px] text-slate-500 mt-1">
+                        To transfer your domain management to another registrar (like GoDaddy or Namecheap), lock in settings and generate the Transfer Authorization (EPP) code.
+                      </p>
+                    </div>
+
+                    {eppCode ? (
+                      <div className="bg-slate-50 border-2 border-black p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-[2px_2px_0px_rgba(0,0,0,1)] animate-fadeIn">
+                        <div className="flex-1">
+                          <span className="block text-[8px] font-black uppercase text-slate-400">Authorization Code (EPP)</span>
+                          <span className="select-all font-mono font-extrabold text-sm text-indigo-600 break-all">{eppCode}</span>
+                        </div>
+                        <button 
+                          onClick={() => { 
+                            navigator.clipboard.writeText(eppCode); 
+                            alert('EPP code copied to clipboard!'); 
+                          }}
+                          className="bg-black hover:bg-zinc-800 text-white text-[10px] font-black uppercase tracking-wider px-4 py-2.5 rounded-lg transition-all shadow-[1.5px_1.5px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                        >
+                          Copy Code
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={handleGetEppCode}
+                        disabled={isFetchingEpp}
+                        className="w-full bg-white border-2 border-black hover:bg-slate-50 text-black text-xs font-black uppercase tracking-widest py-2.5 rounded-xl transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        {isFetchingEpp ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin text-slate-500" /> Generating Transfer Code...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw className="w-4 h-4 animate-spin" style={{ animationDuration: '3s' }} /> Generate Transfer EPP Code
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
         )}
-      </motion.div>
+
+        {inline && (
+          <div className="mt-8 pt-6 border-t-[4px] border-black/10 flex justify-end">
+            <button 
+              onClick={onContinue}
+              className="bg-black text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm hover:-translate-y-1 hover:shadow-[4px_4px_0px_rgba(0,0,0,0.5)] transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)]"
+            >
+              Continue to Publish →
+            </button>
+          </div>
+        )}
+      </div>
+  );
+
+  if (inline) {
+    return content;
+  }
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      {content}
     </motion.div>
   );
 }

@@ -14,9 +14,9 @@ const COLORS = {
 
 const PORTFOLIO_IMAGES = [
   { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop', category: 'Weddings', span: 'col-span-1 row-span-1' },
-  { url: 'https://images.unsplash.com/photo-1511285560929-86b16002067d?q=80&w=2070&auto=format&fit=crop', category: 'Couples', span: 'col-span-1 row-span-2' },
+  { url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop', category: 'Couples', span: 'col-span-1 row-span-2' },
   { url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop', category: 'Landscapes', span: 'col-span-1 row-span-1' },
-  { url: 'https://images.unsplash.com/photo-1520850838323-133289a2e340?q=80&w=2070&auto=format&fit=crop', category: 'Portraits', span: 'col-span-1 row-span-1' },
+  { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2070&auto=format&fit=crop', category: 'Portraits', span: 'col-span-1 row-span-1' },
   { url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop', category: 'Landscapes', span: 'col-span-1 row-span-1' },
 ];
 

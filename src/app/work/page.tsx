@@ -1,15 +1,63 @@
 "use client";
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { PROJECTS } from '@/constants';
-import { ArrowUpRight } from 'lucide-react';
+import { PROJECTS as FALLBACK_PROJECTS } from '@/constants';
+import { ArrowUpRight, Grid, Eye } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import CaseStudies from '@/components/CaseStudies';
+import { getSupabaseBrowserClient } from '@/lib/supabase';
+import HeroShowcase from '@/components/HeroShowcase';
 
 export default function WorkPage() {
   const router = useRouter();
+  const [projects, setProjects] = useState<any[]>(FALLBACK_PROJECTS);
+  const [viewMode, setViewMode] = useState<'grid' | 'showcase'>('grid');
+
+  // Sync with URL query parameter on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('view');
+      if (mode === 'showcase') {
+        setViewMode('showcase');
+      }
+    }
+  }, []);
+
+  const toggleViewMode = (mode: 'grid' | 'showcase') => {
+    setViewMode(mode);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', mode);
+      window.history.pushState({}, '', url.toString());
+    }
+  };
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const supabase = getSupabaseBrowserClient();
+      const { data, error } = await supabase
+        .from('portfolio_items')
+        .select('*')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false });
+        
+      if (!error && data && data.length > 0) {
+        // Map DB portfolio items to the expected format
+        const mappedProjects = data.map(p => ({
+          title: p.title,
+          description: p.description || '',
+          tags: [p.category || 'Portfolio'],
+          link: p.project_url || (p.slug ? `/work/${p.slug}` : '#')
+        }));
+        setProjects(mappedProjects);
+      }
+    };
+    fetchProjects();
+  }, []);
 
   // Filter out any projects that don't have a real link
-  const validProjects = PROJECTS.filter(p => p.link && p.link.startsWith('/'));
+  const validProjects = projects.filter(p => p.link && p.link !== '#');
 
   return (
     <div className="pt-24 lg:pt-32 min-h-screen bg-[#F1EDE1]">
@@ -22,6 +70,30 @@ export default function WorkPage() {
           <p className="text-xl font-medium text-black/60 max-w-2xl mt-6">
             Click any preview to launch the full experience.
           </p>
+
+          {/* View Mode Toggle Control */}
+          <div className="flex items-center gap-1.5 bg-black/5 p-1.5 rounded-full border border-black/10 mt-8 backdrop-blur-sm shadow-inner">
+            <button
+              onClick={() => toggleViewMode('grid')}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 cursor-pointer ${
+                viewMode === 'grid'
+                  ? 'bg-black text-white shadow-md'
+                  : 'text-black/60 hover:text-black'
+              }`}
+            >
+              <Grid className="w-3.5 h-3.5" /> Grid View
+            </button>
+            <button
+              onClick={() => toggleViewMode('showcase')}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 cursor-pointer ${
+                viewMode === 'showcase'
+                  ? 'bg-black text-white shadow-md'
+                  : 'text-black/60 hover:text-black'
+              }`}
+            >
+              <Eye className="w-3.5 h-3.5" /> Hero Showcase (100vh)
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
@@ -50,7 +122,7 @@ export default function WorkPage() {
               </div>
               <div className="px-2">
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {project.tags.map(tag => (
+                  {project.tags.map((tag: string) => (
                     <span key={tag} className="px-2 py-1 bg-black text-white text-[10px] font-bold uppercase rounded-md tracking-widest">
                       {tag}
                     </span>
@@ -69,6 +141,11 @@ export default function WorkPage() {
       </section>
       
       <CaseStudies />
+
+      {/* Conditionally render full screen showcase overlay */}
+      {viewMode === 'showcase' && (
+        <HeroShowcase projects={validProjects} onClose={() => toggleViewMode('grid')} />
+      )}
     </div>
   );
 }
