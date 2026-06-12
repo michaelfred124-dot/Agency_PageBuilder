@@ -66,6 +66,8 @@ import {
 import SiteEditor from '@/components/SiteEditor';
 import { TEMPLATES, TEMPLATE_PAGES } from '@/lib/templates';
 import DomainManagerModal from '@/components/DomainManagerModal';
+import PricingModal from '@/components/PricingModal';
+import PublishWizardModal from '@/components/PublishWizardModal';
 import { getSupabaseBrowserClient } from '@/lib/supabase';
 
 const MY_SITES = [
@@ -137,7 +139,10 @@ export default function DashboardLayout() {
   const [isSiteSelectorOpen, setIsSiteSelectorOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [editingSite, setEditingSite] = useState<any>(null);
-  const [managingDomainFor, setManagingDomainFor] = useState<any>(null);
+  const [managingDomainFor, setManagingDomainFor] = useState<any | null>(null);
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
+  const [isPublishWizardOpen, setIsPublishWizardOpen] = useState(false);
+  const [pendingPublishData, setPendingPublishData] = useState<{ pages: any, theme: any } | null>(null);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -714,7 +719,69 @@ export default function DashboardLayout() {
       initialSections = TEMPLATES[editingSite.templateKey];
     }
 
+    const handlePublishSite = async (pages: any, theme: any, skipDomainModal: boolean = false) => {
+      const existingSubdomain = editingSite.subdomain || '';
+      const subdomain = existingSubdomain || editingSite.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
+      try {
+        let tenantData: any = null;
+        let liveUrl = '';
+        let devUrl = '';
+
+        for (const page of pages) {
+          const pageSlug = page.slug === '/' ? 'index' : page.slug.replace(/^\//, '');
+          
+          const res = await fetch('/api/publish', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subdomain: subdomain.trim(),
+              siteName: editingSite.name,
+              pageSlug: pageSlug,
+              canvasJson: page.sections,
+              themeJson: theme,
+              ownerId: user?.id,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            alert(`❌ Publish failed for page "${page.name}": ${data.error || 'Unknown error'}`);
+            return;
+          }
+
+          if (pageSlug === 'index' || !tenantData) {
+            tenantData = data.tenant;
+            liveUrl = data.liveUrl;
+            devUrl = data.devUrl;
+          }
+        }
+
+        setMySites(prev => {
+          const updated = prev.map(s => 
+            s.id === editingSite.id 
+              ? { ...s, status: 'Live', url: liveUrl, subdomain: tenantData.subdomain, tenantId: tenantData.id }
+              : s
+          );
+          localStorage.setItem('my-sites', JSON.stringify(updated));
+          return updated;
+        });
+
+        localStorage.setItem(`site-pages-${editingSite.id}`, JSON.stringify(pages));
+        localStorage.setItem(`site-theme-${editingSite.id}`, JSON.stringify(theme));
+
+        if (!skipDomainModal) {
+          setManagingDomainFor({ ...editingSite, tenantId: tenantData.id });
+        }
+      } catch (err: any) {
+        console.error('[Publish] Error:', err);
+        alert(`❌ Publish failed: ${err.message || 'Network error'}`);
+      }
+    };
+
     return (
+      <>
       <SiteEditor 
         siteName={editingSite.name} 
         siteId={editingSite.id}
@@ -756,81 +823,14 @@ export default function DashboardLayout() {
           setEditingSite(null);
         }}
         onPublish={async (pages, theme) => {
-          const existingSubdomain = editingSite.subdomain || '';
-          const subdomain = window.prompt(
-            '🚀 Publish to Live\n\nEnter a subdomain for this site.\nIt will be available at: [subdomain].michaelfreddesigns.com',
-            existingSubdomain || editingSite.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
-          );
-
-          if (!subdomain) return;
-
-          try {
-            let tenantData: any = null;
-            let liveUrl = '';
-            let devUrl = '';
-
-            for (const page of pages) {
-              const pageSlug = page.slug === '/' ? 'index' : page.slug.replace(/^\//, '');
-              
-              // Payment check gate for $20 DIY Tier
-              if (editingSite.planTier === 'DIY' && !isOnboardedPaid) {
-                const payConfirm = window.confirm(
-                  `💳 Payment Required — $20/mo Subscription\n\nTo publish "${editingSite.name}" live at ${subdomain}.michaelfreddesigns.com, please confirm your $20/month subscription details.\n\nClick OK to authorize Stripe payment card checkout.`
-                );
-                if (!payConfirm) {
-                  alert("Publish cancelled. Payment authorization is required to launch live sites.");
-                  return;
-                } else {
-                  localStorage.setItem('diy_plan_paid', 'true');
-                  setIsOnboardedPaid(true);
-                }
-              }
-
-              const res = await fetch('/api/publish', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  subdomain: subdomain.trim(),
-                  siteName: editingSite.name,
-                  pageSlug: pageSlug,
-                  canvasJson: page.sections,
-                  themeJson: theme,
-                  ownerId: user?.id,
-                }),
-              });
-
-              const data = await res.json();
-
-              if (!res.ok) {
-                alert(`❌ Publish failed for page "${page.name}": ${data.error || 'Unknown error'}`);
-                return;
-              }
-
-              if (pageSlug === 'index' || !tenantData) {
-                tenantData = data.tenant;
-                liveUrl = data.liveUrl;
-                devUrl = data.devUrl;
-              }
-            }
-
-            setMySites(prev => {
-              const updated = prev.map(s => 
-                s.id === editingSite.id 
-                  ? { ...s, status: 'Live', url: liveUrl, subdomain: tenantData.subdomain, tenantId: tenantData.id }
-                  : s
-              );
-              localStorage.setItem('my-sites', JSON.stringify(updated));
-              return updated;
-            });
-
-            localStorage.setItem(`site-pages-${editingSite.id}`, JSON.stringify(pages));
-            localStorage.setItem(`site-theme-${editingSite.id}`, JSON.stringify(theme));
-
-            alert(`✅ Published successfully!\n\n🌐 Live: ${liveUrl}\n🛠 Dev preview: http://localhost:3000${devUrl}`);
-          } catch (err: any) {
-            console.error('[Publish] Error:', err);
-            alert(`❌ Publish failed: ${err.message || 'Network error'}`);
+          // If first time publishing (no tenantId) OR user hasn't paid on DIY tier, show wizard
+          if (!editingSite.tenantId || (editingSite.planTier === 'DIY' && !isOnboardedPaid)) {
+            setPendingPublishData({ pages, theme });
+            setIsPublishWizardOpen(true);
+            return;
           }
+          // Otherwise it's a subsequent publish, so we do a silent background update
+          await handlePublishSite(pages, theme);
         }}
         user={user}
         mediaFiles={mediaFiles}
@@ -840,6 +840,43 @@ export default function DashboardLayout() {
         handleDeleteMedia={handleDeleteMedia}
         saveSettings={saveSettings}
       />
+      {managingDomainFor && (
+        <div className="fixed inset-0 z-[200]">
+          <DomainManagerModal 
+            site={managingDomainFor} 
+            onClose={() => setManagingDomainFor(null)} 
+            onDomainUpdated={(siteId, domain) => {
+              // Update local state if needed
+              setMySites(prev => prev.map(s => s.id === siteId ? { ...s, customDomain: domain } : s));
+            }}
+          />
+        </div>
+      )}
+      {isPublishWizardOpen && pendingPublishData && (
+        <PublishWizardModal
+          site={editingSite}
+          isOnboardedPaid={isOnboardedPaid}
+          onClose={() => {
+            setIsPublishWizardOpen(false);
+            setPendingPublishData(null);
+          }}
+          onPublishInitial={async () => {
+            // Do the initial publish in the background and return the updated site
+            await handlePublishSite(pendingPublishData.pages, pendingPublishData.theme, true);
+            // After handlePublishSite runs, editingSite might not immediately reflect the new tenantId 
+            // because of closure state, so we read it from localStorage or assume the backend created it.
+            // Actually, handlePublishSite updates `mySites`, we can find it there.
+            const sitesStr = localStorage.getItem('my-sites');
+            if (sitesStr) {
+               const sites = JSON.parse(sitesStr);
+               const updated = sites.find((s: any) => s.id === editingSite.id);
+               if (updated) return updated;
+            }
+            return editingSite;
+          }}
+        />
+      )}
+      </>
     );
   }
 

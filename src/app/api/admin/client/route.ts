@@ -37,6 +37,65 @@ export async function POST(request: NextRequest) {
     const { action } = body;
     const serviceClient = getSupabaseServerClient();
 
+    if (action === 'create') {
+      const { data } = body;
+      if (!data || !data.name || !data.subdomain) {
+        return NextResponse.json({ error: 'Missing required tenant data (name, subdomain)' }, { status: 400 });
+      }
+
+      const formattedSubdomain = data.subdomain.toLowerCase().replace(/[^a-z0-9-]/g, '');
+      if (!formattedSubdomain) {
+        return NextResponse.json({ error: 'Invalid subdomain' }, { status: 400 });
+      }
+
+      // 1. Insert into tenants
+      const { data: newTenant, error: createError } = await serviceClient
+        .from('tenants')
+        .insert([{
+          name: data.name,
+          subdomain: formattedSubdomain,
+          plan_tier: data.plan_tier || 'DIY',
+          status: data.status || 'Draft',
+          custom_domain: data.custom_domain ? data.custom_domain.trim().toLowerCase() : null
+        }])
+        .select()
+        .single();
+
+      if (createError) {
+        console.error('[Admin API] Create tenant error:', createError);
+        return NextResponse.json({ error: createError.message }, { status: 500 });
+      }
+
+      // 2. Initialize default sites_data (index page) so the editor has something to load
+      const defaultPage = {
+        tenant_id: newTenant.id,
+        page_slug: 'index',
+        canvas_json: [
+          {
+            type: "hero",
+            id: "hero-1",
+            content: {
+              title: `Welcome to ${newTenant.name}`,
+              subtitle: "This site is under construction.",
+              ctaText: "Get Started",
+              ctaLink: "#"
+            },
+            styles: {
+              padding: "py-24",
+              background: "bg-white",
+              textColor: "text-black",
+              textAlign: "text-center"
+            }
+          }
+        ],
+        theme_json: {}
+      };
+
+      await serviceClient.from('sites_data').insert([defaultPage]);
+
+      return NextResponse.json({ success: true, tenant: newTenant });
+    }
+
     if (action === 'update') {
       const { tenantId, data } = body;
       if (!tenantId || !data) {

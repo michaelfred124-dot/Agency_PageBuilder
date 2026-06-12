@@ -128,7 +128,7 @@ export const TEMPLATES: Record<string, SectionData[]> = {
         title: "Projects we're proud of",
         projects: [
           { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=800&q=80' },
-          { title: 'Modern Front Yard', loc: 'Mountain View, CA', img: 'https://images.unsplash.com/photo-1585320806297-9794b3e4ce88?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Modern Front Yard', loc: 'Mountain View, CA', img: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=800&q=80' },
           { title: 'Elegant Pathway', loc: 'Cupertino, CA', img: 'https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=800&q=80' },
           { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80' }
         ]
@@ -187,8 +187,8 @@ export const TEMPLATES: Record<string, SectionData[]> = {
       props: {
         images: [
           { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop', title: 'Weddings' },
-          { url: 'https://images.unsplash.com/photo-1520850838323-133289a2e340?q=80&w=2070&auto=format&fit=crop', title: 'Portraits' },
-          { url: 'https://images.unsplash.com/photo-1511285560929-86b16002067d?q=80&w=2070&auto=format&fit=crop', title: 'Couples' },
+          { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2070&auto=format&fit=crop', title: 'Portraits' },
+          { url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop', title: 'Couples' },
           { url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop', title: 'Landscapes' }
         ]
       }

@@ -154,7 +154,7 @@ export default function GreenscapeTemplate() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl relative z-10">
-                <Image src="https://images.unsplash.com/photo-1585320806297-9794b3e4ce88?auto=format&fit=crop&w=1200&q=80" className="w-full h-full object-cover" alt="Garden design" referrerPolicy="no-referrer" fill />
+                <Image src="https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=1200&q=80" className="w-full h-full object-cover" alt="Garden design" referrerPolicy="no-referrer" fill />
               </div>
               <div className="absolute -bottom-10 -right-10 w-2/3 aspect-square bg-[#1A1A1A] p-12 rounded-2xl hidden md:flex flex-col justify-center text-white">
                  <Leaf className="w-12 h-12 text-[#7BA05C] mb-6" />

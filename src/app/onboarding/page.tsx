@@ -58,6 +58,42 @@ function OnboardingForm() {
   
   const [step, setStep] = useState(1); // 1 = choose template, 2 = brand information, 3 = loading redirect
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [presets, setPresets] = useState(PRESETS);
+  
+  // Fetch dynamic templates from the database
+  React.useEffect(() => {
+    const fetchTemplates = async () => {
+      const supabase = getSupabaseBrowserClient();
+      const { data, error } = await supabase
+        .from('site_templates')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+        
+      if (!error && data && data.length > 0) {
+        // Map DB templates to the PRESETS format
+        const dbPresets = data.map(t => ({
+          id: `template-${t.template_key}`,
+          name: t.name,
+          templateKey: t.template_key,
+          image: t.image_url || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+          desc: t.description || 'Custom agency template.'
+        }));
+        
+        // Merge with hardcoded presets, prioritizing DB templates if keys conflict
+        setPresets(prev => {
+          const merged = [...dbPresets];
+          prev.forEach(p => {
+            if (!merged.find(m => m.templateKey === p.templateKey)) {
+              merged.push(p);
+            }
+          });
+          return merged;
+        });
+      }
+    };
+    fetchTemplates();
+  }, []);
 
   // Auth gate check
   React.useEffect(() => {
@@ -82,7 +118,7 @@ function OnboardingForm() {
 
   const handleSelectTemplate = (key: string) => {
     setSelectedTemplate(key);
-    const chosenPreset = PRESETS.find(p => p.templateKey === key);
+    const chosenPreset = presets.find(p => p.templateKey === key);
     setFormData(prev => ({
       ...prev,
       businessName: chosenPreset ? `My ${chosenPreset.name}` : 'My Business',
@@ -141,18 +177,29 @@ function OnboardingForm() {
     return customizeSections(rawTemplateData, formData);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.businessName.trim()) return alert('Please enter your business name.');
     
     setStep(3); // Loading screen
  
-    setTimeout(() => {
+    try {
       const templateKey = selectedTemplate || 'restaurant';
       const newId = `site-${Date.now()}`;
       
       let pagesList = [];
-      if (TEMPLATE_PAGES[templateKey]) {
-        // Generate a 5-page website automatically
+      
+      // 1. Try fetching the dynamic layout from the Shadow Tenant API
+      const res = await fetch(`/api/onboarding/template-layout?templateKey=${templateKey}`);
+      const data = await res.json();
+      
+      if (data && data.pages) {
+        // We found a visually built database template!
+        pagesList = data.pages.map((page: any) => ({
+          ...page,
+          sections: customizeSections(page.sections, formData)
+        }));
+      } else if (TEMPLATE_PAGES[templateKey]) {
+        // 2. Fallback to hardcoded 5-page layout
         pagesList = TEMPLATE_PAGES[templateKey].map(page => ({
           id: page.slug === '/' ? 'home' : `page-${page.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
           name: page.name,
@@ -160,7 +207,7 @@ function OnboardingForm() {
           sections: customizeSections(page.sections, formData)
         }));
       } else {
-        // Fallback to single page website
+        // 3. Fallback to single page website
         const customizedSections = handleGenerateTemplate(templateKey);
         pagesList = [{ id: 'home', name: 'Home', slug: '/', sections: customizedSections }];
       }
@@ -175,7 +222,7 @@ function OnboardingForm() {
         url: `${formData.businessName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'site'}.com`,
         previewUrl: `/preview/${newId}`,
         status: 'Draft',
-        image: PRESETS.find(p => p.templateKey === templateKey)?.image || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+        image: presets.find(p => p.templateKey === templateKey)?.image || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
         lastUpdate: 'Just now',
         templateKey: templateKey,
         planTier: 'DIY'
@@ -200,8 +247,13 @@ function OnboardingForm() {
       sessionStorage.setItem('instant_edit_site_id', newId);
       // Advance to success page step
       setStep(4);
-    }, 1500);
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred while generating your site. Please try again.');
+      setStep(2);
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] flex flex-col font-sans text-slate-800">
@@ -241,7 +293,7 @@ function OnboardingForm() {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                  {PRESETS.map(preset => (
+                  {presets.map(preset => (
                     <div 
                       key={preset.templateKey}
                       onClick={() => handleSelectTemplate(preset.templateKey)}

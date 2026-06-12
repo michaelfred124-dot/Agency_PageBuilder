@@ -80,7 +80,7 @@ export const GS_SCHEMAS = {
       title: "Rooted in our community. \nCommitted to excellence.",
       desc: "Greenscape Landscaping is a locally owned and operated business serving Sunnyvale and surrounding areas. We take pride in our work, our reliability, and the relationships we build with our clients.",
       image:
-        "https://images.unsplash.com/photo-1585320806297-9794b3e4ce88?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=1200&q=80",
     },
   },
   GSProjects: {

@@ -43,8 +43,9 @@ export default function ClientLayout({
   const isPreviewPage = pathname?.startsWith('/preview/');
   const isTenantPage = pathname?.startsWith('/tenants/');
   const isSiteFallbackPage = pathname?.startsWith('/site/');
+  const isAdminPage = pathname?.startsWith('/admin');
 
-  const shouldHideGlobalNav = isTemplatePage || isDashboardPage || isLoginPage || isOnboardingPage || isPreviewPage || isTenantPage || isSiteFallbackPage;
+  const shouldHideGlobalNav = isTemplatePage || isDashboardPage || isLoginPage || isOnboardingPage || isPreviewPage || isTenantPage || isSiteFallbackPage || isAdminPage;
 
   return (
     <>

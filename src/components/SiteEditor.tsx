@@ -3270,7 +3270,7 @@ export default function SiteEditor({
                 className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95"
                 onClick={() => onPublish(pages, globalTheme)}
               >
-                <Globe className="w-3.5 h-3.5" /> {planTier === 'DIY' ? 'Connect Domain to Publish' : 'Publish'}
+                <Globe className="w-3.5 h-3.5" /> Publish Site
               </button>
             )}
           </div>
