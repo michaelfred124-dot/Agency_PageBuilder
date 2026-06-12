@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Star } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { NW_SCHEMAS, NW_RENDERERS } from './blocks/northwood';
 import { GS_SCHEMAS, GS_RENDERERS } from './blocks/greenscape';
 import { LW_SCHEMAS, LW_RENDERERS } from './blocks/lauren';
@@ -130,8 +131,7 @@ export const COMPONENT_SCHEMAS: Record<string, any> = {
         { name: 'title', label: 'Project Title', type: 'text' },
         { name: 'description', label: 'Description', type: 'text' },
         { name: 'image', label: 'Image URL', type: 'text' }
-      ]},
-      { name: 'collectionBinding', label: 'Bind to CMS Collection (e.g. Services)', type: 'text' }
+      ]}
     ],
     defaultProps: {
       projects: [
@@ -146,8 +146,7 @@ export const COMPONENT_SCHEMAS: Record<string, any> = {
       { name: 'title', label: 'Section Title', type: 'text' },
       { name: 'images', label: 'Image URLs', type: 'array', arrayFields: [
         { name: 'url', label: 'Image URL', type: 'text' }
-      ]},
-      { name: 'collectionBinding', label: 'Bind to CMS Collection (e.g. Services)', type: 'text' }
+      ]}
     ],
     defaultProps: {
       title: "Our Work",
@@ -166,7 +165,6 @@ export const COMPONENT_SCHEMAS: Record<string, any> = {
         { name: 'quote', label: 'Quote', type: 'textarea' },
         { name: 'author', label: 'Author', type: 'text' },
       ]},
-      { name: 'collectionBinding', label: 'Bind to CMS Collection (e.g. Testimonials)', type: 'text' },
       { name: 'layoutPreset', label: 'Layout Preset', type: 'text' }
     ],
     defaultProps: {
@@ -359,6 +357,355 @@ export const getHeroButtonClasses = (styleName: string, t: any) => {
     case 'filled':
     default:
       return `${t.buttonBg} ${t.buttonText} px-8 py-5 rounded-xl font-black uppercase tracking-widest text-sm shadow-[6px_6px_0px_rgba(0,0,0,0.3)] inline-block text-center transition-all cursor-pointer`;
+  }
+};
+
+const renderCustomElement = (el: any, handleUpdateElProp: any, isSelected: boolean, isEditable: boolean) => {
+  switch (el.type) {
+    case 'Heading':
+      return (
+        <h3 className="text-3xl font-black uppercase tracking-tighter">
+          <EditableText 
+            value={el.props.text} 
+            onChange={(val) => handleUpdateElProp('text', val)} 
+            isEditable={!!isEditable}
+            autoFocus={isSelected}
+          />
+        </h3>
+      );
+    case 'Paragraph':
+      return (
+        <p className="text-sm text-black/75 leading-relaxed">
+          <EditableText 
+            value={el.props.text} 
+            onChange={(val) => handleUpdateElProp('text', val)} 
+            isEditable={!!isEditable}
+            multiline={true}
+            autoFocus={isSelected}
+          />
+        </p>
+      );
+    case 'Button':
+      return isEditable ? (
+        <div className="inline-block">
+          <EditableText 
+            value={el.props.text} 
+            onChange={(val) => handleUpdateElProp('text', val)} 
+            isEditable={!!isEditable}
+            className={getInlineButtonClasses(el.props.buttonStyle)}
+            autoFocus={isSelected}
+          />
+        </div>
+      ) : (
+        <a href={el.props.link || '#'} className={getInlineButtonClasses(el.props.buttonStyle)}>
+          {el.props.text}
+        </a>
+      );
+    case 'Image':
+      return (
+        <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-black/10">
+          <img src={el.props.url} alt={el.props.alt || ''} className="w-full h-full object-cover" />
+        </div>
+      );
+    case 'Divider':
+      return <div className="border-t-2 border-black/10 my-2 w-full" />;
+    case 'Spacer':
+      return <div style={{ height: el.props.height || '24px' }} />;
+    case 'Video': {
+      const url = el.props.url || '';
+      let embedUrl = '';
+      if (url.includes('youtube.com/watch')) {
+        try {
+          const videoId = new URL(url).searchParams.get('v');
+          embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+        } catch (e) {}
+      } else if (url.includes('youtu.be/')) {
+        const videoId = url.split('/').pop()?.split('?')[0];
+        embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+      } else if (url.includes('vimeo.com/')) {
+        const videoId = url.split('/').pop()?.split('?')[0];
+        embedUrl = videoId ? `https://player.vimeo.com/video/${videoId}` : '';
+      }
+
+      if (embedUrl) {
+        return (
+          <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-black">
+            <iframe src={embedUrl} className="absolute inset-0 w-full h-full border-0" allowFullScreen title="Video Player" />
+          </div>
+        );
+      }
+      return (
+        <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-slate-900 flex items-center justify-center text-white p-4">
+          <div className="text-center">
+            {(() => {
+              const PlayIcon = LucideIcons.Play;
+              return <PlayIcon className="w-10 h-10 mx-auto mb-2 text-indigo-400 opacity-80" />;
+            })()}
+            <div className="text-xs font-bold uppercase tracking-wider">Empty Video Player</div>
+            <div className="text-[10px] text-slate-400 mt-1">Paste a YouTube/Vimeo link in inspector</div>
+          </div>
+        </div>
+      );
+    }
+    case 'GoogleMap': {
+      const query = encodeURIComponent(el.props.address || '1600 Amphitheatre Pkwy, Mountain View, CA');
+      const zoom = el.props.zoom || '14';
+      const src = `https://maps.google.com/maps?q=${query}&z=${zoom}&output=embed`;
+      return (
+        <div className="relative w-full h-64 rounded-2xl overflow-hidden border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-slate-100">
+          <iframe src={src} className="absolute inset-0 w-full h-full border-0" allowFullScreen title="Google Map" />
+        </div>
+      );
+    }
+    case 'StarRating': {
+      const rating = parseFloat(el.props.rating) || 5;
+      const starColor = el.props.color || '#f59e0b';
+      const starSize = el.props.size || '20px';
+      const fullStars = Math.floor(rating);
+      const halfStar = rating % 1 >= 0.5;
+      return (
+        <div className="flex items-center gap-1">
+          {Array.from({ length: 5 }).map((_, idx) => {
+            const isFull = idx < fullStars;
+            const isHalf = idx === fullStars && halfStar;
+            const StarIcon = LucideIcons.Star;
+            return (
+              <StarIcon 
+                key={idx} 
+                style={{ width: starSize, height: starSize, color: starColor }}
+                className={`${isFull ? 'fill-current' : 'opacity-30'} ${isHalf ? 'fill-current opacity-70' : ''}`}
+              />
+            );
+          })}
+          <span className="text-xs font-bold text-slate-500 ml-1">({rating.toFixed(1)})</span>
+        </div>
+      );
+    }
+    case 'Icon': {
+      const name = el.props.name || 'HelpCircle';
+      const color = el.props.color || '#3b82f6';
+      const size = el.props.size || '36px';
+      const IconComponent = (LucideIcons as any)[name] || LucideIcons.HelpCircle;
+      return (
+        <div className="inline-block" style={{ color: color }}>
+          <IconComponent style={{ width: size, height: size }} />
+        </div>
+      );
+    }
+    case 'ImageBox':
+      return (
+        <div className="bg-white border-2 border-black rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col p-4 gap-3">
+          {el.props.url && (
+            <img src={el.props.url} className="w-full aspect-video object-cover rounded-xl border border-black/10" alt="" referrerPolicy="no-referrer" />
+          )}
+          <div className="space-y-1 text-left">
+            <h4 className="font-black text-slate-900 text-sm uppercase tracking-tight">
+              <EditableText 
+                value={el.props.title || 'Card Title'} 
+                onChange={(val) => handleUpdateElProp('title', val)} 
+                isEditable={!!isEditable}
+              />
+            </h4>
+            <p className="text-xs text-slate-550 leading-relaxed font-semibold">
+              <EditableText 
+                value={el.props.text || 'Card body text description goes here...'} 
+                onChange={(val) => handleUpdateElProp('text', val)} 
+                isEditable={!!isEditable}
+                multiline={true}
+              />
+            </p>
+          </div>
+        </div>
+      );
+    case 'IconBox': {
+      const iconName = el.props.icon || 'Sparkles';
+      const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
+      return (
+        <div className="bg-white border-2 border-black rounded-2xl p-5 shadow-[4px_4px_0px_rgba(0,0,0,1)] flex gap-4 items-start text-left">
+          <div className="p-2.5 bg-indigo-50 border-2 border-black rounded-xl text-indigo-600 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+            <IconComponent className="w-5 h-5" />
+          </div>
+          <div className="space-y-1 flex-1">
+            <h4 className="font-black text-slate-900 text-sm uppercase tracking-tight">
+              <EditableText 
+                value={el.props.title || 'Feature Title'} 
+                onChange={(val) => handleUpdateElProp('title', val)} 
+                isEditable={!!isEditable}
+              />
+            </h4>
+            <p className="text-xs text-slate-550 leading-relaxed font-semibold">
+              <EditableText 
+                value={el.props.text || 'Feature description text...'} 
+                onChange={(val) => handleUpdateElProp('text', val)} 
+                isEditable={!!isEditable}
+                multiline={true}
+              />
+            </p>
+          </div>
+        </div>
+      );
+    }
+    case 'Counter':
+      return (
+        <div className="bg-white border-2 border-black p-4 rounded-2xl text-center shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+          <div className="text-3xl font-black text-slate-900 tracking-tight flex items-center justify-center">
+            <EditableText 
+              value={el.props.target || '99'} 
+              onChange={(val) => handleUpdateElProp('target', val)} 
+              isEditable={!!isEditable}
+            />
+            <span className="text-indigo-600">{el.props.suffix || ''}</span>
+          </div>
+          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+            <EditableText 
+              value={el.props.text || 'Satisfied Clients'} 
+              onChange={(val) => handleUpdateElProp('text', val)} 
+              isEditable={!!isEditable}
+            />
+          </div>
+        </div>
+      );
+    case 'Testimonial':
+      return (
+        <div className="bg-white border-2 border-black p-6 rounded-2xl shadow-[4px_4px_0px_rgba(0,0,0,1)] text-left flex flex-col justify-between h-full relative">
+          <span className="text-4xl font-black text-indigo-200 absolute top-2 right-4 select-none">“</span>
+          <div className="space-y-3 flex-1 flex flex-col justify-between">
+            <p className="text-xs text-slate-700 italic leading-relaxed font-semibold mb-4">
+              <EditableText 
+                value={el.props.quote || 'This tool changed our lives.'} 
+                onChange={(val) => handleUpdateElProp('quote', val)} 
+                isEditable={!!isEditable}
+                multiline={true}
+              />
+            </p>
+            <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100">
+              <img src={el.props.avatar || 'https://i.pravatar.cc/100?u=rating'} className="w-8 h-8 rounded-full border border-black/10 object-cover" alt="" referrerPolicy="no-referrer" />
+              <div className="leading-tight">
+                <h5 className="text-[10px] font-black text-slate-900 uppercase tracking-wider">
+                  <EditableText 
+                    value={el.props.author || 'Jane Doe'} 
+                    onChange={(val) => handleUpdateElProp('author', val)} 
+                    isEditable={!!isEditable}
+                  />
+                </h5>
+                <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">
+                  <EditableText 
+                    value={el.props.designation || 'Product Owner'} 
+                    onChange={(val) => handleUpdateElProp('designation', val)} 
+                    isEditable={!!isEditable}
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    case 'Alert': {
+      const type = el.props.alertType || 'success';
+      const bg = type === 'success' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' :
+                 type === 'info' ? 'bg-blue-50 border-blue-300 text-blue-800' :
+                 type === 'warning' ? 'bg-amber-50 border-amber-300 text-amber-800' :
+                 'bg-rose-50 border-rose-300 text-rose-800';
+      const AlertIcon = type === 'success' ? LucideIcons.CheckCircle2 :
+                    type === 'info' ? LucideIcons.Info :
+                    type === 'warning' ? LucideIcons.AlertTriangle :
+                    LucideIcons.ShieldAlert;
+      return (
+        <div className={`border-2 p-3.5 rounded-xl flex items-start gap-3 text-left ${bg} shadow-sm`}>
+          <AlertIcon className="w-4 h-4 shrink-0 mt-0.5" />
+          <div>
+            <h5 className="font-bold text-xs leading-none mb-1 flex items-center gap-1.5 uppercase tracking-wide">
+              <EditableText 
+                value={el.props.title || 'Alert Title'} 
+                onChange={(val) => handleUpdateElProp('title', val)} 
+                isEditable={!!isEditable}
+              />
+            </h5>
+            <p className="text-[11px] leading-relaxed font-semibold opacity-90">
+              <EditableText 
+                value={el.props.text || 'Alert description text.'} 
+                onChange={(val) => handleUpdateElProp('text', val)} 
+                isEditable={!!isEditable}
+                multiline={true}
+              />
+            </p>
+          </div>
+        </div>
+      );
+    }
+    case 'Accordion': {
+      const items = el.props.items || [
+        { title: 'Item 1 title', content: 'Item 1 description.' },
+        { title: 'Item 2 title', content: 'Item 2 description.' }
+      ];
+      return (
+        <div className="border-2 border-black rounded-2xl bg-white overflow-hidden divide-y divide-black text-left shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+          {items.map((item: any, idx: number) => (
+            <details key={idx} className="group/details font-sans" open={idx === 0}>
+              <summary className="flex justify-between items-center px-4 py-3 cursor-pointer select-none font-bold text-xs text-slate-800 hover:bg-slate-50 uppercase tracking-wider">
+                <span>{item.title}</span>
+                {(() => {
+                  const ChevronIcon = LucideIcons.ChevronDown;
+                  return <ChevronIcon className="w-3.5 h-3.5 text-slate-400 group-open/details:rotate-180 transition-transform" />;
+                })()}
+              </summary>
+              <div className="px-4 py-3 bg-slate-50/50 text-[11px] font-semibold text-slate-600 border-t border-black/5 leading-relaxed">
+                {item.content}
+              </div>
+            </details>
+          ))}
+        </div>
+      );
+    }
+    case 'ProgressBar': {
+      const percent = Math.max(0, Math.min(100, parseInt(el.props.percent) || 50));
+      const color = el.props.color || '#3b82f6';
+      return (
+        <div className="space-y-1 text-left w-full font-sans">
+          <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-wider text-slate-650">
+            <EditableText 
+              value={el.props.title || 'My Metric'} 
+              onChange={(val) => handleUpdateElProp('title', val)} 
+              isEditable={!!isEditable}
+            />
+            <span className="font-mono">{percent}%</span>
+          </div>
+          <div className="w-full h-3.5 bg-slate-100 rounded-full border-2 border-black overflow-hidden relative shadow-inner">
+            <div style={{ width: `${percent}%`, backgroundColor: color }} className="h-full border-r-2 border-black rounded-l-full transition-all duration-300" />
+          </div>
+        </div>
+      );
+    }
+    case 'SocialIcons': {
+      const platforms = el.props.platforms || [
+        { name: 'facebook', link: '#' },
+        { name: 'twitter', link: '#' },
+        { name: 'instagram', link: '#' }
+      ];
+      return (
+        <div className="flex flex-wrap gap-2.5 items-center justify-start">
+          {platforms.map((p: any) => {
+            const name = p.name?.toLowerCase();
+            const Icon = name === 'facebook' ? LucideIcons.Facebook :
+                         name === 'twitter' ? LucideIcons.Twitter :
+                         name === 'instagram' ? LucideIcons.Instagram :
+                         name === 'youtube' ? LucideIcons.Youtube :
+                         LucideIcons.Share2;
+            return (
+              <a 
+                key={p.name} 
+                href={isEditable ? undefined : (p.link || '#')} 
+                className="w-8 h-8 rounded-full border-2 border-black bg-white hover:bg-slate-50 flex items-center justify-center shadow-[2px_2px_0px_rgba(0,0,0,1)] text-slate-800 hover:text-black hover:-translate-y-0.5 transition-all cursor-pointer"
+              >
+                <Icon className="w-4 h-4" />
+              </a>
+            );
+          })}
+        </div>
+      );
+    }
+    default:
+      return null;
   }
 };
 
@@ -767,22 +1114,10 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
        </div>
      );
   },
-  ProjectGrid: ({ projects, collectionBinding }: any) => {
-    let displayProjects = projects;
-    if (collectionBinding && typeof window !== 'undefined') {
-      const collections = JSON.parse(localStorage.getItem('cms_collections') || '{}');
-      const boundData = collections[collectionBinding]?.items || [];
-      if (boundData.length > 0) {
-        displayProjects = boundData.map((item: any) => ({
-          title: item.title || item.name || '',
-          description: item.description || item.subtitle || '',
-          image: item.image || item.url || item.photo || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400'
-        }));
-      }
-    }
+  ProjectGrid: ({ projects }: any) => {
     return (
       <div className="grid grid-cols-1 @md:grid-cols-2 gap-8 p-6 @lg:p-10 bg-white">
-        {displayProjects?.map((p: any, i: number) => (
+        {projects?.map((p: any, i: number) => (
           <div key={i} className="border-[4px] border-black rounded-2xl overflow-hidden shadow-[6px_6px_0px_rgba(0,0,0,1)]">
             <img src={(p.image) || undefined} alt={p.title} className="w-full aspect-video object-cover border-b-[4px] border-black" referrerPolicy="no-referrer" />
             <div className="p-6">
@@ -794,22 +1129,12 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
       </div>
     );
   },
-  Gallery: ({ title, images, collectionBinding }: any) => {
-    let displayImages = images;
-    if (collectionBinding && typeof window !== 'undefined') {
-      const collections = JSON.parse(localStorage.getItem('cms_collections') || '{}');
-      const boundData = collections[collectionBinding]?.items || [];
-      if (boundData.length > 0) {
-        displayImages = boundData.map((item: any) => ({
-          url: item.image || item.url || item.photo || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400'
-        }));
-      }
-    }
+  Gallery: ({ title, images }: any) => {
     return (
       <div className="p-6 @lg:p-10 bg-white">
         <h2 className="text-3xl font-black uppercase tracking-tighter mb-8 break-words text-center">{title}</h2>
         <div className="grid grid-cols-2 @md:grid-cols-3 gap-4">
-          {displayImages?.map((img: any, i: number) => (
+          {images?.map((img: any, i: number) => (
              <div key={i} className="aspect-square border-[2px] border-black rounded-lg overflow-hidden shadow-sm">
                <img src={(img.url) || undefined} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
              </div>
@@ -818,25 +1143,13 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
       </div>
     );
   },
-  TestimonialList: ({ title, testimonials, collectionBinding, layoutPreset = 'grid' }: any) => {
-    let displayTestimonials = testimonials;
-    if (collectionBinding && typeof window !== 'undefined') {
-      const collections = JSON.parse(localStorage.getItem('cms_collections') || '{}');
-      const boundData = collections[collectionBinding]?.items || [];
-      if (boundData.length > 0) {
-        displayTestimonials = boundData.map((item: any) => ({
-          quote: item.quote || item.text || item.message || '',
-          author: item.author || item.name || ''
-        }));
-      }
-    }
-
+  TestimonialList: ({ title, testimonials, layoutPreset = 'grid' }: any) => {
     if (layoutPreset === 'list') {
       return (
         <div className="p-6 @lg:p-10 bg-[#F4F1EA]">
           <h2 className="text-3xl font-black uppercase tracking-tighter mb-8 break-words text-center">{title}</h2>
           <div className="flex flex-col gap-6 max-w-4xl mx-auto">
-            {displayTestimonials?.map((t: any, i: number) => (
+            {testimonials?.map((t: any, i: number) => (
               <div key={i} className="bg-white p-6 rounded-2xl border-[3px] border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] flex items-start gap-4">
                 <span className="text-4xl font-black text-[var(--color-primary)] opacity-40 leading-none select-none">“</span>
                 <div className="flex-1">
@@ -855,7 +1168,7 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
         <div className="p-6 @lg:p-10 bg-white">
           <h2 className="text-3xl font-black uppercase tracking-tighter mb-8 break-words text-center text-black">{title}</h2>
           <div className="divide-y divide-black max-w-3xl mx-auto">
-            {displayTestimonials?.map((t: any, i: number) => (
+            {testimonials?.map((t: any, i: number) => (
               <div key={i} className="py-6 flex flex-col gap-2">
                 <p className="text-lg font-semibold italic text-black/80">"{t.quote}"</p>
                 <p className="font-black uppercase tracking-widest text-xs text-[var(--color-primary)]">— {t.author}</p>
@@ -870,7 +1183,7 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
       <div className="p-6 @lg:p-10 bg-[#F4F1EA]">
         <h2 className="text-3xl font-black uppercase tracking-tighter mb-8 break-words text-center">{title}</h2>
         <div className="grid @md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {displayTestimonials?.map((t: any, i: number) => (
+          {testimonials?.map((t: any, i: number) => (
             <div key={i} className="bg-white p-8 rounded-2xl border-[3px] border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]">
               <div className="flex gap-1 mb-4 text-[#D4AF37]">
                 <Star className="w-5 h-5 fill-current" />
@@ -965,10 +1278,21 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
     };
 
     const handleAddElementAt = (colIdx: number, targetIdx: number, parentContainerElIdx?: number) => {
-      const elType = window.prompt("Choose element type (Heading, Paragraph, Button, Image, Divider, Spacer, Container):", "Heading");
+      const allowedTypes = [
+        'Heading', 'Paragraph', 'Button', 'Image', 'Divider', 'Spacer', 'Container',
+        'Video', 'GoogleMap', 'StarRating', 'Icon', 'ImageBox', 'IconBox',
+        'Counter', 'Testimonial', 'Alert', 'Accordion', 'ProgressBar', 'SocialIcons'
+      ];
+      const elType = window.prompt(
+        "Choose element type:\n" +
+        "Heading, Paragraph, Button, Image, Divider, Spacer, Container,\n" +
+        "Video, GoogleMap, StarRating, Icon, ImageBox, IconBox,\n" +
+        "Counter, Testimonial, Alert, Accordion, ProgressBar, SocialIcons", 
+        "Heading"
+      );
       if (!elType) return;
       const cleanElType = elType.trim();
-      if (!['Heading', 'Paragraph', 'Button', 'Image', 'Divider', 'Spacer', 'Container'].includes(cleanElType)) {
+      if (!allowedTypes.includes(cleanElType)) {
         alert("Invalid element type!");
         return;
       }
@@ -979,10 +1303,22 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
         type: cleanElType,
         props: cleanElType === 'Heading' ? { text: 'New Heading Text' } :
                cleanElType === 'Paragraph' ? { text: 'New Paragraph Text goes here...' } :
-               cleanElType === 'Button' ? { text: 'New Button', link: '#' } :
+               cleanElType === 'Button' ? { text: 'New Button', link: '#', buttonStyle: 'filled' } :
                cleanElType === 'Image' ? { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800' } :
                cleanElType === 'Spacer' ? { height: '24px' } :
-               cleanElType === 'Container' ? { elements: [] } : {},
+               cleanElType === 'Container' ? { elements: [] } :
+               cleanElType === 'Video' ? { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' } :
+               cleanElType === 'GoogleMap' ? { address: '1600 Amphitheatre Pkwy, Mountain View, CA', zoom: '14' } :
+               cleanElType === 'StarRating' ? { rating: 5, color: '#f59e0b', size: '20px' } :
+               cleanElType === 'Icon' ? { name: 'Sparkles', color: '#3b82f6', size: '36px' } :
+               cleanElType === 'ImageBox' ? { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=600', title: 'Card Title', text: 'Card body text description goes here...' } :
+               cleanElType === 'IconBox' ? { icon: 'Sparkles', title: 'Feature Title', text: 'Feature description text...' } :
+               cleanElType === 'Counter' ? { target: '99', suffix: '+', text: 'Satisfied Clients' } :
+               cleanElType === 'Testimonial' ? { quote: 'This tool changed our lives.', author: 'Jane Doe', designation: 'Product Owner', avatar: 'https://i.pravatar.cc/100?u=rating' } :
+               cleanElType === 'Alert' ? { alertType: 'success', title: 'Alert Title', text: 'Alert description text.' } :
+               cleanElType === 'Accordion' ? { items: [{ title: 'Item 1 title', content: 'Item 1 description.' }, { title: 'Item 2 title', content: 'Item 2 description.' }] } :
+               cleanElType === 'ProgressBar' ? { title: 'My Metric', percent: '75', color: '#3b82f6' } :
+               cleanElType === 'SocialIcons' ? { platforms: [{ name: 'facebook', link: '#' }, { name: 'twitter', link: '#' }, { name: 'instagram', link: '#' }] } : {},
         styleOverrides: {
           color: '',
           fontSize: '',
@@ -1150,52 +1486,7 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
                         </div>
                       )}
                       <div style={elementStyle}>
-                        {el.type === 'Heading' && (
-                          <h3 className="text-3xl font-black uppercase tracking-tighter">
-                            <EditableText 
-                              value={el.props.text} 
-                              onChange={(val) => handleUpdateElProp('text', val)} 
-                              isEditable={!!isEditable}
-                              autoFocus={isSelected}
-                            />
-                          </h3>
-                        )}
-                        {el.type === 'Paragraph' && (
-                          <p className="text-sm text-black/75 leading-relaxed">
-                            <EditableText 
-                              value={el.props.text} 
-                              onChange={(val) => handleUpdateElProp('text', val)} 
-                              isEditable={!!isEditable}
-                              multiline={true}
-                              autoFocus={isSelected}
-                            />
-                          </p>
-                        )}
-                        {el.type === 'Button' && (
-                          isEditable ? (
-                            <div className="inline-block">
-                              <EditableText 
-                                value={el.props.text} 
-                                onChange={(val) => handleUpdateElProp('text', val)} 
-                                isEditable={!!isEditable}
-                                className={getInlineButtonClasses(el.props.buttonStyle)}
-                                autoFocus={isSelected}
-                              />
-                            </div>
-                          ) : (
-                            <a href={el.props.link || '#'} className={getInlineButtonClasses(el.props.buttonStyle)}>
-                              {el.props.text}
-                            </a>
-                          )
-                        )}
-                        {el.type === 'Image' && (
-                          <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-black/10">
-                            <img src={el.props.url} alt={el.props.alt || ''} className="w-full h-full object-cover" />
-                          </div>
-                        )}
-                        {el.type === 'Divider' && <div className="border-t-2 border-black/10 my-2 w-full" />}
-                        {el.type === 'Spacer' && <div style={{ height: el.props.height || '24px' }} />}
-                        {el.type === 'Container' && (
+                        {el.type === 'Container' ? (
                           <div className="flex flex-col min-h-[40px]">
                             {(el.props.elements || []).map((childEl: any, childIdx: number) => {
                               const isChildSelected = selectedElementId === childEl.id;
@@ -1235,8 +1526,6 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
                                   onClick={(e) => {
                                     if (isEditable) {
                                       e.stopPropagation();
-                                      // Note: we'd need a more robust selection mapping for deeply nested items in the inspector,
-                                      // but for now we just allow standard selection.
                                       onSelectElement?.(childEl.id, colIdx, -1); 
                                     }
                                   }}
@@ -1249,32 +1538,7 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
                                     </div>
                                   )}
                                   <div style={childStyle}>
-                                    {childEl.type === 'Heading' && (
-                                      <h3 className="text-3xl font-black uppercase tracking-tighter">
-                                        <EditableText value={childEl.props.text} onChange={(val) => handleUpdateChildProp('text', val)} isEditable={!!isEditable} autoFocus={isChildSelected} />
-                                      </h3>
-                                    )}
-                                    {childEl.type === 'Paragraph' && (
-                                      <p className="text-sm text-black/75 leading-relaxed">
-                                        <EditableText value={childEl.props.text} onChange={(val) => handleUpdateChildProp('text', val)} isEditable={!!isEditable} multiline autoFocus={isChildSelected} />
-                                      </p>
-                                    )}
-                                    {childEl.type === 'Button' && (
-                                      isEditable ? (
-                                        <div className="inline-block">
-                                          <EditableText value={childEl.props.text} onChange={(val) => handleUpdateChildProp('text', val)} isEditable={!!isEditable} className={getInlineButtonClasses(childEl.props.buttonStyle)} autoFocus={isChildSelected} />
-                                        </div>
-                                      ) : (
-                                        <a href={childEl.props.link || '#'} className={getInlineButtonClasses(childEl.props.buttonStyle)}>{childEl.props.text}</a>
-                                      )
-                                    )}
-                                    {childEl.type === 'Image' && (
-                                      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-black/10">
-                                        <img src={childEl.props.url} alt={childEl.props.alt || ''} className="w-full h-full object-cover" />
-                                      </div>
-                                    )}
-                                    {childEl.type === 'Divider' && <div className="border-t-2 border-black/10 my-2 w-full" />}
-                                    {childEl.type === 'Spacer' && <div style={{ height: childEl.props.height || '24px' }} />}
+                                    {renderCustomElement(childEl, handleUpdateChildProp, isChildSelected, isEditable)}
                                   </div>
                                   {isEditable && (
                                     <div className={`absolute -top-3.5 right-2 ${isChildSelected ? 'flex' : 'hidden group-hover/child:flex'} items-center gap-1 bg-purple-600 text-white rounded px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider z-40 shadow-md border border-white`}>
@@ -1305,6 +1569,8 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
                               </button>
                             )}
                           </div>
+                        ) : (
+                          renderCustomElement(el, handleUpdateElProp, isSelected, isEditable)
                         )}
                       </div>
 

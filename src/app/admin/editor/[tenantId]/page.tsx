@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation';
 import { getSupabaseServerClient, getPageData } from '@/lib/supabase';
 import SiteEditor from '@/components/SiteEditor';
 
-export default async function AdminSiteEditorPage({ params }: { params: { tenantId: string } }) {
-  const { tenantId } = params;
+export default async function AdminSiteEditorPage({ params }: { params: Promise<{ tenantId: string }> }) {
+  const { tenantId } = await params;
   const supabase = getSupabaseServerClient();
 
   // 1. Fetch tenant data

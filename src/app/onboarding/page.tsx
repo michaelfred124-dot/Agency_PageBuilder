@@ -101,19 +101,39 @@ function OnboardingForm() {
       const supabase = getSupabaseBrowserClient();
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        // Redirect to login and preserve the target parameter redirect
         router.push(`/login?redirect=/onboarding?plan=DIY%2520Template`);
       }
     };
     checkUser();
   }, [router]);
   
+  // DIY State
   const [formData, setFormData] = useState({
     businessName: '',
     tagline: '',
     phone: '',
     email: '',
     logoText: ''
+  });
+
+  // DFY State
+  const planName = searchParams.get('plan') || 'DIY Template';
+  const isDfy = planName.toLowerCase().includes('managed') || planName.toLowerCase().includes('custom') || planName.toLowerCase().includes('fully');
+  
+  const [dfyStep, setDfyStep] = useState(1);
+  const [dfyAnswers, setDfyAnswers] = useState({
+    businessName: '',
+    tagline: '',
+    industry: '',
+    themeStyle: 'Minimalist Sleek',
+    logoNotes: '',
+    pagesNeeded: ['Home', 'Services', 'Contact'],
+    websiteGoal: 'Capture Leads',
+    email: '',
+    phone: '',
+    location: '',
+    socialHandles: '',
+    scheduleCall: 'no',
   });
 
   const handleSelectTemplate = (key: string) => {
@@ -254,6 +274,53 @@ function OnboardingForm() {
     }
   };
 
+  const handleDfySubmit = () => {
+    if (!dfyAnswers.businessName.trim()) {
+      alert("Please enter your business name.");
+      return;
+    }
+    setDfyStep(6); // Loading submission
+    setTimeout(() => {
+      // Create new Custom DFY Site Record
+      const newId = `site-dfy-${Date.now()}`;
+      const newSiteRecord = {
+        id: newId,
+        name: dfyAnswers.businessName,
+        url: 'Designing in progress...',
+        previewUrl: '#',
+        status: 'Designing',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600',
+        lastUpdate: 'Brief submitted',
+        templateKey: null,
+        planTier: 'DFY',
+        dfyDetails: dfyAnswers
+      };
+
+      const savedSites = localStorage.getItem('my-sites');
+      let currentSites = [];
+      if (savedSites) {
+        try {
+          currentSites = JSON.parse(savedSites);
+        } catch(e) {
+          console.error(e);
+        }
+      }
+      const updated = [...currentSites, newSiteRecord];
+      localStorage.setItem('my-sites', JSON.stringify(updated));
+      
+      // Complete step
+      setDfyStep(7);
+    }, 2000);
+  };
+
+  const handlePageCheck = (page: string) => {
+    setDfyAnswers(prev => {
+      const active = prev.pagesNeeded.includes(page) 
+        ? prev.pagesNeeded.filter(p => p !== page) 
+        : [...prev.pagesNeeded, page];
+      return { ...prev, pagesNeeded: active };
+    });
+  };
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] flex flex-col font-sans text-slate-800">
@@ -263,181 +330,560 @@ function OnboardingForm() {
           <Link href="/pricing" className="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors">
             <ArrowLeft className="w-4 h-4 text-slate-600" />
           </Link>
-          <span className="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">DIY Template Plan</span>
+          <span className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+            {planName} Plan
+          </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`w-2.5 h-2.5 rounded-full ${step >= 1 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
-          <span className={`w-2.5 h-2.5 rounded-full ${step >= 2 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
-          <span className={`w-2.5 h-2.5 rounded-full ${step >= 3 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+          {isDfy ? (
+            Array.from({ length: 5 }).map((_, idx) => (
+              <span 
+                key={idx} 
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  dfyStep > idx ? 'bg-indigo-650' : 'bg-slate-200'
+                }`}
+              />
+            ))
+          ) : (
+            <>
+              <span className={`w-2.5 h-2.5 rounded-full ${step >= 1 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+              <span className={`w-2.5 h-2.5 rounded-full ${step >= 2 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+              <span className={`w-2.5 h-2.5 rounded-full ${step >= 3 ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+            </>
+          )}
         </div>
       </header>
 
       {/* Main Container */}
       <main className="flex-1 max-w-4xl w-full mx-auto p-6 lg:p-12 pb-32 flex flex-col justify-center">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
-          >
-            {/* Step 1: Pick a Template Preset Style */}
-            {step === 1 && (
-              <div className="space-y-8">
-                <div className="text-center space-y-2 max-w-xl mx-auto">
-                  <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">Pick a visual theme style to customize.</h2>
-                  <p className="text-slate-500 text-sm">
-                    Select a layout direction designed for your industry. Don't worry, you can add sections and modify layouts later inside the builder.
-                  </p>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                  {presets.map(preset => (
-                    <div 
-                      key={preset.templateKey}
-                      onClick={() => handleSelectTemplate(preset.templateKey)}
-                      className="group cursor-pointer bg-white border border-slate-200 hover:border-indigo-500 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
-                    >
-                      <div className="aspect-[16/10] relative overflow-hidden bg-slate-50 border-b border-slate-100">
-                        <img 
-                          src={preset.image} 
-                          alt={preset.name} 
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                          referrerPolicy="no-referrer"
-                        />
-                      </div>
-                      <div className="p-5 flex items-center justify-between gap-4">
-                        <div>
-                          <h3 className="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors">{preset.name} Layout</h3>
-                          <p className="text-slate-400 text-[11px] font-medium mt-0.5 line-clamp-1">{preset.desc}</p>
-                        </div>
-                        <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 group-hover:bg-indigo-50 group-hover:border-indigo-300 flex items-center justify-center shrink-0 transition-colors">
-                          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Step 2: Basic Info Seeding */}
-            {step === 2 && (
-              <div className="space-y-8 max-w-xl mx-auto">
-                <div className="space-y-2">
-                  <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Brand details.</h2>
-                  <p className="text-slate-500 text-xs">Enter your business information to automatically map headers, text blocks, and footers.</p>
-                </div>
-
-                <div className="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm space-y-6">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Name</label>
-                    <input 
-                      type="text" 
-                      value={formData.businessName}
-                      onChange={e => setFormData(prev => ({ ...prev, businessName: e.target.value }))}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
-                      placeholder="e.g. Lauren Wilson Photo" 
-                    />
+          {isDfy ? (
+            <motion.div
+              key={`dfy-${dfyStep}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25 }}
+            >
+              {/* DFY Step 1: Business Basics */}
+              {dfyStep === 1 && (
+                <div className="space-y-8 max-w-xl mx-auto">
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Tell us about your business.</h2>
+                    <p className="text-slate-500 text-xs">Let's gather some basic business details for our design team to begin structuring your brand concept.</p>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Short Tagline / Hero Subtitle</label>
-                    <input 
-                      type="text" 
-                      value={formData.tagline}
-                      onChange={e => setFormData(prev => ({ ...prev, tagline: e.target.value }))}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
-                      placeholder="e.g. Elegant local wedding photographer based in CO." 
-                    />
+                  <div className="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm space-y-6">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Name</label>
+                      <input 
+                        type="text" 
+                        value={dfyAnswers.businessName}
+                        onChange={e => setDfyAnswers(prev => ({ ...prev, businessName: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="e.g. Greenscape Landscaping Solutions" 
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Short Business Tagline</label>
+                      <input 
+                        type="text" 
+                        value={dfyAnswers.tagline}
+                        onChange={e => setDfyAnswers(prev => ({ ...prev, tagline: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="e.g. Premium landscaping and clean lawn design in Denver" 
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Industry / Business Category</label>
+                      <input 
+                        type="text" 
+                        value={dfyAnswers.industry}
+                        onChange={e => setDfyAnswers(prev => ({ ...prev, industry: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="e.g. Landscaping, Photo Studio, Cafe, HVAC Contracting" 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end pt-2">
+                    <button 
+                      onClick={() => {
+                        if (!dfyAnswers.businessName.trim()) return alert("Please enter your business name.");
+                        setDfyStep(2);
+                      }}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 hover:shadow-indigo-600/10 hover:-translate-y-0.5"
+                    >
+                      Next Step <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* DFY Step 2: Styling Preferences */}
+              {dfyStep === 2 && (
+                <div className="space-y-8 max-w-2xl mx-auto">
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Visual style preferences.</h2>
+                    <p className="text-slate-500 text-xs">What kind of theme layout and visual presence matches your brand goals?</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Email</label>
-                      <input 
-                        type="email" 
-                        value={formData.email}
-                        onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
-                        placeholder="hello@laurenphoto.co" 
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Phone Number</label>
-                      <input 
-                        type="text" 
-                        value={formData.phone}
-                        onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
-                        placeholder="(555) 123-4567" 
-                      />
-                    </div>
+                    {[
+                      { name: 'Minimalist Sleek', desc: 'Clean layouts, spacious white backgrounds, neutral tones, and crisp sans-serif headings.' },
+                      { name: 'Bold Neo-Brutalist', desc: 'Vibrant colors, thick black borders, offset cartoon-style shadows, and raw, high-impact fonts.' },
+                      { name: 'Warm & Organic', desc: 'Earthy greens, warm beiges, rounded cards, soft drop shadows, and friendly serif typography.' },
+                      { name: 'Cyberpunk Dark Mode', desc: 'Deep charcoal backgrounds, glowing electric accents (green/purple/neon), and modern technological grid details.' }
+                    ].map(style => (
+                      <div 
+                        key={style.name}
+                        onClick={() => setDfyAnswers(prev => ({ ...prev, themeStyle: style.name }))}
+                        className={`p-5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between text-left ${
+                          dfyAnswers.themeStyle === style.name 
+                            ? 'bg-indigo-50 border-indigo-600 shadow-[2px_2px_0px_rgba(79,70,229,0.1)]' 
+                            : 'bg-white border-slate-200 hover:border-slate-350 hover:bg-slate-50/50'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-extrabold text-slate-800">{style.name}</span>
+                            {dfyAnswers.themeStyle === style.name && (
+                              <div className="w-4 h-4 rounded-full bg-indigo-600 flex items-center justify-center"><Check className="w-2.5 h-2.5 text-white" strokeWidth={3} /></div>
+                            )}
+                          </div>
+                          <p className="text-slate-400 text-[10px] font-medium leading-relaxed mt-2">{style.desc}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Logo Header Text</label>
-                    <input 
-                      type="text" 
-                      value={formData.logoText}
-                      onChange={e => setFormData(prev => ({ ...prev, logoText: e.target.value }))}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
-                      placeholder="Lauren W." 
+                  <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-2">
+                    <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Logo Brief / Branding Notes</label>
+                    <textarea
+                      value={dfyAnswers.logoNotes}
+                      onChange={e => setDfyAnswers(prev => ({ ...prev, logoNotes: e.target.value }))}
+                      placeholder="e.g. We have a dark green circular logo with a leaf icon. Please integrate earthy green colors. We will supply the raw logo file once the draft workspace is ready."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none min-h-[90px] leading-relaxed font-medium"
                     />
                   </div>
-                </div>
 
-                <div className="flex items-center justify-between gap-4 pt-2">
-                  <button 
-                    onClick={() => setStep(1)}
-                    className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                  <div className="flex justify-between items-center pt-2">
+                    <button 
+                      onClick={() => setDfyStep(1)}
+                      className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                    >
+                      Back
+                    </button>
+                    <button 
+                      onClick={() => setDfyStep(3)}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 hover:shadow-indigo-600/10 hover:-translate-y-0.5"
+                    >
+                      Next Step <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* DFY Step 3: Pages & Goals */}
+              {dfyStep === 3 && (
+                <div className="space-y-8 max-w-xl mx-auto">
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Pages and target goals.</h2>
+                    <p className="text-slate-500 text-xs">Which sections and conversion structures are necessary to support your site launch?</p>
+                  </div>
+
+                  <div className="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Pages Needed (Select all that apply)</label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {['Home Page', 'Services Detail', 'About Us', 'Contact Channel', 'Photo Gallery', 'FAQ Page', 'Blog / Articles'].map(page => {
+                          const isChecked = dfyAnswers.pagesNeeded.includes(page);
+                          return (
+                            <div 
+                              key={page}
+                              onClick={() => handlePageCheck(page)}
+                              className={`p-3 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between text-xs font-semibold ${
+                                isChecked 
+                                  ? 'bg-indigo-50 border-indigo-600 text-indigo-700' 
+                                  : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100/40'
+                              }`}
+                            >
+                              <span>{page}</span>
+                              <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${
+                                isChecked ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-350 bg-white'
+                              }`}>
+                                {isChecked && <Check className="w-2.5 h-2.5 text-white" strokeWidth={4} />}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Primary Website Goal</label>
+                      <select 
+                        value={dfyAnswers.websiteGoal}
+                        onChange={e => setDfyAnswers(prev => ({ ...prev, websiteGoal: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-semibold focus:bg-white focus:border-indigo-400 focus:outline-none"
+                      >
+                        <option value="Capture Leads">Capture Leads / Custom Contact Submissions</option>
+                        <option value="Book Consultations">Schedule Phone Calls & Booking Consultations</option>
+                        <option value="Sell E-Commerce">Sell Products / Stripe Merchant Integration</option>
+                        <option value="Brand Identity">Showcase Branding Portfolio & Information Only</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button 
+                      onClick={() => setDfyStep(2)}
+                      className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                    >
+                      Back
+                    </button>
+                    <button 
+                      onClick={() => setDfyStep(4)}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 hover:shadow-indigo-600/10 hover:-translate-y-0.5"
+                    >
+                      Next Step <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* DFY Step 4: Contact & Social Handles */}
+              {dfyStep === 4 && (
+                <div className="space-y-8 max-w-xl mx-auto">
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Public contact details.</h2>
+                    <p className="text-slate-500 text-xs">These channels will be integrated into headers, maps, footers, and contact forms.</p>
+                  </div>
+
+                  <div className="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Email</label>
+                        <input 
+                          type="email" 
+                          value={dfyAnswers.email}
+                          onChange={e => setDfyAnswers(prev => ({ ...prev, email: e.target.value }))}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                          placeholder="e.g. contact@greenscape.com" 
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Phone Number</label>
+                        <input 
+                          type="text" 
+                          value={dfyAnswers.phone}
+                          onChange={e => setDfyAnswers(prev => ({ ...prev, phone: e.target.value }))}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                          placeholder="e.g. (303) 555-0199" 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Location / Address</label>
+                      <input 
+                        type="text" 
+                        value={dfyAnswers.location}
+                        onChange={e => setDfyAnswers(prev => ({ ...prev, location: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="e.g. Denver, CO (or physical street address)" 
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Social Handles (Instagram / Facebook)</label>
+                      <input 
+                        type="text" 
+                        value={dfyAnswers.socialHandles}
+                        onChange={e => setDfyAnswers(prev => ({ ...prev, socialHandles: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="e.g. @greenscapedenver, fb.com/greenscapelandscaping" 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button 
+                      onClick={() => setDfyStep(3)}
+                      className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                    >
+                      Back
+                    </button>
+                    <button 
+                      onClick={() => setDfyStep(5)}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 hover:shadow-indigo-600/10 hover:-translate-y-0.5"
+                    >
+                      Next Step <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* DFY Step 5: Kick-off Call Consultation option */}
+              {dfyStep === 5 && (
+                <div className="space-y-8 max-w-xl mx-auto">
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Hop on a brief kick-off call?</h2>
+                    <p className="text-slate-500 text-xs">Would you like to schedule a 15-minute onboarding phone or video call with your lead web designer to review your brief?</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    {[
+                      { val: 'yes', label: 'Yes, let\'s schedule a call! 📞', desc: 'We will send you a booking calendar link on the next page to schedule a direct consultation with your developer.' },
+                      { val: 'no', label: 'No call needed, start building! 💻', desc: 'The details I have supplied in this brief are sufficient. Clear my dashboard and start designing right away.' }
+                    ].map(opt => (
+                      <div 
+                        key={opt.val}
+                        onClick={() => setDfyAnswers(prev => ({ ...prev, scheduleCall: opt.val }))}
+                        className={`p-5 rounded-2xl border-2 transition-all cursor-pointer text-left flex items-start gap-4 ${
+                          dfyAnswers.scheduleCall === opt.val 
+                            ? 'bg-indigo-50 border-indigo-600 shadow-[2px_2px_0px_rgba(79,70,229,0.1)]' 
+                            : 'bg-white border-slate-200 hover:border-slate-350 hover:bg-slate-50/50'
+                        }`}
+                      >
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 ${
+                          dfyAnswers.scheduleCall === opt.val ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-350 bg-white'
+                        }`}>
+                          {dfyAnswers.scheduleCall === opt.val && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                        </div>
+                        <div>
+                          <span className="text-xs font-extrabold text-slate-800 leading-none block">{opt.label}</span>
+                          <span className="text-[10px] text-slate-400 font-medium leading-relaxed block mt-1.5">{opt.desc}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button 
+                      onClick={() => setDfyStep(4)}
+                      className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                    >
+                      Back
+                    </button>
+                    <button 
+                      onClick={handleDfySubmit}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-sm transition-all hover:shadow-indigo-600/10 hover:-translate-y-0.5"
+                    >
+                      Submit Design Brief
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* DFY Step 6: Submission Loader */}
+              {dfyStep === 6 && (
+                <div className="max-w-md mx-auto py-12 text-center flex flex-col items-center justify-center space-y-4">
+                  <div className="w-12 h-12 rounded-full border-4 border-slate-200 border-t-indigo-600 animate-spin" />
+                  <div className="space-y-1">
+                    <h3 className="font-extrabold text-slate-800 text-base">Submitting onboarding brief...</h3>
+                    <p className="text-slate-400 text-xs">Registering your account project timeline and assigning developer.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* DFY Step 7: Onboarding Success */}
+              {dfyStep === 7 && (
+                <div className="max-w-md mx-auto py-8 text-center space-y-6 flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-emerald-50 border-[4px] border-emerald-500 flex items-center justify-center text-emerald-500 shadow-sm animate-bounce">
+                    <Check className="w-8 h-8" strokeWidth={4} />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Brief Submitted!</h2>
+                    <p className="text-slate-550 text-xs leading-relaxed max-w-sm mx-auto font-medium">
+                      Our senior design team has received your design brief. 
+                      <strong className="block text-slate-850 mt-2 font-extrabold">Please allow 5 to 10 business days for us to come up with the site.</strong>
+                      The layout design and project timeline will automatically sync and update in your dashboard when ready!
+                    </p>
+                    {dfyAnswers.scheduleCall === 'yes' && (
+                      <p className="text-xs text-indigo-600 font-bold bg-indigo-50 border border-indigo-100 rounded-xl p-3 mt-4">
+                        📞 Keep an eye on your inbox! We will email you a booking link within 24 hours to schedule your kick-off consultation.
+                      </p>
+                    )}
+                  </div>
+                  
+                  <button
+                    onClick={() => router.push('/dashboard')}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-2xl text-xs font-bold shadow-md shadow-indigo-600/10 hover:-translate-y-0.5 transition-all flex items-center gap-1.5 font-sans"
                   >
-                    Back to Styles
+                    Go to My Dashboard <ArrowRight className="w-4 h-4" strokeWidth={3} />
                   </button>
-                  <button 
-                    onClick={handleSubmit}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 hover:shadow-indigo-600/10 hover:-translate-y-0.5"
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25 }}
+            >
+              {/* Step 1: Pick a Template Preset Style */}
+              {step === 1 && (
+                <div className="space-y-8">
+                  <div className="text-center space-y-2 max-w-xl mx-auto">
+                    <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">Pick a visual theme style to customize.</h2>
+                    <p className="text-slate-500 text-sm">
+                      Select a layout direction designed for your industry. Don't worry, you can add sections and modify layouts later inside the builder.
+                    </p>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                    {presets.map(preset => (
+                      <div 
+                        key={preset.templateKey}
+                        onClick={() => handleSelectTemplate(preset.templateKey)}
+                        className="group cursor-pointer bg-white border border-slate-200 hover:border-indigo-500 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                      >
+                        <div className="aspect-[16/10] relative overflow-hidden bg-slate-50 border-b border-slate-100">
+                          <img 
+                            src={preset.image} 
+                            alt={preset.name} 
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                        <div className="p-5 flex items-center justify-between gap-4">
+                          <div>
+                            <h3 className="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors">{preset.name} Layout</h3>
+                            <p className="text-slate-400 text-[11px] font-medium mt-0.5 line-clamp-1">{preset.desc}</p>
+                          </div>
+                          <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 group-hover:bg-indigo-50 group-hover:border-indigo-300 flex items-center justify-center shrink-0 transition-colors">
+                            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2: Basic Info Seeding */}
+              {step === 2 && (
+                <div className="space-y-8 max-w-xl mx-auto">
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Brand details.</h2>
+                    <p className="text-slate-500 text-xs">Enter your business information to automatically map headers, text blocks, and footers.</p>
+                  </div>
+
+                  <div className="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm space-y-6">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Name</label>
+                      <input 
+                        type="text" 
+                        value={formData.businessName}
+                        onChange={e => setFormData(prev => ({ ...prev, businessName: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="e.g. Lauren Wilson Photo" 
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Short Tagline / Hero Subtitle</label>
+                      <input 
+                        type="text" 
+                        value={formData.tagline}
+                        onChange={e => setFormData(prev => ({ ...prev, tagline: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="e.g. Elegant local wedding photographer based in CO." 
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Business Email</label>
+                        <input 
+                          type="email" 
+                          value={formData.email}
+                          onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                          placeholder="hello@laurenphoto.co" 
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Phone Number</label>
+                        <input 
+                          type="text" 
+                          value={formData.phone}
+                          onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                          placeholder="(555) 123-4567" 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Logo Header Text</label>
+                      <input 
+                        type="text" 
+                        value={formData.logoText}
+                        onChange={e => setFormData(prev => ({ ...prev, logoText: e.target.value }))}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none font-medium" 
+                        placeholder="Lauren W." 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-4 pt-2">
+                    <button 
+                      onClick={() => setStep(1)}
+                      className="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                    >
+                      Back to Styles
+                    </button>
+                    <button 
+                      onClick={handleSubmit}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 hover:shadow-indigo-600/10 hover:-translate-y-0.5"
+                    >
+                      Generate Workspace <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Loading Screen */}
+              {step === 3 && (
+                <div className="max-w-md mx-auto py-12 text-center flex flex-col items-center justify-center space-y-4">
+                  <div className="w-12 h-12 rounded-full border-4 border-slate-200 border-t-indigo-600 animate-spin" />
+                  <div className="space-y-1">
+                    <h3 className="font-extrabold text-slate-800 text-base">Creating layout editor workspace...</h3>
+                    <p className="text-slate-400 text-xs">Injecting brand variables, styling colors, and mapping assets.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4: Onboarding Success Screen */}
+              {step === 4 && (
+                <div className="max-w-md mx-auto py-8 text-center space-y-6 flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-emerald-50 border-[4px] border-emerald-500 flex items-center justify-center text-emerald-500 shadow-sm animate-bounce">
+                    <Check className="w-8 h-8" strokeWidth={4} />
+                  </div>
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Branding generated!</h2>
+                    <p className="text-slate-500 text-xs max-w-sm mx-auto leading-relaxed">
+                      We've customized the layout style with your branding info. Next, you'll be redirected into our website builder to review and tweak the design.
+                    </p>
+                  </div>
+                  
+                  <button
+                    onClick={() => router.push('/dashboard')}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-2xl text-xs font-bold shadow-md shadow-indigo-600/10 hover:-translate-y-0.5 transition-all flex items-center gap-1.5 font-sans"
                   >
-                    Generate Workspace <ChevronRight className="w-3.5 h-3.5" />
+                    Start Customizing Site <ArrowRight className="w-4 h-4" strokeWidth={3} />
                   </button>
                 </div>
-              </div>
-            )}
-
-            {/* Step 3: Loading Screen */}
-            {step === 3 && (
-              <div className="max-w-md mx-auto py-12 text-center flex flex-col items-center justify-center space-y-4">
-                <div className="w-12 h-12 rounded-full border-4 border-slate-200 border-t-indigo-600 animate-spin" />
-                <div className="space-y-1">
-                  <h3 className="font-extrabold text-slate-800 text-base">Creating layout editor workspace...</h3>
-                  <p className="text-slate-400 text-xs">Injecting brand variables, styling colors, and mapping assets.</p>
-                </div>
-              </div>
-            )}
-
-            {/* Step 4: Onboarding Success Screen */}
-            {step === 4 && (
-              <div className="max-w-md mx-auto py-8 text-center space-y-6 flex flex-col items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-emerald-50 border-[4px] border-emerald-500 flex items-center justify-center text-emerald-500 shadow-sm animate-bounce">
-                  <Check className="w-8 h-8" strokeWidth={4} />
-                </div>
-                <div className="space-y-2">
-                  <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 leading-tight">Branding generated!</h2>
-                  <p className="text-slate-500 text-xs max-w-sm mx-auto leading-relaxed">
-                    We've customized the layout style with your branding info. Next, you'll be redirected into our website builder to review and tweak the design.
-                  </p>
-                </div>
-                
-                <button
-                  onClick={() => router.push('/dashboard')}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-2xl text-xs font-bold shadow-md shadow-indigo-600/10 hover:-translate-y-0.5 transition-all flex items-center gap-1.5 font-sans"
-                >
-                  Start Customizing Site <ArrowRight className="w-4 h-4" strokeWidth={3} />
-                </button>
-              </div>
-            )}
-          </motion.div>
+              )}
+            </motion.div>
+          )}
         </AnimatePresence>
       </main>
     </div>

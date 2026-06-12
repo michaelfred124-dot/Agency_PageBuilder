@@ -205,6 +205,7 @@ export default function DashboardLayout() {
   });
   // Paywall Gate State
   const [isOnboardedPaid, setIsOnboardedPaid] = useState<boolean>(false);
+  const [showTrialGateModal, setShowTrialGateModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -237,50 +238,7 @@ export default function DashboardLayout() {
   const [inboxSearchQuery, setInboxSearchQuery] = useState('');
   const [inboxFilter, setInboxFilter] = useState<'all' | 'unread' | 'read' | 'archived'>('all');
 
-  // CMS Collections State
-  const [selectedCollectionKey, setSelectedCollectionKey] = useState<string>('Services');
-  const [cmsCollections, setCmsCollections] = useState<Record<string, { name: string; fields: string[]; items: any[] }>>({});
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('cms_collections');
-      if (saved) {
-        try {
-          setCmsCollections(JSON.parse(saved));
-        } catch (e) {
-          console.error(e);
-        }
-      } else {
-        const defaultCollections = {
-          Services: {
-            name: 'Services',
-            fields: ['title', 'description', 'image'],
-            items: [
-              { id: '1', title: 'Web Design', description: 'Premium custom design for modern brands.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600' },
-              { id: '2', title: 'SEO Optimization', description: 'Rank high on Google search rankings.', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600' }
-            ]
-          },
-          Testimonials: {
-            name: 'Testimonials',
-            fields: ['quote', 'author'],
-            items: [
-              { id: '1', quote: 'They delivered our site 2 weeks ahead of schedule! Amazing work.', author: 'John Doe' },
-              { id: '2', quote: 'The neo-brutalist aesthetic is exactly what we wanted.', author: 'Sarah Jenkins' }
-            ]
-          }
-        };
-        setCmsCollections(defaultCollections);
-        localStorage.setItem('cms_collections', JSON.stringify(defaultCollections));
-      }
-    }
-  }, []);
-
-  const saveCollections = (updated: any) => {
-    setCmsCollections(updated);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('cms_collections', JSON.stringify(updated));
-    }
-  };
+  // CMS Collections State removed
 
   const loadLocalSites = () => {
     if (typeof window === 'undefined') return [];
@@ -818,7 +776,11 @@ export default function DashboardLayout() {
 
           // If exiting to dashboard on DIY tier, automatically prompt to link custom domain
           if (editingSite.planTier === 'DIY') {
-            setManagingDomainFor(editingSite);
+            if (!isOnboardedPaid) {
+              setShowTrialGateModal(true);
+            } else {
+              setManagingDomainFor(editingSite);
+            }
           }
           setEditingSite(null);
         }}
@@ -856,6 +818,9 @@ export default function DashboardLayout() {
         <PublishWizardModal
           site={editingSite}
           isOnboardedPaid={isOnboardedPaid}
+          onPlanSubscribed={() => {
+            setIsOnboardedPaid(true);
+          }}
           onClose={() => {
             setIsPublishWizardOpen(false);
             setPendingPublishData(null);
@@ -948,7 +913,82 @@ export default function DashboardLayout() {
     }
   }
 
+  const renderLockedFeatureGate = () => {
+    return (
+      <div className="max-w-xl mx-auto py-12 px-6 bg-[#F8F5F2] border-[4px] border-black rounded-3xl shadow-[12px_12px_0px_rgba(0,0,0,1)] text-center space-y-6 animate-fade-in font-sans">
+        <div className="w-16 h-16 bg-amber-400 text-slate-900 border-[3px] border-black rounded-2xl flex items-center justify-center mx-auto shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+          <Zap className="w-8 h-8 text-black fill-black animate-pulse" />
+        </div>
+        
+        <div className="space-y-2">
+          <span className="text-[10px] bg-indigo-50 border-2 border-indigo-600 text-indigo-700 px-3 py-1 rounded-full font-black uppercase tracking-wider">
+            🎁 Start 1-Month Free Trial
+          </span>
+          <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900 pt-2">
+            Unlock the Backend & Domains
+          </h2>
+          <p className="text-slate-500 text-xs max-w-sm mx-auto leading-relaxed font-semibold">
+            To view analytics, manage inbox leads, or configure custom domains, start your 30-day free trial first!
+          </p>
+        </div>
+
+        <div className="bg-white border-2 border-black rounded-2xl p-5 text-left space-y-3 shadow-[3px_3px_0px_rgba(0,0,0,1)]">
+          <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest border-b border-black/10 pb-1.5">What you'll unlock:</p>
+          <div className="space-y-2">
+            {[
+              { title: "Connect Custom Domains", desc: "Attach your brand's unique web address" },
+              { title: "Inbox & Leads Manager", desc: "Receive & reply to customer messages" },
+              { title: "E-Commerce & Stripe Checkout", desc: "Accept payments and sell digital products" },
+              { title: "Visitor Analytics & Reports", desc: "Track performance and traffic insights" }
+            ].map(item => (
+              <div key={item.title} className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" strokeWidth={3} />
+                <div>
+                  <p className="text-xs font-bold text-slate-800 leading-tight">{item.title}</p>
+                  <p className="text-[10px] text-slate-400 font-semibold leading-tight mt-0.5">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 pt-2">
+          <button
+            onClick={() => {
+              localStorage.setItem('diy_plan_paid', 'true');
+              setIsOnboardedPaid(true);
+              alert("🎉 Subscription Activated! Your 1-month free trial has started. All premium backend metrics and domain manager options are now fully unlocked.");
+            }}
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md border-2 border-black hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_rgba(0,0,0,1)]"
+          >
+            Start 1-Month Free Trial ($0.00)
+          </button>
+          
+          <button
+            onClick={() => {
+              if (selectedSite) {
+                setEditingSite(selectedSite);
+              } else if (mySites.length > 0) {
+                setEditingSite(mySites[0]);
+              } else {
+                setIsTemplateModalOpen(true);
+              }
+            }}
+            className="w-full bg-white hover:bg-slate-50 text-slate-800 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all border-2 border-black hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_rgba(0,0,0,1)]"
+          >
+            Customize Draft Site in Builder
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   const renderContent = () => {
+    // Gate backend pages under 1-month free trial
+    if (!isOnboardedPaid && activeSection !== 'My Sites') {
+      return renderLockedFeatureGate();
+    }
+
     switch (activeSection) {
       case 'Overview':
         return (
@@ -1256,8 +1296,14 @@ export default function DashboardLayout() {
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur shadow-sm px-2.5 py-1 flex items-center gap-1.5 rounded-full border border-slate-200/50">
-                    <span className={`w-1.5 h-1.5 rounded-full ${selectedSite.status === 'Live' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                    <span className="text-[10px] font-bold text-slate-700 tracking-wider uppercase">{selectedSite.status}</span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${
+                      selectedSite.status === 'Live' ? 'bg-emerald-500' : 
+                      selectedSite.status === 'Designing' ? 'bg-indigo-500 animate-pulse' : 
+                      'bg-amber-500'
+                    }`} />
+                    <span className="text-[10px] font-bold text-slate-700 tracking-wider uppercase">
+                      {selectedSite.status === 'Designing' ? 'Designing (5-10 Days)' : selectedSite.status}
+                    </span>
                   </div>
                 </div>
                 <div className="p-6 flex-1 flex flex-col justify-between">
@@ -1267,12 +1313,17 @@ export default function DashboardLayout() {
                       <h2 className="text-xl font-bold text-slate-900 leading-tight">{selectedSite.name}</h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 font-medium">
-                      <span className="flex items-center gap-1.5"><Globe className="w-3.5 h-3.5 text-slate-400" /> {selectedSite.url}</span>
+                      <span className="flex items-center gap-1.5">
+                        <Globe className="w-3.5 h-3.5 text-slate-400" /> 
+                        {selectedSite.status === 'Designing' ? 'Designing in progress...' : selectedSite.url}
+                      </span>
                       <span>&bull;</span>
                       <span>Last updated: {selectedSite.lastUpdate || 'Just now'}</span>
                     </div>
                     <p className="text-xs text-slate-500 max-w-xl leading-relaxed">
-                      {globalSettings.defaultSeoDescription || 'Manage this website layout, cms content tables, view site reports, or connect customer support.'}
+                      {selectedSite.status === 'Designing'
+                        ? 'Please allow 5 to 10 business days for us to come up with the site. The layout design and project timeline will automatically update in your dashboard when ready!'
+                        : (globalSettings.defaultSeoDescription || 'Manage this website layout, cms content tables, view site reports, or connect customer support.')}
                     </p>
                     
                     {/* Plan-specific Conversion/Status Banner */}
@@ -1307,29 +1358,55 @@ export default function DashboardLayout() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-slate-100">
-                    <button 
-                      onClick={() => setEditingSite(selectedSite)}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-2"
-                    >
-                      Edit Site
-                    </button>
+                    {selectedSite.status === 'Designing' ? (
+                      <button 
+                        onClick={() => setActiveSection('Project Timeline')}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-2"
+                      >
+                        Review Timeline
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => setEditingSite(selectedSite)}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-2"
+                      >
+                        Edit Site
+                      </button>
+                    )}
                     <button 
                       onClick={() => setActiveSection('Contact Agency')}
                       className="bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2"
                     >
                       Request Design Update
                     </button>
-                    <a 
-                      href={selectedSite.previewUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5 text-slate-400" /> View Live
-                    </a>
+                    {selectedSite.status === 'Designing' ? (
+                      <button 
+                        onClick={() => alert("Please allow 5 to 10 business days for us to come up with the site. The layout design will update in the dashboard when ready.")}
+                        className="bg-slate-50 text-slate-400 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all opacity-60 cursor-not-allowed flex items-center gap-2"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-350" /> View Live
+                      </button>
+                    ) : (
+                      <a 
+                        href={selectedSite.previewUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-400" /> View Live
+                      </a>
+                    )}
                     <button 
-                      onClick={() => setManagingDomainFor(selectedSite)}
-                      className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2"
+                      onClick={() => {
+                        if (selectedSite.status === 'Designing') {
+                          alert("Domain connection is locked while our senior team is hand-crafting your custom layout. Please wait 5-10 business days until your site is ready!");
+                        } else if (!isOnboardedPaid) {
+                          setShowTrialGateModal(true);
+                        } else {
+                          setManagingDomainFor(selectedSite);
+                        }
+                      }}
+                      className={`bg-white text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2 ${selectedSite.status === 'Designing' ? 'opacity-60 cursor-not-allowed' : 'hover:bg-slate-50'}`}
                     >
                       <Settings className="w-3.5 h-3.5 text-slate-400" /> Connect Domain
                     </button>
@@ -1469,202 +1546,7 @@ export default function DashboardLayout() {
           </div>
         );
       
-      case 'CMS Collections': {
-        const collectionKeys = Object.keys(cmsCollections);
-        const activeCollKey = selectedCollectionKey || collectionKeys[0] || '';
-        const activeColl = cmsCollections[activeCollKey];
-
-        return (
-          <div className="max-w-6xl mx-auto space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">CMS Database Collections</h1>
-                <p className="text-slate-500 text-sm mt-0.5">Manage dynamic content tables. Bind grids, services, or galleries in the builder to these tables.</p>
-              </div>
-              <button 
-                onClick={() => {
-                  const name = window.prompt("Enter collection name (e.g., Services, Team, Products):");
-                  if (!name) return;
-                  const cleanName = name.trim();
-                  if (cmsCollections[cleanName]) {
-                    alert("Collection already exists!");
-                    return;
-                  }
-                  const fieldsInput = window.prompt("Enter comma-separated fields for this collection (e.g., title, description, image):", "title,description,image");
-                  if (!fieldsInput) return;
-                  const fields = fieldsInput.split(',').map(f => f.trim().toLowerCase()).filter(Boolean);
-                  
-                  const updated = {
-                    ...cmsCollections,
-                    [cleanName]: {
-                      name: cleanName,
-                      fields: fields,
-                      items: []
-                    }
-                  };
-                  saveCollections(updated);
-                  setSelectedCollectionKey(cleanName);
-                }}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5"
-              >
-                <Plus className="w-4 h-4" /> Create Collection
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden min-h-[500px]">
-              {/* Left sidebar: list of collections */}
-              <div className="border-r border-slate-200 bg-slate-50/50 p-4 space-y-4">
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">My Tables</h3>
-                <div className="space-y-1">
-                  {collectionKeys.map(key => {
-                    const isActive = activeCollKey === key;
-                    return (
-                      <button
-                        key={key}
-                        onClick={() => setSelectedCollectionKey(key)}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-left ${
-                          isActive 
-                            ? 'bg-indigo-600 text-white shadow-sm' 
-                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-800'
-                        }`}
-                      >
-                        <span className="flex items-center gap-2">
-                          <Database className="w-4 h-4" />
-                          {key}
-                        </span>
-                        <span className="text-[10px] opacity-70">({cmsCollections[key].items.length})</span>
-                      </button>
-                    );
-                  })}
-                  {collectionKeys.length === 0 && (
-                    <p className="text-xs text-slate-400 font-medium p-3">No custom collections created yet.</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Right: Data Table */}
-              <div className="md:col-span-3 p-6 flex flex-col justify-between">
-                {activeColl ? (
-                  <div className="space-y-6 flex-1 flex flex-col">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                      <div>
-                        <h2 className="text-lg font-bold text-slate-900">{activeColl.name} Collection</h2>
-                        <p className="text-xs text-slate-400 font-medium">Fields: {activeColl.fields.join(', ')}</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => {
-                            const newCols = { ...cmsCollections };
-                            const itemFields = activeColl.fields;
-                            const newItem: any = { id: `item-${Date.now()}` };
-                            for (const f of itemFields) {
-                              const val = window.prompt(`Enter value for field "${f}":`);
-                              newItem[f] = val || '';
-                            }
-                            newCols[activeCollKey].items.push(newItem);
-                            saveCollections(newCols);
-                          }}
-                          className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
-                        >
-                          <Plus className="w-3.5 h-3.5" /> Add Row
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (confirm(`Delete entire collection "${activeCollKey}"?`)) {
-                              const newCols = { ...cmsCollections };
-                              delete newCols[activeCollKey];
-                              saveCollections(newCols);
-                              setSelectedCollectionKey(Object.keys(newCols)[0] || '');
-                            }
-                          }}
-                          className="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/50 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" /> Delete Table
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex-1 overflow-x-auto">
-                      <table className="w-full text-left border-collapse min-w-[500px]">
-                        <thead>
-                          <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[10px] font-bold uppercase tracking-wider">
-                            {activeColl.fields.map(f => (
-                              <th key={f} className="px-4 py-3">{f}</th>
-                            ))}
-                            <th className="px-4 py-3 text-right">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 text-slate-700 text-xs font-medium">
-                          {activeColl.items.map((item, idx) => (
-                            <tr key={item.id || idx}>
-                              {activeColl.fields.map(f => (
-                                <td key={f} className="px-4 py-3 max-w-[200px] truncate">
-                                  {f === 'image' || f === 'url' ? (
-                                    <div className="flex items-center gap-2">
-                                      {item[f] ? <img src={item[f]} className="w-8 h-8 rounded object-cover border border-slate-100" /> : <span className="text-slate-400 italic">none</span>}
-                                      <span className="text-[10px] truncate max-w-[120px] font-mono text-slate-400" title={item[f]}>{item[f]}</span>
-                                    </div>
-                                  ) : (
-                                    item[f] || <span className="text-slate-400 italic">empty</span>
-                                  )}
-                                </td>
-                              ))}
-                              <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
-                                <button
-                                  onClick={() => {
-                                    const newCols = { ...cmsCollections };
-                                    const targetItem = newCols[activeCollKey].items[idx];
-                                    for (const f of activeColl.fields) {
-                                      const oldVal = targetItem[f] || '';
-                                      const newVal = window.prompt(`Edit value for "${f}":`, oldVal);
-                                      if (newVal !== null) {
-                                        targetItem[f] = newVal;
-                                      }
-                                    }
-                                    saveCollections(newCols);
-                                  }}
-                                  className="text-indigo-600 hover:text-indigo-700 font-bold"
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    if (confirm("Delete this row?")) {
-                                      const newCols = { ...cmsCollections };
-                                      newCols[activeCollKey].items.splice(idx, 1);
-                                      saveCollections(newCols);
-                                    }
-                                  }}
-                                  className="text-rose-600 hover:text-rose-700 font-bold"
-                                >
-                                  Delete
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                          {activeColl.items.length === 0 && (
-                            <tr>
-                              <td colSpan={activeColl.fields.length + 1} className="px-4 py-8 text-center text-slate-400 font-medium">
-                                No rows in this table yet. Click "Add Row" to start adding content.
-                              </td>
-                            </tr>
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex-1 flex flex-col items-center justify-center text-center p-12">
-                    <Database className="w-12 h-12 text-slate-350 opacity-40 mb-3" />
-                    <h3 className="font-semibold text-slate-800 text-base">Select or Create a Collection</h3>
-                    <p className="text-slate-400 text-xs mt-1 max-w-sm">Use CMS collections to manage team members, services lists, menus, reviews, or FAQs without editing code or pages manually.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      }
+      // CMS Collections view removed
 
       case 'My Sites':
         return (
@@ -1696,44 +1578,83 @@ export default function DashboardLayout() {
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur shadow-sm px-2.5 py-1 flex items-center gap-1.5 rounded-full border border-slate-200/50">
-                      <span className={`w-1.5 h-1.5 rounded-full ${site.status === 'Live' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                      <span className="text-[10px] font-bold text-slate-700 uppercase">{site.status}</span>
+                      <span className={`w-1.5 h-1.5 rounded-full ${
+                        site.status === 'Live' ? 'bg-emerald-500' : 
+                        site.status === 'Designing' ? 'bg-indigo-500 animate-pulse' : 
+                        'bg-amber-500'
+                      }`} />
+                      <span className="text-[10px] font-bold text-slate-700 uppercase">
+                        {site.status === 'Designing' ? 'Designing (5-10 Days)' : site.status}
+                      </span>
                     </div>
                   </div>
                   <div className="p-5 space-y-4">
                     <div>
                       <h3 className="font-bold text-slate-900 text-base">{site.name}</h3>
                       <p className="text-slate-400 text-xs mt-1 flex items-center gap-1">
-                        <Globe className="w-3.5 h-3.5 text-slate-300" /> {site.url}
+                        <Globe className="w-3.5 h-3.5 text-slate-300" /> 
+                        {site.status === 'Designing' ? 'Designing in progress...' : site.url}
                       </p>
+                      {site.status === 'Designing' && (
+                        <p className="text-slate-500 text-[10.5px] mt-2.5 font-medium leading-relaxed bg-indigo-50 border border-indigo-100 rounded-xl p-3">
+                          Please allow 5 to 10 business days for us to come up with the site. The layout design will update in the dashboard when ready!
+                        </p>
+                      )}
                     </div>
                     
                     <div className="flex items-center gap-2 pt-4 border-t border-slate-100">
-                      <button 
-                        onClick={() => setEditingSite(site)}
-                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl text-xs font-bold shadow-sm transition-colors text-center"
-                      >
-                        Edit Site
-                      </button>
+                      {site.status === 'Designing' ? (
+                        <button 
+                          onClick={() => { setSelectedSite(site); setActiveSection('Project Timeline'); }}
+                          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl text-xs font-bold shadow-sm transition-colors text-center animate-pulse"
+                        >
+                          Review Timeline
+                        </button>
+                      ) : (
+                        <button 
+                          onClick={() => setEditingSite(site)}
+                          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl text-xs font-bold shadow-sm transition-colors text-center"
+                        >
+                          Edit Site
+                        </button>
+                      )}
                       <button 
                         onClick={() => { setSelectedSite(site); setActiveSection('Contact Agency'); }}
                         className="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-700 py-2 rounded-xl text-xs font-bold border border-slate-200 transition-colors text-center"
                       >
                         Request Update
                       </button>
-                      <a 
-                        href={site.previewUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="bg-slate-50 hover:bg-slate-100 text-slate-600 p-2 rounded-xl border border-slate-200 transition-all flex items-center justify-center"
-                        title="Preview"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
+                      {site.status === 'Designing' ? (
+                        <button 
+                          onClick={() => alert("Please allow 5 to 10 business days for us to come up with the site. The layout design will update in the dashboard when ready.")}
+                          className="bg-slate-50 text-slate-400 p-2 rounded-xl border border-slate-200 transition-all flex items-center justify-center cursor-not-allowed opacity-60"
+                          title="Preview (Locked)"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </button>
+                      ) : (
+                        <a 
+                          href={site.previewUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="bg-slate-50 hover:bg-slate-100 text-slate-600 p-2 rounded-xl border border-slate-200 transition-all flex items-center justify-center"
+                          title="Preview"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      )}
                       <button 
-                        onClick={() => setManagingDomainFor(site)}
-                        className="bg-slate-50 hover:bg-slate-100 text-slate-600 p-2 rounded-xl border border-slate-200 transition-all flex items-center justify-center"
-                        title="Settings"
+                        onClick={() => {
+                          if (site.status === 'Designing') {
+                            alert("Domain connection is locked while our senior team is hand-crafting your custom layout. Please wait 5-10 business days until your site is ready!");
+                          } else if (!isOnboardedPaid) {
+                            setShowTrialGateModal(true);
+                          } else {
+                            setManagingDomainFor(site);
+                          }
+                        }}
+                        className={`bg-slate-50 text-slate-600 p-2 rounded-xl border border-slate-200 transition-all flex items-center justify-center ${site.status === 'Designing' ? 'opacity-60 cursor-not-allowed' : 'hover:bg-slate-100'}`}
+                        title={site.status === 'Designing' ? "Settings (Locked)" : "Settings"}
                       >
                         <Settings className="w-4 h-4" />
                       </button>
@@ -3204,7 +3125,6 @@ export default function DashboardLayout() {
             {[
               { icon: LayoutDashboard, label: 'Overview' },
               { icon: Globe, label: 'My Sites' },
-              { icon: Database, label: 'CMS Collections' },
               { icon: Mail, label: 'Inbox Messages' }
             ].map((link) => (
               <button
@@ -3506,6 +3426,93 @@ export default function DashboardLayout() {
                 ));
               }}
             />
+          )}
+        </AnimatePresence>
+
+        {/* Trial Gate Modal */}
+        <AnimatePresence>
+          {showTrialGateModal && (
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 backdrop-blur-sm"
+              onClick={() => setShowTrialGateModal(false)}
+            >
+              <motion.div 
+                initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+                className="bg-[#F8F5F2] border-[4px] border-black rounded-[32px] p-6 lg:p-8 max-w-md w-full shadow-[12px_12px_0px_rgba(0,0,0,1)] relative"
+                onClick={e => e.stopPropagation()}
+              >
+                <button 
+                  onClick={() => setShowTrialGateModal(false)} 
+                  className="absolute top-6 right-6 p-2 hover:bg-black/5 rounded-full transition-colors border border-transparent hover:border-black"
+                >
+                  <CloseIcon className="w-5 h-5" />
+                </button>
+
+                <div className="space-y-6 text-center">
+                  <div className="w-14 h-14 bg-amber-400 text-slate-900 border-[3px] border-black rounded-2xl flex items-center justify-center mx-auto shadow-[4px_4px_0px_rgba(0,0,0,1)] mt-2">
+                    <Globe className="w-7 h-7 text-black" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-[10px] bg-indigo-50 border-2 border-indigo-650 text-indigo-700 px-3 py-1 rounded-full font-black uppercase tracking-wider">
+                      Premium Custom Domain Feature
+                    </span>
+                    <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 pt-2">
+                      Connect Your Domain
+                    </h2>
+                    <p className="text-slate-500 text-xs leading-relaxed font-semibold">
+                      To route custom domains, launch your site online, and access premium traffic analytics, start your **1-Month Free Trial**!
+                    </p>
+                  </div>
+
+                  <div className="bg-white border-2 border-black rounded-2xl p-4 text-left space-y-2.5 shadow-[3px_3px_0px_rgba(0,0,0,1)] font-sans">
+                    <p className="text-[9px] font-black text-slate-700 uppercase tracking-widest border-b border-black/10 pb-1.5">What is included:</p>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" strokeWidth={3} />
+                      <span className="text-xs font-semibold text-slate-750">Unlimited custom domain connections</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" strokeWidth={3} />
+                      <span className="text-xs font-semibold text-slate-750">30-day risk-free preview trial period</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" strokeWidth={3} />
+                      <span className="text-xs font-semibold text-slate-750">Free SSL security & hosting on Vercel Edge</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2.5 pt-2">
+                    <button
+                      onClick={() => {
+                        localStorage.setItem('diy_plan_paid', 'true');
+                        setIsOnboardedPaid(true);
+                        setShowTrialGateModal(false);
+                        alert("🎉 Trial Subscribed! Custom Domain routing is now unlocked. You can now configure your domains.");
+                      }}
+                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md border-2 border-black hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_rgba(0,0,0,1)]"
+                    >
+                      Start 1-Month Free Trial ($0.00)
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowTrialGateModal(false);
+                        if (selectedSite) {
+                          setEditingSite(selectedSite);
+                        } else if (mySites.length > 0) {
+                          setEditingSite(mySites[0]);
+                        } else {
+                          setIsTemplateModalOpen(true);
+                        }
+                      }}
+                      className="w-full bg-white hover:bg-slate-50 text-slate-800 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all border-2 border-black hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_rgba(0,0,0,1)]"
+                    >
+                      Open Site Editor & Publish
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
           )}
         </AnimatePresence>
 

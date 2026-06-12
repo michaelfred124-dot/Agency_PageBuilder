@@ -33,13 +33,15 @@ export default async function AdminRevenuePage() {
       const subscriptions = await stripe.subscriptions.list({ status: 'active', limit: 100 });
       let stripeMRR = 0;
       for (const sub of subscriptions.data) {
-        const price = sub.items.data[0]?.price;
+        const item = sub.items.data[0];
+        const price = item?.price;
         if (price && price.unit_amount) {
           let amount = price.unit_amount / 100;
           if (price.recurring?.interval === 'year') {
             amount = amount / 12;
           }
-          stripeMRR += amount * sub.quantity;
+          const qty = item.quantity || 1;
+          stripeMRR += amount * qty;
         }
       }
       mrr = Math.round(stripeMRR);

@@ -20,7 +20,8 @@ const PRICING_PLANS = [
       "Connect custom domain",
       "Basic support"
     ],
-    color: '#3B82F6' // Blue
+    color: '#3B82F6', // Blue
+    trial: "1-Month Free Trial"
   },
   {
     name: "DFY Agency",
@@ -87,9 +88,22 @@ export default function PricingModal({ onClose, onSelectPlan }: PricingModalProp
               </h3>
               <p className="text-zinc-500 font-semibold uppercase tracking-wider text-[10px] min-h-[30px]">{plan.description}</p>
               
-              <div className="mb-6 flex items-baseline gap-1 mt-4">
-                <span className="text-4xl font-black tracking-tight text-black">{plan.price}</span>
-                <span className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">/month</span>
+              <div className="mb-6 flex flex-col mt-4">
+                {plan.trial ? (
+                  <div className="flex flex-col">
+                    <span className="text-indigo-650 font-black uppercase tracking-wider text-[10px] mb-1">🎁 {plan.trial}</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-black tracking-tight text-black">Free</span>
+                      <span className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">for 30 days</span>
+                    </div>
+                    <span className="text-[10px] text-zinc-500 font-bold mt-1">Then {plan.price}/month</span>
+                  </div>
+                ) : (
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-black tracking-tight text-black">{plan.price}</span>
+                    <span className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">/month</span>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-3 mb-8 flex-grow">
@@ -107,7 +121,7 @@ export default function PricingModal({ onClose, onSelectPlan }: PricingModalProp
                 onClick={() => onSelectPlan(plan.name)}
                 className="w-full py-3 border-2 border-black rounded-xl font-bold uppercase tracking-wider text-xs hover:bg-black hover:text-white transition-colors text-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer"
               >
-                Select {plan.name}
+                {plan.trial ? "Start Free Trial" : `Select ${plan.name}`}
               </button>
             </div>
           ))}

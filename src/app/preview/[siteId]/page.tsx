@@ -22,6 +22,8 @@ export default function PreviewPage() {
   const [dbTenantId, setDbTenantId] = useState<string>('');
 
   useEffect(() => {
+    if (!siteId) return;
+
     // 1. Get site metadata to retrieve templateKey and name
     const savedSitesRaw = localStorage.getItem('my-sites');
     let templateKey = '';
@@ -44,7 +46,7 @@ export default function PreviewPage() {
     }
 
     // Fallback template key if it is a template ID
-    if (!templateKey && siteId.startsWith('template-')) {
+    if (!templateKey && siteId && siteId.startsWith('template-')) {
       if (siteId.includes('restaurant')) templateKey = 'restaurant';
       else if (siteId.includes('lauren')) templateKey = 'lauren';
       else if (siteId.includes('greenscape')) templateKey = 'greenscape';

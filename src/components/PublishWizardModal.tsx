@@ -10,13 +10,15 @@ interface PublishWizardModalProps {
   isOnboardedPaid: boolean;
   onClose: () => void;
   onPublishInitial: () => Promise<any>; // Returns the updated site object with tenantId
+  onPlanSubscribed?: () => void;
 }
 
 export default function PublishWizardModal({ 
   site, 
   isOnboardedPaid,
   onClose, 
-  onPublishInitial 
+  onPublishInitial,
+  onPlanSubscribed
 }: PublishWizardModalProps) {
   // Step 1: Pricing (skip if already paid), Step 2: Publishing (loader), Step 3: Domain, Step 4: Final Success
   const initialStep = (site.planTier === 'DIY' && !isOnboardedPaid) ? 'plan' : 'publishing';
@@ -46,6 +48,9 @@ export default function PublishWizardModal({
   const handlePlanSelected = (planName: string) => {
     // Mark as paid in local storage for now (mock)
     localStorage.setItem('diy_plan_paid', 'true');
+    if (onPlanSubscribed) {
+      onPlanSubscribed();
+    }
     setStep('publishing');
   };
 
@@ -100,7 +105,7 @@ export default function PublishWizardModal({
                 <div className="grid md:grid-cols-2 gap-6 mt-4">
                   {[
                     {
-                      name: "DIY Plan", price: "$20", description: "Perfect for managing your own website.", color: '#3B82F6',
+                      name: "DIY Plan", price: "$20", description: "Perfect for managing your own website.", color: '#3B82F6', trial: "1-Month Free Trial",
                       features: ["Hosting & SSL included", "Unlimited edits via builder", "Connect custom domain", "Basic support"]
                     },
                     {
@@ -112,10 +117,25 @@ export default function PublishWizardModal({
                       {plan.popular && <div className="absolute -top-3 right-6 px-3 py-1 border-2 border-black rounded-full font-bold uppercase tracking-widest text-[10px] text-white bg-amber-500 shadow-[2px_2px_0px_rgba(0,0,0,1)]">Most Popular</div>}
                       <h3 className="text-xl font-extrabold uppercase tracking-tight mb-2" style={{ color: plan.color }}>{plan.name}</h3>
                       <p className="text-zinc-500 font-semibold uppercase tracking-wider text-[10px] min-h-[30px]">{plan.description}</p>
-                      <div className="mb-6 flex items-baseline gap-1 mt-4">
-                        <span className="text-4xl font-black tracking-tight text-black">{plan.price}</span>
-                        <span className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">/month</span>
+                      
+                      <div className="mb-6 flex flex-col mt-4">
+                        {plan.trial ? (
+                          <div className="flex flex-col">
+                            <span className="text-indigo-650 font-black uppercase tracking-wider text-[10px] mb-1">🎁 {plan.trial}</span>
+                            <div className="flex items-baseline gap-1">
+                              <span className="text-4xl font-black tracking-tight text-black">Free</span>
+                              <span className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">for 30 days</span>
+                            </div>
+                            <span className="text-[10px] text-zinc-500 font-bold mt-1">Then {plan.price}/month</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-4xl font-black tracking-tight text-black">{plan.price}</span>
+                            <span className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">/month</span>
+                          </div>
+                        )}
                       </div>
+
                       <div className="space-y-3 mb-8 flex-grow">
                         {plan.features.map((feature, j) => (
                           <div key={j} className="flex items-start gap-3">
@@ -125,7 +145,7 @@ export default function PublishWizardModal({
                         ))}
                       </div>
                       <button className="w-full py-3 border-2 border-black rounded-xl font-bold uppercase tracking-wider text-xs hover:bg-black hover:text-white transition-colors text-black bg-white shadow-[2px_2px_0px_rgba(0,0,0,1)]">
-                        Select {plan.name}
+                        {plan.trial ? "Start Free Trial" : `Select ${plan.name}`}
                       </button>
                     </div>
                   ))}

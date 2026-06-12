@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { getTenantBySubdomain, getPageData } from '@/lib/supabase';
 import { Renderers } from '@/lib/blocks';
 
+export const dynamic = 'force-dynamic';
+
 interface SiteFallbackPageProps {
   params: Promise<{
     subdomain: string;
