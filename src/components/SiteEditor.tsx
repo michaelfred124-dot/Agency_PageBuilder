@@ -86,13 +86,25 @@ const ELEMENT_TYPE_CONFIGS = [
   { type: 'Icon', label: 'Icon', icon: 'Sparkles', color: 'bg-cyan-100 text-cyan-700', desc: 'Lucide icon' },
   { type: 'ImageBox', label: 'Image Box', icon: 'LayoutGrid', color: 'bg-sky-100 text-sky-700', desc: 'Card with image' },
   { type: 'IconBox', label: 'Icon Box', icon: 'Layers', color: 'bg-teal-100 text-teal-700', desc: 'Feature list box' },
+  { type: 'BasicGallery', label: 'Basic Gallery', icon: 'LayoutGrid', color: 'bg-green-100 text-green-700', desc: 'Grid of images' },
+  { type: 'ImageCarousel', label: 'Image Carousel', icon: 'Images', color: 'bg-sky-100 text-sky-700', desc: 'Sliding image show' },
+  { type: 'IconList', label: 'Icon List', icon: 'List', color: 'bg-teal-100 text-teal-700', desc: 'List with custom icons' },
   { type: 'Counter', label: 'Counter', icon: 'Smile', color: 'bg-amber-100 text-amber-700', desc: 'Fun fact tracker' },
+  { type: 'Spacer', label: 'Spacer', icon: 'SeparatorHorizontal', color: 'bg-purple-100 text-purple-700', desc: 'Empty space' },
   { type: 'Testimonial', label: 'Testimonial', icon: 'MessageSquare', color: 'bg-pink-100 text-pink-700', desc: 'Client quote' },
-  { type: 'Alert', label: 'Alert', icon: 'AlertCircle', color: 'bg-rose-100 text-rose-700', desc: 'Notification message' },
+  { type: 'Tabs', label: 'Tabs', icon: 'Folder', color: 'bg-indigo-100 text-indigo-700', desc: 'Tabbed content sections' },
   { type: 'Accordion', label: 'Accordion', icon: 'Menu', color: 'bg-indigo-100 text-indigo-700', desc: 'Collapsible QA' },
-  { type: 'ProgressBar', label: 'Progress Bar', icon: 'SlidersHorizontal', color: 'bg-violet-100 text-violet-700', desc: 'Skill stats metric' },
+  { type: 'Toggle', label: 'Toggle', icon: 'ChevronDown', color: 'bg-amber-100 text-amber-700', desc: 'Independently collapsible FAQ' },
   { type: 'SocialIcons', label: 'Social Icons', icon: 'Share2', color: 'bg-blue-100 text-blue-700', desc: 'Profile links' },
+  { type: 'ProgressBar', label: 'Progress Bar', icon: 'SlidersHorizontal', color: 'bg-violet-100 text-violet-700', desc: 'Skill stats metric' },
+  { type: 'SoundCloud', label: 'SoundCloud', icon: 'Music', color: 'bg-orange-100 text-orange-700', desc: 'SoundCloud player' },
+  { type: 'Shortcode', label: 'Shortcode', icon: 'Brackets', color: 'bg-gray-100 text-gray-700', desc: 'Shortcode text box' },
+  { type: 'HTML', label: 'HTML', icon: 'Code', color: 'bg-red-100 text-red-700', desc: 'Custom HTML snippet' },
+  { type: 'MenuAnchor', label: 'Menu Anchor', icon: 'Anchor', color: 'bg-blue-100 text-blue-700', desc: 'Scroll anchor point' },
+  { type: 'Sidebar', label: 'Sidebar', icon: 'Columns', color: 'bg-purple-100 text-purple-700', desc: 'Sidebar widget area' },
+  { type: 'Alert', label: 'Alert', icon: 'AlertCircle', color: 'bg-rose-100 text-rose-700', desc: 'Notification message' },
 ];
+
 
 // --- Undo/Redo History Hook ---
 function useHistory<T>(initial: T) {
@@ -693,6 +705,41 @@ function EmptyCanvasDropZone() {
   );
 }
 
+const getDefaultInlineElementProps = (type: string) => {
+  switch (type) {
+    case 'Heading': return { text: 'New Heading Text' };
+    case 'Paragraph': return { text: 'New Paragraph Text goes here...' };
+    case 'Button': return { text: 'Click Here', link: '#', buttonStyle: 'filled' };
+    case 'Image': return { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800', alt: 'Image' };
+    case 'Spacer': return { height: '24px' };
+    case 'Container': return { elements: [] };
+    case 'Video': return { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' };
+    case 'GoogleMap': return { address: '1600 Amphitheatre Pkwy, Mountain View, CA', zoom: '14' };
+    case 'StarRating': return { rating: 5, color: '#f59e0b', size: '20px' };
+    case 'Icon': return { name: 'Sparkles', color: '#3b82f6', size: '36px' };
+    case 'ImageBox': return { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=600', title: 'Card Title', text: 'Card body text description goes here...' };
+    case 'IconBox': return { icon: 'Sparkles', title: 'Feature Title', text: 'Feature description text...' };
+    case 'Counter': return { target: '99', suffix: '+', text: 'Satisfied Clients' };
+    case 'Testimonial': return { quote: 'This tool changed our lives.', author: 'Jane Doe', designation: 'Product Owner', avatar: 'https://i.pravatar.cc/100?u=rating' };
+    case 'Alert': return { alertType: 'success', title: 'Alert Title', text: 'Alert description text.' };
+    case 'Accordion': return { items: [{ title: 'Item 1 title', content: 'Item 1 description.' }, { title: 'Item 2 title', content: 'Item 2 description.' }] };
+    case 'ProgressBar': return { title: 'My Metric', percent: '75', color: '#3b82f6' };
+    case 'SocialIcons': return { platforms: [{ name: 'facebook', link: '#' }, { name: 'twitter', link: '#' }, { name: 'instagram', link: '#' }] };
+    case 'BasicGallery': return { images: [{ url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=600' }, { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=600' }, { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600' }], columns: 3, spacing: '16px' };
+    case 'ImageCarousel': return { images: [{ url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800' }, { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=800' }, { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800' }], autoplay: true, speed: 3000 };
+    case 'IconList': return { items: [{ text: 'Premium Design Quality', icon: 'Sparkles' }, { text: '24/7 Priority Support', icon: 'CheckCircle' }, { text: 'Secure Transactions', icon: 'ShieldCheck' }], iconColor: '#3b82f6' };
+    case 'Tabs': return { items: [{ title: 'Overview', content: 'Our state-of-the-art solution is built for growing businesses looking to optimize their workflow and scale operations easily.' }, { title: 'Specifications', content: 'Compatible with all major web standards, fully visual layout builder, dynamic interactive elements, and sub-millisecond page loads.' }] };
+    case 'Toggle': return { items: [{ title: 'Is it mobile responsive?', content: 'Yes, all designs are fully mobile-responsive and look amazing on any device.' }, { title: 'Can I custom code?', content: 'Absolutely! Use the HTML or Shortcode widgets for custom integrations.' }] };
+    case 'SoundCloud': return { url: 'https://soundcloud.com/octobersveryown/drake-back-to-back', visual: true };
+    case 'Shortcode': return { code: '[newsletter-signup placeholder="Enter email..."]' };
+    case 'HTML': return { html: '<div class="p-6 bg-indigo-50 border-2 border-dashed border-indigo-200 rounded-xl text-center font-sans font-medium text-indigo-700">Custom HTML Rendering Area</div>' };
+    case 'MenuAnchor': return { anchorId: 'features' };
+    case 'Sidebar': return { title: 'Blog Sidebar', widgets: [{ type: 'search', title: 'Search Blog' }, { type: 'recent-posts', title: 'Recent Publications' }, { type: 'categories', title: 'Top Categories' }] };
+    case 'Divider': return {};
+    default: return {};
+  }
+};
+
 export default function SiteEditor({
   siteName,
   siteId,
@@ -995,7 +1042,8 @@ export default function SiteEditor({
       setSelectedSectionId(newSection.id);
       
       // Auto-select the newly added element if it's a primitive widget
-      if (['Heading', 'Paragraph', 'Button', 'Image', 'Spacer', 'Container'].includes(blockType)) {
+      const isInlineElement = ELEMENT_TYPE_CONFIGS.some(c => c.type === blockType);
+      if (isInlineElement) {
         setTimeout(() => {
           handleSelectElement(newSection.props.columns[0].elements[0].id, 0, 0);
         }, 50);
@@ -1112,24 +1160,7 @@ export default function SiteEditor({
       const newEl = {
         id: `el-${Date.now()}`,
         type: elType,
-        props: elType === 'Heading' ? { text: 'New Heading Text' } :
-               elType === 'Paragraph' ? { text: 'New Paragraph Text goes here...' } :
-               elType === 'Button' ? { text: 'Click Here', link: '#', buttonStyle: 'filled' } :
-               elType === 'Image' ? { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800', alt: 'Image' } :
-               elType === 'Spacer' ? { height: '24px' } :
-               elType === 'Container' ? { elements: [] } :
-               elType === 'Video' ? { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' } :
-               elType === 'GoogleMap' ? { address: '1600 Amphitheatre Pkwy, Mountain View, CA', zoom: '14' } :
-               elType === 'StarRating' ? { rating: 5, color: '#f59e0b', size: '20px' } :
-               elType === 'Icon' ? { name: 'Sparkles', color: '#3b82f6', size: '36px' } :
-               elType === 'ImageBox' ? { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=600', title: 'Card Title', text: 'Card body text description goes here...' } :
-               elType === 'IconBox' ? { icon: 'Sparkles', title: 'Feature Title', text: 'Feature description text...' } :
-               elType === 'Counter' ? { target: '99', suffix: '+', text: 'Satisfied Clients' } :
-               elType === 'Testimonial' ? { quote: 'This tool changed our lives.', author: 'Jane Doe', designation: 'Product Owner', avatar: 'https://i.pravatar.cc/100?u=rating' } :
-               elType === 'Alert' ? { alertType: 'success', title: 'Alert Title', text: 'Alert description text.' } :
-               elType === 'Accordion' ? { items: [{ title: 'Item 1 title', content: 'Item 1 description.' }, { title: 'Item 2 title', content: 'Item 2 description.' }] } :
-               elType === 'ProgressBar' ? { title: 'My Metric', percent: '75', color: '#3b82f6' } :
-               elType === 'SocialIcons' ? { platforms: [{ name: 'facebook', link: '#' }, { name: 'twitter', link: '#' }, { name: 'instagram', link: '#' }] } : {},
+        props: getDefaultInlineElementProps(elType),
         styleOverrides: elType === 'Container' ? {
           paddingTop: '16px',
           paddingBottom: '16px',
@@ -1221,7 +1252,8 @@ export default function SiteEditor({
   const addSection = (type: ComponentType | string, insertAtIndex?: number) => {
     let newSection: SectionData;
     
-    if (['Heading', 'Paragraph', 'Button', 'Image', 'Spacer', 'Container'].includes(type as string)) {
+    const isInlineElement = ELEMENT_TYPE_CONFIGS.some(c => c.type === type);
+    if (isInlineElement) {
       newSection = {
         id: `item-customsection-${Date.now()}`,
         type: 'CustomSection',
@@ -1234,12 +1266,7 @@ export default function SiteEditor({
                 {
                   id: `el-${Date.now()}`,
                   type: type,
-                  props: type === 'Heading' ? { text: 'New Heading Text' } :
-                         type === 'Paragraph' ? { text: 'New Paragraph Text goes here...' } :
-                         type === 'Button' ? { text: 'Click Here', link: '#', buttonStyle: 'filled' } :
-                         type === 'Image' ? { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800', alt: 'Image' } :
-                         type === 'Spacer' ? { height: '24px' } :
-                         type === 'Container' ? { elements: [] } : {},
+                  props: getDefaultInlineElementProps(type as string),
                   styleOverrides: type === 'Container' ? {
                     paddingTop: '16px',
                     paddingBottom: '16px',
@@ -1300,7 +1327,7 @@ export default function SiteEditor({
     setRightSidebarOpen(true);
     
     // Auto-select if it's a primitive widget
-    if (['Heading', 'Paragraph', 'Button', 'Image', 'Spacer', 'Container'].includes(type as string)) {
+    if (isInlineElement) {
       setTimeout(() => {
         handleSelectElement(newSection.props.columns[0].elements[0].id, 0, 0);
       }, 50);
@@ -1475,12 +1502,14 @@ export default function SiteEditor({
               <div className="col-span-2 text-[9px] font-bold text-gray-400 mb-1 select-none">
                 Drag basic widgets onto canvas
               </div>
-              <DraggableBlockItem type="Heading" description="Add a title" onClick={() => addSection('Heading')} />
-              <DraggableBlockItem type="Paragraph" description="Add text block" onClick={() => addSection('Paragraph')} />
-              <DraggableBlockItem type="Button" description="Clickable action" onClick={() => addSection('Button')} />
-              <DraggableBlockItem type="Image" description="Visual asset" onClick={() => addSection('Image')} />
-              <DraggableBlockItem type="Spacer" description="Empty space" onClick={() => addSection('Spacer')} />
-              <DraggableBlockItem type="CustomSection" description="Container Layout" onClick={() => addSection('CustomSection')} />
+              {ELEMENT_TYPE_CONFIGS.map(el => (
+                <DraggableBlockItem 
+                  key={el.type}
+                  type={el.type} 
+                  description={el.desc} 
+                  onClick={() => addSection(el.type)} 
+                />
+              ))}
             </div>
           </div>
         ) : leftPanelTab === 'blocks' ? (
@@ -2913,6 +2942,434 @@ export default function SiteEditor({
                             className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
                             placeholder="e.g. 24px"
                           />
+                        </div>
+                      )}
+                      {selectedElement.type === 'BasicGallery' && (
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Columns</label>
+                            <select
+                              value={selectedElement.props.columns || 3}
+                              onChange={(e) => updateProp('columns', parseInt(e.target.value) || 3)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-800 focus:outline-none focus:border-blue-400"
+                            >
+                              <option value={1}>1 Column</option>
+                              <option value={2}>2 Columns</option>
+                              <option value={3}>3 Columns</option>
+                              <option value={4}>4 Columns</option>
+                              <option value={6}>6 Columns</option>
+                            </select>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Spacing</label>
+                            <select
+                              value={selectedElement.props.spacing || '16px'}
+                              onChange={(e) => updateProp('spacing', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-800 focus:outline-none focus:border-blue-400"
+                            >
+                              <option value="8px">8px (Small)</option>
+                              <option value="16px">16px (Medium)</option>
+                              <option value="24px">24px (Large)</option>
+                              <option value="32px">32px (X-Large)</option>
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans font-black">Gallery Images</label>
+                            {((selectedElement.props.images || []) as any[]).map((img, idx) => (
+                              <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group space-y-2">
+                                <button 
+                                  onClick={() => {
+                                    const newImages = [...selectedElement.props.images];
+                                    newImages.splice(idx, 1);
+                                    updateProp('images', newImages);
+                                  }}
+                                  className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                                <div className="text-[9px] font-bold text-gray-400 uppercase">Image {idx + 1}</div>
+                                <div className="flex gap-2">
+                                  {img.url && (
+                                    <img src={img.url} className="w-10 h-10 object-cover rounded border border-gray-250 bg-white" alt="" />
+                                  )}
+                                  <input 
+                                    type="text"
+                                    value={img.url || ''}
+                                    onChange={(e) => {
+                                      const newImages = [...selectedElement.props.images];
+                                      newImages[idx] = { ...newImages[idx], url: e.target.value };
+                                      updateProp('images', newImages);
+                                    }}
+                                    placeholder="Image URL"
+                                    className="flex-1 bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => {
+                                const newImages = [...(selectedElement.props.images || []), { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=600' }];
+                                updateProp('images', newImages);
+                              }}
+                              className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                            >
+                              + Add Gallery Image
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      {selectedElement.type === 'ImageCarousel' && (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Autoplay</label>
+                            <input 
+                              type="checkbox"
+                              checked={!!selectedElement.props.autoplay}
+                              onChange={(e) => updateProp('autoplay', e.target.checked)}
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Speed (ms)</label>
+                            <input 
+                              type="number"
+                              value={selectedElement.props.speed || 3000}
+                              onChange={(e) => updateProp('speed', parseInt(e.target.value) || 3000)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                              placeholder="3000"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans font-black">Carousel Slides</label>
+                            {((selectedElement.props.images || []) as any[]).map((img, idx) => (
+                              <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group space-y-2">
+                                <button 
+                                  onClick={() => {
+                                    const newImages = [...selectedElement.props.images];
+                                    newImages.splice(idx, 1);
+                                    updateProp('images', newImages);
+                                  }}
+                                  className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                                <div className="text-[9px] font-bold text-gray-400 uppercase">Slide {idx + 1}</div>
+                                <div className="flex gap-2">
+                                  {img.url && (
+                                    <img src={img.url} className="w-10 h-10 object-cover rounded border border-gray-250 bg-white" alt="" />
+                                  )}
+                                  <input 
+                                    type="text"
+                                    value={img.url || ''}
+                                    onChange={(e) => {
+                                      const newImages = [...selectedElement.props.images];
+                                      newImages[idx] = { ...newImages[idx], url: e.target.value };
+                                      updateProp('images', newImages);
+                                    }}
+                                    placeholder="Slide Image URL"
+                                    className="flex-1 bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => {
+                                const newImages = [...(selectedElement.props.images || []), { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800' }];
+                                updateProp('images', newImages);
+                              }}
+                              className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                            >
+                              + Add Carousel Slide
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      {selectedElement.type === 'IconList' && (
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Global Icon Color</label>
+                            <div className="flex gap-2 items-center">
+                              <input 
+                                type="color"
+                                value={selectedElement.props.iconColor || '#3b82f6'}
+                                onChange={(e) => updateProp('iconColor', e.target.value)}
+                                className="w-8 h-8 rounded border border-gray-300 cursor-pointer p-0 bg-transparent shrink-0"
+                              />
+                              <input 
+                                type="text"
+                                value={selectedElement.props.iconColor || '#3b82f6'}
+                                onChange={(e) => updateProp('iconColor', e.target.value)}
+                                className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs font-mono text-gray-800 focus:bg-white focus:border-blue-400"
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans font-black">List Items</label>
+                            {((selectedElement.props.items || []) as any[]).map((item, idx) => (
+                              <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group space-y-2">
+                                <button 
+                                  onClick={() => {
+                                    const newItems = [...selectedElement.props.items];
+                                    newItems.splice(idx, 1);
+                                    updateProp('items', newItems);
+                                  }}
+                                  className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                                <div className="text-[9px] font-bold text-gray-400 uppercase">Item {idx + 1}</div>
+                                <input 
+                                  type="text"
+                                  value={item.icon || 'Sparkles'}
+                                  onChange={(e) => {
+                                    const newItems = [...selectedElement.props.items];
+                                    newItems[idx] = { ...newItems[idx], icon: e.target.value };
+                                    updateProp('items', newItems);
+                                  }}
+                                  placeholder="Icon Name (Lucide)"
+                                  className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                                />
+                                <input 
+                                  type="text"
+                                  value={item.text || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...selectedElement.props.items];
+                                    newItems[idx] = { ...newItems[idx], text: e.target.value };
+                                    updateProp('items', newItems);
+                                  }}
+                                  placeholder="Item Text"
+                                  className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                                />
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => {
+                                const newItems = [...(selectedElement.props.items || []), { text: 'New List Item', icon: 'CheckCircle' }];
+                                updateProp('items', newItems);
+                              }}
+                              className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                            >
+                              + Add List Item
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      {selectedElement.type === 'Tabs' && (
+                        <div className="space-y-4">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans font-black">Tab Items</label>
+                          {((selectedElement.props.items || []) as any[]).map((item, idx) => (
+                            <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group space-y-2">
+                              <button 
+                                onClick={() => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems.splice(idx, 1);
+                                  updateProp('items', newItems);
+                                }}
+                                className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                              <div className="text-[9px] font-bold text-gray-400 uppercase">Tab {idx + 1}</div>
+                              <input 
+                                type="text"
+                                value={item.title || ''}
+                                onChange={(e) => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems[idx] = { ...newItems[idx], title: e.target.value };
+                                  updateProp('items', newItems);
+                                }}
+                                placeholder="Tab Title"
+                                className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                              />
+                              <textarea 
+                                value={item.content || ''}
+                                onChange={(e) => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems[idx] = { ...newItems[idx], content: e.target.value };
+                                  updateProp('items', newItems);
+                                }}
+                                placeholder="Tab Content Description"
+                                className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none min-h-[60px]"
+                              />
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const newItems = [...(selectedElement.props.items || []), { title: 'New Tab Title', content: 'New tab content goes here...' }];
+                              updateProp('items', newItems);
+                            }}
+                            className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                          >
+                            + Add Tab Item
+                          </button>
+                        </div>
+                      )}
+                      {selectedElement.type === 'Toggle' && (
+                        <div className="space-y-4">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans font-black">Toggle Items</label>
+                          {((selectedElement.props.items || []) as any[]).map((item, idx) => (
+                            <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group space-y-2">
+                              <button 
+                                onClick={() => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems.splice(idx, 1);
+                                  updateProp('items', newItems);
+                                }}
+                                className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                              <div className="text-[9px] font-bold text-gray-400 uppercase">Toggle {idx + 1}</div>
+                              <input 
+                                type="text"
+                                value={item.title || ''}
+                                onChange={(e) => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems[idx] = { ...newItems[idx], title: e.target.value };
+                                  updateProp('items', newItems);
+                                }}
+                                placeholder="Toggle Title"
+                                className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                              />
+                              <textarea 
+                                value={item.content || ''}
+                                onChange={(e) => {
+                                  const newItems = [...selectedElement.props.items];
+                                  newItems[idx] = { ...newItems[idx], content: e.target.value };
+                                  updateProp('items', newItems);
+                                }}
+                                placeholder="Toggle content text..."
+                                className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none min-h-[60px]"
+                              />
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const newItems = [...(selectedElement.props.items || []), { title: 'New FAQ Question', content: 'New FAQ answer goes here...' }];
+                              updateProp('items', newItems);
+                            }}
+                            className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                          >
+                            + Add Toggle FAQ
+                          </button>
+                        </div>
+                      )}
+                      {selectedElement.type === 'SoundCloud' && (
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">SoundCloud Track URL</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.url || ''}
+                              onChange={(e) => updateProp('url', e.target.value)}
+                              placeholder="https://soundcloud.com/..."
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Visual Cover Art Player</label>
+                            <input 
+                              type="checkbox"
+                              checked={!!selectedElement.props.visual}
+                              onChange={(e) => updateProp('visual', e.target.checked)}
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
+                            />
+                          </div>
+                        </div>
+                      )}
+                      {selectedElement.type === 'Shortcode' && (
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Shortcode Text</label>
+                          <input 
+                            type="text"
+                            value={selectedElement.props.code || ''}
+                            onChange={(e) => updateProp('code', e.target.value)}
+                            placeholder="e.g. [newsletter-form id='1']"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs font-mono focus:bg-white focus:border-blue-400 focus:outline-none"
+                          />
+                        </div>
+                      )}
+                      {selectedElement.type === 'HTML' && (
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Raw HTML Markup</label>
+                          <textarea 
+                            value={selectedElement.props.html || ''}
+                            onChange={(e) => updateProp('html', e.target.value)}
+                            placeholder="<div>\n  <p>Hello HTML</p>\n</div>"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs font-mono focus:bg-white focus:border-blue-400 focus:outline-none min-h-[160px]"
+                          />
+                        </div>
+                      )}
+                      {selectedElement.type === 'MenuAnchor' && (
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Anchor ID (Without #)</label>
+                          <input 
+                            type="text"
+                            value={selectedElement.props.anchorId || ''}
+                            onChange={(e) => updateProp('anchorId', e.target.value)}
+                            placeholder="e.g. about-us, features"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                          />
+                          <p className="text-[9px] text-gray-400 leading-tight">Use this ID in a Button link or Menu item (e.g. <code>#features</code>) to scroll directly here.</p>
+                        </div>
+                      )}
+                      {selectedElement.type === 'Sidebar' && (
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans">Sidebar Heading Title</label>
+                            <input 
+                              type="text"
+                              value={selectedElement.props.title || ''}
+                              onChange={(e) => updateProp('title', e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:bg-white focus:border-blue-400 focus:outline-none"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block font-sans font-black">Widgets Installed</label>
+                            {((selectedElement.props.widgets || []) as any[]).map((w, idx) => (
+                              <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group space-y-2">
+                                <button 
+                                  onClick={() => {
+                                    const newWidgets = [...selectedElement.props.widgets];
+                                    newWidgets.splice(idx, 1);
+                                    updateProp('widgets', newWidgets);
+                                  }}
+                                  className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                                <div className="text-[9px] font-bold text-gray-400 uppercase">{w.type.replace('-', ' ')} Widget</div>
+                                <input 
+                                  type="text"
+                                  value={w.title || ''}
+                                  onChange={(e) => {
+                                    const newWidgets = [...selectedElement.props.widgets];
+                                    newWidgets[idx] = { ...newWidgets[idx], title: e.target.value };
+                                    updateProp('widgets', newWidgets);
+                                  }}
+                                  placeholder="Widget Title"
+                                  className="w-full bg-white border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-900 focus:outline-none"
+                                />
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => {
+                                const widgetType = window.prompt("Enter widget type (search, recent-posts, categories):", "search");
+                                if (!widgetType || !['search', 'recent-posts', 'categories'].includes(widgetType.toLowerCase().trim())) {
+                                  alert("Allowed types: search, recent-posts, categories");
+                                  return;
+                                }
+                                const cleanType = widgetType.toLowerCase().trim();
+                                const defaultTitle = cleanType === 'search' ? 'Search Blog' :
+                                                     cleanType === 'recent-posts' ? 'Recent Work' : 'Categories';
+                                const newWidgets = [...(selectedElement.props.widgets || []), { type: cleanType, title: defaultTitle }];
+                                updateProp('widgets', newWidgets);
+                              }}
+                              className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                            >
+                              + Add Sidebar Widget
+                            </button>
+                          </div>
                         </div>
                       )}
                     </div>
