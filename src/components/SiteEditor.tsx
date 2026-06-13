@@ -25,7 +25,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { ComponentType, SectionData, COMPONENT_SCHEMAS, Renderers } from '@/lib/blocks';
+import { ComponentType, SectionData, COMPONENT_SCHEMAS, Renderers, getDefaultInlineElementProps } from '@/lib/blocks';
 import { TEMPLATES } from '@/lib/templates';
 
 export type PageData = {
@@ -90,7 +90,7 @@ const ELEMENT_TYPE_CONFIGS = [
   { type: 'ImageCarousel', label: 'Image Carousel', icon: 'Images', color: 'bg-sky-100 text-sky-700', desc: 'Sliding image show' },
   { type: 'IconList', label: 'Icon List', icon: 'List', color: 'bg-teal-100 text-teal-700', desc: 'List with custom icons' },
   { type: 'Counter', label: 'Counter', icon: 'Smile', color: 'bg-amber-100 text-amber-700', desc: 'Fun fact tracker' },
-  { type: 'Spacer', label: 'Spacer', icon: 'SeparatorHorizontal', color: 'bg-purple-100 text-purple-700', desc: 'Empty space' },
+
   { type: 'Testimonial', label: 'Testimonial', icon: 'MessageSquare', color: 'bg-pink-100 text-pink-700', desc: 'Client quote' },
   { type: 'Tabs', label: 'Tabs', icon: 'Folder', color: 'bg-indigo-100 text-indigo-700', desc: 'Tabbed content sections' },
   { type: 'Accordion', label: 'Accordion', icon: 'Menu', color: 'bg-indigo-100 text-indigo-700', desc: 'Collapsible QA' },
@@ -224,7 +224,7 @@ function BlockPreview({ type }: { type: ComponentType | string }) {
 }
 
 // Draggable Sidebar Item for adding blocks
-function DraggableBlockItem({ type, description, onClick }: { type: ComponentType | string; description: string; onClick: () => void }) {
+function DraggableBlockItem({ type, description, onClick, iconName, label, color }: { type: ComponentType | string; description: string; onClick: () => void; iconName?: string; label?: string; color?: string; }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `new-block-${type}`,
     data: {
@@ -238,6 +238,8 @@ function DraggableBlockItem({ type, description, onClick }: { type: ComponentTyp
     zIndex: 9999,
   } : undefined;
 
+  const Icon = iconName ? ((LucideIcons as any)[iconName] || LucideIcons.Box) : null;
+
   return (
     <div
       ref={setNodeRef}
@@ -245,13 +247,26 @@ function DraggableBlockItem({ type, description, onClick }: { type: ComponentTyp
       {...listeners}
       {...attributes}
       onClick={onClick}
-      className={`w-full text-left p-2 bg-white border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all group flex flex-col gap-2 cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-40 border-dashed scale-95' : ''}`}
+      className={`w-full text-left bg-white border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-40 border-dashed scale-95' : ''} ${iconName ? 'p-3 rounded-lg items-center justify-center gap-1.5 aspect-square' : 'p-2 rounded-xl gap-2'}`}
     >
-      <BlockPreview type={type} />
-      <div className="px-1 flex flex-col gap-0.5">
-        <span className="font-semibold text-xs text-gray-800 group-hover:text-blue-600 transition-colors leading-tight">{type}</span>
-        <span className="text-[10px] font-medium text-gray-500 leading-none truncate">{description}</span>
-      </div>
+      {iconName ? (
+        <>
+          <div className={`w-8 h-8 rounded-md flex items-center justify-center transition-transform group-hover:scale-110 ${color || 'bg-slate-100 text-slate-700'}`}>
+            {Icon && <Icon size={16} strokeWidth={2} />}
+          </div>
+          <span className="text-[10px] font-semibold text-slate-600 group-hover:text-blue-600 transition-colors text-center leading-tight">
+            {label || type}
+          </span>
+        </>
+      ) : (
+        <>
+          <BlockPreview type={type} />
+          <div className="px-1 flex flex-col gap-0.5 w-full">
+            <span className="font-semibold text-xs text-gray-800 group-hover:text-blue-600 transition-colors leading-tight">{label || type}</span>
+            <span className="text-[10px] font-medium text-gray-500 leading-none truncate">{description}</span>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -705,40 +720,7 @@ function EmptyCanvasDropZone() {
   );
 }
 
-const getDefaultInlineElementProps = (type: string) => {
-  switch (type) {
-    case 'Heading': return { text: 'New Heading Text' };
-    case 'Paragraph': return { text: 'New Paragraph Text goes here...' };
-    case 'Button': return { text: 'Click Here', link: '#', buttonStyle: 'filled' };
-    case 'Image': return { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800', alt: 'Image' };
-    case 'Spacer': return { height: '24px' };
-    case 'Container': return { elements: [] };
-    case 'Video': return { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' };
-    case 'GoogleMap': return { address: '1600 Amphitheatre Pkwy, Mountain View, CA', zoom: '14' };
-    case 'StarRating': return { rating: 5, color: '#f59e0b', size: '20px' };
-    case 'Icon': return { name: 'Sparkles', color: '#3b82f6', size: '36px' };
-    case 'ImageBox': return { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=600', title: 'Card Title', text: 'Card body text description goes here...' };
-    case 'IconBox': return { icon: 'Sparkles', title: 'Feature Title', text: 'Feature description text...' };
-    case 'Counter': return { target: '99', suffix: '+', text: 'Satisfied Clients' };
-    case 'Testimonial': return { quote: 'This tool changed our lives.', author: 'Jane Doe', designation: 'Product Owner', avatar: 'https://i.pravatar.cc/100?u=rating' };
-    case 'Alert': return { alertType: 'success', title: 'Alert Title', text: 'Alert description text.' };
-    case 'Accordion': return { items: [{ title: 'Item 1 title', content: 'Item 1 description.' }, { title: 'Item 2 title', content: 'Item 2 description.' }] };
-    case 'ProgressBar': return { title: 'My Metric', percent: '75', color: '#3b82f6' };
-    case 'SocialIcons': return { platforms: [{ name: 'facebook', link: '#' }, { name: 'twitter', link: '#' }, { name: 'instagram', link: '#' }] };
-    case 'BasicGallery': return { images: [{ url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=600' }, { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=600' }, { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600' }], columns: 3, spacing: '16px' };
-    case 'ImageCarousel': return { images: [{ url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800' }, { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=800' }, { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800' }], autoplay: true, speed: 3000 };
-    case 'IconList': return { items: [{ text: 'Premium Design Quality', icon: 'Sparkles' }, { text: '24/7 Priority Support', icon: 'CheckCircle' }, { text: 'Secure Transactions', icon: 'ShieldCheck' }], iconColor: '#3b82f6' };
-    case 'Tabs': return { items: [{ title: 'Overview', content: 'Our state-of-the-art solution is built for growing businesses looking to optimize their workflow and scale operations easily.' }, { title: 'Specifications', content: 'Compatible with all major web standards, fully visual layout builder, dynamic interactive elements, and sub-millisecond page loads.' }] };
-    case 'Toggle': return { items: [{ title: 'Is it mobile responsive?', content: 'Yes, all designs are fully mobile-responsive and look amazing on any device.' }, { title: 'Can I custom code?', content: 'Absolutely! Use the HTML or Shortcode widgets for custom integrations.' }] };
-    case 'SoundCloud': return { url: 'https://soundcloud.com/octobersveryown/drake-back-to-back', visual: true };
-    case 'Shortcode': return { code: '[newsletter-signup placeholder="Enter email..."]' };
-    case 'HTML': return { html: '<div class="p-6 bg-indigo-50 border-2 border-dashed border-indigo-200 rounded-xl text-center font-sans font-medium text-indigo-700">Custom HTML Rendering Area</div>' };
-    case 'MenuAnchor': return { anchorId: 'features' };
-    case 'Sidebar': return { title: 'Blog Sidebar', widgets: [{ type: 'search', title: 'Search Blog' }, { type: 'recent-posts', title: 'Recent Publications' }, { type: 'categories', title: 'Top Categories' }] };
-    case 'Divider': return {};
-    default: return {};
-  }
-};
+
 
 export default function SiteEditor({
   siteName,
@@ -960,7 +942,8 @@ export default function SiteEditor({
       const blockType = active.data.current.blockType;
       let newSection: SectionData;
       
-      if (['Heading', 'Paragraph', 'Button', 'Image', 'Spacer', 'Container'].includes(blockType)) {
+      const isInlineEl = ELEMENT_TYPE_CONFIGS.some(c => c.type === blockType);
+      if (isInlineEl) {
         newSection = {
           id: `item-customsection-${Date.now()}`,
           type: 'CustomSection',
@@ -973,12 +956,7 @@ export default function SiteEditor({
                   {
                     id: `el-${Date.now()}`,
                     type: blockType,
-                    props: blockType === 'Heading' ? { text: 'New Heading Text' } :
-                           blockType === 'Paragraph' ? { text: 'New Paragraph Text goes here...' } :
-                           blockType === 'Button' ? { text: 'Click Here', link: '#', buttonStyle: 'filled' } :
-                           blockType === 'Image' ? { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800', alt: 'Image' } :
-                           blockType === 'Spacer' ? { height: '24px' } :
-                           blockType === 'Container' ? { elements: [] } : {},
+                    props: getDefaultInlineElementProps(blockType),
                     styleOverrides: blockType === 'Container' ? {
                       paddingTop: '16px',
                       paddingBottom: '16px',
@@ -1014,7 +992,7 @@ export default function SiteEditor({
         newSection = {
           id: `item-${blockType.toLowerCase()}-${Date.now()}`,
           type: blockType as ComponentType,
-          props: { ...COMPONENT_SCHEMAS[blockType].defaultProps },
+          props: { ...COMPONENT_SCHEMAS[blockType]?.defaultProps },
           styleOverrides: {
             paddingTop: '32px',
             paddingBottom: '32px',
@@ -1498,16 +1476,19 @@ export default function SiteEditor({
 
         {leftPanelTab === 'elements' ? (
           <div className="flex-1 overflow-y-auto pr-1 space-y-3 custom-scrollbar">
-            <div className="grid grid-cols-2 gap-2">
-              <div className="col-span-2 text-[9px] font-bold text-gray-400 mb-1 select-none">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="col-span-3 text-[9px] font-bold text-gray-400 mb-1 select-none">
                 Drag basic widgets onto canvas
               </div>
               {ELEMENT_TYPE_CONFIGS.map(el => (
                 <DraggableBlockItem 
                   key={el.type}
                   type={el.type} 
+                  label={el.label}
                   description={el.desc} 
                   onClick={() => addSection(el.type)} 
+                  iconName={el.icon}
+                  color={el.color}
                 />
               ))}
             </div>

@@ -1,4 +1,5 @@
-import React from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, Star } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { NW_SCHEMAS, NW_RENDERERS } from './blocks/northwood';
@@ -360,6 +361,109 @@ export const getHeroButtonClasses = (styleName: string, t: any) => {
   }
 };
 
+const InteractiveImageCarousel = ({ images, autoplay, speed }: { images: any[], autoplay: boolean, speed: number }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!autoplay || !images || images.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveIndex(prev => (prev + 1) % images.length);
+    }, speed || 3000);
+    return () => clearInterval(interval);
+  }, [autoplay, speed, images?.length]);
+
+  if (!images || images.length === 0) {
+    return (
+      <div className="w-full aspect-video bg-gray-100 flex items-center justify-center border-2 border-black rounded-2xl shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+        <span className="text-xs font-bold text-gray-400">No images added</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-slate-900 group">
+      {/* Slides */}
+      <div className="w-full h-full flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
+        {images.map((img, idx) => (
+          <div key={idx} className="w-full h-full shrink-0 relative">
+            <img src={img.url} className="w-full h-full object-cover" alt="" referrerPolicy="no-referrer" />
+          </div>
+        ))}
+      </div>
+
+      {/* Prev / Next buttons */}
+      {images.length > 1 && (
+        <>
+          <button 
+            onClick={() => setActiveIndex(prev => (prev - 1 + images.length) % images.length)}
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-black bg-white hover:bg-slate-50 flex items-center justify-center shadow-[2px_2px_0px_rgba(0,0,0,1)] text-slate-800 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            {(() => {
+              const Icon = LucideIcons.ChevronLeft;
+              return <Icon className="w-4 h-4" />;
+            })()}
+          </button>
+          <button 
+            onClick={() => setActiveIndex(prev => (prev + 1) % images.length)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-black bg-white hover:bg-slate-50 flex items-center justify-center shadow-[2px_2px_0px_rgba(0,0,0,1)] text-slate-800 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            {(() => {
+              const Icon = LucideIcons.ChevronRight;
+              return <Icon className="w-4 h-4" />;
+            })()}
+          </button>
+        </>
+      )}
+
+      {/* Dot Indicators */}
+      {images.length > 1 && (
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+          {images.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveIndex(idx)}
+              className={`w-2.5 h-2.5 rounded-full border-2 border-black transition-all ${idx === activeIndex ? 'bg-white scale-110' : 'bg-white/45'}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const InteractiveTabs = ({ items }: { items: any[] }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  if (!items || items.length === 0) {
+    return (
+      <div className="p-4 bg-gray-50 border-2 border-black rounded-2xl text-center text-xs font-bold text-gray-400">
+        No tabs defined
+      </div>
+    );
+  }
+
+  return (
+    <div className="border-2 border-black rounded-2xl bg-white overflow-hidden shadow-[4px_4px_0px_rgba(0,0,0,1)] text-left font-sans">
+      {/* Tab bar header */}
+      <div className="flex bg-slate-50 border-b border-black overflow-x-auto divide-x divide-black shrink-0">
+        {items.map((tab, idx) => (
+          <button
+            key={idx}
+            onClick={() => setActiveIndex(idx)}
+            className={`px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all hover:bg-white text-slate-800 shrink-0 ${idx === activeIndex ? 'bg-white text-indigo-600 border-b-2 border-b-indigo-600' : 'bg-slate-50'}`}
+          >
+            {tab.title || `Tab ${idx + 1}`}
+          </button>
+        ))}
+      </div>
+      {/* Content panel */}
+      <div className="p-5 text-slate-600 text-xs font-semibold leading-relaxed min-h-[85px] whitespace-pre-wrap">
+        {items[activeIndex]?.content || 'Tab content is empty.'}
+      </div>
+    </div>
+  );
+};
+
 const renderCustomElement = (el: any, handleUpdateElProp: any, isSelected: boolean, isEditable: boolean) => {
   switch (el.type) {
     case 'Heading':
@@ -545,6 +649,63 @@ const renderCustomElement = (el: any, handleUpdateElProp: any, isSelected: boole
         </div>
       );
     }
+    case 'BasicGallery': {
+      const images = el.props.images || [];
+      const columns = el.props.columns || 3;
+      const spacing = el.props.spacing || '16px';
+      const gridStyle = {
+        display: 'grid',
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+        gap: spacing,
+      };
+
+      if (images.length === 0) {
+        return (
+          <div className="p-5 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl text-center text-xs font-bold text-slate-400">
+            Empty Gallery (Add images in sidebar)
+          </div>
+        );
+      }
+      return (
+        <div style={gridStyle} className="w-full">
+          {images.map((img: any, idx: number) => (
+            <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-black/10 hover:scale-105 hover:rotate-1 transition-all duration-300 shadow-sm bg-slate-50">
+              <img src={img.url} className="w-full h-full object-cover" alt="" referrerPolicy="no-referrer" />
+            </div>
+          ))}
+        </div>
+      );
+    }
+    case 'ImageCarousel': {
+      return (
+        <InteractiveImageCarousel 
+          images={el.props.images || []}
+          autoplay={!!el.props.autoplay}
+          speed={el.props.speed || 3000}
+        />
+      );
+    }
+    case 'IconList': {
+      const items = el.props.items || [];
+      const iconColor = el.props.iconColor || '#3b82f6';
+      
+      if (items.length === 0) {
+        return <div className="text-xs text-gray-400 p-2 font-semibold">Empty Icon List</div>;
+      }
+      return (
+        <ul className="flex flex-col gap-2.5 text-left font-sans">
+          {items.map((item: any, idx: number) => {
+            const Icon = (LucideIcons as any)[item.icon] || LucideIcons.CheckCircle;
+            return (
+              <li key={idx} className="flex items-start gap-2.5 text-xs font-semibold text-slate-800">
+                <Icon className="w-4 h-4 shrink-0 mt-0.5" style={{ color: iconColor }} />
+                <span>{item.text || `List Item ${idx + 1}`}</span>
+              </li>
+            );
+          })}
+        </ul>
+      );
+    }
     case 'Counter':
       return (
         <div className="bg-white border-2 border-black p-4 rounded-2xl text-center shadow-[4px_4px_0px_rgba(0,0,0,1)]">
@@ -600,6 +761,258 @@ const renderCustomElement = (el: any, handleUpdateElProp: any, isSelected: boole
           </div>
         </div>
       );
+    case 'Tabs': {
+      return <InteractiveTabs items={el.props.items || []} />;
+    }
+    case 'Accordion': {
+      const items = el.props.items || [
+        { title: 'Item 1 title', content: 'Item 1 description.' },
+        { title: 'Item 2 title', content: 'Item 2 description.' }
+      ];
+      return (
+        <div className="border-2 border-black rounded-2xl bg-white overflow-hidden divide-y divide-black text-left shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+          {items.map((item: any, idx: number) => (
+            <details key={idx} className="group/details font-sans" open={idx === 0}>
+              <summary className="flex justify-between items-center px-4 py-3 cursor-pointer select-none font-bold text-xs text-slate-800 hover:bg-slate-50 uppercase tracking-wider">
+                <span>{item.title}</span>
+                {(() => {
+                  const ChevronIcon = LucideIcons.ChevronDown;
+                  return <ChevronIcon className="w-3.5 h-3.5 text-slate-400 group-open/details:rotate-180 transition-transform" />;
+                })()}
+              </summary>
+              <div className="px-4 py-3 bg-slate-50/50 text-[11px] font-semibold text-slate-650 border-t border-black/5 leading-relaxed">
+                {item.content}
+              </div>
+            </details>
+          ))}
+        </div>
+      );
+    }
+    case 'Toggle': {
+      const items = el.props.items || [];
+      if (items.length === 0) {
+        return <div className="text-xs text-gray-400 p-2 font-semibold">Empty Toggle Items</div>;
+      }
+      return (
+        <div className="flex flex-col gap-2.5 text-left w-full font-sans">
+          {items.map((item: any, idx: number) => (
+            <details key={idx} className="group/toggle border-2 border-black rounded-xl bg-white p-3.5 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+              <summary className="flex justify-between items-center cursor-pointer select-none font-bold text-xs text-slate-850 hover:text-black uppercase tracking-wider">
+                <span>{item.title || `FAQ Toggle ${idx + 1}`}</span>
+                {(() => {
+                  const ChevronIcon = LucideIcons.ChevronDown;
+                  return <ChevronIcon className="w-3.5 h-3.5 text-slate-400 group-open/toggle:rotate-180 transition-transform duration-150" />;
+                })()}
+              </summary>
+              <div className="mt-2 text-[10px] font-semibold text-slate-600 border-t border-black/5 pt-2 leading-relaxed whitespace-pre-wrap">
+                {item.content}
+              </div>
+            </details>
+          ))}
+        </div>
+      );
+    }
+    case 'SocialIcons': {
+      const platforms = el.props.platforms || [
+        { name: 'facebook', link: '#' },
+        { name: 'twitter', link: '#' },
+        { name: 'instagram', link: '#' }
+      ];
+      return (
+        <div className="flex flex-wrap gap-2.5 items-center justify-start">
+          {platforms.map((p: any) => {
+            const name = p.name?.toLowerCase();
+            const Icon = name === 'facebook' ? LucideIcons.Facebook :
+                         name === 'twitter' ? LucideIcons.Twitter :
+                         name === 'instagram' ? LucideIcons.Instagram :
+                         name === 'youtube' ? LucideIcons.Youtube :
+                         LucideIcons.Share2;
+            return (
+              <a 
+                key={p.name} 
+                href={isEditable ? undefined : (p.link || '#')} 
+                className="w-8 h-8 rounded-full border-2 border-black bg-white hover:bg-slate-50 flex items-center justify-center shadow-[2px_2px_0px_rgba(0,0,0,1)] text-slate-800 hover:text-black hover:-translate-y-0.5 transition-all cursor-pointer"
+              >
+                <Icon className="w-4 h-4" />
+              </a>
+            );
+          })}
+        </div>
+      );
+    }
+    case 'ProgressBar': {
+      const percent = Math.max(0, Math.min(100, parseInt(el.props.percent) || 50));
+      const color = el.props.color || '#3b82f6';
+      return (
+        <div className="space-y-1 text-left w-full font-sans">
+          <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-wider text-slate-650">
+            <EditableText 
+              value={el.props.title || 'My Metric'} 
+              onChange={(val) => handleUpdateElProp('title', val)} 
+              isEditable={!!isEditable}
+            />
+            <span className="font-mono">{percent}%</span>
+          </div>
+          <div className="w-full h-3.5 bg-slate-100 rounded-full border-2 border-black overflow-hidden relative shadow-inner">
+            <div style={{ width: `${percent}%`, backgroundColor: color }} className="h-full border-r-2 border-black rounded-l-full transition-all duration-300" />
+          </div>
+        </div>
+      );
+    }
+    case 'SoundCloud': {
+      const url = el.props.url || '';
+      const visual = !!el.props.visual;
+      
+      if (!url) {
+        return (
+          <div className="p-4 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl text-center text-xs font-bold text-slate-400 flex flex-col items-center gap-2">
+            {(() => {
+              const MusicIcon = LucideIcons.Music;
+              return <MusicIcon className="w-6 h-6 text-slate-450" />;
+            })()}
+            <span>No SoundCloud URL defined</span>
+          </div>
+        );
+      }
+
+      const encodedUrl = encodeURIComponent(url);
+      const visualParam = visual ? 'true' : 'false';
+      const height = visual ? '300' : '166';
+      const src = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=${visualParam}`;
+
+      return (
+        <div className="w-full border-2 border-black rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(0,0,0,1)] bg-slate-50">
+          <iframe 
+            width="100%" 
+            height={height} 
+            scrolling="no" 
+            frameBorder="no" 
+            allow="autoplay" 
+            src={src} 
+          />
+        </div>
+      );
+    }
+    case 'Shortcode': {
+      const code = el.props.code || '';
+      return (
+        <div className="bg-slate-950 border-2 border-black rounded-xl p-3 shadow-[3px_3px_0px_rgba(0,0,0,1)] text-left font-mono">
+          <div className="flex items-center gap-1.5 border-b border-white/10 pb-1.5 mb-1.5">
+            <div className="w-2 h-2 rounded-full bg-red-400" />
+            <div className="w-2 h-2 rounded-full bg-yellow-400" />
+            <div className="w-2 h-2 rounded-full bg-green-400" />
+            <span className="text-[8px] text-white/40 font-bold ml-1.5 uppercase font-sans">Shortcode</span>
+          </div>
+          <code className="text-emerald-450 text-[10px] font-semibold">{code || '[no_code_set]'}</code>
+        </div>
+      );
+    }
+    case 'HTML': {
+      const html = el.props.html || '';
+      if (!html) {
+        return (
+          <div className="p-4 bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl text-center text-xs font-bold text-slate-400">
+            Empty HTML block (Add markup in sidebar)
+          </div>
+        );
+      }
+      return <div dangerouslySetInnerHTML={{ __html: html }} className="w-full overflow-hidden text-left" />;
+    }
+    case 'MenuAnchor': {
+      const anchorId = el.props.anchorId || '';
+      return (
+        <div id={anchorId} className="relative w-full h-0 pointer-events-none">
+          {isEditable && (
+            <div className="absolute -top-3.5 left-2 bg-blue-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase shadow border border-blue-700 pointer-events-auto select-none z-10">
+              ⚓ Anchor: #{anchorId || 'empty'}
+            </div>
+          )}
+        </div>
+      );
+    }
+    case 'Sidebar': {
+      const title = el.props.title || 'Sidebar Navigation';
+      const widgets = el.props.widgets || [
+        { type: 'search', title: 'Search Blog' },
+        { type: 'recent-posts', title: 'Recent Publications' },
+        { type: 'categories', title: 'Top Categories' }
+      ];
+
+      return (
+        <div className="w-full flex flex-col gap-5 text-left font-sans bg-white border-2 border-black rounded-2xl p-4.5 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+          <h4 className="font-black text-slate-900 text-xs uppercase tracking-wider pb-1.5 border-b-2 border-black leading-none mt-1">
+            {title}
+          </h4>
+          <div className="flex flex-col gap-4">
+            {widgets.map((w: any, idx: number) => {
+              if (w.type === 'search') {
+                return (
+                  <div key={idx} className="space-y-1">
+                    <label className="text-[9px] font-black uppercase tracking-wider text-slate-400">{w.title || 'Search'}</label>
+                    <div className="flex border-2 border-black rounded-lg overflow-hidden shadow-[1.5px_1.5px_0px_rgba(0,0,0,1)]">
+                      <input 
+                        type="text" 
+                        placeholder="Search articles..." 
+                        disabled 
+                        className="flex-1 px-2.5 py-1 text-[11px] outline-none bg-slate-50/50"
+                      />
+                      <button disabled className="px-2.5 bg-slate-900 text-white flex items-center justify-center border-l border-black">
+                        {(() => {
+                          const SearchIcon = LucideIcons.Search;
+                          return <SearchIcon className="w-3 h-3" />;
+                        })()}
+                      </button>
+                    </div>
+                  </div>
+                );
+              }
+              if (w.type === 'recent-posts') {
+                return (
+                  <div key={idx} className="space-y-1.5">
+                    <label className="text-[9px] font-black uppercase tracking-wider text-slate-400">{w.title || 'Recent Posts'}</label>
+                    <ul className="flex flex-col gap-1.5 font-medium">
+                      {[
+                        { title: 'Designing beautiful UI/UX layouts', date: 'June 12, 2026' },
+                        { title: 'The future of visual page builders', date: 'May 30, 2026' },
+                        { title: 'Building scaleable React apps', date: 'April 15, 2026' }
+                      ].map((post, postIdx) => (
+                        <li key={postIdx} className="border-b border-slate-100 pb-1 last:border-0 last:pb-0">
+                          <h5 className="text-[11px] font-bold text-slate-800 hover:text-indigo-650 transition-colors leading-tight">
+                            {post.title}
+                          </h5>
+                          <span className="text-[8px] text-slate-450 block mt-0.5">{post.date}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              }
+              if (w.type === 'categories') {
+                return (
+                  <div key={idx} className="space-y-1.5">
+                    <label className="text-[9px] font-black uppercase tracking-wider text-slate-400">{w.title || 'Categories'}</label>
+                    <ul className="flex flex-col gap-1.5 font-bold">
+                      {[
+                        { name: 'Web Development', count: 18 },
+                        { name: 'UI & Design Systems', count: 12 },
+                        { name: 'Interactive Widgets', count: 9 },
+                        { name: 'SEO & Optimization', count: 6 }
+                      ].map((cat, catIdx) => (
+                        <li key={catIdx} className="flex justify-between items-center text-[11px] text-slate-700 hover:text-indigo-600 transition-colors cursor-pointer">
+                          <span>{cat.name}</span>
+                          <span className="bg-slate-50 px-1 py-0.5 rounded text-[8px] text-slate-500 border border-slate-200">{cat.count}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
+        </div>
+      );
+    }
     case 'Alert': {
       const type = el.props.alertType || 'success';
       const bg = type === 'success' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' :
@@ -706,6 +1119,41 @@ const renderCustomElement = (el: any, handleUpdateElProp: any, isSelected: boole
     }
     default:
       return null;
+  }
+};
+
+export const getDefaultInlineElementProps = (type: string): Record<string, any> => {
+  switch (type) {
+    case 'Heading': return { text: 'New Heading Text' };
+    case 'Paragraph': return { text: 'New Paragraph Text goes here...' };
+    case 'Button': return { text: 'Click Here', link: '#', buttonStyle: 'filled' };
+    case 'Image': return { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800', alt: 'Image' };
+    case 'Spacer': return { height: '24px' };
+    case 'Container': return { elements: [] };
+    case 'Video': return { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' };
+    case 'GoogleMap': return { address: '1600 Amphitheatre Pkwy, Mountain View, CA', zoom: '14' };
+    case 'StarRating': return { rating: 5, color: '#f59e0b', size: '20px' };
+    case 'Icon': return { name: 'Sparkles', color: '#3b82f6', size: '36px' };
+    case 'ImageBox': return { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=600', title: 'Card Title', text: 'Card body text description goes here...' };
+    case 'IconBox': return { icon: 'Sparkles', title: 'Feature Title', text: 'Feature description text...' };
+    case 'Counter': return { target: '99', suffix: '+', text: 'Satisfied Clients' };
+    case 'Testimonial': return { quote: 'This tool changed our lives.', author: 'Jane Doe', designation: 'Product Owner', avatar: 'https://i.pravatar.cc/100?u=rating' };
+    case 'Alert': return { alertType: 'success', title: 'Alert Title', text: 'Alert description text.' };
+    case 'Accordion': return { items: [{ title: 'Item 1 title', content: 'Item 1 description.' }, { title: 'Item 2 title', content: 'Item 2 description.' }] };
+    case 'ProgressBar': return { title: 'My Metric', percent: '75', color: '#3b82f6' };
+    case 'SocialIcons': return { platforms: [{ name: 'facebook', link: '#' }, { name: 'twitter', link: '#' }, { name: 'instagram', link: '#' }] };
+    case 'BasicGallery': return { images: [{ url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=600' }, { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=600' }, { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600' }], columns: 3, spacing: '16px' };
+    case 'ImageCarousel': return { images: [{ url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800' }, { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=800' }, { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800' }], autoplay: true, speed: 3000 };
+    case 'IconList': return { items: [{ text: 'Premium Design Quality', icon: 'Sparkles' }, { text: '24/7 Priority Support', icon: 'CheckCircle' }, { text: 'Secure Transactions', icon: 'ShieldCheck' }], iconColor: '#3b82f6' };
+    case 'Tabs': return { items: [{ title: 'Overview', content: 'Our state-of-the-art solution is built for growing businesses looking to optimize their workflow and scale operations easily.' }, { title: 'Specifications', content: 'Compatible with all major web standards, fully visual layout builder, dynamic interactive elements, and sub-millisecond page loads.' }] };
+    case 'Toggle': return { items: [{ title: 'Is it mobile responsive?', content: 'Yes, all designs are fully mobile-responsive and look amazing on any device.' }, { title: 'Can I custom code?', content: 'Absolutely! Use the HTML or Shortcode widgets for custom integrations.' }] };
+    case 'SoundCloud': return { url: 'https://soundcloud.com/octobersveryown/drake-back-to-back', visual: true };
+    case 'Shortcode': return { code: '[newsletter-signup placeholder="Enter email..."]' };
+    case 'HTML': return { html: '<div class="p-6 bg-indigo-50 border-2 border-dashed border-indigo-200 rounded-xl text-center font-sans font-medium text-indigo-700">Custom HTML Rendering Area</div>' };
+    case 'MenuAnchor': return { anchorId: 'features' };
+    case 'Sidebar': return { title: 'Blog Sidebar', widgets: [{ type: 'search', title: 'Search Blog' }, { type: 'recent-posts', title: 'Recent Publications' }, { type: 'categories', title: 'Top Categories' }] };
+    case 'Divider': return {};
+    default: return {};
   }
 };
 
@@ -1223,7 +1671,7 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
       </div>
     );
   },
-  CustomSection: ({ columns = [], isEditable, onPropChange, selectedElementId, onSelectElement, onDeleteElement, onMoveElement, scale = 1 }: any) => {
+  CustomSection: ({ columns = [], isEditable, onPropChange, selectedElementId, onSelectElement, onAddElement, onDeleteElement, onMoveElement, scale = 1 }: any) => {
     const handleDragStart = (e: React.DragEvent, cIdx: number, eIdx: number) => {
       e.stopPropagation();
       e.dataTransfer.effectAllowed = 'move';
@@ -1277,79 +1725,9 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
       }
     };
 
-    const handleAddElementAt = (colIdx: number, targetIdx: number, parentContainerElIdx?: number) => {
-      const allowedTypes = [
-        'Heading', 'Paragraph', 'Button', 'Image', 'Divider', 'Spacer', 'Container',
-        'Video', 'GoogleMap', 'StarRating', 'Icon', 'ImageBox', 'IconBox',
-        'Counter', 'Testimonial', 'Alert', 'Accordion', 'ProgressBar', 'SocialIcons'
-      ];
-      const elType = window.prompt(
-        "Choose element type:\n" +
-        "Heading, Paragraph, Button, Image, Divider, Spacer, Container,\n" +
-        "Video, GoogleMap, StarRating, Icon, ImageBox, IconBox,\n" +
-        "Counter, Testimonial, Alert, Accordion, ProgressBar, SocialIcons", 
-        "Heading"
-      );
-      if (!elType) return;
-      const cleanElType = elType.trim();
-      if (!allowedTypes.includes(cleanElType)) {
-        alert("Invalid element type!");
-        return;
-      }
-      
-      const newCols = JSON.parse(JSON.stringify(columns));
-      const newEl = {
-        id: `el-${Date.now()}`,
-        type: cleanElType,
-        props: cleanElType === 'Heading' ? { text: 'New Heading Text' } :
-               cleanElType === 'Paragraph' ? { text: 'New Paragraph Text goes here...' } :
-               cleanElType === 'Button' ? { text: 'New Button', link: '#', buttonStyle: 'filled' } :
-               cleanElType === 'Image' ? { url: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800' } :
-               cleanElType === 'Spacer' ? { height: '24px' } :
-               cleanElType === 'Container' ? { elements: [] } :
-               cleanElType === 'Video' ? { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' } :
-               cleanElType === 'GoogleMap' ? { address: '1600 Amphitheatre Pkwy, Mountain View, CA', zoom: '14' } :
-               cleanElType === 'StarRating' ? { rating: 5, color: '#f59e0b', size: '20px' } :
-               cleanElType === 'Icon' ? { name: 'Sparkles', color: '#3b82f6', size: '36px' } :
-               cleanElType === 'ImageBox' ? { url: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=600', title: 'Card Title', text: 'Card body text description goes here...' } :
-               cleanElType === 'IconBox' ? { icon: 'Sparkles', title: 'Feature Title', text: 'Feature description text...' } :
-               cleanElType === 'Counter' ? { target: '99', suffix: '+', text: 'Satisfied Clients' } :
-               cleanElType === 'Testimonial' ? { quote: 'This tool changed our lives.', author: 'Jane Doe', designation: 'Product Owner', avatar: 'https://i.pravatar.cc/100?u=rating' } :
-               cleanElType === 'Alert' ? { alertType: 'success', title: 'Alert Title', text: 'Alert description text.' } :
-               cleanElType === 'Accordion' ? { items: [{ title: 'Item 1 title', content: 'Item 1 description.' }, { title: 'Item 2 title', content: 'Item 2 description.' }] } :
-               cleanElType === 'ProgressBar' ? { title: 'My Metric', percent: '75', color: '#3b82f6' } :
-               cleanElType === 'SocialIcons' ? { platforms: [{ name: 'facebook', link: '#' }, { name: 'twitter', link: '#' }, { name: 'instagram', link: '#' }] } : {},
-        styleOverrides: {
-          color: '',
-          fontSize: '',
-          textAlign: 'left',
-          marginTop: '0px',
-          marginBottom: '12px'
-        } as any
-      };
-      
-      if (cleanElType === 'Container') {
-        newEl.styleOverrides = {
-          ...newEl.styleOverrides,
-          paddingTop: '16px',
-          paddingBottom: '16px',
-          paddingLeft: '16px',
-          paddingRight: '16px',
-          backgroundColor: '#f9fafb', // Light gray so it's visible by default
-          borderWidth: '1px',
-          borderColor: '#e5e7eb',
-          borderRadius: '8px'
-        };
-      }
-      
-      if (parentContainerElIdx !== undefined) {
-        newCols[colIdx].elements[parentContainerElIdx].props.elements = newCols[colIdx].elements[parentContainerElIdx].props.elements || [];
-        newCols[colIdx].elements[parentContainerElIdx].props.elements.splice(targetIdx, 0, newEl);
-      } else {
-        newCols[colIdx].elements.splice(targetIdx, 0, newEl);
-      }
-      
-      onPropChange?.('columns', newCols);
+    const handleAddElementAt = (colIdx: number, _targetIdx?: number, _parentContainerElIdx?: number) => {
+      // Open the professional modal in SiteEditor instead of window.prompt
+      onAddElement?.(colIdx);
     };
 
     return (
@@ -1367,7 +1745,7 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
               style={colStyle} 
               onDragOver={handleDragOver}
               onDrop={(e) => handleDropColumn(e, colIdx)}
-              className="flex flex-col gap-4 border-2 border-dashed border-transparent hover:border-black/15 p-4 rounded-xl relative transition-all"
+              className="flex flex-col gap-3 border-2 border-dashed border-transparent hover:border-black/15 p-3 rounded-xl relative transition-all"
             >
               {isEditable && colIdx < columns.length - 1 && (
                 <div 
@@ -1477,7 +1855,7 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
                       onDragStart={(e) => handleDragStart(e, colIdx, elIdx)}
                       onDragOver={handleDragOver}
                       onDrop={(e) => handleDrop(e, colIdx, elIdx + 1)}
-                      className={`relative group/el border-2 transition-all p-2 rounded-lg ${isEditable ? 'cursor-grab active:cursor-grabbing hover:border-blue-400/40 hover:bg-blue-50/5' : ''} 
+                      className={`relative group/el border-2 transition-all rounded-lg overflow-visible ${isEditable ? 'cursor-grab active:cursor-grabbing hover:border-blue-400/40' : ''} 
                         ${isSelected ? 'border-blue-500 ring-2 ring-blue-100/50 bg-blue-50/5' : 'border-transparent'}`}
                     >
                       {isEditable && isSelected && (
