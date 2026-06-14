@@ -1,24 +1,72 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 import { Check, Star, ArrowRight, Smile, Shield, Sparkles, Phone, MapPin, ChevronDown, Clock, Heart } from 'lucide-react';
 
 const BASE = '/work/clarity-dental';
 const NAVY = '#0C2340';
-const BLUE = '#0284C7';
-const LIGHT = '#F0F8FF';
+const SKY = '#0284C7';
+const ICE = '#F0F9FF';
+const MINT = '#DCFCE7';
+const WHITE = '#FFFFFF';
 
+/* ── Animated counter component ── */
+function AnimatedStat({ target, label, suffix = '+' }: { target: number; label: string; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const duration = 1500;
+          const startTime = performance.now();
+
+          const step = (now: number) => {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease-out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.round(eased * target));
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target]);
+
+  return (
+    <div ref={ref} className="text-center px-6 py-8">
+      <div
+        className="text-5xl md:text-6xl font-bold mb-2 tabular-nums"
+        style={{ fontFamily: 'var(--font-display)', color: WHITE }}
+      >
+        {count.toLocaleString()}{suffix}
+      </div>
+      <div className="text-xs font-bold uppercase tracking-widest" style={{ color: SKY }}>
+        {label}
+      </div>
+    </div>
+  );
+}
+
+/* ── Data ── */
 const SVCS = [
-  { icon: Smile, title: 'General & Preventive', tag: 'Foundation', price: 'Most insurances accepted', desc: 'Cleanings, X-rays, exams, and fillings. Preventive care that saves you money and pain long-term.', items: ['Teeth cleaning & polishing', 'Digital X-rays', 'Comprehensive exam', 'Sealants & fluoride', 'Gum disease treatment', 'Emergency same-day visits'] },
-  { icon: Sparkles, title: 'Cosmetic Dentistry', tag: 'Transform', price: 'Financing available', desc: 'From subtle whitening to complete smile makeovers. We help you achieve the smile you have always wanted.', items: ['Professional teeth whitening', 'Porcelain veneers', 'Dental bonding', 'Smile makeovers', 'Gum contouring', 'Tooth-colored fillings'] },
-  { icon: Shield, title: 'Restorative', tag: 'Repair', price: 'Same-week appointments', desc: 'Crowns, bridges, and dentures to replace damaged or missing teeth and restore full function.', items: ['Dental crowns & bridges', 'Partial & full dentures', 'Inlays & onlays', 'Root canal therapy', 'Tooth extractions', 'Bone grafting'] },
-  { icon: Heart, title: 'Implants & Ortho', tag: 'Specialty', price: 'Free consultation', desc: 'Permanent tooth replacement with implants and orthodontic treatment with Invisalign or braces.', items: ['Single & multiple implants', 'Implant-supported dentures', 'Invisalign for teens & adults', 'Traditional braces', 'Retainers', 'Free Invisalign consultation'] },
-];
-
-const STEPS = [
-  { n: '01', title: 'Book Your Visit', desc: 'Online in 60 seconds or call. New patients often seen within the same week.' },
-  { n: '02', title: 'Comprehensive Exam', desc: 'Full digital X-rays, gum health check, and exam by Dr. Patel or Dr. Kim. No rush.' },
-  { n: '03', title: 'Personalized Treatment Plan', desc: 'We explain everything clearly, prioritize by urgency, and present all options — no pressure.' },
-  { n: '04', title: 'Comfortable Care', desc: 'Sedation available. We check in throughout every procedure. You are always in control.' },
+  { icon: Smile, title: 'General & Preventive', category: 'General', price: 'From $89', desc: 'Cleanings, X-rays, exams, and fillings. Preventive care that saves you money and pain long-term.', items: ['Teeth cleaning & polishing', 'Digital X-rays', 'Comprehensive exam', 'Sealants & fluoride', 'Gum disease treatment', 'Emergency same-day visits'] },
+  { icon: Sparkles, title: 'Cosmetic Dentistry', category: 'Cosmetic', price: 'From $295', desc: 'From subtle whitening to complete smile makeovers. We help you achieve the smile you have always wanted.', items: ['Professional teeth whitening', 'Porcelain veneers', 'Dental bonding', 'Smile makeovers', 'Gum contouring', 'Tooth-colored fillings'] },
+  { icon: Shield, title: 'Restorative', category: 'Orthodontics', price: 'Same-week appts', desc: 'Crowns, bridges, and dentures to replace damaged or missing teeth and restore full function.', items: ['Dental crowns & bridges', 'Partial & full dentures', 'Inlays & onlays', 'Root canal therapy', 'Tooth extractions', 'Bone grafting'] },
+  { icon: Heart, title: 'Implants & Ortho', category: 'Emergency', price: 'Free consult', desc: 'Permanent tooth replacement with implants and orthodontic treatment with Invisalign or braces.', items: ['Single & multiple implants', 'Implant-supported dentures', 'Invisalign for teens & adults', 'Traditional braces', 'Retainers', 'Free Invisalign consultation'] },
 ];
 
 const INSURANCE = ['Delta Dental', 'Cigna', 'MetLife', 'Aetna', 'United Concordia', 'Guardian', 'Humana', 'BlueCross BlueShield'];
@@ -39,121 +87,219 @@ const FAQS = [
   { q: "What are your hours?", a: "Monday through Thursday 7:00am–7:00pm, Friday 7:00am–5:00pm, and Saturday 8:00am–3:00pm. We offer early morning, evening, and Saturday appointments specifically to accommodate working adults and families." },
 ];
 
+const CHECKPOINTS = [
+  "Digital X-rays & 3D cone beam imaging",
+  "Nitrous oxide & oral sedation available",
+  "Evening hours Mon–Thu until 7pm",
+  "Saturday morning appointments available",
+  "Online booking & text appointment reminders",
+];
+
 export default function ClarityDentalHome() {
   return (
     <>
-      {/* HERO */}
-      <section className="relative min-h-[82vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2068&auto=format&fit=crop" alt="" fill className="object-cover object-top" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(12,35,64,0.97) 0%, rgba(12,35,64,0.65) 55%, rgba(12,35,64,0.15) 100%)' }} />
-        </div>
-        <div className="relative z-10 px-8 md:px-16 max-w-2xl">
-          <div className="flex items-center gap-3 mb-6"><div className="w-8 h-px" style={{ backgroundColor: BLUE }} /><span className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/50">Denver, CO · All Ages · All Insurances</span></div>
-          <h1 className="text-5xl md:text-6xl font-serif text-white leading-tight mb-5">A healthier smile<br />starts here.</h1>
-          <p className="text-white/60 text-lg mb-10 max-w-md leading-relaxed">Compassionate, comprehensive dental care for families and individuals. General, cosmetic, restorative, implants, and orthodontics — all under one roof.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4 rounded-full" style={{ backgroundColor: BLUE }}>Book Appointment <ArrowRight className="w-4 h-4" /></Link>
-            <a href="tel:7205550139" className="inline-flex items-center gap-2 border border-white/30 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4 rounded-full"><Phone className="w-4 h-4" /> (720) 555-0139</a>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/15 text-white/55 font-bold uppercase tracking-widest text-[11px] px-8 py-4 rounded-full">Our Services</Link>
+      {/* HERO — asymmetric split screen */}
+      <section className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
+        {/* Left — NAVY dark panel */}
+        <div
+          className="flex flex-col justify-center px-10 md:px-14 py-20 md:py-0 order-1"
+          style={{ backgroundColor: NAVY }}
+        >
+          {/* Eyebrow */}
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-px" style={{ backgroundColor: SKY }} />
+            <span className="text-[9px] font-bold uppercase tracking-[0.45em] text-white/50">Denver, CO · Accepting New Patients</span>
           </div>
+
+          {/* Headline */}
+          <h1
+            className="text-5xl md:text-6xl lg:text-7xl text-white leading-tight mb-6"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 400 }}
+          >
+            Dentistry you&rsquo;ll actually look forward to.
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-white/55 text-lg leading-relaxed mb-10 max-w-md" style={{ fontWeight: 300 }}>
+            Compassionate, comprehensive dental care for families and individuals. General, cosmetic, restorative, implants, and orthodontics — all under one roof.
+          </p>
+
+          {/* CTA buttons */}
+          <div className="flex flex-wrap gap-3 mb-10">
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[10px] px-8 py-4"
+              style={{ backgroundColor: SKY }}
+            >
+              Book Appointment <ArrowRight className="w-4 h-4" />
+            </Link>
+            <a
+              href="tel:7205550139"
+              className="inline-flex items-center gap-2 border border-white/30 text-white font-bold uppercase tracking-widest text-[10px] px-8 py-4"
+            >
+              <Phone className="w-4 h-4" /> (720) 555-0139
+            </a>
+          </div>
+
+          {/* 3 quick-stat badges */}
+          <div className="flex flex-wrap gap-3">
+            {[
+              { val: '4.9★', sub: '480+ Reviews' },
+              { val: '20+', sub: 'Years Serving Denver' },
+              { val: 'Same-Day', sub: 'Emergency Visits' },
+            ].map((b, i) => (
+              <div key={i} className="px-4 py-3 border border-white/10 text-center">
+                <div className="text-white font-bold text-sm">{b.val}</div>
+                <div className="text-white/40 text-[9px] uppercase tracking-widest mt-0.5">{b.sub}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right — full photo */}
+        <div className="relative overflow-hidden order-2" style={{ minHeight: '50vh' }}>
+          <Image
+            src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2068&auto=format&fit=crop"
+            alt="Clarity Dental Studio"
+            fill
+            className="object-cover object-top"
+            referrerPolicy="no-referrer"
+            priority
+          />
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section style={{ backgroundColor: BLUE }} className="py-10">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {['Now Accepting New Patients', 'Same-Day Emergency Visits', 'All Major Insurances Accepted', 'Financing — 0% Interest'].map((s, i) => (
-            <div key={i} className="text-white font-bold text-sm">{s}</div>
-          ))}
+      {/* SIGNATURE ELEMENT — animated stats counters */}
+      <section style={{ backgroundColor: NAVY }} className="border-t border-white/5">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-white/5">
+          <AnimatedStat target={20} label="Years Serving Denver" />
+          <AnimatedStat target={15000} label="Smiles Transformed" />
+          <AnimatedStat target={98} label="% Patient Satisfaction" suffix="%" />
+          <AnimatedStat target={4} label="Doctors on Staff" />
         </div>
       </section>
 
       {/* SPECIAL OFFER BANNER */}
-      <section style={{ backgroundColor: LIGHT }} className="py-6 px-6 text-center border-b border-blue-100">
-        <p className="text-sm font-bold" style={{ color: NAVY }}>New Patient Special: Exam + X-Rays + Cleaning — <span style={{ color: BLUE }}>$89 (Reg. $290)</span> · <Link href={`${BASE}/contact`} className="underline">Book Online Now</Link></p>
+      <section style={{ backgroundColor: ICE }} className="py-5 px-6 text-center border-b border-sky-100">
+        <p className="text-sm font-bold" style={{ color: NAVY }}>
+          New Patient Special: Exam + X-Rays + Cleaning —{' '}
+          <span style={{ color: SKY }}>$89 (Reg. $290)</span>{' '}
+          ·{' '}
+          <Link href={`${BASE}/contact`} className="underline">Book Online Now</Link>
+        </p>
       </section>
 
-      {/* SERVICES */}
-      <section style={{ backgroundColor: LIGHT }} className="py-24 px-6 md:px-12">
+      {/* SERVICES — 4-category grid with icon + category + items + price */}
+      <section style={{ backgroundColor: ICE }} className="py-24 px-6 md:px-12">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: BLUE }}>What We Offer</div>
-            <h2 className="text-4xl font-serif mb-3" style={{ color: NAVY }}>Everything Your Smile Needs</h2>
+            <p className="text-[9px] font-bold uppercase tracking-[0.45em] mb-4" style={{ color: SKY }}>What We Offer</p>
+            <h2
+              className="text-4xl md:text-5xl mb-3"
+              style={{ fontFamily: 'var(--font-display)', color: NAVY }}
+            >
+              Everything Your Smile Needs
+            </h2>
             <p className="text-gray-500 text-sm max-w-md mx-auto">One office, one team, complete dental care. We treat patients aged 3 to 93.</p>
           </div>
           <div className="grid sm:grid-cols-2 gap-6">
-            {SVCS.map(({ icon: Icon, title, tag, price, desc, items }, i) => (
-              <div key={i} className="bg-white p-8 rounded-lg shadow-sm">
+            {SVCS.map(({ icon: Icon, title, category, price, desc, items }, i) => (
+              <div key={i} className="bg-white p-8 border border-sky-50">
                 <div className="flex items-start justify-between mb-5">
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ backgroundColor: BLUE + '15' }}>
-                    <Icon className="w-5 h-5" style={{ color: BLUE }} strokeWidth={1.5} />
+                  <div>
+                    <div
+                      className="text-[9px] font-bold uppercase tracking-widest mb-2"
+                      style={{ color: SKY }}
+                    >
+                      {category}
+                    </div>
+                    <div className="w-10 h-10 flex items-center justify-center" style={{ backgroundColor: SKY + '12' }}>
+                      <Icon className="w-5 h-5" style={{ color: SKY }} strokeWidth={1.5} />
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-[9px] font-bold uppercase tracking-widest mb-1" style={{ color: BLUE }}>{tag}</div>
-                    <div className="text-[10px] text-gray-400">{price}</div>
-                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 text-white" style={{ backgroundColor: NAVY }}>
+                    {price}
+                  </span>
                 </div>
-                <h3 className="font-bold text-lg mb-2" style={{ color: NAVY }}>{title}</h3>
+                <h3
+                  className="text-2xl mb-2"
+                  style={{ fontFamily: 'var(--font-display)', color: NAVY }}
+                >
+                  {title}
+                </h3>
                 <p className="text-gray-500 text-sm leading-relaxed mb-5">{desc}</p>
                 <ul className="grid grid-cols-2 gap-1.5">
-                  {items.map((item, j) => <li key={j} className="flex items-center gap-1.5 text-xs text-gray-400"><Check className="w-3 h-3 shrink-0" style={{ color: BLUE }} />{item}</li>)}
+                  {items.map((item, j) => (
+                    <li key={j} className="flex items-center gap-1.5 text-xs text-gray-400">
+                      <Check className="w-3 h-3 shrink-0" style={{ color: SKY }} />{item}
+                    </li>
+                  ))}
                 </ul>
               </div>
             ))}
           </div>
           <div className="text-center mt-10">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4 rounded-full" style={{ backgroundColor: NAVY }}>Full Services & Pricing <ArrowRight className="w-4 h-4" /></Link>
+            <Link
+              href={`${BASE}/services`}
+              className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[10px] px-10 py-4"
+              style={{ backgroundColor: NAVY }}
+            >
+              Full Services & Pricing <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section style={{ backgroundColor: NAVY }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: BLUE }}>Your Visit</div>
-            <h2 className="text-4xl font-serif text-white">What to Expect</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {STEPS.map(({ n, title, desc }, i) => (
-              <div key={i} className="text-center">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-serif font-bold text-lg text-white" style={{ backgroundColor: BLUE }}>{n}</div>
-                <h3 className="font-bold text-white text-sm mb-2">{title}</h3>
-                <p className="text-white/35 text-xs leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PRACTICE SPLIT */}
-      <section className="grid lg:grid-cols-2 min-h-[55vh]">
-        <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
-          <Image src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
-        </div>
-        <div className="flex items-center px-10 md:px-16 py-16" style={{ backgroundColor: NAVY }}>
+      {/* WHY CHOOSE US — ICE background, doctor photo right, text left */}
+      <section style={{ backgroundColor: WHITE }} className="grid lg:grid-cols-2 min-h-[55vh]">
+        <div className="flex items-center px-10 md:px-16 py-16" style={{ backgroundColor: ICE }}>
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-5" style={{ color: BLUE }}>Our Practice</div>
-            <h2 className="text-4xl font-serif text-white mb-6">Dental care that puts you at ease.</h2>
-            <p className="text-white/50 leading-relaxed mb-8">Dr. Anita Patel and Dr. Marcus Kim built Clarity around one principle: every patient deserves to feel comfortable, informed, and respected — not rushed, judged, or scared.</p>
+            <p className="text-[9px] font-bold uppercase tracking-[0.45em] mb-5" style={{ color: SKY }}>Our Practice</p>
+            <h2
+              className="text-4xl md:text-5xl mb-6 leading-tight"
+              style={{ fontFamily: 'var(--font-display)', color: NAVY }}
+            >
+              Dental care that puts you at ease.
+            </h2>
+            <p className="text-gray-500 leading-relaxed mb-8">
+              Dr. Anita Patel and Dr. Marcus Kim built Clarity around one principle: every patient deserves to feel comfortable, informed, and respected — not rushed, judged, or scared.
+            </p>
             <div className="space-y-3 mb-8">
-              {["Digital X-rays & 3D cone beam imaging", "Nitrous oxide & oral sedation available", "Evening hours Mon–Thu until 7pm", "Saturday morning appointments available", "Online booking & text appointment reminders", "No surprise billing — transparent estimates"].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-white/50"><Check className="w-4 h-4 shrink-0" style={{ color: BLUE }} />{p}</div>
+              {CHECKPOINTS.map((p, i) => (
+                <div key={i} className="flex items-center gap-3 text-sm text-gray-600">
+                  <Check className="w-4 h-4 shrink-0" style={{ color: SKY }} />{p}
+                </div>
               ))}
             </div>
-            <Link href={`${BASE}/about`} className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b pb-0.5" style={{ color: BLUE, borderColor: BLUE }}>Meet Dr. Patel & Dr. Kim <ArrowRight className="w-3.5 h-3.5" /></Link>
+            <Link
+              href={`${BASE}/about`}
+              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b pb-0.5"
+              style={{ color: SKY, borderColor: SKY }}
+            >
+              Meet Dr. Patel & Dr. Kim <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
+        </div>
+        <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
+          <Image
+            src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=2070&auto=format&fit=crop"
+            alt=""
+            fill
+            className="object-cover"
+            referrerPolicy="no-referrer"
+          />
         </div>
       </section>
 
       {/* INSURANCE STRIP */}
-      <section style={{ backgroundColor: LIGHT }} className="py-12 px-6 md:px-12 border-y border-blue-100">
+      <section style={{ backgroundColor: ICE }} className="py-12 px-6 md:px-12 border-y border-sky-100">
         <div className="max-w-5xl mx-auto text-center">
-          <div className="text-[10px] font-bold uppercase tracking-widest mb-6" style={{ color: NAVY }}>Insurance Partners</div>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="text-[9px] font-bold uppercase tracking-widest mb-6" style={{ color: NAVY }}>Insurance Partners</div>
+          <div className="flex flex-wrap justify-center gap-3">
             {INSURANCE.map((ins, i) => (
-              <span key={i} className="px-4 py-2 bg-white border border-blue-100 text-xs font-bold text-gray-500 rounded-full">{ins}</span>
+              <span key={i} className="px-4 py-2 bg-white border border-sky-100 text-xs font-bold text-gray-500">
+                {ins}
+              </span>
             ))}
           </div>
           <p className="text-gray-400 text-xs mt-5">No insurance? Ask about our in-house Clarity Care Plan — flat-rate annual fee, no waiting periods.</p>
@@ -161,24 +307,71 @@ export default function ClarityDentalHome() {
       </section>
 
       {/* REVIEWS */}
-      <section style={{ backgroundColor: LIGHT }} className="py-20 px-6 md:px-12">
+      <section style={{ backgroundColor: ICE }} className="py-20 px-6 md:px-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: BLUE }}>Patient Reviews</div>
-            <h2 className="text-4xl font-serif mb-2" style={{ color: NAVY }}>4.9 Stars on Google</h2>
+            <p className="text-[9px] font-bold uppercase tracking-[0.45em] mb-4" style={{ color: SKY }}>Patient Reviews</p>
+            <h2
+              className="text-4xl md:text-5xl mb-2"
+              style={{ fontFamily: 'var(--font-display)', color: NAVY }}
+            >
+              4.9 Stars on Google
+            </h2>
             <p className="text-gray-400 text-sm">480+ verified patient reviews</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white p-7 rounded-lg shadow-sm">
-                <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: BLUE }} />)}</div>
-                <p className="text-gray-600 italic text-sm leading-relaxed mb-4">"{r.text}"</p>
-                <div className="font-bold text-xs" style={{ color: NAVY }}>— {r.author} <span className="text-gray-400 font-normal">· {r.service}</span></div>
+              <div key={i} className="bg-white p-7 border-t-4" style={{ borderTopColor: SKY }}>
+                <div className="flex mb-3">
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: SKY }} />)}
+                </div>
+                <p className="text-gray-600 italic text-sm leading-relaxed mb-5">"{r.text}"</p>
+                <div className="font-bold text-xs" style={{ color: NAVY }}>
+                  — {r.author} <span className="text-gray-400 font-normal">· {r.service}</span>
+                </div>
               </div>
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="text-[10px] font-bold uppercase tracking-widest" style={{ color: BLUE }}>Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" /></Link>
+            <Link
+              href={`${BASE}/reviews`}
+              className="text-[10px] font-bold uppercase tracking-widest"
+              style={{ color: SKY }}
+            >
+              Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* NEW PATIENTS — MINT/green background with special offer */}
+      <section style={{ backgroundColor: MINT }} className="py-16 px-6 md:px-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[9px] font-bold uppercase tracking-[0.45em] mb-4" style={{ color: '#166534' }}>New Patients</p>
+          <h2
+            className="text-4xl md:text-5xl mb-4"
+            style={{ fontFamily: 'var(--font-display)', color: NAVY }}
+          >
+            Start with our $89 New Patient Special
+          </h2>
+          <p className="text-gray-600 text-sm leading-relaxed mb-8 max-w-xl mx-auto">
+            Includes full exam, digital X-rays, and professional cleaning. Regular value $290. We accept most major insurance plans — and if you have none, we have options.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[10px] px-10 py-4"
+              style={{ backgroundColor: NAVY }}
+            >
+              Claim This Offer <ArrowRight className="w-4 h-4" />
+            </Link>
+            <a
+              href="tel:7205550139"
+              className="inline-flex items-center gap-2 border font-bold uppercase tracking-widest text-[10px] px-10 py-4"
+              style={{ borderColor: NAVY, color: NAVY }}
+            >
+              <Phone className="w-4 h-4" /> Call to Schedule
+            </a>
           </div>
         </div>
       </section>
@@ -187,15 +380,20 @@ export default function ClarityDentalHome() {
       <section className="py-24 px-6 md:px-12 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: BLUE }}>FAQ</div>
-            <h2 className="text-4xl font-serif" style={{ color: NAVY }}>Patient Questions Answered</h2>
+            <p className="text-[9px] font-bold uppercase tracking-[0.45em] mb-4" style={{ color: SKY }}>FAQ</p>
+            <h2
+              className="text-4xl md:text-5xl"
+              style={{ fontFamily: 'var(--font-display)', color: NAVY }}
+            >
+              Patient Questions Answered
+            </h2>
           </div>
           <div className="divide-y divide-gray-100">
             {FAQS.map(({ q, a }, i) => (
               <details key={i} className="group py-5">
                 <summary className="flex items-center justify-between cursor-pointer gap-4">
                   <span className="font-bold text-sm leading-snug" style={{ color: NAVY }}>{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: BLUE }} />
+                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: SKY }} />
                 </summary>
                 <p className="mt-4 text-gray-500 text-sm leading-relaxed">{a}</p>
               </details>
@@ -208,36 +406,62 @@ export default function ClarityDentalHome() {
       <section style={{ backgroundColor: NAVY }} className="py-16 px-6 md:px-12">
         <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10">
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: BLUE }}>Our Office</div>
-            <div className="flex items-start gap-2 text-white/65 text-sm">
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: BLUE }} />
+            <div className="text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: SKY }}>Our Office</div>
+            <div className="flex items-start gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.65)' }}>
+              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: SKY }} />
               <span>720 S Colorado Blvd, Suite 550<br />Denver, CO 80246</span>
             </div>
           </div>
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: BLUE }}>Office Hours</div>
-            <div className="text-white/65 text-sm space-y-1">
+            <div className="text-[9px] font-bold uppercase tracking-widest mb-3" style={{ color: SKY }}>Office Hours</div>
+            <div className="text-sm space-y-1" style={{ color: 'rgba(255,255,255,0.65)' }}>
               <div>Mon – Thu: 7:00am – 7:00pm</div>
               <div>Friday: 7:00am – 5:00pm</div>
               <div>Saturday: 8:00am – 3:00pm</div>
-              <div className="text-white/30">Sunday: Closed</div>
+              <div style={{ color: 'rgba(255,255,255,0.3)' }}>Sunday: Closed</div>
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: BLUE }}>Contact Us</div>
-            <a href="tel:7205550139" className="inline-flex items-center gap-2 text-white font-bold text-base"><Phone className="w-4 h-4" style={{ color: BLUE }} /> (720) 555-0139</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-7 py-3 rounded-full" style={{ backgroundColor: BLUE }}>Book an Appointment <ArrowRight className="w-3.5 h-3.5" /></Link>
+            <div className="text-[9px] font-bold uppercase tracking-widest mb-1" style={{ color: SKY }}>Contact Us</div>
+            <a href="tel:7205550139" className="inline-flex items-center gap-2 text-white font-bold text-base">
+              <Phone className="w-4 h-4" style={{ color: SKY }} /> (720) 555-0139
+            </a>
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[10px] px-7 py-3"
+              style={{ backgroundColor: SKY }}
+            >
+              Book an Appointment <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* FINAL CTA */}
-      <section style={{ backgroundColor: BLUE }} className="py-16 px-6 text-center">
-        <h2 className="text-3xl font-serif text-white mb-4">New patients welcome. Same-week appointments available.</h2>
-        <p className="text-white/70 mb-8 max-w-xl mx-auto">Accepting most insurance plans. Flexible payment options for all patients. Morning, evening, and Saturday hours for busy families.</p>
+      <section style={{ backgroundColor: SKY }} className="py-16 px-6 text-center">
+        <h2
+          className="text-3xl md:text-4xl text-white mb-4"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          New patients welcome. Same-week appointments available.
+        </h2>
+        <p className="text-white/70 mb-8 max-w-xl mx-auto text-sm">
+          Accepting most insurance plans. Flexible payment options for all patients. Morning, evening, and Saturday hours for busy families.
+        </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-bold uppercase tracking-widest text-[11px] px-10 py-4 rounded-full" style={{ color: NAVY }}>Book Online Now <ArrowRight className="w-4 h-4" /></Link>
-          <a href="tel:7205550139" className="inline-flex items-center gap-2 border-2 border-white text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4 rounded-full"><Clock className="w-4 h-4" /> Same-Day Emergency Line</a>
+          <Link
+            href={`${BASE}/contact`}
+            className="inline-flex items-center gap-2 bg-white font-bold uppercase tracking-widest text-[10px] px-10 py-4"
+            style={{ color: NAVY }}
+          >
+            Book Online Now <ArrowRight className="w-4 h-4" />
+          </Link>
+          <a
+            href="tel:7205550139"
+            className="inline-flex items-center gap-2 border-2 border-white text-white font-bold uppercase tracking-widest text-[10px] px-10 py-4"
+          >
+            <Clock className="w-4 h-4" /> Same-Day Emergency Line
+          </a>
         </div>
       </section>
     </>
