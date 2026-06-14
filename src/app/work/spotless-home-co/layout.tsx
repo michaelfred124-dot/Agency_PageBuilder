@@ -1,7 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { Sparkles, Phone, Mail, MapPin } from 'lucide-react';
+import { Nunito } from 'next/font/google';
 import SCNav from '@/components/templates/sc/Nav';
+
+const nunito = Nunito({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-display', display: 'swap' });
 
 const BASE = '/work/spotless-home-co';
 const TEAL = '#0694A2';
@@ -9,7 +12,7 @@ const DARK = '#134E4A';
 
 export default function SpotlessLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen font-sans bg-white text-gray-800">
+    <div className={`${nunito.variable} min-h-screen bg-white text-gray-800`} style={{ fontFamily: 'var(--font-display)' }}>
       <SCNav />
       <main>{children}</main>
       <footer style={{ backgroundColor: DARK }} className="text-white pt-14 pb-8 px-6 md:px-12">

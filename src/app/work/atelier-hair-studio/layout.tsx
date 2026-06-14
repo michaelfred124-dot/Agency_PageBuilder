@@ -1,7 +1,23 @@
 import React from 'react';
 import Link from 'next/link';
 import { Scissors, Phone, Mail, MapPin, Instagram } from 'lucide-react';
+import { Cormorant_Garamond, Jost } from 'next/font/google';
 import AHNav from '@/components/templates/ah/Nav';
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const jost = Jost({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-body',
+  display: 'swap',
+});
 
 const BASE = '/work/atelier-hair-studio';
 const CHARCOAL = '#1A1A1A';
@@ -10,16 +26,16 @@ const BLUSH = '#F2DCE2';
 
 export default function AtelierLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen font-sans bg-white text-gray-800">
+    <div className={`${cormorant.variable} ${jost.variable} min-h-screen bg-white`}>
       <AHNav />
-      <main>{children}</main>
-      <footer style={{ backgroundColor: CHARCOAL }} className="text-white pt-16 pb-8 px-6 md:px-12">
+      <main style={{ fontFamily: 'var(--font-body)' }}>{children}</main>
+      <footer style={{ backgroundColor: CHARCOAL, fontFamily: 'var(--font-body)' }} className="text-white pt-16 pb-8 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
               <div className="flex items-center gap-2 mb-5">
                 <Scissors className="w-4 h-4" style={{ color: ROSE }} />
-                <span className="font-serif italic text-xl tracking-wider">Atelier</span>
+                <span className="italic text-xl tracking-wider" style={{ fontFamily: 'var(--font-display)' }}>Atelier</span>
               </div>
               <p className="text-white/40 text-sm leading-relaxed mb-5">Luxury hair artistry in Austin, TX. Where sustainable beauty meets expert craft.</p>
               <div className="flex gap-4">

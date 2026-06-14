@@ -1,25 +1,102 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { Wrench, ArrowRight, Check, Star, Phone, Shield, Car, Zap, Clock, MapPin, ChevronDown, Battery } from 'lucide-react';
 
 const BASE = '/work/ridge-line-auto';
 const CHARCOAL = '#1C1C1C';
 const RED = '#C0392B';
+const SILVER = '#8C8C8C';
+const CONCRETE = '#F5F5F5';
 
-const SVCS = [
-  { icon: Wrench, title: 'Oil & Fluids', price: 'From $29', desc: 'Conventional, synthetic, and high-mileage options. Full fluid check included.', items: ['Conventional oil change', 'Synthetic oil change', 'Transmission fluid', 'Coolant flush'] },
-  { icon: Shield, title: 'Brake Service', price: 'From $149', desc: 'Brake pad replacement, rotor resurfacing, caliper service, and brake fluid.', items: ['Brake pad replacement', 'Rotor resurfacing', 'Brake fluid flush', 'Caliper replacement'] },
-  { icon: Car, title: 'Engine & Transmission', price: 'Free Estimate', desc: 'Full engine diagnostics, repair, and transmission service.', items: ['Check engine light', 'Timing belt/chain', 'Transmission service', 'Head gasket'] },
-  { icon: Zap, title: 'Electrical Systems', price: 'From $75', desc: 'Battery, alternator, starter, and full electrical diagnostics.', items: ['Battery replacement', 'Alternator repair', 'Starter replacement', 'Fuse diagnosis'] },
-  { icon: Battery, title: 'Tires & Alignment', price: 'From $79', desc: 'Tire mounting, balancing, rotation, and 4-wheel alignment.', items: ['Tire mounting & balance', 'Tire rotation', '4-wheel alignment', 'TPMS reset'] },
-  { icon: Clock, title: 'Preventive Maintenance', price: 'From $49', desc: 'Scheduled maintenance to keep your vehicle running trouble-free.', items: ['30/60/90k service', 'Cabin air filter', 'Spark plug replacement', 'Fuel system cleaning'] },
+const displayFont = { fontFamily: 'var(--font-display)', fontWeight: 700 } as const;
+const displayMed = { fontFamily: 'var(--font-display)', fontWeight: 600 } as const;
+const displayNorm = { fontFamily: 'var(--font-display)', fontWeight: 400 } as const;
+const bodyFont = { fontFamily: 'var(--font-body)', fontWeight: 400 } as const;
+const bodyBold = { fontFamily: 'var(--font-body)', fontWeight: 700 } as const;
+
+// ── Service checklist data ──
+type ServiceEntry = {
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  title: string;
+  price: string;
+  includes: string[];
+};
+
+const SERVICE_LIST: ServiceEntry[] = [
+  { icon: Wrench, title: 'Oil Change', price: 'From $29', includes: ['Synthetic oil', 'Filter replacement', '27-point inspection', 'Tire pressure check'] },
+  { icon: Shield, title: 'Brake Service', price: 'From $149', includes: ['Pad replacement', 'Rotor inspection', 'Caliper check', 'Brake fluid top-off'] },
+  { icon: Zap, title: 'Engine Diagnostics', price: 'From $89', includes: ['OBD-II scan', 'Check engine analysis', 'Written report', 'Estimate provided'] },
+  { icon: Battery, title: 'Tire Services', price: 'From $25', includes: ['Rotation', 'Balance', 'Alignment check', 'Tread depth report'] },
+  { icon: Car, title: 'Transmission', price: 'From $175', includes: ['Fluid flush', 'Filter change', 'Shift quality test', 'Leak inspection'] },
+  { icon: Clock, title: 'AC & Heating', price: 'From $95', includes: ['Refrigerant check', 'Compressor test', 'Cabin filter', 'Performance test'] },
 ];
 
-const STEPS = [
-  { n: '1', title: 'Drop Off or Schedule', desc: 'Book online, call, or just drive in. Most services can be done same day.' },
-  { n: '2', title: 'Digital Inspection Report', desc: 'We send you a detailed inspection to your phone with photos — no surprises.' },
-  { n: '3', title: 'You Approve, We Repair', desc: 'No work starts without your sign-off. Flat-rate pricing, nothing added later.' },
-  { n: '4', title: 'Pickup & Drive Confident', desc: 'Most repairs come with our 24-month / 24,000-mile warranty.' },
+function ServiceChecklist() {
+  const [open, setOpen] = useState<number | null>(null);
+
+  return (
+    <div className="grid md:grid-cols-2 gap-4">
+      {SERVICE_LIST.map(({ icon: Icon, title, price, includes }, i) => (
+        <div
+          key={i}
+          className="border border-gray-200 overflow-hidden"
+        >
+          {/* Header row */}
+          <button
+            className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
+            onClick={() => setOpen(open === i ? null : i)}
+          >
+            <div className="flex items-center gap-4">
+              <Icon className="w-5 h-5 text-gray-300 shrink-0" strokeWidth={1.5} />
+              <div>
+                <div className="text-base" style={{ ...displayMed, color: CHARCOAL }}>{title}</div>
+                <div className="text-sm" style={{ color: RED, ...displayNorm }}>{price}</div>
+              </div>
+            </div>
+            <div
+              className="text-[10px] uppercase tracking-widest flex items-center gap-1 shrink-0"
+              style={{ color: open === i ? RED : SILVER, ...displayNorm }}
+            >
+              Details <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${open === i ? 'rotate-180' : ''}`} />
+            </div>
+          </button>
+
+          {/* Expandable includes */}
+          <div
+            className="overflow-hidden transition-all duration-300"
+            style={{ maxHeight: open === i ? '200px' : '0px' }}
+          >
+            <ul className="px-5 pb-5 pt-1 space-y-2 border-t border-gray-100">
+              {includes.map((item, j) => (
+                <li key={j} className="flex items-center gap-2.5 text-sm text-gray-500" style={bodyFont}>
+                  <Check className="w-3.5 h-3.5 shrink-0" style={{ color: RED }} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Static content ──
+const STATS = [
+  { v: '18 Years', l: 'Serving Denver' },
+  { v: '14,000+', l: 'Vehicles Serviced' },
+  { v: 'ASE', l: 'Certified Technicians' },
+  { v: '24-Mo', l: 'Warranty on Repairs' },
+];
+
+const TRUST_POINTS = [
+  { icon: Shield, title: 'Flat-Rate Pricing', desc: 'You get a firm price before any work starts. No line items added after the fact. No surprises.' },
+  { icon: Zap, title: 'Digital Inspection', desc: 'We send a 50-point inspection report to your phone with photos before touching anything.' },
+  { icon: Check, title: 'No Upsells', desc: 'We only recommend what your car actually needs. If it can wait, we say so — and put it in writing.' },
+  { icon: Wrench, title: '24-Month Warranty', desc: 'All major repairs backed by our 24-month / 24,000-mile parts and labor warranty.' },
 ];
 
 const REVIEWS = [
@@ -41,176 +118,198 @@ const FAQS = [
 export default function RidgeLineHome() {
   return (
     <>
-      {/* HERO */}
-      <section className="relative min-h-[88vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ backgroundColor: 'rgba(28,28,28,0.88)' }} />
-        </div>
-        <div className="absolute left-0 top-0 bottom-0 w-1.5" style={{ backgroundColor: RED }} />
-        <div className="relative z-10 px-12 md:px-20 max-w-2xl">
-          <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-5 text-white/35">ASE Certified · Denver, CO · Est. 2006</div>
-          <h1 className="text-5xl md:text-7xl font-black text-white leading-none mb-6 uppercase">Your Car.<br /><span style={{ color: RED }}>Our</span> Expertise.<br />Zero Runaround.</h1>
-          <p className="text-white/55 text-base mb-10 leading-relaxed max-w-lg">Honest diagnostics. Fair pricing. Same-day service on most repairs. No upsells, no unnecessary work — just quality done right the first time.</p>
+      {/* ── HERO — split panel ── */}
+      <section className="flex flex-col lg:grid lg:grid-cols-2 min-h-screen">
+        {/* LEFT: Charcoal text panel */}
+        <div
+          className="flex flex-col justify-center px-10 md:px-16 py-16 order-2 lg:order-1"
+          style={{ backgroundColor: CHARCOAL }}
+        >
+          {/* Small info line */}
+          <p className="text-[10px] uppercase tracking-[0.45em] text-white/35 mb-8" style={displayNorm}>
+            Denver, CO · Est. 2006 · ASE Certified
+          </p>
+
+          {/* Big stacked headline */}
+          <h1 className="text-6xl md:text-8xl text-white leading-none mb-6 uppercase" style={displayFont}>
+            YOUR<br />CAR<br />DESERVES<br /><span style={{ color: RED }}>HONEST<br />WORK.</span>
+          </h1>
+
+          {/* Red rule */}
+          <div className="mb-6" style={{ width: 60, height: 3, backgroundColor: RED }} />
+
+          {/* Phone */}
+          <p className="text-2xl text-white mb-3" style={displayFont}>(720) 555-0184</p>
+
+          {/* Tagline */}
+          <p className="text-[11px] uppercase tracking-[0.4em] text-white/40 mb-10" style={displayNorm}>
+            No Hidden Fees · No Upsells · No BS
+          </p>
+
+          {/* Buttons */}
           <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-[11px] px-8 py-4" style={{ backgroundColor: RED }}>Book Service Online <ArrowRight className="w-4 h-4" /></Link>
-            <a href="tel:3035550247" className="inline-flex items-center gap-2 border border-white/25 text-white font-black uppercase tracking-widest text-[11px] px-8 py-4"><Phone className="w-4 h-4" /> (303) 555-0247</a>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/15 text-white/60 font-black uppercase tracking-widest text-[11px] px-8 py-4">View All Services</Link>
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 text-white text-[11px] uppercase tracking-widest px-8 py-4"
+              style={{ backgroundColor: RED, ...displayNorm }}
+            >
+              Get a Quote <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href={`${BASE}/services`}
+              className="inline-flex items-center gap-2 border border-white text-white text-[11px] uppercase tracking-widest px-8 py-4"
+              style={displayNorm}
+            >
+              View Services
+            </Link>
           </div>
+        </div>
+
+        {/* RIGHT: Photo */}
+        <div className="relative order-1 lg:order-2" style={{ minHeight: '40vh' }}>
+          <Image
+            src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=2070&auto=format&fit=crop"
+            alt="Ridge Line Auto garage"
+            fill
+            className="object-cover"
+            style={{ objectPosition: 'right center' }}
+            referrerPolicy="no-referrer"
+            priority
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(28,28,28,0.3) 0%, transparent 40%)' }} />
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section style={{ backgroundColor: RED }} className="py-10">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          {['14,000+ Vehicles Serviced', 'ASE Certified Technicians', 'Same-Day Service Available', '24-Mo / 24K-Mi Warranty'].map((s, i) => (
-            <div key={i} className="text-white font-black text-sm uppercase tracking-widest">{s}</div>
+      {/* ── STATS STRIP ── */}
+      <section style={{ backgroundColor: CHARCOAL }} className="py-12 border-t border-white/10">
+        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {STATS.map(({ v, l }, i) => (
+            <div key={i}>
+              <div className="text-3xl text-white leading-none mb-1" style={displayFont}>{v}</div>
+              <div className="text-[10px] uppercase tracking-widest" style={{ color: RED, ...displayNorm }}>{l}</div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* SERVICES GRID */}
-      <section className="py-24 px-6 md:px-12 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
+      {/* ── SERVICE CHECKLIST ── */}
+      <section style={{ backgroundColor: CONCRETE }} className="py-24 px-6 md:px-12">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>Services & Pricing</div>
-            <h2 className="text-4xl font-black uppercase" style={{ color: CHARCOAL }}>Everything Your Vehicle Needs</h2>
-            <p className="text-gray-400 mt-3 text-sm">Flat-rate pricing · No hidden fees · No work without your approval</p>
+            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: RED, ...displayNorm }}>Services & Pricing</div>
+            <h2 className="text-5xl uppercase mb-3" style={{ ...displayFont, color: CHARCOAL }}>What We Work On</h2>
+            <p className="text-gray-400 text-sm" style={bodyFont}>Flat-rate pricing · No hidden fees · No work without your approval</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {SVCS.map(({ icon: Icon, title, price, desc, items }, i) => (
-              <div key={i} className="bg-white p-7 border-b-4 hover:shadow-md transition-shadow" style={{ borderBottomColor: RED }}>
-                <div className="flex items-start justify-between mb-5">
-                  <Icon className="w-6 h-6 text-gray-300" strokeWidth={1.5} />
-                  <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 text-white" style={{ backgroundColor: RED }}>{price}</span>
-                </div>
-                <h3 className="font-black text-base mb-2" style={{ color: CHARCOAL }}>{title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed mb-4">{desc}</p>
-                <ul className="space-y-1">
-                  {items.map((item, j) => <li key={j} className="flex items-center gap-2 text-xs text-gray-400"><Check className="w-3 h-3 shrink-0" style={{ color: RED }} />{item}</li>)}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <ServiceChecklist />
           <div className="text-center mt-10">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: CHARCOAL }}>Full Pricing & Services <ArrowRight className="w-4 h-4" /></Link>
+            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-white text-[11px] uppercase tracking-widest px-10 py-4" style={{ backgroundColor: CHARCOAL, ...displayNorm }}>
+              Full Pricing & Services <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section style={{ backgroundColor: CHARCOAL }} className="py-20 px-6 md:px-12">
+      {/* ── WHY RIDGE LINE ── */}
+      <section style={{ backgroundColor: CONCRETE }} className="py-20 px-6 md:px-12 border-t border-gray-200">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>The Process</div>
-            <h2 className="text-4xl font-black text-white uppercase">Simple. Honest. Fast.</h2>
+            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: RED, ...displayNorm }}>Why Ridge Line</div>
+            <h2 className="text-4xl uppercase" style={{ ...displayFont, color: CHARCOAL }}>Honest Auto Repair. Our Guarantee.</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {STEPS.map(({ n, title, desc }, i) => (
-              <div key={i} className="text-center">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-black text-lg text-white" style={{ backgroundColor: RED }}>{n}</div>
-                <h3 className="font-black text-white text-sm mb-2">{title}</h3>
-                <p className="text-white/35 text-xs leading-relaxed">{desc}</p>
+            {TRUST_POINTS.map(({ icon: Icon, title, desc }, i) => (
+              <div key={i} className="bg-white p-6">
+                <div className="w-10 h-10 flex items-center justify-center mb-4" style={{ backgroundColor: CHARCOAL }}>
+                  <Icon className="w-5 h-5" style={{ color: RED }} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-sm uppercase mb-2" style={{ ...displayMed, color: CHARCOAL }}>{title}</h3>
+                <p className="text-xs text-gray-400 leading-relaxed" style={bodyFont}>{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* WHY RIDGE LINE */}
-      <section className="grid lg:grid-cols-2 min-h-[55vh]">
-        <div className="flex items-center px-10 md:px-16 py-16" style={{ backgroundColor: CHARCOAL }}>
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-5" style={{ color: RED }}>Why Ridge Line</div>
-            <h2 className="text-4xl font-black text-white mb-7 uppercase leading-tight">Honest Auto Repair. Our Guarantee.</h2>
-            <div className="space-y-3 mb-8">
-              {["Digital inspection reports texted to your phone", "No repair starts without your written approval", "ASE-certified technician on every job", "24-month / 24,000-mile parts & labor warranty", "Loaner vehicles for repairs over 1 day", "Veteran & senior discount — ask us"].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-white/55"><Check className="w-4 h-4 shrink-0" style={{ color: RED }} />{p}</div>
-              ))}
-            </div>
-            <Link href={`${BASE}/about`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest border-b pb-0.5" style={{ color: RED, borderColor: RED }}>Meet the Team <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
-        </div>
-        <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
-          <Image src="https://images.unsplash.com/photo-1504222490345-c075b626eba5?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section className="py-20 px-6 md:px-12 bg-gray-50">
+      {/* ── REVIEWS on CHARCOAL ── */}
+      <section style={{ backgroundColor: CHARCOAL }} className="py-20 px-6 md:px-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-black uppercase mb-2" style={{ color: CHARCOAL }}>4.8 Stars · 350+ Google Reviews</h2>
+            <h2 className="text-4xl text-white uppercase mb-2" style={displayFont}>4.8 Stars · 350+ Google Reviews</h2>
             <div className="flex justify-center gap-1">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" style={{ color: RED }} />)}</div>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white p-7 border-t-4" style={{ borderTopColor: RED }}>
+              <div key={i} className="bg-white/5 p-7 border-l-4" style={{ borderLeftColor: RED }}>
                 <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: RED }} />)}</div>
-                <p className="text-gray-600 text-sm italic leading-relaxed mb-4">"{r.text}"</p>
-                <div className="font-black text-xs uppercase tracking-widest text-gray-400">— {r.author} · {r.service}</div>
+                <p className="text-white/65 text-sm italic leading-relaxed mb-4" style={bodyFont}>"{r.text}"</p>
+                <div className="text-white text-xs uppercase tracking-widest" style={displayNorm}>— {r.author} · {r.service}</div>
               </div>
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="text-[10px] font-black uppercase tracking-widest" style={{ color: RED }}>Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" /></Link>
+            <Link href={`${BASE}/reviews`} className="text-[10px] uppercase tracking-widest" style={{ color: RED, ...displayNorm }}>
+              Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* ── FAQ on WHITE ── */}
       <section className="py-24 px-6 md:px-12 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>FAQ</div>
-            <h2 className="text-4xl font-black uppercase" style={{ color: CHARCOAL }}>Common Questions</h2>
+            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: RED, ...displayNorm }}>FAQ</div>
+            <h2 className="text-4xl uppercase" style={{ ...displayFont, color: CHARCOAL }}>Common Questions</h2>
           </div>
           <div className="divide-y divide-gray-100">
             {FAQS.map(({ q, a }, i) => (
               <details key={i} className="group py-5">
                 <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-black text-sm leading-snug" style={{ color: CHARCOAL }}>{q}</span>
+                  <span className="text-sm leading-snug" style={{ ...bodyBold, color: CHARCOAL }}>{q}</span>
                   <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: RED }} />
                 </summary>
-                <p className="mt-4 text-gray-500 text-sm leading-relaxed">{a}</p>
+                <p className="mt-4 text-gray-500 text-sm leading-relaxed" style={bodyFont}>{a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CONTACT STRIP */}
-      <section style={{ backgroundColor: CHARCOAL }} className="py-14 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 items-center">
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: RED }}>Location</div>
-            <div className="flex items-start gap-2 text-white/65 text-sm">
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
-              <span>4820 Tennyson St<br />Denver, CO 80212</span>
-            </div>
+      {/* ── CONTACT STRIP — RED ── */}
+      <section style={{ backgroundColor: RED }} className="py-16 px-6 md:px-12">
+        <div className="max-w-5xl mx-auto">
+          {/* Big phone number */}
+          <div className="text-center mb-10">
+            <p className="text-[10px] uppercase tracking-[0.5em] text-white/60 mb-3" style={displayNorm}>Call Us Directly</p>
+            <a href="tel:7205550184" className="text-5xl md:text-6xl text-white" style={displayFont}>(720) 555-0184</a>
           </div>
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: RED }}>Hours</div>
-            <div className="text-white/65 text-sm space-y-0.5">
-              <div>Mon – Fri: 7:00am – 6:00pm</div>
-              <div>Saturday: 8:00am – 4:00pm</div>
-              <div className="text-white/30">Sunday: Closed</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <a href="tel:3035550247" className="inline-flex items-center gap-2 text-white font-black text-base"><Phone className="w-4 h-4" style={{ color: RED }} /> (303) 555-0247</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-[11px] px-7 py-3" style={{ backgroundColor: RED }}>Book Service Now <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
-        </div>
-      </section>
 
-      {/* FINAL CTA */}
-      <section style={{ backgroundColor: RED }} className="py-16 px-6 text-center">
-        <h2 className="text-3xl font-black text-white uppercase mb-4">Get Back on the Road Today.</h2>
-        <p className="text-white/75 mb-8 text-sm font-bold uppercase tracking-widest">Same-day service available Monday through Friday. No appointment needed.</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-black uppercase tracking-widest text-[11px] px-10 py-4" style={{ color: CHARCOAL }}>Book Service <ArrowRight className="w-4 h-4" /></Link>
-          <a href="tel:3035550247" className="inline-flex items-center gap-2 border-2 border-white text-white font-black uppercase tracking-widest text-[11px] px-10 py-4"><Phone className="w-4 h-4" /> Call Now</a>
+          {/* Hours grid + address + CTA */}
+          <div className="grid md:grid-cols-3 gap-8 border-t border-white/20 pt-10">
+            <div>
+              <div className="text-[10px] uppercase tracking-widest text-white/60 mb-3" style={displayNorm}>Location</div>
+              <div className="flex items-start gap-2 text-white/80 text-sm" style={bodyFont}>
+                <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-white" />
+                <span>2214 Industrial Blvd<br />Denver, CO 80211</span>
+              </div>
+            </div>
+            <div>
+              <div className="text-[10px] uppercase tracking-widest text-white/60 mb-3" style={displayNorm}>Hours</div>
+              <div className="grid grid-cols-2 gap-y-1 text-sm text-white/80" style={bodyFont}>
+                <span>Mon – Fri</span><span>7am – 6pm</span>
+                <span>Saturday</span><span>8am – 4pm</span>
+                <span>Sunday</span><span className="text-white/40">Closed</span>
+              </div>
+            </div>
+            <div className="flex flex-col gap-3 justify-center">
+              <Link href={`${BASE}/contact`} className="inline-flex items-center justify-center gap-2 bg-white text-[11px] uppercase tracking-widest px-8 py-4" style={{ color: CHARCOAL, ...displayNorm }}>
+                Book Service Online <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link href={`${BASE}/services`} className="inline-flex items-center justify-center gap-2 border-2 border-white text-white text-[11px] uppercase tracking-widest px-8 py-4" style={displayNorm}>
+                View All Services
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </>
