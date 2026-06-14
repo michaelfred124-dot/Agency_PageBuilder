@@ -1,25 +1,41 @@
 import React from 'react';
 import Link from 'next/link';
 import { Flower2, Phone, Mail, MapPin, Instagram } from 'lucide-react';
+import { Cormorant_Garamond, Raleway } from 'next/font/google';
 import GTNav from '@/components/templates/gt/Nav';
 
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const raleway = Raleway({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-body',
+  display: 'swap',
+});
+
 const BASE = '/work/golden-thread-events';
-const DARK = '#2C1F1F';
-const GOLD = '#C49A3C';
+const DARK = '#1A1A1A';
+const GOLD = '#C9A96E';
 const SAGE = '#6B8F6B';
 
 export default function GoldenThreadLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen font-sans bg-white text-gray-800">
+    <div className={`${cormorant.variable} ${raleway.variable} min-h-screen bg-white`}>
       <GTNav />
-      <main>{children}</main>
-      <footer style={{ backgroundColor: DARK }} className="text-white pt-16 pb-8 px-6 md:px-12">
+      <main style={{ fontFamily: 'var(--font-body)' }}>{children}</main>
+      <footer style={{ backgroundColor: DARK, fontFamily: 'var(--font-body)' }} className="text-white pt-16 pb-8 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
               <div className="flex items-center gap-2 mb-5">
                 <Flower2 className="w-4 h-4" style={{ color: GOLD }} />
-                <span className="font-serif italic text-xl tracking-wider">The Golden Thread</span>
+                <span className="italic text-xl tracking-wider" style={{ fontFamily: 'var(--font-display)' }}>The Golden Thread</span>
               </div>
               <p className="text-white/40 text-sm leading-relaxed mb-5">Luxury wedding planning and event design. Charleston, SC. Serving the Southeast.</p>
               <div className="flex gap-4">
