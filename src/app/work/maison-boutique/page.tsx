@@ -1,30 +1,26 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag, ArrowRight, Star, Leaf, Sparkles, Heart, Check, Phone, MapPin, ChevronDown, Clock } from 'lucide-react';
+import { ArrowRight, Star, Leaf, Sparkles, Heart, Check, Phone, MapPin, ChevronDown } from 'lucide-react';
 
 const BASE = '/work/maison-boutique';
 const ESPRESSO = '#2C1A0E';
 const SAGE = '#7D9B76';
 const SAND = '#F2EAD9';
 const MOCHA = '#5C3D2E';
+const CREAM = '#FDF9F3';
 
-const COLLECTIONS = [
-  { title: 'New Arrivals', tag: 'Every Thursday', desc: 'Fresh pieces added weekly — curated from sustainable makers, small labels, and ethical brands. First access for styling clients.', items: ['Linen & natural fiber pieces', 'Seasonal color palettes', 'Limited quantities', 'Online available same day'] },
-  { title: 'Wardrobe Classics', tag: 'Investment Dressing', desc: 'Timeless silhouettes that anchor your wardrobe. Blazers, trousers, dresses, and knitwear selected to outlast every trend.', items: ['Year-round wearability', 'Versatile color palette', 'Quality construction', 'Ethically sourced fabrics'] },
-  { title: 'Sustainable Picks', tag: 'Conscious Fashion', desc: 'Every piece certified or verified — organic, Fair Trade, or women-owned production. Fashion you can feel good about.', items: ['GOTS organic certified', 'Fair Trade manufacturing', 'Women-owned brands', 'Carbon-neutral shipping available'] },
-  { title: 'Accessories', tag: 'Complete the Look', desc: 'Curated bags, jewelry, scarves, and shoes to finish any outfit. Small-batch makers and local Nashville artists featured.', items: ['Small-batch jewelry', 'Locally made pieces', 'Leather goods & totes', 'Seasonal scarf collection'] },
-];
-
-const FEATURED = [
-  { img: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=1976&auto=format&fit=crop', label: 'New Arrival', name: 'Linen Wrap Dress', price: '$148' },
-  { img: 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=1886&auto=format&fit=crop', label: 'Best Seller', name: 'Camel Blazer', price: '$224' },
-  { img: 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1887&auto=format&fit=crop', label: 'Back in Stock', name: 'Silk Midi Skirt', price: '$176' },
+const NEW_ARRIVALS = [
+  { img: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=1976&auto=format&fit=crop', name: 'Linen Wrap Dress', price: '$148' },
+  { img: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1976&auto=format&fit=crop', name: 'Tailored Blazer', price: '$265' },
+  { img: 'https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1887&auto=format&fit=crop', name: 'Silk Midi Skirt', price: '$195' },
+  { img: 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=1886&auto=format&fit=crop', name: 'Wide Leg Trouser', price: '$188' },
+  { img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?q=80&w=1910&auto=format&fit=crop', name: 'Cashmere Sweater', price: '$225' },
+  { img: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070&auto=format&fit=crop', name: 'Cotton Tote', price: '$68' },
 ];
 
 const STYLING = [
   { icon: Sparkles, title: 'Styling Appointment', price: 'Complimentary', desc: '45-minute one-on-one session. We pull pieces for your body, lifestyle, and goals. No purchase necessary.' },
   { icon: Heart, title: 'Wardrobe Audit', price: '$150 · 90 min', desc: 'We visit your closet, help you identify gaps, remove what is not working, and build a shopping list.' },
-  { icon: ShoppingBag, title: 'Gift Styling', price: 'Complimentary', desc: 'Tell us about her. We pull a curated selection with a gift note and beautiful packaging.' },
   { icon: Leaf, title: 'Capsule Wardrobe Build', price: 'From $400', desc: 'Complete capsule — 10–15 pieces chosen to maximize your wearable combinations and simplify every morning.' },
 ];
 
@@ -47,170 +43,295 @@ const FAQS = [
 export default function MaisonHome() {
   return (
     <>
-      {/* HERO */}
-      <section className="relative min-h-screen flex items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1974&auto=format&fit=crop" alt="" fill className="object-cover object-top" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(44,26,14,0.92) 0%, rgba(44,26,14,0.3) 55%, transparent 100%)' }} />
+      {/* HERO — off-grid overlap */}
+      <section
+        className="relative min-h-screen overflow-hidden"
+        style={{ backgroundColor: CREAM }}
+      >
+        {/* Large fashion photo, right 60%, with padding so it doesn't touch edges */}
+        <div
+          className="absolute top-8 bottom-8 right-8 overflow-hidden hidden md:block"
+          style={{ left: '38%' }}
+        >
+          <Image
+            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1974&auto=format&fit=crop"
+            alt="Maison Boutique curated fashion"
+            fill
+            className="object-cover object-top"
+            referrerPolicy="no-referrer"
+            priority
+          />
         </div>
-        <div className="relative z-10 px-8 md:px-16 pb-24 max-w-xl">
-          <div className="flex items-center gap-3 mb-5"><div className="w-8 h-px" style={{ backgroundColor: SAGE }} /><span className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/45">Nashville, TN · Est. 2018 · Sustainably Curated</span></div>
-          <h1 className="text-5xl md:text-6xl font-serif italic text-white leading-tight mb-5">Dressed<br />for your<br />story.</h1>
-          <p className="text-white/60 text-lg mb-10 max-w-sm leading-relaxed">Curated women's fashion. Sustainably sourced, thoughtfully selected, personally styled. New arrivals every Thursday.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-[11px] px-8 py-4" style={{ backgroundColor: ESPRESSO, color: SAND }}>Shop New Arrivals <ArrowRight className="w-4 h-4" /></Link>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 border border-white/30 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4">Book Free Styling Appt</Link>
+
+        {/* Mobile photo */}
+        <div className="relative h-[50vh] md:hidden">
+          <Image
+            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1974&auto=format&fit=crop"
+            alt="Maison Boutique"
+            fill
+            className="object-cover object-top"
+            referrerPolicy="no-referrer"
+            priority
+          />
+        </div>
+
+        {/* Text block — overlaps left edge of photo */}
+        <div className="relative z-10 flex items-center min-h-screen md:min-h-0 md:h-screen px-8 md:px-16">
+          <div className="max-w-[520px]">
+            {/* Location tag */}
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-8 h-px" style={{ backgroundColor: SAGE }} />
+              <span className="text-xs tracking-[0.4em] uppercase" style={{ color: MOCHA, fontFamily: 'var(--font-body)', fontWeight: 300 }}>Nashville, TN · Est. 2018</span>
+            </div>
+
+            {/* Headline */}
+            <h1
+              className="leading-none mb-6"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(3rem, 6vw, 5.5rem)',
+                color: ESPRESSO,
+                lineHeight: 1.05,
+              }}
+            >
+              Curated for<br />women who<br />know themselves.
+            </h1>
+
+            {/* Subtitle */}
+            <p
+              className="text-lg mb-10 leading-relaxed max-w-sm"
+              style={{ color: `${ESPRESSO}88`, fontFamily: 'var(--font-body)', fontWeight: 300 }}
+            >
+              Intentional fashion. Personal styling. Sustainably sourced. New arrivals every Thursday.
+            </p>
+
+            {/* CTA */}
+            <Link
+              href={`${BASE}/services`}
+              className="inline-flex items-center gap-3 px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white"
+              style={{ backgroundColor: ESPRESSO, fontFamily: 'var(--font-body)' }}
+            >
+              Shop the Collection <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section style={{ backgroundColor: ESPRESSO }} className="py-10">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          {['New Arrivals Every Thursday', 'Free Styling Appointments', 'Sustainable Fashion', 'Free Shipping $75+'].map((s, i) => (
-            <div key={i} className="font-bold text-sm" style={{ color: i % 2 === 0 ? SAND : SAGE }}>{s}</div>
+      {/* NEW ARRIVALS — horizontal scrolling cards (signature element) */}
+      <section className="py-20" style={{ backgroundColor: CREAM }}>
+        <div className="px-8 md:px-16 mb-8">
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] mb-3" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>Shop</p>
+              <h2
+                className="leading-none"
+                style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: ESPRESSO }}
+              >
+                New Arrivals — Every Thursday
+              </h2>
+            </div>
+            <Link
+              href={`${BASE}/services`}
+              className="hidden md:inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest pb-1 border-b"
+              style={{ color: ESPRESSO, borderColor: ESPRESSO, fontFamily: 'var(--font-body)' }}
+            >
+              View all <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Scrollable row */}
+        <div
+          className="flex overflow-x-auto gap-4 pb-6 px-8 md:px-16 snap-x snap-mandatory"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {NEW_ARRIVALS.map((product, i) => (
+            <div
+              key={i}
+              className="snap-center shrink-0 group cursor-pointer"
+              style={{ minWidth: '260px' }}
+            >
+              {/* Square photo */}
+              <div className="relative aspect-square overflow-hidden mb-4">
+                <Image
+                  src={product.img}
+                  alt={product.name}
+                  fill
+                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="pr-2">
+                <h3
+                  className="text-xl mb-1"
+                  style={{ fontFamily: 'var(--font-display)', color: ESPRESSO }}
+                >
+                  {product.name}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm" style={{ color: MOCHA, fontFamily: 'var(--font-body)', fontWeight: 300 }}>{product.price}</span>
+                  <button
+                    className="text-xs font-semibold uppercase tracking-widest border-b pb-0.5 transition-colors"
+                    style={{ color: SAGE, borderColor: SAGE, fontFamily: 'var(--font-body)' }}
+                  >
+                    + Wishlist
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* FEATURED PRODUCTS */}
-      <section style={{ backgroundColor: SAND }} className="py-20 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: MOCHA }}>This Week</div>
-            <h2 className="text-4xl font-serif italic" style={{ color: ESPRESSO }}>New Arrivals</h2>
+      {/* ABOUT CLARA — sand background, editorial */}
+      <section className="py-24 px-8 md:px-16" style={{ backgroundColor: SAND }}>
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] mb-8" style={{ color: MOCHA, fontFamily: 'var(--font-body)' }}>Our Story</p>
+            {/* Large italic pull-quote */}
+            <blockquote
+              className="text-3xl md:text-4xl leading-snug mb-10 italic"
+              style={{ fontFamily: 'var(--font-display)', color: ESPRESSO }}
+            >
+              "Fashion rooted<br />in intention."
+            </blockquote>
+            <div className="w-10 h-px mb-8" style={{ backgroundColor: SAGE }} />
+            <p className="text-base leading-relaxed mb-5" style={{ color: `${ESPRESSO}88`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>
+              Maison was founded in 2018 with one idea: a boutique where every piece is chosen with purpose. We work with sustainable brands, small designers, and ethical manufacturers to bring Nashville women a wardrobe they can feel proud of.
+            </p>
+            <p className="text-base leading-relaxed mb-10" style={{ color: `${ESPRESSO}88`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>
+              Clara and Simone built this from scratch — two friends with a shared conviction that fashion should make you feel more like yourself, not less.
+            </p>
+            <Link
+              href={`${BASE}/about`}
+              className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest pb-1 border-b"
+              style={{ color: ESPRESSO, borderColor: ESPRESSO, fontFamily: 'var(--font-body)' }}
+            >
+              Meet Clara & Simone <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {FEATURED.map((p, i) => (
-              <div key={i} className="overflow-hidden bg-white hover:shadow-md transition-shadow">
-                <div className="relative h-80">
-                  <Image src={p.img} alt={p.name} fill className="object-cover object-top hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
-                  <div className="absolute top-3 left-3 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 text-white" style={{ backgroundColor: SAGE }}>{p.label}</div>
-                </div>
-                <div className="p-5 flex justify-between items-center">
-                  <div>
-                    <div className="font-bold text-sm mb-0.5" style={{ color: ESPRESSO }}>{p.name}</div>
-                    <div className="text-xs text-gray-400">Nashville, TN · In Store & Online</div>
-                  </div>
-                  <div className="font-bold text-sm" style={{ color: MOCHA }}>{p.price}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: ESPRESSO }}>Shop the Full Collection <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
-        </div>
-      </section>
-
-      {/* COLLECTIONS */}
-      <section className="py-20 px-6 md:px-12" style={{ backgroundColor: ESPRESSO }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: SAGE }}>Collections</div>
-            <h2 className="text-4xl font-serif italic mb-3" style={{ color: SAND }}>Shop by Category</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-5">
-            {COLLECTIONS.map(({ title, tag, desc, items }, i) => (
-              <div key={i} className="border border-white/10 p-7 hover:border-sage-500/40 transition-colors">
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="font-bold text-base" style={{ color: SAND }}>{title}</h3>
-                  <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 ml-3 shrink-0" style={{ backgroundColor: SAGE, color: 'white' }}>{tag}</span>
-                </div>
-                <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(242,234,217,0.45)' }}>{desc}</p>
-                <ul className="grid grid-cols-2 gap-1.5">
-                  {items.map((item, j) => <li key={j} className="flex items-center gap-1.5 text-xs" style={{ color: 'rgba(242,234,217,0.35)' }}><Check className="w-3 h-3 shrink-0" style={{ color: SAGE }} />{item}</li>)}
-                </ul>
-              </div>
-            ))}
+          <div className="relative aspect-[4/5] overflow-hidden">
+            <Image
+              src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070&auto=format&fit=crop"
+              alt="Inside Maison Boutique"
+              fill
+              className="object-cover"
+              referrerPolicy="no-referrer"
+            />
           </div>
         </div>
       </section>
 
       {/* STYLING SERVICES */}
-      <section style={{ backgroundColor: SAND }} className="py-20 px-6 md:px-12">
+      <section className="py-24 px-8 md:px-16" style={{ backgroundColor: CREAM }}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: MOCHA }}>Personal Styling</div>
-            <h2 className="text-4xl font-serif italic mb-3" style={{ color: ESPRESSO }}>More Than a Boutique</h2>
-            <p className="text-gray-500 text-sm max-w-md mx-auto">Our stylists are trained to help you find what works — not just sell you something. Come with a challenge, leave with a solution.</p>
+          <div className="text-center mb-16">
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>Personal Styling</p>
+            <h2
+              className="text-4xl md:text-5xl italic mb-4"
+              style={{ fontFamily: 'var(--font-display)', color: ESPRESSO }}
+            >
+              More Than a Boutique
+            </h2>
+            <p className="text-sm max-w-md mx-auto" style={{ color: `${ESPRESSO}66`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>
+              Our stylists are trained to help you find what works — not just sell you something.
+            </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid md:grid-cols-3 gap-6">
             {STYLING.map(({ icon: Icon, title, price, desc }, i) => (
-              <div key={i} className="bg-white p-7 text-center">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5" style={{ backgroundColor: SAND }}>
+              <div key={i} className="p-8" style={{ backgroundColor: 'white' }}>
+                <div className="w-10 h-10 flex items-center justify-center mb-6" style={{ backgroundColor: SAND }}>
                   <Icon className="w-5 h-5" style={{ color: SAGE }} strokeWidth={1.5} />
                 </div>
-                <h3 className="font-bold text-sm mb-1" style={{ color: ESPRESSO }}>{title}</h3>
-                <div className="text-[10px] font-bold mb-3" style={{ color: SAGE }}>{price}</div>
-                <p className="text-xs text-gray-400 leading-relaxed">{desc}</p>
+                <h3 className="text-lg mb-1 italic" style={{ fontFamily: 'var(--font-display)', color: ESPRESSO }}>{title}</h3>
+                <div className="text-xs font-semibold mb-4 uppercase tracking-widest" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>{price}</div>
+                <p className="text-sm leading-relaxed" style={{ color: `${ESPRESSO}77`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest px-10 py-4 text-white"
+              style={{ backgroundColor: ESPRESSO, fontFamily: 'var(--font-body)' }}
+            >
+              Book a Free Styling Session <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* SUSTAINABILITY — sage band */}
+      <section className="py-16 px-8 md:px-16" style={{ backgroundColor: SAGE }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+            <div>
+              <h2 className="text-3xl md:text-4xl italic text-white mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+                Fashion you can feel good about.
+              </h2>
+              <p className="text-white/70 text-sm max-w-md" style={{ fontFamily: 'var(--font-body)', fontWeight: 300 }}>
+                Every brand we carry is vetted for production practices, fabric quality, and ethical sourcing.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 shrink-0">
+              {[
+                { stat: '100%', label: 'Vetted Brands' },
+                { stat: 'XS–3X', label: 'Size Range' },
+                { stat: '40+', label: 'Indie Makers' },
+                { stat: 'Free', label: 'Styling Always' },
+              ].map((s, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-3xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-body)' }}>{s.stat}</div>
+                  <div className="text-xs text-white/60 uppercase tracking-widest" style={{ fontFamily: 'var(--font-body)', fontWeight: 300 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* REVIEWS — dark espresso background */}
+      <section className="py-24 px-8 md:px-16" style={{ backgroundColor: ESPRESSO }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>What Clients Say</p>
+            <h2 className="text-4xl md:text-5xl italic" style={{ fontFamily: 'var(--font-display)', color: SAND }}>Style That Speaks</h2>
+            <p className="text-sm mt-3" style={{ color: `${SAND}55`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>5.0 Stars · 140+ Google Reviews</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {REVIEWS.map((r, i) => (
+              <div key={i} className="p-8" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(242,234,217,0.08)' }}>
+                <div className="flex mb-5">{[...Array(5)].map((_, j) => <Star key={j} className="w-3 h-3 fill-current" style={{ color: SAGE }} />)}</div>
+                <p className="italic text-sm leading-relaxed mb-6" style={{ color: `${SAND}88`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>"{r.text}"</p>
+                <div className="text-xs font-semibold uppercase tracking-widest" style={{ color: SAND, fontFamily: 'var(--font-body)' }}>
+                  — {r.author} <span style={{ color: SAGE, fontWeight: 300 }}>· {r.service}</span>
+                </div>
               </div>
             ))}
           </div>
           <div className="text-center mt-10">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: ESPRESSO }}>Book a Free Styling Session <ArrowRight className="w-4 h-4" /></Link>
-          </div>
-        </div>
-      </section>
-
-      {/* BRAND STORY SPLIT */}
-      <section className="grid lg:grid-cols-2 min-h-[60vh]">
-        <div className="relative overflow-hidden" style={{ minHeight: '400px' }}>
-          <Image src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
-        </div>
-        <div className="flex items-center px-10 md:px-16 py-16" style={{ backgroundColor: ESPRESSO }}>
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-5" style={{ color: SAGE }}>Our Story</div>
-            <h2 className="text-4xl font-serif italic text-white mb-6">Fashion rooted in intention.</h2>
-            <p className="leading-relaxed mb-8" style={{ color: 'rgba(242,234,217,0.45)' }}>Maison was founded in 2018 with one idea: a boutique where every piece is chosen with purpose. We work with sustainable brands, small designers, and ethical manufacturers to bring Nashville women a wardrobe they can feel proud of.</p>
-            <div className="space-y-3 mb-8">
-              {["Sustainably sourced — every brand vetted", "Small-batch and limited quantities", "Size XS–3X across key wardrobe pieces", "Free personal styling — no purchase required", "Online shop updated with in-store arrivals", "Local delivery same-day in Nashville"].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm" style={{ color: 'rgba(242,234,217,0.45)' }}><Check className="w-4 h-4 shrink-0" style={{ color: SAGE }} />{p}</div>
-              ))}
-            </div>
-            <Link href={`${BASE}/about`} className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b pb-0.5" style={{ color: SAGE, borderColor: SAGE }}>Meet Clara & Simone <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section style={{ backgroundColor: SAND }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: MOCHA }}>What Clients Say</div>
-            <h2 className="text-4xl font-serif italic mb-2" style={{ color: ESPRESSO }}>Style That Speaks</h2>
-            <p className="text-gray-500 text-sm">5.0 Stars · 140+ Google Reviews</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white p-7 text-center">
-                <div className="flex justify-center mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: MOCHA }} />)}</div>
-                <p className="text-gray-600 italic text-sm leading-relaxed mb-4">"{r.text}"</p>
-                <div className="font-bold text-xs" style={{ color: ESPRESSO }}>— {r.author} <span className="text-gray-400 font-normal">· {r.service}</span></div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="text-[10px] font-bold uppercase tracking-widest" style={{ color: ESPRESSO }}>Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" /></Link>
+            <Link href={`${BASE}/reviews`} className="text-xs font-semibold uppercase tracking-widest pb-1 border-b" style={{ color: SAND, borderColor: `${SAND}40`, fontFamily: 'var(--font-body)' }}>
+              Read All Reviews <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-24 px-6 md:px-12 bg-white">
+      <section className="py-24 px-8 md:px-16" style={{ backgroundColor: CREAM }}>
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: SAGE }}>FAQ</div>
-            <h2 className="text-4xl font-serif italic" style={{ color: ESPRESSO }}>Questions Answered</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>FAQ</p>
+            <h2 className="text-4xl italic" style={{ fontFamily: 'var(--font-display)', color: ESPRESSO }}>Questions Answered</h2>
           </div>
-          <div className="divide-y divide-amber-50">
+          <div className="divide-y" style={{ borderColor: `${ESPRESSO}10` }}>
             {FAQS.map(({ q, a }, i) => (
               <details key={i} className="group py-5">
                 <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-bold text-sm leading-snug" style={{ color: ESPRESSO }}>{q}</span>
+                  <span className="text-sm font-semibold leading-snug" style={{ color: ESPRESSO, fontFamily: 'var(--font-body)' }}>{q}</span>
                   <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: SAGE }} />
                 </summary>
-                <p className="mt-4 text-gray-500 text-sm leading-relaxed">{a}</p>
+                <p className="mt-4 text-sm leading-relaxed" style={{ color: `${ESPRESSO}77`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>{a}</p>
               </details>
             ))}
           </div>
@@ -218,38 +339,68 @@ export default function MaisonHome() {
       </section>
 
       {/* CONTACT STRIP */}
-      <section style={{ backgroundColor: ESPRESSO }} className="py-16 px-6 md:px-12">
+      <section style={{ backgroundColor: ESPRESSO }} className="py-16 px-8 md:px-16">
         <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10">
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: SAGE }}>Visit Us</div>
-            <div className="flex items-start gap-2 text-white/65 text-sm">
+            <div className="text-xs font-semibold uppercase tracking-[0.3em] mb-3" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>Visit Us</div>
+            <div className="flex items-start gap-2 text-sm" style={{ color: `${SAND}77`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>
               <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: SAGE }} />
-              <span>512 12th Ave South<br />Nashville, TN 37203<br /><span className="text-white/30 text-xs">The 12 South neighborhood</span></span>
+              <span>512 12th Ave South<br />Nashville, TN 37203<br /><span className="text-xs opacity-50">The 12 South neighborhood</span></span>
             </div>
           </div>
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: SAGE }}>Store Hours</div>
-            <div className="text-white/65 text-sm space-y-1">
+            <div className="text-xs font-semibold uppercase tracking-[0.3em] mb-3" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>Store Hours</div>
+            <div className="text-sm space-y-1" style={{ color: `${SAND}77`, fontFamily: 'var(--font-body)', fontWeight: 300 }}>
               <div>Mon – Sat: 10:00am – 7:00pm</div>
               <div>Sunday: 11:00am – 5:00pm</div>
-              <div className="font-bold mt-2" style={{ color: SAGE }}>Free styling appts available daily</div>
+              <div className="font-semibold mt-2" style={{ color: SAGE }}>Free styling appts available daily</div>
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: SAGE }}>Connect</div>
-            <a href="tel:6155550284" className="inline-flex items-center gap-2 text-white font-bold text-base"><Phone className="w-4 h-4" style={{ color: SAGE }} /> (615) 555-0284</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-[11px] px-7 py-3 text-white" style={{ backgroundColor: SAGE }}>Book a Styling Session <ArrowRight className="w-3.5 h-3.5" /></Link>
+            <div className="text-xs font-semibold uppercase tracking-[0.3em] mb-1" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>Connect</div>
+            <a href="tel:6155550284" className="inline-flex items-center gap-2 text-base font-semibold" style={{ color: SAND, fontFamily: 'var(--font-body)' }}>
+              <Phone className="w-4 h-4" style={{ color: SAGE }} /> (615) 555-0284
+            </a>
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 font-semibold uppercase tracking-widest text-xs px-7 py-3 text-white"
+              style={{ backgroundColor: SAGE, fontFamily: 'var(--font-body)' }}
+            >
+              Book a Styling Session <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* FINAL CTA */}
-      <section style={{ backgroundColor: ESPRESSO }} className="py-14 px-6 text-center border-t border-white/8">
-        <h2 className="text-3xl font-serif italic mb-4" style={{ color: SAND }}>Book a personal styling appointment.</h2>
-        <p className="mb-8 text-sm max-w-md mx-auto" style={{ color: 'rgba(242,234,217,0.45)' }}>Complimentary. 45 minutes. Your wardrobe, your story. No purchase pressure — just thoughtful guidance from a trained stylist who genuinely cares.</p>
+      <section className="py-20 px-8 text-center" style={{ backgroundColor: SAND }}>
+        <h2
+          className="text-4xl md:text-6xl italic mb-5"
+          style={{ fontFamily: 'var(--font-display)', color: ESPRESSO }}
+        >
+          Book a personal<br />styling appointment.
+        </h2>
+        <p
+          className="text-sm max-w-md mx-auto mb-10"
+          style={{ color: `${ESPRESSO}66`, fontFamily: 'var(--font-body)', fontWeight: 300 }}
+        >
+          Complimentary. 45 minutes. Your wardrobe, your story. No purchase pressure — just thoughtful guidance from a trained stylist who genuinely cares.
+        </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-[11px] px-10 py-4 text-white" style={{ backgroundColor: SAGE }}>Book Appointment <ArrowRight className="w-4 h-4" /></Link>
-          <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/15 font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ color: SAND }}><Clock className="w-4 h-4" /> Shop New Arrivals</Link>
+          <Link
+            href={`${BASE}/contact`}
+            className="inline-flex items-center gap-2 font-semibold uppercase tracking-widest text-sm px-10 py-4 text-white"
+            style={{ backgroundColor: ESPRESSO, fontFamily: 'var(--font-body)' }}
+          >
+            Book Appointment <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link
+            href={`${BASE}/services`}
+            className="inline-flex items-center gap-2 border font-semibold uppercase tracking-widest text-sm px-10 py-4"
+            style={{ borderColor: ESPRESSO, color: ESPRESSO, fontFamily: 'var(--font-body)' }}
+          >
+            Shop New Arrivals
+          </Link>
         </div>
       </section>
     </>
