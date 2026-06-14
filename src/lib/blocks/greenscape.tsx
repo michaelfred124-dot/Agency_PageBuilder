@@ -12,6 +12,11 @@ import {
   User,
   MapPin,
   ArrowRight,
+  Phone,
+  Mail,
+  Clock,
+  Menu,
+  X
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -143,6 +148,42 @@ export const GS_SCHEMAS = {
       text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area.",
     },
   },
+  GSHeader: {
+    description: "Greenscape Header & Navigation",
+    fields: [
+      { name: "businessName", label: "Business Name", type: "text" },
+      { name: "tagline", label: "Tagline", type: "text" },
+      { name: "phone", label: "Phone Number", type: "text" },
+      { name: "address", label: "Address/Service Area", type: "text" },
+      { name: "hours", label: "Hours of Operation", type: "text" },
+      { name: "ctaText", label: "CTA Button Text", type: "text" }
+    ],
+    defaultProps: {
+      businessName: "Greenscape",
+      tagline: "Landscaping",
+      phone: "(408) 123-4567",
+      address: "Proudly serving Sunnyvale and surrounding areas",
+      hours: "Mon - Sat: 7AM - 6PM",
+      ctaText: "Get a Free Quote"
+    }
+  },
+  GSContact: {
+    description: "Greenscape Contact Page Details & Form",
+    fields: [
+      { name: "title", label: "Title", type: "text" },
+      { name: "subtitle", label: "Subtitle", type: "textarea" },
+      { name: "phone", label: "Phone Number", type: "text" },
+      { name: "email", label: "Email Address", type: "text" },
+      { name: "address", label: "Street Address", type: "textarea" }
+    ],
+    defaultProps: {
+      title: "Get In Touch",
+      subtitle: "Ready to start your outdoor transformation? Let us know how we can help.",
+      phone: "(408) 123-4567",
+      email: "info@greenscape.com",
+      address: "123 Greenway Dr, Sunnyvale, CA 94086"
+    }
+  }
 };
 
 const getIcon = (name: string, className: string) => {
@@ -345,6 +386,222 @@ export const GS_RENDERERS = {
       </div>
     </section>
   ),
+  GSHeader: ({ businessName, tagline, phone, address, hours, ctaText }: any) => {
+    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+    return (
+      <header className="w-full flex flex-col shrink-0">
+        {/* Top Bar */}
+        <div className="bg-[#1A1A1A] text-white py-2 px-6 md:px-12 text-[10px] md:text-xs font-medium flex justify-between items-center border-b border-white/10 uppercase tracking-widest">
+          <div className="flex items-center gap-2">
+             <MapPin className="w-3 h-3 text-[#7BA05C]" />
+             {address}
+          </div>
+          <div className="hidden md:flex items-center gap-6">
+             <div className="flex items-center gap-2">
+               <Clock className="w-3 h-3 text-[#7BA05C]" />
+               {hours}
+             </div>
+             <div className="flex items-center gap-2">
+               <Phone className="w-3 h-3 text-[#7BA05C]" />
+               {phone}
+             </div>
+          </div>
+        </div>
+
+        {/* Navbar */}
+        <nav className="bg-white py-5 px-6 md:px-12 flex justify-between items-center relative z-50 border-b border-[#F7F6F2]">
+          <div className="flex items-center gap-2">
+            <div className="bg-[#4C6B36] p-1.5 rounded-lg">
+              <Leaf className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="font-black text-xl tracking-tighter uppercase">{businessName}</span>
+              <span className="text-[10px] font-bold tracking-[0.3em] text-[#4C6B36] uppercase">{tagline}</span>
+            </div>
+          </div>
+          
+          <div className="hidden lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-[#1A1A1A]">
+            <Link href="#" className="hover:text-[#4C6B36] transition-colors border-b-2 border-transparent pb-1">Home</Link>
+            <Link href="#" className="hover:text-[#4C6B36] transition-colors border-b-2 border-transparent pb-1">Services</Link>
+            <Link href="#" className="hover:text-[#4C6B36] transition-colors border-b-2 border-transparent pb-1">About</Link>
+            <Link href="#" className="hover:text-[#4C6B36] transition-colors border-b-2 border-transparent pb-1">Projects</Link>
+            <Link href="#" className="hover:text-[#4C6B36] transition-colors border-b-2 border-transparent pb-1">Contact</Link>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button className="bg-[#4C6B36] text-white px-6 py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#3D552B] transition-all flex items-center gap-2 rounded-md">
+              {ctaText} <ArrowRight className="w-4 h-4" />
+            </button>
+            <button className="lg:hidden text-zinc-900" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
+
+          {mobileMenuOpen && (
+            <div className="absolute top-full left-0 right-0 bg-white border-b border-zinc-200 shadow-lg p-6 flex flex-col gap-4 text-xs font-bold uppercase tracking-wider text-zinc-900 z-50">
+              <Link href="#" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+              <Link href="#" onClick={() => setMobileMenuOpen(false)}>Services</Link>
+              <Link href="#" onClick={() => setMobileMenuOpen(false)}>About</Link>
+              <Link href="#" onClick={() => setMobileMenuOpen(false)}>Projects</Link>
+              <Link href="#" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+            </div>
+          )}
+        </nav>
+      </header>
+    );
+  },
+  GSContact: ({ title, subtitle, phone, email, address }: any) => {
+    const [formState, setFormState] = React.useState({ name: '', email: '', phone: '', service: 'lawn-care', message: '' });
+    const [submitted, setSubmitted] = React.useState(false);
+    
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      setSubmitted(true);
+    };
+
+    return (
+      <section className="py-16 @md:py-24 bg-[#F7F6F2]">
+        <div className="w-full max-w-7xl mx-auto px-6 @md:px-12">
+          <div className="grid @lg:grid-cols-12 gap-12 @md:gap-16 items-start">
+            
+            {/* Contact details */}
+            <div className="@lg:col-span-5 space-y-8 text-left">
+              <div>
+                <span className="text-[#4C6B36] font-black uppercase tracking-widest text-xs block mb-4">Contact Us</span>
+                <h2 className="text-4xl @sm:text-5xl font-black uppercase tracking-tighter leading-none mb-6">
+                  {title}
+                </h2>
+                <p className="text-base text-[#333333]/70 leading-relaxed">
+                  {subtitle}
+                </p>
+              </div>
+
+              <div className="space-y-6 bg-white p-8 rounded-2xl border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)]">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-[#F7F6F2] border-2 border-black flex items-center justify-center text-[#4C6B36] shrink-0">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] uppercase font-black tracking-widest text-[#333333]/40">Call or Text</h4>
+                    <p className="font-bold text-zinc-900 text-sm mt-0.5">{phone}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-[#F7F6F2] border-2 border-black flex items-center justify-center text-[#4C6B36] shrink-0">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] uppercase font-black tracking-widest text-[#333333]/40">Email Us</h4>
+                    <p className="font-bold text-zinc-900 text-sm mt-0.5">{email}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-[#F7F6F2] border-2 border-black flex items-center justify-center text-[#4C6B36] shrink-0">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] uppercase font-black tracking-widest text-[#333333]/40">Address</h4>
+                    <p className="font-bold text-zinc-900 text-sm mt-0.5 whitespace-pre-line">{address}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Form */}
+            <div className="@lg:col-span-7 w-full bg-white p-8 @md:p-12 rounded-2xl border-4 border-black shadow-[12px_12px_0px_rgba(0,0,0,1)]">
+              {submitted ? (
+                <div className="py-12 text-center">
+                  <div className="w-16 h-16 bg-[#4C6B36] text-white border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] rounded-xl flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase tracking-tighter text-zinc-900 mb-2">Message Sent!</h3>
+                  <p className="text-zinc-500 text-sm max-w-sm mx-auto">Thank you for reaching out. A landscaping specialist will contact you shortly to schedule your free estimate.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <h3 className="text-xl font-black uppercase tracking-tighter text-zinc-900 mb-6 pb-4 border-b-2 border-zinc-100 text-left">Free Estimate Request</h3>
+                  
+                  <div className="grid grid-cols-1 @md:grid-cols-2 gap-6">
+                    <div className="flex flex-col text-left">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">Your Name</label>
+                      <input 
+                        type="text" 
+                        required 
+                        value={formState.name}
+                        onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                        className="bg-[#F7F6F2] border-2 border-black px-4 py-3 text-xs font-bold uppercase tracking-wider rounded-lg focus:outline-none focus:bg-white focus:border-[#4C6B36] transition-colors" 
+                        placeholder="e.g. John Doe"
+                      />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">Phone Number</label>
+                      <input 
+                        type="tel" 
+                        required
+                        value={formState.phone}
+                        onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
+                        className="bg-[#F7F6F2] border-2 border-black px-4 py-3 text-xs font-bold uppercase tracking-wider rounded-lg focus:outline-none focus:bg-white focus:border-[#4C6B36] transition-colors" 
+                        placeholder="e.g. (408) 555-0199"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 @md:grid-cols-2 gap-6">
+                    <div className="flex flex-col text-left">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">Email Address</label>
+                      <input 
+                        type="email" 
+                        required
+                        value={formState.email}
+                        onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                        className="bg-[#F7F6F2] border-2 border-black px-4 py-3 text-xs font-bold uppercase tracking-wider rounded-lg focus:outline-none focus:bg-white focus:border-[#4C6B36] transition-colors" 
+                        placeholder="e.g. john@example.com"
+                      />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">Service Needed</label>
+                      <select 
+                        value={formState.service}
+                        onChange={(e) => setFormState({ ...formState, service: e.target.value })}
+                        className="bg-[#F7F6F2] border-2 border-black px-4 py-3 text-xs font-bold uppercase tracking-wider rounded-lg focus:outline-none focus:bg-white focus:border-[#4C6B36] transition-colors appearance-none"
+                      >
+                        <option value="lawn-care">Lawn Care & Maintenance</option>
+                        <option value="design">Landscape Design</option>
+                        <option value="hardscaping">Hardscaping & Patios</option>
+                        <option value="irrigation">Irrigation Systems</option>
+                        <option value="cleanup">Yard Cleanups</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col text-left">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">Message details</label>
+                    <textarea 
+                      rows={4}
+                      value={formState.message}
+                      onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                      className="bg-[#F7F6F2] border-2 border-black px-4 py-3 text-xs font-semibold rounded-lg focus:outline-none focus:bg-white focus:border-[#4C6B36] transition-colors" 
+                      placeholder="Tell us about your project..."
+                    />
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="w-full bg-[#4C6B36] hover:bg-[#3D552B] text-white py-4 text-xs font-black uppercase tracking-[0.2em] rounded-lg border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 active:translate-y-1 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:shadow-none transition-all"
+                  >
+                    Submit Estimate Request
+                  </button>
+                </form>
+              )}
+            </div>
+
+          </div>
+        </div>
+      </section>
+    );
+  },
   GSFooter: ({ text }: any) => (
     <footer className="py-12 bg-[#1A1A1A] border-t border-white/5 text-center text-white/40 px-6">
       <div className="w-full max-w-7xl mx-auto">
@@ -355,7 +612,7 @@ export const GS_RENDERERS = {
           </span>
         </div>
         <p className="text-xs uppercase tracking-wider mb-8">{text}</p>
-        <div className="flex justify-center gap-6 text-xs uppercase font-bold tracking-widest text-white/30">
+        <div className="flex justify-center gap-6 text-xs uppercase font-bold tracking-widest text-[#333333]/30">
           <Link href="#" className="hover:text-[#7BA05C] transition-colors">
             Privacy
           </Link>

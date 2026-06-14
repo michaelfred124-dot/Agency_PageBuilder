@@ -190,7 +190,7 @@ export default function PreviewWrapper({
                style={{
                  width: viewport === 'desktop' ? '1200px' : viewport === 'tablet' ? '768px' : '375px',
                  maxWidth: 'none',
-                 minHeight: '100%',
+                 minHeight: '800px',
                  transform: `scale(${scale})`,
                  backgroundColor: theme?.pageBackground || '#ffffff',
                  ['--color-primary' as any]: (theme as any)?.colorPrimary || '#3b82f6',

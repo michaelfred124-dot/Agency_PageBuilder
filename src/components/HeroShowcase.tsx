@@ -117,12 +117,21 @@ export default function HeroShowcase({ projects, onClose }: HeroShowcaseProps) {
           >
             {/* Live website preview inside iframe */}
             <div className="absolute inset-0 w-full h-full z-0 bg-neutral-900">
-              <iframe
-                src={project.link}
-                className="w-full h-full border-0 pointer-events-none"
-                scrolling="no"
-                title={project.title}
-              />
+              {i === activeIndex ? (
+                <iframe
+                  src={project.link}
+                  className="w-full h-full border-0 pointer-events-none"
+                  scrolling="no"
+                  title={project.title}
+                />
+              ) : (
+                <img
+                  src={project.image || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"}
+                  className="w-full h-full object-cover opacity-60"
+                  alt=""
+                  referrerPolicy="no-referrer"
+                />
+              )}
             </div>
 
             {/* Immersive gradient shade for legibility */}

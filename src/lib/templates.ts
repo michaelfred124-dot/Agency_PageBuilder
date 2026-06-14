@@ -519,10 +519,1052 @@ export const TEMPLATES: Record<string, SectionData[]> = {
       }
     }
   ],
-  blank: []
+  blank: [],
+
+  // ── NEW INDUSTRY TEMPLATES ──────────────────────────────────────────────────
+
+  // 1. LAW FIRM – Sterling Law Group
+  law_firm: [
+    {
+      id: "lf-header-1",
+      type: "SLHeader",
+      props: {
+        businessName: "STERLING LAW",
+        navLinks: ["HOME", "PRACTICE AREAS", "ABOUT US", "RESULTS", "CONTACT"]
+      }
+    },
+    {
+      id: "lf-hero-1",
+      type: "SLHero",
+      props: {
+        headline: "TRUSTED.\nEXPERIENCED.\nRESULTS-DRIVEN.",
+        subheading: "YOUR RIGHTS. OUR PRIORITY.",
+        description: "Sterling & Associates provides aggressive legal representation for individuals and businesses. Over 25 years of courtroom excellence and $50M+ recovered for our clients.",
+        backgroundImage: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "lf-stats-1",
+      type: "SLStats",
+      props: {
+        stats: [
+          { value: "25+", label: "Years of\nLegal Excellence", icon: "Scale" },
+          { value: "2,000+", label: "Cases\nSuccessfully Closed", icon: "Users" },
+          { value: "$50M+", label: "Recovered for\nOur Clients", icon: "Shield" },
+          { value: "98%", label: "Client\nSatisfaction Rate", icon: "Star" }
+        ]
+      }
+    },
+    {
+      id: "lf-services-1",
+      type: "SLServices",
+      props: {
+        heading: "Our Practice Areas",
+        services: [
+          { title: "Personal Injury", icon: "Heart", desc: "Car accidents, slip and falls, and workplace injuries. We fight to maximize your compensation.", img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=800&auto=format&fit=crop" },
+          { title: "Business Law", icon: "Building2", desc: "Contract disputes, business formation, mergers, and commercial litigation for growing businesses.", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" },
+          { title: "Family Law", icon: "Home", desc: "Divorce, child custody, adoption, and guardianship handled with care and confidentiality.", img: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=800&auto=format&fit=crop" },
+          { title: "Estate Planning", icon: "FileText", desc: "Wills, trusts, powers of attorney, and probate to protect your family's future.", img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop" }
+        ]
+      }
+    },
+    {
+      id: "lf-steps-1",
+      type: "SLProcess",
+      props: {
+        heading: "How We Work.\nSimple & Transparent.",
+        steps: [
+          { title: "Free Consultation", desc: "Schedule a no-obligation call. We review your case and outline your legal options clearly.", icon: "MessageCircle" },
+          { title: "Case Strategy", desc: "We build a tailored legal strategy designed to maximize your outcome and protect your rights.", icon: "Search" },
+          { title: "Aggressive Advocacy", desc: "We fight in your corner—in negotiations, mediation, or in court—every step of the way.", icon: "Shield" },
+          { title: "Resolution", desc: "We guide you to a full resolution so you can move forward with confidence and peace of mind.", icon: "CheckCircle" }
+        ]
+      }
+    },
+    {
+      id: "lf-testimonials-1",
+      type: "SLTestimonials",
+      props: {
+        heading: "Client Success Stories",
+        reviews: [
+          { name: "Rebecca M.", role: "Personal Injury Client", quote: "Sterling Law fought tirelessly for me after my accident. They recovered 3x what the insurance company offered. I felt supported every single step of the way.", img: "https://randomuser.me/api/portraits/women/44.jpg" },
+          { name: "Thomas H.", role: "Business Owner", quote: "I had a complex contract dispute and Sterling's team was absolutely brilliant. They resolved it quickly and saved my company thousands of dollars.", img: "https://randomuser.me/api/portraits/men/32.jpg" },
+          { name: "Maria S.", role: "Estate Planning Client", quote: "They made estate planning straightforward and stress-free. My family is now fully protected and I have total peace of mind.", img: "https://randomuser.me/api/portraits/women/67.jpg" }
+        ]
+      }
+    },
+    {
+      id: "lf-cta-1",
+      type: "SLCTA",
+      props: {
+        heading: "Don't Navigate the Legal System Alone.\nGet Expert Representation Today.",
+        buttonText: "SCHEDULE FREE CONSULTATION"
+      }
+    },
+    {
+      id: "lf-footer-1",
+      type: "SLFooter",
+      props: { businessName: "STERLING LAW" }
+    }
+  ],
+
+  // 2. AUTO REPAIR – Ridge Line Auto Service
+  auto_repair: [
+    {
+      id: "ar-header-1",
+      type: "RLHeader",
+      props: {
+        businessName: "RIDGE LINE AUTO",
+        tagline: "HONEST. FAST. RELIABLE.",
+        phone: "(555) 874-0200",
+        ctaText: "BOOK ONLINE",
+        navLinks: ["HOME", "SERVICES", "ABOUT US", "REVIEWS", "LOCATION"]
+      }
+    },
+    {
+      id: "ar-hero-1",
+      type: "RLHero",
+      props: {
+        badge: "Rated #1 Auto Repair in the Valley",
+        title: "Expert Auto Repair You Can Actually Trust",
+        subtitle: "Factory-trained technicians. Transparent pricing. No surprises. Just your car running perfectly — fast.",
+        ctaText: "BOOK AN APPOINTMENT",
+        secondaryCtaText: "GET AN ESTIMATE",
+        bgImage: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "ar-stats-1",
+      type: "RLStats",
+      props: {
+        stats: [
+          { value: "15,000+", label: "Vehicles\nServiced", icon: "Car" },
+          { value: "5.0 Stars", label: "300+ Verified\nReviews", icon: "Star" },
+          { value: "18+", label: "Years Serving\nThe Community", icon: "Calendar" },
+          { value: "Same-Day", label: "Service Available\nMost Repairs", icon: "Zap" }
+        ]
+      }
+    },
+    {
+      id: "ar-services-1",
+      type: "RLServices",
+      props: {
+        title: "Full-Service Auto Care",
+        subtitle: "From oil changes to full engine rebuilds — we handle it all under one roof with factory-grade equipment.",
+        services: [
+          { title: "Oil Change & Tune-Up", icon: "Droplets", desc: "Quick, precise oil changes with a full multi-point inspection on every visit. In and out fast.", img: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=800&auto=format&fit=crop" },
+          { title: "Brakes & Suspension", icon: "Shield", desc: "Safety is everything. We inspect, service, and replace brake systems and suspension components.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop" },
+          { title: "Engine & Transmission", icon: "Settings", desc: "From diagnostics to full rebuilds, our certified techs tackle even the most complex engine jobs.", img: "https://images.unsplash.com/photo-1581579187009-cbef9be1a049?q=80&w=800&auto=format&fit=crop" },
+          { title: "AC & Electrical", icon: "Zap", desc: "We diagnose and repair air conditioning systems, wiring, batteries, and all electrical components.", img: "https://images.unsplash.com/photo-1615906655593-ad0386982a0f?q=80&w=800&auto=format&fit=crop" }
+        ]
+      }
+    },
+    {
+      id: "ar-process-1",
+      type: "RLProcess",
+      props: {
+        title: "Getting your car fixed has never been this easy",
+        steps: [
+          { title: "Book Online", desc: "Schedule your appointment in seconds from your phone or computer. Pick a time that works for you.", icon: "Calendar" },
+          { title: "Drop It Off", desc: "Bring your vehicle in and our advisor will walk through everything with you before any work begins.", icon: "Car" },
+          { title: "We Fix It Right", desc: "Certified techs complete the work using OEM parts. We update you throughout with photos and texts.", icon: "Wrench" }
+        ]
+      }
+    },
+    {
+      id: "ar-testimonials-1",
+      type: "RLTestimonials",
+      props: {
+        title: "What Our Customers Say",
+        reviews: [
+          { name: "Karen D.", role: "Regular Customer", quote: "I've been bringing my cars here for 8 years. They are always honest, upfront about costs, and never try to upsell you on things you don't need. Rare to find that these days.", img: "https://randomuser.me/api/portraits/women/28.jpg" },
+          { name: "Brandon T.", role: "Fleet Manager", quote: "Ridge Line services our entire company fleet of 12 vans. Turnaround is fast, work is excellent, and they always beat the dealership prices. Couldn't ask for more.", img: "https://randomuser.me/api/portraits/men/51.jpg" }
+        ]
+      }
+    },
+    {
+      id: "ar-cta-1",
+      type: "RLCTA",
+      props: {
+        title: "Car Trouble? We've Got You Covered.",
+        subtitle: "Book online in 60 seconds or call us now for same-day service availability.",
+        buttonText: "BOOK YOUR APPOINTMENT"
+      }
+    },
+    {
+      id: "ar-footer-1",
+      type: "RLFooter",
+      props: {
+        businessName: "RIDGE LINE AUTO",
+        tagline: "HONEST. FAST. RELIABLE.",
+        description: "Trusted auto repair and maintenance serving the community for over 18 years. All makes and models welcome.",
+        licensing: "ASE Certified Technicians | Licensed & Insured",
+        phone: "(555) 874-0200",
+        email: "service@ridgelineauto.com",
+        address: "2847 Commerce Blvd, Suite A"
+      }
+    }
+  ],
+
+  // 3. HAIR SALON – Atelier Hair Studio
+  hair_salon: [
+    {
+      id: "hs-hero-1",
+      type: "AHHero",
+      props: {
+        title: "Where Hair Becomes\nHigh Art.",
+        subtitle: "Precision cuts, lived-in color, and luxury treatments in an intimate studio setting. Book your transformation today.",
+        bgImage: "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2074&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "hs-about-1",
+      type: "AHAbout",
+      props: {
+        title: "Hi, I'm Sofia.\nYour new favorite stylist.",
+        desc: "With over 12 years behind the chair and advanced training in Paris and New York, I specialize in creating tailored looks that enhance your natural beauty. My studio is a space where you can slow down, be yourself, and leave feeling completely transformed. Every appointment is a 1-on-1 experience — no double-booking, ever.",
+        image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1974&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "hs-services-1",
+      type: "AHServices",
+      props: {
+        services: [
+          { iconName: 'Scissors', title: 'Precision Cuts', desc: 'Custom haircuts tailored to your face shape, texture, and lifestyle. Includes blowout.' },
+          { iconName: 'Sparkles', title: 'Color & Balayage', desc: 'Lived-in color, bold transformations, and everything in between. Always blended perfectly.' },
+          { iconName: 'Star', title: 'Keratin Treatments', desc: 'Smooth, frizz-free hair for up to 3 months. Safe for all hair types and colors.' },
+          { iconName: 'Heart', title: 'Bridal Packages', desc: 'Full-day bridal prep for you and your wedding party. Trials available.' }
+        ]
+      }
+    },
+    {
+      id: "hs-portfolio-1",
+      type: "AHPortfolio",
+      props: {
+        images: [
+          { url: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=800&auto=format&fit=crop", title: "Balayage" },
+          { url: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=800&auto=format&fit=crop", title: "Color" },
+          { url: "https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?q=80&w=800&auto=format&fit=crop", title: "Cuts" },
+          { url: "https://images.unsplash.com/photo-1470259078422-826894b933aa?q=80&w=800&auto=format&fit=crop", title: "Styling" }
+        ]
+      }
+    },
+    {
+      id: "hs-testimonials-1",
+      type: "AHTestimonials",
+      props: {
+        testimonials: [
+          { text: "Sofia is an absolute genius with color. I came in with a reference photo and left with something even better. I get compliments every single day.", author: "Natalie P." },
+          { text: "I have super thick, curly hair and Sofia is the only stylist who actually knows what she's doing with it. Life-changing haircut!", author: "Amara J." },
+          { text: "The studio vibe is so relaxing and Sofia makes you feel totally comfortable. My hair has never looked or felt this healthy. Worth every penny.", author: "Claire M." }
+        ]
+      }
+    },
+    {
+      id: "hs-cta-1",
+      type: "AHCta",
+      props: {
+        title: "Ready for your best hair yet?",
+        image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "hs-footer-1",
+      type: "AHFooter",
+      props: { text: "© 2026 Atelier Hair Studio · All rights reserved · By appointment only" }
+    }
+  ],
+
+  // 4. REAL ESTATE – Meridian Properties
+  real_estate: [
+    {
+      id: "re-hero-1",
+      type: "MPHero",
+      props: {
+        title: "Find Your Perfect\nHome in the Valley.",
+        subtitle: "Local expertise, white-glove service, and an unmatched record of results. Let's find the home you deserve.",
+        bgImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=2073&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "re-stats-1",
+      type: "MPStats",
+      props: {
+        stats: [
+          { value: "450+", label: "Homes\nSuccessfully Sold", icon: "Home" },
+          { value: "$120M+", label: "In Transactions\nThis Year", icon: "TrendingUp" },
+          { value: "14 Days", label: "Average Days\nOn Market", icon: "Calendar" },
+          { value: "5★", label: "Zillow & Google\nRated Agent", icon: "Star" }
+        ]
+      }
+    },
+    {
+      id: "re-services-1",
+      type: "MPServices",
+      props: {
+        services: [
+          { iconName: 'Home', title: 'Buyer Representation', desc: 'We find the right home at the right price and guide you through every step of closing.' },
+          { iconName: 'TrendingUp', title: 'Seller Strategy', desc: 'Expert staging, photography, and pricing to sell your home fast and for top dollar.' },
+          { iconName: 'Building2', title: 'Investment Properties', desc: 'Rental analysis, cap rates, and off-market deals for serious real estate investors.' },
+          { iconName: 'MapPin', title: 'Relocation Services', desc: 'Moving to our area? We make the transition seamless with local knowledge and connections.' },
+          { iconName: 'Key', title: 'First-Time Buyers', desc: 'We walk first-time buyers through the entire process — from pre-approval to keys in hand.' },
+          { iconName: 'FileText', title: 'Luxury Market', desc: 'Discretion and results for high-end buyers and sellers in the $1M+ market.' }
+        ]
+      }
+    },
+    {
+      id: "re-listings-1",
+      type: "MPListings",
+      props: {
+        title: "Featured Listings",
+        projects: [
+          { title: "4 Bed · 3 Bath · $685,000", loc: "2204 Ridgemont Way, Scottsdale AZ", img: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?q=80&w=800&auto=format&fit=crop" },
+          { title: "3 Bed · 2 Bath · $425,000", loc: "819 Lakeview Terrace, Tempe AZ", img: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=800&auto=format&fit=crop" },
+          { title: "5 Bed · 4 Bath · $1,100,000", loc: "10 Camelback Peak Dr, Phoenix AZ", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop" },
+          { title: "2 Bed · 2 Bath · $310,000", loc: "445 Saguaro Circle #3, Mesa AZ", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop" }
+        ]
+      }
+    },
+    {
+      id: "re-testimonials-1",
+      type: "MPTestimonials",
+      props: {
+        testimonials: [
+          { text: "Meridian sold our home in 8 days for $22K over asking. Their marketing and negotiation skills are absolutely next level.", author: "The Hernandez Family", rating: "5" },
+          { text: "As first-time buyers we were nervous, but they made every step easy and clear. We couldn't have done it without them.", author: "Jake & Emily S.", rating: "5" },
+          { text: "I've bought and sold 6 homes. Meridian is by far the best real estate team I've ever worked with. Responsive, honest, results-driven.", author: "David R.", rating: "5" }
+        ]
+      }
+    },
+    {
+      id: "re-cta-1",
+      type: "MPCta",
+      props: {
+        title: "Ready to Buy, Sell, or Invest?\nLet's talk.",
+        subtitle: "Schedule a free 30-minute strategy call today. No obligation, no pressure — just expert guidance."
+      }
+    },
+    {
+      id: "re-footer-1",
+      type: "MPFooter",
+      props: { text: "© 2026 Meridian Properties. Licensed Real Estate Brokerage. Equal Housing Opportunity." }
+    }
+  ],
+
+  // 5. PERSONAL TRAINER – Iron Edge Fitness
+  personal_trainer: [
+    {
+      id: "pt-header-1",
+      type: "IEHeader",
+      props: {
+        businessName: "IRON EDGE",
+        navLinks: ["HOME", "PROGRAMS", "ABOUT", "RESULTS", "PRICING", "START NOW"]
+      }
+    },
+    {
+      id: "pt-hero-1",
+      type: "IEHero",
+      props: {
+        headline: "STRONGER.\nLEANER.\nCONFIDENT.",
+        subheading: "REAL COACHING. REAL RESULTS.",
+        description: "Iron Edge is private 1-on-1 personal training built around your specific goals, schedule, and fitness level. No group classes. No fluff. Just results.",
+        backgroundImage: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "pt-stats-1",
+      type: "IEStats",
+      props: {
+        stats: [
+          { value: "300+", label: "Clients\nTransformed", icon: "Users" },
+          { value: "8+", label: "Years of\nCoaching", icon: "Calendar" },
+          { value: "94%", label: "Goal Achievement\nRate", icon: "TrendingUp" },
+          { value: "NSCA", label: "Certified Strength &\nConditioning Specialist", icon: "Shield" }
+        ]
+      }
+    },
+    {
+      id: "pt-services-1",
+      type: "IEServices",
+      props: {
+        heading: "Training Programs Built Around You",
+        services: [
+          { title: "1-on-1 Personal Training", icon: "User", desc: "Private sessions tailored entirely to your goals, schedule, and current fitness level.", img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop" },
+          { title: "Fat Loss Programs", desc: "Evidence-based nutrition guidance and training protocols for sustainable, permanent fat loss.", icon: "TrendingDown", img: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=800&auto=format&fit=crop" },
+          { title: "Strength & Muscle", icon: "Dumbbell", desc: "Progressive overload programming designed to build strength and lean muscle over time.", img: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop" },
+          { title: "Online Coaching", icon: "Laptop", desc: "Full coaching experience delivered remotely — programming, check-ins, and nutrition support.", img: "https://images.unsplash.com/photo-1616279969862-a2dc396a7f10?q=80&w=800&auto=format&fit=crop" }
+        ]
+      }
+    },
+    {
+      id: "pt-steps-1",
+      type: "IEProcess",
+      props: {
+        heading: "Your Transformation Starts Here.",
+        steps: [
+          { title: "Free Strategy Call", desc: "We start with a free 30-minute consultation to understand your goals, lifestyle, and fitness history.", icon: "MessageCircle" },
+          { title: "Custom Program", desc: "I build a fully personalized training and nutrition plan designed specifically for your body and goals.", icon: "ClipboardList" },
+          { title: "Train & Track", desc: "We train together (or remotely), tracking progress weekly and adjusting the plan as you improve.", icon: "TrendingUp" },
+          { title: "Reach Your Goals", desc: "Real, lasting results. Most clients hit their primary goal within 12–16 weeks of consistent training.", icon: "Star" }
+        ]
+      }
+    },
+    {
+      id: "pt-testimonials-1",
+      type: "IETestimonials",
+      props: {
+        heading: "Client Transformations",
+        reviews: [
+          { name: "Jessica L.", role: "Lost 38 lbs in 14 weeks", quote: "I tried everything before Iron Edge. This program finally taught me how to eat and train in a way that actually fits my life. I've kept the weight off for 2 years.", img: "https://randomuser.me/api/portraits/women/31.jpg" },
+          { name: "Marcus K.", role: "Added 25 lbs of muscle", quote: "I gained more muscle in 4 months with Iron Edge than I did in 3 years training on my own. The personalized programming makes all the difference.", img: "https://randomuser.me/api/portraits/men/40.jpg" },
+          { name: "Sandra T.", role: "Post-surgery rehabilitation", quote: "After my knee surgery I was nervous to work out. The program was careful, progressive, and I'm now stronger than before my injury. Incredible coach.", img: "https://randomuser.me/api/portraits/women/57.jpg" }
+        ]
+      }
+    },
+    {
+      id: "pt-pricing-1",
+      type: "IEPricing",
+      props: {
+        heading: "Simple, Transparent Pricing.",
+        plans: [
+          { title: "Online Coaching", price: "197", icon: "Laptop", features: ["Weekly Training Program", "Nutrition Guidance", "Weekly Check-In Call", "App-Based Tracking"] },
+          { title: "In-Person Training", price: "397", icon: "User", isPopular: true, features: ["3 Private Sessions/Week", "Custom Meal Plan", "Body Composition Tracking", "Unlimited Text Support"] },
+          { title: "VIP Intensive", price: "697", icon: "Star", features: ["5 Sessions/Week", "Full Nutrition Coaching", "Priority Scheduling", "Monthly Photo Reviews"] }
+        ]
+      }
+    },
+    {
+      id: "pt-cta-1",
+      type: "IECTA",
+      props: {
+        heading: "Your Best Body Is Closer Than You Think.\nStart Today.",
+        buttonText: "BOOK FREE STRATEGY CALL"
+      }
+    },
+    {
+      id: "pt-footer-1",
+      type: "IEFooter",
+      props: { businessName: "IRON EDGE" }
+    }
+  ],
+
+  // 6. DENTAL PRACTICE – Clarity Dental Studio
+  dental: [
+    {
+      id: "dt-header-1",
+      type: "CDHeader",
+      props: {
+        businessName: "CLARITY DENTAL",
+        navLinks: ["HOME", "SERVICES", "ABOUT US", "PATIENT INFO", "BOOK NOW"]
+      }
+    },
+    {
+      id: "dt-hero-1",
+      type: "CDHero",
+      props: {
+        headline: "YOUR SMILE.\nOUR PASSION.\nPERFECTED.",
+        subheading: "GENTLE CARE. STUNNING RESULTS.",
+        description: "Clarity Dental Studio provides modern, anxiety-free dental care for the whole family. From routine cleanings to complete smile makeovers — we're your partner in lifelong oral health.",
+        backgroundImage: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "dt-stats-1",
+      type: "CDStats",
+      props: {
+        stats: [
+          { value: "5,000+", label: "Happy Patients\nServed", icon: "Users" },
+          { value: "15+", label: "Years of\nExpert Care", icon: "Calendar" },
+          { value: "4.9★", label: "Google\nRating", icon: "Star" },
+          { value: "Same-Day", label: "Emergency\nAppointments", icon: "Zap" }
+        ]
+      }
+    },
+    {
+      id: "dt-services-1",
+      type: "CDServices",
+      props: {
+        heading: "Comprehensive Dental Services",
+        services: [
+          { title: "General & Preventive", icon: "Shield", desc: "Cleanings, exams, X-rays, fillings, and preventive care for the whole family. Gentle and thorough.", img: "https://images.unsplash.com/photo-1588776814546-1ffedcb087b4?q=80&w=800&auto=format&fit=crop" },
+          { title: "Cosmetic Dentistry", icon: "Sparkles", desc: "Teeth whitening, veneers, bonding, and smile makeovers to give you total confidence.", img: "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=800&auto=format&fit=crop" },
+          { title: "Implants & Restorations", icon: "Star", desc: "Dental implants, crowns, bridges, and full restorations. Beautiful, long-lasting results.", img: "https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=800&auto=format&fit=crop" },
+          { title: "Invisalign & Orthodontics", icon: "Smile", desc: "Straighten your smile discreetly with Invisalign clear aligners. Results in as little as 6 months.", img: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?q=80&w=800&auto=format&fit=crop" }
+        ]
+      }
+    },
+    {
+      id: "dt-testimonials-1",
+      type: "CDTestimonials",
+      props: {
+        heading: "Real Patients. Real Smiles.",
+        reviews: [
+          { name: "Lindsay F.", role: "Cosmetic Patient", quote: "I got veneers at Clarity Dental and the results are beyond anything I imagined. My confidence has completely transformed. The team is warm, professional, and so skilled.", img: "https://randomuser.me/api/portraits/women/35.jpg" },
+          { name: "Robert M.", role: "Implant Patient", quote: "After losing a tooth I was worried about implants. The procedure was painless and the implant looks completely natural. Wish I had done it sooner!", img: "https://randomuser.me/api/portraits/men/58.jpg" },
+          { name: "Amy K.", role: "Family Patient", quote: "We bring our whole family here — from our 6-year-old to my 70-year-old mom. Dr. Chen puts everyone at ease and the team is genuinely kind and caring.", img: "https://randomuser.me/api/portraits/women/62.jpg" }
+        ]
+      }
+    },
+    {
+      id: "dt-pricing-1",
+      type: "CDPricing",
+      props: {
+        heading: "Membership Plans for Uninsured Patients",
+        plans: [
+          { title: "Basic Plan", price: "29/mo", icon: "Shield", features: ["2 Cleanings Per Year", "Annual X-Rays", "Oral Cancer Screening", "10% Off All Treatments"] },
+          { title: "Complete Care", price: "49/mo", icon: "Star", isPopular: true, features: ["2 Cleanings Per Year", "Annual X-Rays", "1 Emergency Visit", "20% Off All Treatments"] },
+          { title: "Family Plan", price: "89/mo", icon: "Home", features: ["Covers 2 Adults", "2 Children Under 12", "All Basic Benefits", "25% Off All Treatments"] }
+        ]
+      }
+    },
+    {
+      id: "dt-cta-1",
+      type: "CDCTA",
+      props: {
+        heading: "Ready for a Smile You Love?\nBook Your Visit Today.",
+        buttonText: "REQUEST AN APPOINTMENT"
+      }
+    },
+    {
+      id: "dt-footer-1",
+      type: "CDFooter",
+      props: { businessName: "CLARITY DENTAL" }
+    }
+  ],
+
+  // 7. DOG GROOMING – Paws & Pamper Pet Spa
+  dog_grooming: [
+    {
+      id: "dg-hero-1",
+      type: "PPHero",
+      props: {
+        title: "Your Dog Deserves\nThe Very Best.",
+        subtitle: "Professional grooming in a calm, cage-free spa environment. Every visit is a tail-wagging good time.",
+        bgImage: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "dg-ethos-1",
+      type: "PPEthos",
+      props: {
+        features: [
+          { iconName: 'Heart', title: 'Cage-Free Studio', desc: 'Your pup roams freely between appointments in our calm, open-space studio.' },
+          { iconName: 'Leaf', title: 'Natural Products', desc: 'We use only natural, non-toxic, hypoallergenic shampoos and conditioners.' },
+          { iconName: 'Shield', title: 'Fear Free Certified', desc: 'Every groomer is certified in low-stress, fear-free handling techniques.' },
+          { iconName: 'Star', title: 'One Dog at a Time', desc: 'No rushed appointments. Your dog gets our full attention for their whole visit.' }
+        ]
+      }
+    },
+    {
+      id: "dg-orderahead-1",
+      type: "PPBook",
+      props: {
+        title: "Book Your Pup's Appointment",
+        subtitle: "Online booking is quick and easy. Spots fill up fast — reserve your dog's next grooming session in seconds.",
+        image: "https://images.unsplash.com/photo-1534361960057-19f4434a4aeb?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "dg-community-1",
+      type: "PPTestimonials",
+      props: {
+        testimonials: [
+          { text: "Paws & Pamper is the ONLY place I trust with my golden retriever. She actually gets excited when we pull into the parking lot!", author: "Lauren C.", rating: "5" },
+          { text: "My anxious rescue dog used to shake at the groomers. After one visit here he was calm and happy. They are absolute miracle workers.", author: "James D.", rating: "5" },
+          { text: "Amazing results every time. My doodle comes out looking like a show dog and smells incredible. Worth every penny.", author: "Priya M.", rating: "5" }
+        ]
+      }
+    },
+    {
+      id: "dg-findus-1",
+      type: "PPFindUs",
+      props: {
+        address: "531 Barkley Ave",
+        cityState: "Austin, TX 78704",
+        phone: "(512) 555-0183",
+        email: "hello@pawsandpamper.com",
+        image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=2069&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "dg-footer-1",
+      type: "PPFooter",
+      props: { text: "© 2026 Paws & Pamper Pet Spa · Austin, TX · Cage-Free · Fear Free Certified" }
+    }
+  ],
+
+  // 8. WEDDING PLANNER – The Golden Thread Events
+  wedding_planner: [
+    {
+      id: "wp-hero-1",
+      type: "GTHero",
+      props: {
+        title: "Your Dream Wedding,\nFlawlessly Executed.",
+        subtitle: "Luxury wedding planning and design for couples who want every detail to be absolutely perfect. Based in Charleston, serving the Southeast.",
+        bgImage: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "wp-about-1",
+      type: "GTAbout",
+      props: {
+        title: "Hi, I'm Claire.\nI turn visions into memories.",
+        desc: "I've been planning weddings for 10+ years and have produced over 200 weddings across the Southeast. My approach blends high-level logistics with creative design — so your day is not only beautiful but runs without a hitch. I become your most organized friend, your creative partner, and your stress absorber all at once.",
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "wp-services-1",
+      type: "GTServices",
+      props: {
+        services: [
+          { iconName: 'Star', title: 'Full Planning', desc: 'From first meeting to final farewell — we handle every detail of your entire wedding journey.' },
+          { iconName: 'CheckCircle', title: 'Day-Of Coordination', desc: 'Months of prep distilled into flawless execution on your wedding day. You relax, we run everything.' },
+          { iconName: 'Flower2', title: 'Design & Styling', desc: 'Moodboards, florals, tablescapes, and décor direction to bring your aesthetic vision to life.' },
+          { iconName: 'Heart', title: 'Elopements', desc: 'Intimate, meaningful ceremonies for couples who want something personal, private, and unforgettable.' }
+        ]
+      }
+    },
+    {
+      id: "wp-portfolio-1",
+      type: "GTPortfolio",
+      props: {
+        images: [
+          { url: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=800&auto=format&fit=crop", title: "Outdoor Ceremony" },
+          { url: "https://images.unsplash.com/photo-1478146059778-26028b07395a?q=80&w=800&auto=format&fit=crop", title: "Garden Reception" },
+          { url: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=800&auto=format&fit=crop", title: "Florals & Design" },
+          { url: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop", title: "Reception Details" }
+        ]
+      }
+    },
+    {
+      id: "wp-testimonials-1",
+      type: "GTTestimonials",
+      props: {
+        testimonials: [
+          { text: "Claire is the reason our wedding was absolutely perfect. She anticipated every problem before it happened and our guests still talk about how flawless the day was.", author: "Sophie & Andrew" },
+          { text: "Hiring Claire was the single best decision we made for our wedding. She understood our vision immediately and elevated it beyond what we thought possible.", author: "Maya & Jordan" },
+          { text: "From our first call I knew Claire was something special. She's calm, creative, deeply organized, and just genuinely cares about your wedding as much as you do.", author: "Emma P." }
+        ]
+      }
+    },
+    {
+      id: "wp-cta-1",
+      type: "GTCta",
+      props: {
+        title: "Your perfect day starts with one conversation.",
+        image: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "wp-footer-1",
+      type: "GTFooter",
+      props: { text: "© 2026 The Golden Thread Events · Charleston, SC · Serving the Southeast" }
+    }
+  ],
+
+  // 9. HOME CLEANING – Spotless Home Co.
+  home_cleaning: [
+    {
+      id: "hc-hero-1",
+      type: "SCHero",
+      props: {
+        title: "A Spotless Home.\nFresh Every Time.",
+        subtitle: "Reliable, thorough, and trustworthy home cleaning services. We treat your home like our own.",
+        bgImage: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "hc-stats-1",
+      type: "SCStats",
+      props: {
+        stats: [
+          { value: "1,200+", label: "Homes\nCleaned", icon: "Home" },
+          { value: "7+", label: "Years in\nBusiness", icon: "Calendar" },
+          { value: "4.9★", label: "Google & Yelp\nRating", icon: "Star" },
+          { value: "100%", label: "Background\nChecked Team", icon: "Shield" }
+        ]
+      }
+    },
+    {
+      id: "hc-services-1",
+      type: "SCServices",
+      props: {
+        services: [
+          { iconName: 'Sparkles', title: 'Standard Cleaning', desc: 'Regular maintenance cleaning for a consistently clean home. Weekly, bi-weekly, or monthly.' },
+          { iconName: 'Star', title: 'Deep Cleaning', desc: 'A thorough, top-to-bottom clean including baseboards, appliance interiors, and more.' },
+          { iconName: 'Key', title: 'Move-In / Move-Out', desc: 'Leave your old home spotless or start fresh in your new place with our move clean service.' },
+          { iconName: 'Building2', title: 'Airbnb & Rentals', desc: 'Fast turnovers between guests with hotel-standard cleanliness. We track checkout schedules.' },
+          { iconName: 'Leaf', title: 'Eco-Friendly Option', desc: 'We offer green cleaning with non-toxic products that are safe for kids, pets, and the planet.' },
+          { iconName: 'Calendar', title: 'One-Time Service', desc: 'Need a single cleaning? No contracts required. Book whenever the need arises.' }
+        ]
+      }
+    },
+    {
+      id: "hc-about-1",
+      type: "SCAbout",
+      props: {
+        title: "Family-owned. Locally trusted.\nSince 2017.",
+        desc: "Spotless Home Co. was founded by the Martinez family with one goal: to give busy homeowners one less thing to worry about. We're fully insured, background checked, and use professional-grade products. Every cleaner on our team is personally trained and held to the highest standards.",
+        image: "https://images.unsplash.com/photo-1527515545081-5db817172677?q=80&w=1200&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "hc-testimonials-1",
+      type: "SCTestimonials",
+      props: {
+        testimonials: [
+          { text: "Spotless has been cleaning our home for 3 years. Consistent, thorough, and the team is always punctual and professional. We couldn't live without them.", author: "The Chen Family", rating: "5" },
+          { text: "I had them do a deep clean before listing my house for sale. The realtor said it was the cleanest house she'd shown in months. House sold in 4 days!", author: "Michael O.", rating: "5" },
+          { text: "I was nervous about letting cleaners into my home, but the background check process and professionalism immediately put me at ease. Truly trustworthy.", author: "Sandra W.", rating: "5" }
+        ]
+      }
+    },
+    {
+      id: "hc-cta-1",
+      type: "SCCta",
+      props: {
+        title: "Get your free quote today.\nFirst clean is 15% off.",
+        subtitle: "Book online in 2 minutes or give us a call. We'll match any local competitor's price."
+      }
+    },
+    {
+      id: "hc-footer-1",
+      type: "SCFooter",
+      props: { text: "© 2026 Spotless Home Co. · Fully Insured · Background Checked Team · Serving the Metro Area" }
+    }
+  ],
+
+  // 10. YOGA STUDIO – Solstice Yoga & Wellness
+  yoga_studio: [
+    {
+      id: "ys-hero-1",
+      type: "SYHero",
+      props: {
+        title: "Find Your\nCenter Here.",
+        subtitle: "A welcoming, all-levels yoga and wellness studio rooted in community, movement, and mindfulness.",
+        bgImage: "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "ys-ethos-1",
+      type: "SYEthos",
+      props: {
+        features: [
+          { iconName: 'Sun', title: 'All Levels Welcome', desc: 'From first-timers to advanced practitioners, every class is guided with care and modifications.' },
+          { iconName: 'Heart', title: 'Community First', desc: "We're more than a studio — we're a community where everyone belongs and feels seen." },
+          { iconName: 'Leaf', title: 'Holistic Wellness', desc: 'Beyond yoga — we offer meditation, breathwork, sound healing, and wellness workshops.' },
+          { iconName: 'Star', title: 'Expert Instructors', desc: 'Every teacher holds a 200hr+ RYT certification and brings years of dedicated teaching experience.' }
+        ]
+      }
+    },
+    {
+      id: "ys-orderahead-1",
+      type: "SYBook",
+      props: {
+        title: "Book Your Class Online",
+        subtitle: "Reserve your mat in advance for any of our 30+ weekly classes. New student special — first week unlimited for $25.",
+        image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "ys-community-1",
+      type: "SYTestimonials",
+      props: {
+        testimonials: [
+          { text: "Solstice completely changed my relationship with movement. I walked in tight and stressed, and after 3 months I feel the best I have in years. This community is magic.", author: "Rachel T.", rating: "5" },
+          { text: "The instructors are world-class. Every class is thoughtfully designed and I've learned so much about my body and breath in just a few months.", author: "Omar N.", rating: "5" },
+          { text: "I've tried a dozen yoga studios and nothing compares to Solstice. The space is beautiful, the people are genuine, and every single teacher is exceptional.", author: "Diane M.", rating: "5" }
+        ]
+      }
+    },
+    {
+      id: "ys-findus-1",
+      type: "SYFindUs",
+      props: {
+        address: "814 Solstice Lane",
+        cityState: "Denver, CO 80203",
+        phone: "(720) 555-0142",
+        email: "hello@solsticeyoga.com",
+        image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=2070&auto=format&fit=crop"
+      }
+    },
+    {
+      id: "ys-footer-1",
+      type: "SYFooter",
+      props: { text: "© 2026 Solstice Yoga & Wellness · Denver, CO · All are welcome here." }
+    }
+  ],
+
+  // ── PROHOME SERVICES ────────────────────────────────────────────────────────
+  prohome_services: [
+    {
+      id: "ph-header-1",
+      type: "PHHeader",
+      props: {
+        businessName: "Valley ProHome Services",
+        phone: "(555) 382-9100",
+        navLinks: ["Plumbing", "Electrical", "HVAC", "Contact"]
+      }
+    },
+    {
+      id: "ph-hero-1",
+      type: "PHHero",
+      props: {
+        headline: "Fast, Reliable Home Services\nYou Can Trust",
+        sub: "Serving the greater valley area since 2006. Licensed, bonded, and insured professionals available 24/7.",
+        phone: "(555) 382-9100",
+        ctaText: "Book a Service Call",
+        bgImage: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=2070&q=80",
+        badges: ["Licensed & Bonded", "5-Star Rated", "24/7 Emergency", "Free Estimates"]
+      }
+    },
+    {
+      id: "ph-stats-1",
+      type: "PHStats",
+      props: {
+        stats: [
+          { value: "18+", label: "Years in Business" },
+          { value: "12,400+", label: "Customers Served" },
+          { value: "4.9★", label: "Average Rating" },
+          { value: "< 2hrs", label: "Avg Response Time" }
+        ]
+      }
+    },
+    {
+      id: "ph-services-1",
+      type: "PHServices",
+      props: {
+        title: "Our Services",
+        subtitle: "Full-spectrum home services from the valley's most trusted crew.",
+        services: [
+          { icon: "Wrench", name: "Plumbing", desc: "Leaks, clogs, water heaters, pipe repair, and remodels." },
+          { icon: "Zap", name: "Electrical", desc: "Panel upgrades, outlets, lighting, and EV charger installs." },
+          { icon: "Wind", name: "HVAC", desc: "AC repair, furnace tune-up, duct cleaning, and new systems." },
+          { icon: "Droplets", name: "Drain Cleaning", desc: "Hydro-jetting, camera inspection, and sewer line service." },
+          { icon: "Flame", name: "Water Heaters", desc: "Tank & tankless install, repair, and annual service." },
+          { icon: "Shield", name: "24/7 Emergency", desc: "Round-the-clock dispatch for urgent home crises." }
+        ]
+      }
+    },
+    {
+      id: "ph-process-1",
+      type: "PHProcess",
+      props: {
+        title: "How It Works",
+        steps: [
+          { num: "01", heading: "Call or Book Online", body: "Reach us any time via phone, text, or our online booking form. No hold times — we answer fast." },
+          { num: "02", heading: "We Dispatch a Pro", body: "A vetted, uniformed technician arrives on-time with all the tools for your service type." },
+          { num: "03", heading: "Job Done Right", body: "We fix it properly, clean up after ourselves, and follow up to make sure you're satisfied." }
+        ]
+      }
+    },
+    {
+      id: "ph-testimonials-1",
+      type: "PHTestimonials",
+      props: {
+        title: "What Our Customers Say",
+        reviews: [
+          { name: "Sandra M.", service: "Plumbing Repair", rating: 5, text: "Showed up within 90 minutes and had my burst pipe fixed in under an hour. Absolutely saved us during the holidays." },
+          { name: "Derek H.", service: "HVAC Tune-Up", rating: 5, text: "The technician was polite, knowledgeable, and didn't try to upsell me on anything I didn't need. Rare to find that." },
+          { name: "Priya K.", service: "Electrical Panel", rating: 5, text: "Upgraded my old panel to 200A with zero hiccups. Clean work, passed inspection first try. Will use again." },
+          { name: "Tom G.", service: "Water Heater Install", rating: 5, text: "Same-day install of a new tankless unit. Fast, clean, and they explained everything. Outstanding." }
+        ]
+      }
+    },
+    {
+      id: "ph-cta-1",
+      type: "PHCTA",
+      props: {
+        headline: "Need a Pro Today?",
+        sub: "We dispatch within the hour. No diagnostic fees. Just honest service from real professionals.",
+        phone: "(555) 382-9100",
+        ctaText: "Schedule Online"
+      }
+    },
+    {
+      id: "ph-footer-1",
+      type: "PHFooter",
+      props: {
+        businessName: "Valley ProHome Services",
+        phone: "(555) 382-9100",
+        email: "hello@valleyprohome.com",
+        address: "3820 Industrial Blvd, Your City, ST 12345",
+        links: ["Plumbing", "Electrical", "HVAC", "Reviews", "Emergency Service"],
+        copyright: "© 2025 Valley ProHome Services. All rights reserved."
+      }
+    }
+  ],
+
+  // ── MAISON BOUTIQUE ─────────────────────────────────────────────────────────
+  maison_boutique: [
+    {
+      id: "mb-hero-1",
+      type: "MBHero",
+      props: {
+        headline: "Dressed for\nyour story.",
+        sub: "Curated collections for women who live intentionally. New arrivals every Thursday.",
+        ctaText: "Shop New Arrivals",
+        secondaryText: "Explore Lookbook",
+        badge: "New Collection · Spring 2025",
+        bgImage: "https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=2070&q=80"
+      }
+    },
+    {
+      id: "mb-about-1",
+      type: "MBAbout",
+      props: {
+        eyebrow: "Our Story",
+        headline: "More than a boutique.\nA way of life.",
+        body: "Founded in 2018, Maison was built on the belief that getting dressed should feel joyful — not overwhelming. We source only from makers who share our commitment to quality, ethics, and lasting style over passing trends.",
+        ctaText: "Meet the Founders",
+        image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=2070&q=80"
+      }
+    },
+    {
+      id: "mb-collections-1",
+      type: "MBCollections",
+      props: {
+        eyebrow: "Shop",
+        title: "Current Collections",
+        collections: [
+          { label: "New Arrivals", sub: "24 pieces", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80" },
+          { label: "Essentials", sub: "Year-round staples", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80" },
+          { label: "Sale", sub: "Up to 40% off", image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80" }
+        ]
+      }
+    },
+    {
+      id: "mb-quote-1",
+      type: "MBQuote",
+      props: {
+        quote: "Style is a way of saying who you are without having to speak.",
+        attribution: "— Rachel Zoe"
+      }
+    },
+    {
+      id: "mb-testimonials-1",
+      type: "MBTestimonials",
+      props: {
+        eyebrow: "Our Customers",
+        title: "They love it here.",
+        reviews: [
+          { name: "Claire B.", rating: 5, text: "I discovered Maison two years ago and haven't shopped anywhere else since. The quality is impeccable and the team actually knows fashion." },
+          { name: "Nadia S.", rating: 5, text: "The curation here is unlike anything I've seen locally. Every piece feels like it was chosen with purpose. My wardrobe has completely transformed." },
+          { name: "Taylor M.", rating: 5, text: "Ordered online and everything arrived beautifully packaged. Sizing was perfect and the fabric quality is way above the price point." }
+        ]
+      }
+    },
+    {
+      id: "mb-newsletter-1",
+      type: "MBNewsletter",
+      props: {
+        headline: "Be the first to know.",
+        sub: "New arrivals, private events, and styling tips — straight to your inbox.",
+        placeholder: "Your email address",
+        buttonText: "Subscribe",
+        fine: "No spam, ever. Unsubscribe anytime."
+      }
+    },
+    {
+      id: "mb-footer-1",
+      type: "MBFooter",
+      props: {
+        businessName: "Maison Boutique",
+        tagline: "Intentional style. Lasting quality.",
+        copyright: "© 2025 Maison Boutique. All rights reserved.",
+        shop: ["New Arrivals", "Essentials", "Sale", "Lookbook"],
+        company: ["Our Story", "Sustainability", "Press", "Careers"],
+        support: ["Sizing Guide", "Shipping & Returns", "FAQ", "Contact Us"]
+      }
+    }
+  ]
 };
 
 export const TEMPLATE_PAGES: Record<string, { name: string; slug: string; sections: SectionData[] }[]> = {
+  greenscape: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: [
+        { id: "gs-home-header", type: "GSHeader", props: { businessName: "Greenscape", tagline: "Landscaping", phone: "(408) 123-4567", address: "Proudly serving Sunnyvale and surrounding areas", hours: "Mon - Sat: 7AM - 6PM", ctaText: "Get a Free Quote" } },
+        { id: "gs-home-hero", type: "GSHero", props: { title: "Beautiful landscapes.\nBuilt for your life.", subtitle: "Expert landscaping services that enhance your property and add lasting value. Rooted in quality since 2012.", bgImage: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=2070&q=80" } },
+        { id: "gs-home-services", type: "GSServices", props: { services: [
+          { iconName: 'Shovel', title: 'Lawn Care', desc: 'Expert maintenance for every season.' },
+          { iconName: 'Trees', title: 'Landscape Design', desc: 'Custom designs tailored to you.' },
+          { iconName: 'Leaf', title: 'Garden & Planting', desc: 'Beautiful plants and expert care.' },
+          { iconName: 'Droplets', title: 'Hardscaping', desc: 'Patios, walkways, and walls.' },
+          { iconName: 'ShieldCheck', title: 'Irrigation', desc: 'Efficient water-saving systems.' },
+          { iconName: 'Trash2', title: 'Cleanup', desc: 'Yard cleanup and debris removal.' }
+        ] } },
+        { id: "gs-home-about", type: "GSAbout", props: { title: "Rooted in our community. \nCommitted to excellence.", desc: "Greenscape Landscaping is a locally owned and operated business serving Sunnyvale and surrounding areas. We take pride in our work, our reliability, and the relationships we build with our clients.", image: "https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=1200&q=80" } },
+        { id: "gs-home-projects", type: "GSProjects", props: { title: "Projects we're proud of", projects: [
+          { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Modern Front Yard', loc: 'Mountain View, CA', img: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Elegant Pathway', loc: 'Cupertino, CA', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80' }
+        ] } },
+        { id: "gs-home-cta", type: "GSCta", props: { title: "Let's build something \nbeautiful together.", subtitle: "Contact us today for your free quote and start your transition to a more beautiful life outdoors." } },
+        { id: "gs-home-footer", type: "GSFooter", props: { text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area." } }
+      ]
+    },
+    {
+      name: 'Services',
+      slug: '/services',
+      sections: [
+        { id: "gs-services-header", type: "GSHeader", props: { businessName: "Greenscape", tagline: "Landscaping", phone: "(408) 123-4567", address: "Proudly serving Sunnyvale and surrounding areas", hours: "Mon - Sat: 7AM - 6PM", ctaText: "Get a Free Quote" } },
+        { id: "gs-services-hero", type: "GSHero", props: { title: "Our Landscaping\nServices", subtitle: "We offer professional lawn care, design, hardscaping, irrigation, and yard cleanups.", bgImage: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?auto=format&fit=crop&w=2070&q=80" } },
+        { id: "gs-services-grid", type: "GSServices", props: { services: [
+          { iconName: 'Shovel', title: 'Lawn Care', desc: 'Expert maintenance for every season.' },
+          { iconName: 'Trees', title: 'Landscape Design', desc: 'Custom designs tailored to you.' },
+          { iconName: 'Leaf', title: 'Garden & Planting', desc: 'Beautiful plants and expert care.' },
+          { iconName: 'Droplets', title: 'Hardscaping', desc: 'Patios, walkways, and walls.' },
+          { iconName: 'ShieldCheck', title: 'Irrigation', desc: 'Efficient water-saving systems.' },
+          { iconName: 'Trash2', title: 'Cleanup', desc: 'Yard cleanup and debris removal.' }
+        ] } },
+        { id: "gs-services-cta", type: "GSCta", props: { title: "Let's build something \nbeautiful together.", subtitle: "Contact us today for your free quote and start your transition to a more beautiful life outdoors." } },
+        { id: "gs-services-footer", type: "GSFooter", props: { text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area." } }
+      ]
+    },
+    {
+      name: 'About Us',
+      slug: '/about',
+      sections: [
+        { id: "gs-about-header", type: "GSHeader", props: { businessName: "Greenscape", tagline: "Landscaping", phone: "(408) 123-4567", address: "Proudly serving Sunnyvale and surrounding areas", hours: "Mon - Sat: 7AM - 6PM", ctaText: "Get a Free Quote" } },
+        { id: "gs-about-hero", type: "GSHero", props: { title: "Rooted in Our\nCommunity", subtitle: "Committed to excellence in Sunnyvale and the surrounding Bay Area since 2012.", bgImage: "https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=2070&q=80" } },
+        { id: "gs-about-block", type: "GSAbout", props: { title: "Rooted in our community. \nCommitted to excellence.", desc: "Greenscape Landscaping is a locally owned and operated business serving Sunnyvale and surrounding areas. We take pride in our work, our reliability, and the relationships we build with our clients.", image: "https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=1200&q=80" } },
+        { id: "gs-about-cta", type: "GSCta", props: { title: "Let's build something \nbeautiful together.", subtitle: "Contact us today for your free quote and start your transition to a more beautiful life outdoors." } },
+        { id: "gs-about-footer", type: "GSFooter", props: { text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area." } }
+      ]
+    },
+    {
+      name: 'Our Work',
+      slug: '/projects',
+      sections: [
+        { id: "gs-projects-header", type: "GSHeader", props: { businessName: "Greenscape", tagline: "Landscaping", phone: "(408) 123-4567", address: "Proudly serving Sunnyvale and surrounding areas", hours: "Mon - Sat: 7AM - 6PM", ctaText: "Get a Free Quote" } },
+        { id: "gs-projects-hero", type: "GSHero", props: { title: "Projects We're\nProud Of", subtitle: "Take a look at some of our recent backyard design and landscaping projects.", bgImage: "https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=2070&q=80" } },
+        { id: "gs-projects-block", type: "GSProjects", props: { title: "Projects we're proud of", projects: [
+          { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Modern Front Yard', loc: 'Mountain View, CA', img: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Elegant Pathway', loc: 'Cupertino, CA', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80' }
+        ] } },
+        { id: "gs-projects-cta", type: "GSCta", props: { title: "Let's build something \nbeautiful together.", subtitle: "Contact us today for your free quote and start your transition to a more beautiful life outdoors." } },
+        { id: "gs-projects-footer", type: "GSFooter", props: { text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area." } }
+      ]
+    },
+    {
+      name: 'Contact',
+      slug: '/contact',
+      sections: [
+        { id: "gs-contact-header", type: "GSHeader", props: { businessName: "Greenscape", tagline: "Landscaping", phone: "(408) 123-4567", address: "Proudly serving Sunnyvale and surrounding areas", hours: "Mon - Sat: 7AM - 6PM", ctaText: "Get a Free Quote" } },
+        { id: "gs-contact-hero", type: "GSHero", props: { title: "Start Your Outdoor\nTransformation", subtitle: "Contact us today for a free, no-obligation estimate on your next project.", bgImage: "https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=2070&q=80" } },
+        { id: "gs-contact-block", type: "GSContact", props: { title: "Get In Touch", subtitle: "Ready to start your outdoor transformation? Let us know how we can help.", phone: "(408) 123-4567", email: "info@greenscape.com", address: "123 Greenway Dr, Sunnyvale, CA 94086" } },
+        { id: "gs-contact-footer", type: "GSFooter", props: { text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area." } }
+      ]
+    }
+  ],
   restaurant: [
     {
       name: 'Home',

@@ -9,10 +9,22 @@ import { EC_SCHEMAS, EC_RENDERERS } from './blocks/ecommerce';
 import { BS_SCHEMAS, BS_RENDERERS } from './blocks/brighter-solar';
 import { RESTAURANT_SCHEMAS, RESTAURANT_RENDERERS } from './blocks/restaurant';
 import { VV_SCHEMAS, VV_RENDERERS } from './blocks/voltvikings';
+import { PH_SCHEMAS, PH_RENDERERS } from './blocks/prohome';
+import { MB_SCHEMAS, MB_RENDERERS } from './blocks/maison';
+import { SL_SCHEMAS, SL_RENDERERS } from './blocks/sterlinglaw';
+import { RL_SCHEMAS, RL_RENDERERS } from './blocks/ridgeline';
+import { AH_SCHEMAS, AH_RENDERERS } from './blocks/atelierhair';
+import { MP_SCHEMAS, MP_RENDERERS } from './blocks/meridian';
+import { IE_SCHEMAS, IE_RENDERERS } from './blocks/ironedge';
+import { CD_SCHEMAS, CD_RENDERERS } from './blocks/claritydental';
+import { PP_SCHEMAS, PP_RENDERERS } from './blocks/pawspamper';
+import { GT_SCHEMAS, GT_RENDERERS } from './blocks/goldenthread';
+import { SC_SCHEMAS, SC_RENDERERS } from './blocks/spotless';
+import { SY_SCHEMAS, SY_RENDERERS } from './blocks/solstice';
 import EditableText from '@/components/EditableText';
 import ContactForm from '@/components/ContactForm';
 
-export type ComponentType = 'Hero' | 'Feature' | 'ProjectGrid' | 'Gallery' | 'TestimonialList' | 'Banner' | 'GSHero' | 'NWHero' | 'LWHero' | 'NWEthos' | 'NWMenu' | 'NWFindUs' | 'NWOrderAhead' | 'NWCommunity' | 'NWFooter' | 'GSServices' | 'GSAbout' | 'GSProjects' | 'GSCta' | 'GSFooter' | 'LWAbout' | 'LWServices' | 'LWPortfolio' | 'LWTestimonials' | 'LWCta' | 'LWFooter' | 'ProductGrid' | 'PricingTable' | 'BSHeader' | 'BSHero' | 'BSStats' | 'BSServices' | 'BSSteps' | 'BSTestimonials' | 'BSPricing' | 'BSCTA' | 'BSFooter' | 'CustomSection' | 'ShopifyProduct' | 'RHero' | 'RFeatures' | 'RMenuPreview' | 'RAtmosphere' | 'RChef' | 'RReviews' | 'RHoursInfo' | 'RCta' | 'RFooter' | 'ContactForm' | 'GoogleMap' | 'CalendlyEmbed' | 'MailchimpForm' | 'InstagramFeed' | 'VVHeader' | 'VVHero' | 'VVStats' | 'VVServices' | 'VVProcess' | 'VVTestimonials' | 'VVMap' | 'VVCTA' | 'VVFooter';
+export type ComponentType = 'Hero' | 'Feature' | 'ProjectGrid' | 'Gallery' | 'TestimonialList' | 'Banner' | 'GSHero' | 'GSHeader' | 'GSContact' | 'NWHero' | 'LWHero' | 'NWEthos' | 'NWMenu' | 'NWFindUs' | 'NWOrderAhead' | 'NWCommunity' | 'NWFooter' | 'GSServices' | 'GSAbout' | 'GSProjects' | 'GSCta' | 'GSFooter' | 'LWAbout' | 'LWServices' | 'LWPortfolio' | 'LWTestimonials' | 'LWCta' | 'LWFooter' | 'ProductGrid' | 'PricingTable' | 'BSHeader' | 'BSHero' | 'BSStats' | 'BSServices' | 'BSSteps' | 'BSTestimonials' | 'BSPricing' | 'BSCTA' | 'BSFooter' | 'CustomSection' | 'ShopifyProduct' | 'RHero' | 'RFeatures' | 'RMenuPreview' | 'RAtmosphere' | 'RChef' | 'RReviews' | 'RHoursInfo' | 'RCta' | 'RFooter' | 'ContactForm' | 'GoogleMap' | 'CalendlyEmbed' | 'MailchimpForm' | 'InstagramFeed' | 'VVHeader' | 'VVHero' | 'VVStats' | 'VVServices' | 'VVProcess' | 'VVTestimonials' | 'VVMap' | 'VVCTA' | 'VVFooter' | 'PHHeader' | 'PHHero' | 'PHStats' | 'PHServices' | 'PHProcess' | 'PHTestimonials' | 'PHCTA' | 'PHFooter' | 'MBHero' | 'MBAbout' | 'MBCollections' | 'MBQuote' | 'MBTestimonials' | 'MBNewsletter' | 'MBFooter' | 'SLHeader' | 'SLHero' | 'SLStats' | 'SLServices' | 'SLProcess' | 'SLTestimonials' | 'SLCTA' | 'SLFooter' | 'RLHeader' | 'RLHero' | 'RLStats' | 'RLServices' | 'RLProcess' | 'RLTestimonials' | 'RLCTA' | 'RLFooter' | 'AHHero' | 'AHAbout' | 'AHServices' | 'AHPortfolio' | 'AHTestimonials' | 'AHCta' | 'AHFooter' | 'MPHero' | 'MPStats' | 'MPServices' | 'MPListings' | 'MPTestimonials' | 'MPCta' | 'MPFooter' | 'IEHeader' | 'IEHero' | 'IEStats' | 'IEServices' | 'IEProcess' | 'IETestimonials' | 'IEPricing' | 'IECTA' | 'IEFooter' | 'CDHeader' | 'CDHero' | 'CDStats' | 'CDServices' | 'CDTestimonials' | 'CDPricing' | 'CDCTA' | 'CDFooter' | 'PPHero' | 'PPEthos' | 'PPBook' | 'PPTestimonials' | 'PPFindUs' | 'PPFooter' | 'GTHero' | 'GTAbout' | 'GTServices' | 'GTPortfolio' | 'GTTestimonials' | 'GTCta' | 'GTFooter' | 'SCHero' | 'SCStats' | 'SCServices' | 'SCAbout' | 'SCTestimonials' | 'SCCta' | 'SCFooter' | 'SYHero' | 'SYEthos' | 'SYBook' | 'SYTestimonials' | 'SYFindUs' | 'SYFooter';
 
 export interface SectionOverrides {
   paddingTop?: string;
@@ -48,6 +60,18 @@ export const COMPONENT_SCHEMAS: Record<string, any> = {
   ...BS_SCHEMAS,
   ...RESTAURANT_SCHEMAS,
   ...VV_SCHEMAS,
+  ...PH_SCHEMAS,
+  ...MB_SCHEMAS,
+  ...SL_SCHEMAS,
+  ...RL_SCHEMAS,
+  ...AH_SCHEMAS,
+  ...MP_SCHEMAS,
+  ...IE_SCHEMAS,
+  ...CD_SCHEMAS,
+  ...PP_SCHEMAS,
+  ...GT_SCHEMAS,
+  ...SC_SCHEMAS,
+  ...SY_SCHEMAS,
   Hero: {
     description: "Large hero block with a call to action.",
     fields: [
@@ -1165,6 +1189,18 @@ export const Renderers: Record<string, (props: any) => React.ReactNode> = {
   ...BS_RENDERERS,
   ...RESTAURANT_RENDERERS,
   ...VV_RENDERERS,
+  ...PH_RENDERERS,
+  ...MB_RENDERERS,
+  ...SL_RENDERERS,
+  ...RL_RENDERERS,
+  ...AH_RENDERERS,
+  ...MP_RENDERERS,
+  ...IE_RENDERERS,
+  ...CD_RENDERERS,
+  ...PP_RENDERERS,
+  ...GT_RENDERERS,
+  ...SC_RENDERERS,
+  ...SY_RENDERERS,
   Hero: ({ title, subtitle, buttonText, buttonLink = '#', buttonStyle = 'filled', theme, layoutPreset = 'standard', image, isEditable, onPropChange }: any) => {
     const t = getThemeClasses(theme);
     const imgUrl = image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600';

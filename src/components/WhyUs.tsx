@@ -84,7 +84,11 @@ export default function WhyUs() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
             className="lg:col-span-2 lg:row-span-2 border-2 border-zinc-950 rounded-3xl p-8 lg:p-12 shadow-[6px_6px_0px_rgba(9,9,11,1)] flex flex-col relative z-20 overflow-hidden"
-            style={{ backgroundColor: COLORS.green }}
+            style={{ 
+              backgroundColor: '#F3FBF0', 
+              backgroundImage: `linear-gradient(to right, rgba(134, 222, 0, 0.4) 1.5px, transparent 1.5px), linear-gradient(to bottom, rgba(134, 222, 0, 0.4) 1.5px, transparent 1.5px)`,
+              backgroundSize: '24px 24px'
+            }}
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '24px 24px' }} />
@@ -127,7 +131,7 @@ export default function WhyUs() {
 
               {/* Right Column: Visual Mockup for Positives */}
               <div className="flex justify-center sm:justify-end">
-                <div className="w-full max-w-[340px] aspect-[4/3] bg-zinc-950 border-2 border-zinc-950 rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(255,255,255,1)] hover:shadow-[6px_6px_0px_rgba(255,255,255,1)] hover:-translate-y-1 transition-all duration-300">
+                <div className="w-full max-w-[340px] aspect-[4/3] bg-zinc-950 border-2 border-zinc-950 rounded-2xl overflow-hidden shadow-[4px_4px_0px_rgba(9,9,11,1)] hover:shadow-[6px_6px_0px_rgba(9,9,11,1)] hover:-translate-y-1 transition-all duration-300">
                   <img 
                     src="/positives_preview.png" 
                     alt="Web speed and growth performance positives illustration" 
@@ -141,7 +145,7 @@ export default function WhyUs() {
             <div className="mt-10 pt-8 border-t border-zinc-950/10 relative z-10 flex justify-center text-center">
               <Link 
                 href="/pricing" 
-                className="inline-block bg-zinc-950 text-white px-8 py-4 border-2 border-zinc-950 rounded-full font-bold uppercase tracking-widest text-sm hover:-translate-y-0.5 transition-transform duration-300 shadow-[4px_4px_0px_rgba(255,255,255,1)] hover:shadow-[6px_6px_0px_rgba(255,255,255,1)]"
+                className="inline-block bg-zinc-950 text-white px-8 py-4 border-2 border-zinc-950 rounded-full font-bold uppercase tracking-widest text-sm hover:-translate-y-0.5 transition-transform duration-300 shadow-[4px_4px_0px_rgba(9,9,11,1)] hover:shadow-[6px_6px_0px_rgba(9,9,11,1)]"
               >
                 View Plans & Get Started
               </Link>

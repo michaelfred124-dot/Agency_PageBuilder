@@ -109,10 +109,15 @@ export const EC_RENDERERS = {
                 <div className="text-4xl font-black mb-8">{plan.price}</div>
                 
                 <ul className="flex flex-col gap-4 mb-8 flex-1">
-                  {plan.features?.split(',').map((f: string, j: number) => (
+                  {(Array.isArray(plan.features)
+                    ? plan.features
+                    : typeof plan.features === 'string'
+                      ? plan.features.split(',')
+                      : []
+                  ).map((f: string, j: number) => (
                     <li key={j} className="flex items-start gap-3 text-sm font-medium">
                       <Check className={`w-5 h-5 shrink-0 ${isPopular ? 'text-white/80' : 'text-black/50'}`} />
-                      <span className={isPopular ? 'text-white/80' : 'text-black/70'}>{f.trim()}</span>
+                      <span className={isPopular ? 'text-white/80' : 'text-black/70'}>{typeof f === 'string' ? f.trim() : f}</span>
                     </li>
                   ))}
                 </ul>

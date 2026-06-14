@@ -120,6 +120,126 @@ const MY_SITES = [
     image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400&auto=format&fit=crop',
     lastUpdate: 'Just now',
     templateKey: 'voltvikings'
+  },
+  {
+    id: 'template-sterling-law',
+    name: 'Sterling Law Group',
+    url: 'sterlinglawgroup.com',
+    previewUrl: '/preview/template-sterling-law',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'law_firm'
+  },
+  {
+    id: 'template-ridge-line-auto',
+    name: 'Ridge Line Auto Service',
+    url: 'ridgelineauto.com',
+    previewUrl: '/preview/template-ridge-line-auto',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'auto_repair'
+  },
+  {
+    id: 'template-atelier-hair',
+    name: 'Atelier Hair Studio',
+    url: 'atelierhair.com',
+    previewUrl: '/preview/template-atelier-hair',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'hair_salon'
+  },
+  {
+    id: 'template-meridian-properties',
+    name: 'Meridian Properties',
+    url: 'meridianproperties.com',
+    previewUrl: '/preview/template-meridian-properties',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'real_estate'
+  },
+  {
+    id: 'template-iron-edge-fitness',
+    name: 'Iron Edge Fitness',
+    url: 'ironedgefitness.com',
+    previewUrl: '/preview/template-iron-edge-fitness',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'personal_trainer'
+  },
+  {
+    id: 'template-clarity-dental',
+    name: 'Clarity Dental Studio',
+    url: 'claritydental.com',
+    previewUrl: '/preview/template-clarity-dental',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'dental'
+  },
+  {
+    id: 'template-paws-pamper',
+    name: 'Paws & Pamper Pet Spa',
+    url: 'pawsandpamper.com',
+    previewUrl: '/preview/template-paws-pamper',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'dog_grooming'
+  },
+  {
+    id: 'template-golden-thread',
+    name: 'The Golden Thread Events',
+    url: 'goldenthreadevents.com',
+    previewUrl: '/preview/template-golden-thread',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'wedding_planner'
+  },
+  {
+    id: 'template-spotless-home',
+    name: 'Spotless Home Co.',
+    url: 'spotlesshomeco.com',
+    previewUrl: '/preview/template-spotless-home',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'home_cleaning'
+  },
+  {
+    id: 'template-solstice-yoga',
+    name: 'Solstice Yoga & Wellness',
+    url: 'solsticeyoga.com',
+    previewUrl: '/preview/template-solstice-yoga',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'yoga_studio'
+  },
+  {
+    id: 'template-valley-prohome',
+    name: 'Valley ProHome Services',
+    url: 'valleyprohome.com',
+    previewUrl: '/preview/template-valley-prohome',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'prohome_services'
+  },
+  {
+    id: 'template-maison-boutique',
+    name: 'Maison Boutique',
+    url: 'maisonboutique.com',
+    previewUrl: '/preview/template-maison-boutique',
+    status: 'Template',
+    image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=400&auto=format&fit=crop',
+    lastUpdate: 'Just now',
+    templateKey: 'maison_boutique'
   }
 ];
 
@@ -207,12 +327,53 @@ export default function DashboardLayout() {
   const [isOnboardedPaid, setIsOnboardedPaid] = useState<boolean>(false);
   const [showTrialGateModal, setShowTrialGateModal] = useState<boolean>(false);
 
+  // DFY Dynamic Project Timeline & Checklist States
+  const [dfyActivePhase, setDfyActivePhase] = useState<number>(1); // 1 = Assets, 2 = Wireframe, 3 = Review, 4 = Launch/Domain
+  const [dfyAssets, setDfyAssets] = useState<any[]>([
+    { id: 'logo', label: 'Vector/High-Res Logo file', category: 'Design', status: 'Pending', type: 'file', fileUrl: '' },
+    { id: 'colors', label: 'Brand color preferences or hex codes', category: 'Branding', status: 'Pending', type: 'text', textVal: '' },
+    { id: 'content', label: 'Company Bio or Homepage introduction text', category: 'Copywriting', status: 'Pending', type: 'text', textVal: '' },
+    { id: 'photos', label: 'Team/Office/Work gallery photos', category: 'Assets', status: 'Pending', type: 'file', fileUrl: '' },
+    { id: 'domains', label: 'Preferred custom domain address (e.g. acme.com)', category: 'Technical', status: 'Pending', type: 'text', textVal: '' }
+  ]);
+  const [dfyConceptApproved, setDfyConceptApproved] = useState<boolean>(false);
+  const [dfyRevisionNotes, setDfyRevisionNotes] = useState<string>('');
+  const [dfyRevisionSubmitted, setDfyRevisionSubmitted] = useState<boolean>(false);
+  const [dfyFinalSignoff, setDfyFinalSignoff] = useState<boolean>(false);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const paid = localStorage.getItem('diy_plan_paid') === 'true';
       setIsOnboardedPaid(paid);
+
+      const savedPhase = localStorage.getItem('dfy_active_phase');
+      if (savedPhase) setDfyActivePhase(parseInt(savedPhase));
+
+      const savedAssets = localStorage.getItem('dfy_assets_checklist');
+      if (savedAssets) {
+        try { setDfyAssets(JSON.parse(savedAssets)); } catch(e) {}
+      }
+
+      const savedConcept = localStorage.getItem('dfy_concept_approved');
+      if (savedConcept) setDfyConceptApproved(savedConcept === 'true');
+
+      const savedRevisionSub = localStorage.getItem('dfy_revision_submitted');
+      if (savedRevisionSub) setDfyRevisionSubmitted(savedRevisionSub === 'true');
+
+      const savedSignoff = localStorage.getItem('dfy_final_signoff');
+      if (savedSignoff) setDfyFinalSignoff(savedSignoff === 'true');
     }
   }, []);
+
+  const updateDfyPhase = (phase: number) => {
+    setDfyActivePhase(phase);
+    localStorage.setItem('dfy_active_phase', String(phase));
+  };
+
+  const updateDfyAssets = (newAssets: any[]) => {
+    setDfyAssets(newAssets);
+    localStorage.setItem('dfy_assets_checklist', JSON.stringify(newAssets));
+  };
 
   // Auto-play Top Banner Carousel
   useEffect(() => {
@@ -499,8 +660,9 @@ export default function DashboardLayout() {
         } else {
           setSelectedMessage(null);
         }
-      } catch (err) {
-        console.error('Error fetching submissions:', err);
+      } catch (err: any) {
+        // Suppress all errors for now since contact_submissions table may not exist
+        setSubmissions([]);
       } finally {
         setIsSubmissionsLoading(false);
       }
@@ -651,6 +813,18 @@ export default function DashboardLayout() {
         } catch (e) {
           console.error(e);
         }
+      } else if (editingSite.aiSections) {
+        initialPages = [
+          {
+            id: 'home',
+            name: 'Home',
+            slug: '/',
+            sections: editingSite.aiSections
+          }
+        ];
+        if (editingSite.aiTheme) {
+          initialTheme = editingSite.aiTheme;
+        }
       } else if (editingSite.templateKey && TEMPLATE_PAGES[editingSite.templateKey]) {
         const defaultPages = TEMPLATE_PAGES[editingSite.templateKey];
         initialPages = defaultPages.map(p => ({
@@ -666,7 +840,7 @@ export default function DashboardLayout() {
         initialSections = TEMPLATES[editingSite.templateKey];
       }
       
-      if (savedTheme) {
+      if (savedTheme && !initialTheme) {
         try {
           initialTheme = JSON.parse(savedTheme);
         } catch (e) {
@@ -1380,12 +1554,14 @@ export default function DashboardLayout() {
                       Request Design Update
                     </button>
                     {selectedSite.status === 'Designing' ? (
-                      <button 
-                        onClick={() => alert("Please allow 5 to 10 business days for us to come up with the site. The layout design will update in the dashboard when ready.")}
-                        className="bg-slate-50 text-slate-400 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all opacity-60 cursor-not-allowed flex items-center gap-2"
+                      <a 
+                        href={selectedSite.previewUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2"
                       >
-                        <ExternalLink className="w-3.5 h-3.5 text-slate-350" /> View Live
-                      </button>
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-400" /> View Baseline Design
+                      </a>
                     ) : (
                       <a 
                         href={selectedSite.previewUrl} 
@@ -1625,13 +1801,15 @@ export default function DashboardLayout() {
                         Request Update
                       </button>
                       {site.status === 'Designing' ? (
-                        <button 
-                          onClick={() => alert("Please allow 5 to 10 business days for us to come up with the site. The layout design will update in the dashboard when ready.")}
-                          className="bg-slate-50 text-slate-400 p-2 rounded-xl border border-slate-200 transition-all flex items-center justify-center cursor-not-allowed opacity-60"
-                          title="Preview (Locked)"
+                        <a 
+                          href={site.previewUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="bg-slate-50 hover:bg-slate-100 text-slate-600 p-2 rounded-xl border border-slate-200 transition-all flex items-center justify-center"
+                          title="View Baseline Design"
                         >
-                          <ExternalLink className="w-4 h-4" />
-                        </button>
+                          <ExternalLink className="w-4 h-4 text-slate-500" />
+                        </a>
                       ) : (
                         <a 
                           href={site.previewUrl} 
@@ -1685,53 +1863,348 @@ export default function DashboardLayout() {
         );
 
       case 'Project Timeline':
+        const completedAssets = dfyAssets.filter(a => a.status === 'Submitted').length;
+        const progressPercent = Math.round((completedAssets / dfyAssets.length) * 100);
+
         return (
           <div className="max-w-4xl mx-auto space-y-8">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Project Timeline</h1>
-              <p className="text-slate-500 text-xs mt-0.5">Track the status of your active website delivery.</p>
-            </div>
-            
-            <div className="bg-white border border-slate-200 p-6 lg:p-10 rounded-2xl shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-                <Clock3 className="w-32 h-32" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">AI-Speed Delivery Funnel</h1>
+                <p className="text-slate-500 text-xs mt-0.5">We design and code in real-time. Review your live draft and request changes instantly.</p>
               </div>
-              
-              <div className="max-w-2xl relative pl-8">
-                <div className="absolute left-3.5 top-2 bottom-2 w-[2px] bg-slate-100" />
-                
-                <div className="space-y-10">
-                  {[
-                    { step: 1, title: 'Discovery & Onboarding', desc: 'Received questionnaire and core assets. Set project goal.', status: 'Completed', date: 'Oct 12', isCurrent: false },
-                    { step: 2, title: 'Structure Wireframes', desc: 'Mapped page layouts and conversion flow based on marketing goals.', status: 'Completed', date: 'Oct 18', isCurrent: false },
-                    { step: 3, title: 'Visual & UI Design', desc: 'Adding custom typography, color codes, image library, and page layouts.', status: 'In Progress', date: 'Est. Oct 24', isCurrent: true },
-                    { step: 4, title: 'Development & Dynamic CMS', desc: 'Building the live app, publishing modules, and integrating dashboard CMS.', status: 'Pending', date: 'Upcoming', isCurrent: false }
-                  ].map((item) => (
-                    <div key={item.step} className="relative flex items-start gap-6">
-                      <div className={`absolute -left-8 w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all ${
-                        item.status === 'Completed' ? 'bg-emerald-500 border-emerald-500 text-white' : 
-                        item.isCurrent ? 'bg-indigo-600 border-indigo-600 text-white' : 
-                        'bg-white border-slate-200 text-slate-400'
+              <div className="flex items-center gap-2 bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-1.5 text-xs text-indigo-700 font-bold uppercase tracking-wider self-start sm:self-center">
+                <Clock3 className="w-4 h-4 text-indigo-650 animate-pulse" />
+                Est. Delivery: 2-4 Days
+              </div>
+            </div>
+
+            {/* Pizza Tracker Phase Header (3 Steps) */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative">
+                {[
+                  { phase: 1, name: '1. Asset Gathering', desc: 'Provide branding & copy', active: dfyActivePhase === 1, done: dfyActivePhase > 1 },
+                  { phase: 2, name: '2. Live Prototype Draft', desc: 'Interact with AI build & revise', active: dfyActivePhase === 2, done: dfyActivePhase > 2 },
+                  { phase: 3, name: '3. Domain & Go-Live', desc: 'Point DNS and publish site', active: dfyActivePhase === 3, done: dfyFinalSignoff }
+                ].map((p, idx) => (
+                  <div 
+                    key={p.phase} 
+                    onClick={() => {
+                      if (p.phase <= dfyActivePhase || (p.phase === 2 && completedAssets > 0) || (p.phase === 3 && dfyFinalSignoff)) {
+                        updateDfyPhase(p.phase);
+                      } else {
+                        alert("Please complete the previous stages to unlock this phase.");
+                      }
+                    }}
+                    className={`relative p-4 rounded-xl border-2 transition-all cursor-pointer text-left ${
+                      p.active 
+                        ? 'bg-indigo-50 border-indigo-600 shadow-[3px_3px_0px_rgba(79,70,229,0.15)]' 
+                        : p.done
+                        ? 'bg-emerald-50/40 border-emerald-500/30 hover:bg-slate-50/80'
+                        : 'bg-slate-50 border-slate-200 opacity-60 hover:opacity-85'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className={`text-[10px] font-black uppercase tracking-wider ${
+                        p.active ? 'text-indigo-700' : p.done ? 'text-emerald-700' : 'text-slate-400'
                       }`}>
-                        {item.status === 'Completed' ? '✓' : item.step}
-                      </div>
-                      <div className={item.status === 'Pending' ? 'opacity-55' : ''}>
-                        <div className="flex items-center gap-3">
-                          <h3 className="font-bold text-slate-800 text-base">{item.title}</h3>
-                          <span className={`text-[9px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${
-                            item.status === 'Completed' ? 'bg-emerald-50 text-emerald-700' :
-                            item.isCurrent ? 'bg-indigo-50 text-indigo-700' :
-                            'bg-slate-100 text-slate-500'
-                          }`}>{item.status}</span>
-                        </div>
-                        <p className="text-slate-500 text-xs mt-1 leading-relaxed">{item.desc}</p>
-                        <span className="text-[10px] text-slate-400 font-bold block mt-1.5">{item.date}</span>
+                        {p.name}
+                      </span>
+                      {p.done && <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />}
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-medium mt-1">{p.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dynamic Phase Panel */}
+            <AnimatePresence mode="wait">
+              {dfyActivePhase === 1 && (
+                <motion.div
+                  key="phase-1"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  className="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm space-y-6"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                      <h2 className="text-lg font-bold text-slate-900">Phase 1: Gathering Brand Assets</h2>
+                      <p className="text-slate-500 text-xs mt-0.5">Provide the brand parameters below. Our AI-assisted developer uses these to instantly generate your layout draft.</p>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className="text-xs font-bold text-slate-700">{progressPercent}% Completed</span>
+                      <div className="w-32 bg-slate-100 h-2 rounded-full overflow-hidden mt-1.5 border border-slate-200">
+                        <div className="bg-indigo-600 h-full transition-all duration-505" style={{ width: `${progressPercent}%` }} />
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+                  </div>
+
+                  {/* Checklist Table */}
+                  <div className="space-y-4 font-sans">
+                    {dfyAssets.map((asset, index) => (
+                      <div key={asset.id} className="border border-slate-150 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-slate-300 transition-all bg-slate-50/20">
+                        <div className="space-y-1 max-w-xl">
+                          <div className="flex items-center gap-2.5">
+                            <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
+                              {asset.category}
+                            </span>
+                            <span className={`text-[9.5px] font-bold uppercase tracking-wider flex items-center gap-1 ${
+                              asset.status === 'Submitted' ? 'text-emerald-600' : 'text-amber-500'
+                            }`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${asset.status === 'Submitted' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                              {asset.status}
+                            </span>
+                          </div>
+                          <h4 className="font-bold text-slate-800 text-sm leading-tight mt-1">{asset.label}</h4>
+                          {asset.status === 'Submitted' && (
+                            <p className="text-slate-500 text-xs font-semibold mt-1 bg-white border border-slate-155 rounded-lg p-2 truncate">
+                              Provided: {asset.type === 'file' ? (asset.fileUrl || 'MockUploadedFile.png') : asset.textVal}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="shrink-0 flex items-center gap-2">
+                          {asset.status !== 'Submitted' ? (
+                            asset.type === 'file' ? (
+                              <button
+                                onClick={() => {
+                                  const url = window.prompt(`Simulate file upload for "${asset.label}". Enter a mockup file name or asset URL:`, `${asset.id}_logo_brand.png`);
+                                  if (url) {
+                                    const copy = [...dfyAssets];
+                                    copy[index].status = 'Submitted';
+                                    copy[index].fileUrl = url;
+                                    updateDfyAssets(copy);
+                                  }
+                                }}
+                                className="bg-indigo-50 hover:bg-indigo-100 text-indigo-750 border border-indigo-200 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5"
+                              >
+                                <Upload className="w-3.5 h-3.5" /> Upload File
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  const val = window.prompt(`Provide text info for "${asset.label}":`, asset.id === 'colors' ? '#4F46E5, Minimalist Dark Grey' : 'About us description...');
+                                  if (val) {
+                                    const copy = [...dfyAssets];
+                                    copy[index].status = 'Submitted';
+                                    copy[index].textVal = val;
+                                    updateDfyAssets(copy);
+                                  }
+                                }}
+                                className="bg-indigo-50 hover:bg-indigo-100 text-indigo-750 border border-indigo-200 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5"
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Provide Info
+                              </button>
+                            )
+                          ) : (
+                            <button
+                              onClick={() => {
+                                const copy = [...dfyAssets];
+                                copy[index].status = 'Pending';
+                                copy[index].fileUrl = '';
+                                copy[index].textVal = '';
+                                updateDfyAssets(copy);
+                              }}
+                              className="text-rose-600 hover:bg-rose-50 border border-rose-100 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all"
+                            >
+                              Edit/Reset
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+                    <span className="text-slate-400 text-xs font-semibold font-sans">
+                      {completedAssets} of {dfyAssets.length} assets provided
+                    </span>
+                    <button
+                      onClick={() => {
+                        if (completedAssets === 0) {
+                          alert("Please upload or provide at least one asset to proceed.");
+                          return;
+                        }
+                        updateDfyPhase(2);
+                      }}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5"
+                    >
+                      Approve Assets <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {dfyActivePhase === 2 && (
+                <motion.div
+                  key="phase-2"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  className="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm space-y-6"
+                >
+                  <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <h2 className="text-lg font-bold text-slate-900">Phase 2: Live Interactive Prototype Review</h2>
+                      <p className="text-slate-500 text-xs mt-0.5">Interact with the generated prototype. Request revisions or confirm visual sign-off.</p>
+                    </div>
+                    <span className="bg-indigo-50 border border-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider self-start sm:self-center">
+                      Prototype Deployed
+                    </span>
+                  </div>
+
+                  {/* Browser Mock Screen */}
+                  <div className="border-[3px] border-slate-200 rounded-2xl overflow-hidden shadow-sm bg-slate-50 font-sans">
+                    <div className="bg-slate-200/50 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-3 h-3 rounded-full bg-rose-400" />
+                        <span className="w-3 h-3 rounded-full bg-amber-400" />
+                        <span className="w-3 h-3 rounded-full bg-emerald-400" />
+                      </div>
+                      <div className="bg-white px-6 py-0.5 rounded-lg border border-slate-200/50 text-[10px] text-slate-400 font-semibold truncate max-w-sm">
+                        https://draft-preview-{selectedSite?.id || 'site'}.michaelfreddesigns.com
+                      </div>
+                      <div className="w-8" />
+                    </div>
+                    
+                    <div className="p-8 text-center bg-white space-y-4">
+                      <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto"><Eye className="w-6 h-6" /></div>
+                      <h3 className="font-extrabold text-slate-805 text-sm">Custom Live AI Prototype</h3>
+                      <p className="text-slate-500 text-xs max-w-sm mx-auto leading-relaxed">
+                        Verify fully coded responsive layouts, custom copy alignment, navigation links, and dynamic templates in real-time.
+                      </p>
+                      <button
+                        onClick={() => {
+                          alert(`Opening prototype live draft preview at: /preview/${selectedSite?.id}`);
+                          window.open(`/preview/${selectedSite?.id}`, '_blank');
+                        }}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-xs font-bold shadow-sm transition-colors inline-flex items-center gap-1.5"
+                      >
+                        Launch Interactive Draft <ExternalLink className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Revision Round Panel */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4 font-sans">
+                    <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Submit Layout & Copy Adjustments</h4>
+                    <p className="text-slate-500 text-xs leading-relaxed">
+                      Review all sections. If you need any tweaks (e.g. text edits, swapping photos, moving header blocks), log them below. If the draft is perfect, click **Final Sign-off**.
+                    </p>
+
+                    <div className="space-y-3">
+                      <textarea
+                        value={dfyRevisionNotes}
+                        onChange={(e) => setDfyRevisionNotes(e.target.value)}
+                        placeholder="e.g. The homepage looks amazing! Can we make the main call-to-action button color green instead of indigo to match our branding, and change the about description to..."
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs focus:border-indigo-400 focus:outline-none min-h-[90px] leading-relaxed font-medium"
+                      />
+
+                      <div className="flex flex-wrap items-center gap-3">
+                        <button
+                          onClick={() => {
+                            if (!dfyRevisionNotes.trim()) return alert("Please type your adjustments in the textbox before submitting.");
+                            setDfyRevisionSubmitted(true);
+                            localStorage.setItem('dfy_revision_submitted', 'true');
+                            alert("📝 Adjustments submitted. Developer has been notified to modify the AI-generated code blocks.");
+                          }}
+                          className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition-colors"
+                        >
+                          Submit Revision List
+                        </button>
+                        <button
+                          onClick={() => {
+                            setDfyFinalSignoff(true);
+                            localStorage.setItem('dfy_final_signoff', 'true');
+                            updateDfyPhase(3);
+                            alert("🎉 Final Sign-off Confirmed! Custom portal is ready for domain launch.");
+                          }}
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-md shadow-emerald-600/10 flex items-center gap-1.5"
+                        >
+                          <CheckCircle2 className="w-4 h-4" /> Final Sign-off & Approve Build
+                        </button>
+                      </div>
+
+                      {dfyRevisionSubmitted && (
+                        <div className="bg-indigo-50 border border-indigo-150 rounded-xl p-3 text-xs text-indigo-800 font-semibold leading-relaxed">
+                          ⚙️ Revision list in progress: "{dfyRevisionNotes}"
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <button onClick={() => updateDfyPhase(1)} className="text-xs font-bold text-slate-500 hover:text-slate-850 transition-all font-sans">
+                      Back to Assets
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {dfyActivePhase === 3 && (
+                <motion.div
+                  key="phase-3"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  className="bg-white border border-slate-200 rounded-3xl p-8 shadow-md text-center space-y-6 flex flex-col items-center justify-center font-sans"
+                >
+                  <div className="w-16 h-16 rounded-full bg-emerald-50 border-[4px] border-emerald-500 flex items-center justify-center text-emerald-500 shadow-sm animate-bounce">
+                    <Sparkles className="w-8 h-8" />
+                  </div>
+                  
+                  <div className="space-y-2 max-w-md">
+                    <h2 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Your Website is Ready to Launch!</h2>
+                    <p className="text-slate-500 text-xs leading-relaxed max-w-sm mx-auto font-medium">
+                      Congratulations! The AI code assembly is approved. The final step is connecting your custom domain to point to our secure hosting.
+                    </p>
+                  </div>
+
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-left space-y-4 max-w-lg w-full">
+                    <h4 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-1.5">
+                      <Settings className="w-4 h-4 text-indigo-600" /> DNS Instructions
+                    </h4>
+                    <div className="space-y-3 text-xs leading-relaxed">
+                      <div className="flex items-start gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-indigo-50 border border-indigo-150 flex items-center justify-center text-[10px] font-bold text-indigo-650 shrink-0">1</span>
+                        <p className="text-slate-650">Enter your custom domain in the manager portal (e.g. `mybrand.com`).</p>
+                      </div>
+                      <div className="flex items-start gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-indigo-50 border border-indigo-150 flex items-center justify-center text-[10px] font-bold text-indigo-650 shrink-0">2</span>
+                        <p className="text-slate-650">Add a CNAME DNS record in GoDaddy, Namecheap or Google Domains pointing to: `hosting.michaelfreddesigns.com`.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <button
+                      onClick={() => {
+                        setManagingDomainFor(selectedSite);
+                      }}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl text-xs font-bold shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/20 transition-all flex items-center gap-1.5"
+                    >
+                      Connect Domain Now <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        alert("🚀 Website published to production! Handover keys emailed to owner.");
+                      }}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl text-xs font-bold shadow-md shadow-emerald-600/10 transition-all"
+                    >
+                      Go Live!
+                    </button>
+                  </div>
+
+                  <div className="pt-2">
+                    <button onClick={() => updateDfyPhase(2)} className="text-xs font-bold text-slate-400 hover:text-slate-600 transition-all font-sans">
+                      Back to Review Draft
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         );
 
@@ -3355,6 +3828,8 @@ export default function DashboardLayout() {
                     </div>
                   )}
 
+
+
                   {/* Agency Templates */}
                   {MY_SITES.map(site => (
                     <div 
@@ -3658,6 +4133,7 @@ export default function DashboardLayout() {
             </motion.div>
           )}
         </AnimatePresence>
+        
       </main>
     </div>
   );

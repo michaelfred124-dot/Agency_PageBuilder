@@ -140,6 +140,47 @@ function useHistory<T>(initial: T) {
   return { state, push, undo, redo, canUndo, canRedo, historyLength: history.length, historyIndex: index };
 }
 
+// --- Toast Notification System ---
+type ToastMsg = { id: number; message: string; type: 'success' | 'error' | 'info' };
+
+function useToast() {
+  const [toasts, setToasts] = useState<ToastMsg[]>([]);
+  const addToast = useCallback((message: string, type: ToastMsg['type'] = 'success') => {
+    const id = Date.now() + Math.random();
+    setToasts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3200);
+  }, []);
+  return { toasts, addToast };
+}
+
+function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
+  const icons: Record<string, string> = { success: '✓', error: '✕', info: 'ℹ' };
+  const colors: Record<string, string> = {
+    success: 'bg-green-600 text-white border-green-700',
+    error: 'bg-red-600 text-white border-red-700',
+    info: 'bg-gray-900 text-white border-gray-700',
+  };
+  return (
+    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-2 pointer-events-none">
+      <AnimatePresence>
+        {toasts.map(t => (
+          <motion.div
+            key={t.id}
+            initial={{ opacity: 0, y: 16, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className={`flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-2xl text-sm font-semibold pointer-events-auto border ${colors[t.type]}`}
+          >
+            <span className="text-base leading-none">{icons[t.type]}</span>
+            {t.message}
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // Preset color options
 const COLOR_PRESETS = [
   { name: 'Transparent', value: 'transparent' },
@@ -686,16 +727,12 @@ function SortableSection({
         </div>
       )}
 
-      {/* "Newly Added" visual cue */}
+      {/* "Newly Added" visual cue — clean pulse ring */}
       {isNewlyAdded && (
         <div
           style={inverseScaleStyle}
-          className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
-        >
-          <div className="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xl flex items-center gap-2 animate-bounce">
-            <span>✏️</span> Click to edit this section
-          </div>
-        </div>
+          className="absolute inset-0 pointer-events-none z-10 rounded-sm ring-4 ring-blue-500/60 animate-pulse"
+        />
       )}
     </div>
   );
@@ -707,15 +744,21 @@ function EmptyCanvasDropZone() {
   });
 
   return (
-    <div 
-      ref={setNodeRef} 
-      className={`flex-1 min-h-[600px] flex flex-col items-center justify-center transition-colors border-2 border-dashed rounded-2xl mx-8 my-8 ${isOver ? 'border-blue-500 bg-blue-50/50' : 'border-gray-200 bg-gray-50/50 hover:bg-gray-50/80'}`}
+    <div
+      ref={setNodeRef}
+      className={`flex-1 min-h-[600px] flex flex-col items-center justify-center transition-all duration-200 border-2 border-dashed rounded-2xl mx-8 my-8 ${isOver ? 'border-blue-400 bg-blue-50/60 scale-[1.01]' : 'border-gray-200 bg-gray-50/40 hover:border-gray-300 hover:bg-gray-50/70'}`}
     >
-       <LayoutTemplate className={`w-12 h-12 mb-4 transition-all ${isOver ? 'text-blue-500 scale-110' : 'text-gray-400 opacity-50'}`} />
-       <p className={`font-semibold text-sm ${isOver ? 'text-blue-700' : 'text-gray-400'}`}>
-         {isOver ? 'Drop it here!' : 'No sections yet'}
-       </p>
-       {!isOver && <p className="font-medium text-xs mt-2 text-center px-6 text-gray-400">Drag sections from the widget panel and drop them here</p>}
+      <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-5 transition-all duration-200 ${isOver ? 'bg-blue-100 scale-110' : 'bg-gray-100'}`}>
+        <LayoutTemplate className={`w-10 h-10 transition-all ${isOver ? 'text-blue-500' : 'text-gray-400'}`} />
+      </div>
+      <p className={`font-black text-base tracking-tight mb-2 ${isOver ? 'text-blue-700' : 'text-gray-500'}`}>
+        {isOver ? 'Drop to add section' : 'Start building your page'}
+      </p>
+      {!isOver && (
+        <p className="font-medium text-xs text-center px-8 text-gray-400 max-w-[260px] leading-relaxed">
+          Drag blocks from the left panel, or click the <span className="font-bold text-gray-600">+</span> button to insert a section
+        </p>
+      )}
     </div>
   );
 }
@@ -789,6 +832,14 @@ export default function SiteEditor({
   const [betweenInsertSearch, setBetweenInsertSearch] = useState('');
   const [newlyAddedIds, setNewlyAddedIds] = useState<Set<string>>(new Set());
 
+  // --- Modern UX state ---
+  const { toasts, addToast } = useToast();
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [pendingTemplateKey, setPendingTemplateKey] = useState<string | null>(null);
+  const [confirmDeletePageId, setConfirmDeletePageId] = useState<string | null>(null);
+  const [showAddSocial, setShowAddSocial] = useState(false);
+  const [newSocialName, setNewSocialName] = useState('facebook');
 
   useEffect(() => {
     setSelectedElementId(null);
@@ -1313,11 +1364,15 @@ export default function SiteEditor({
       setEditSubTab('content');
     }
 
-    // Mark as newly added for the visual cue
+    // Mark as newly added for the visual cue + smooth scroll
     setNewlyAddedIds(prev => new Set([...prev, newSection.id]));
     setTimeout(() => {
+      const el = document.querySelector(`[data-section-id="${newSection.id}"]`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 120);
+    setTimeout(() => {
       setNewlyAddedIds(prev => { const n = new Set(prev); n.delete(newSection.id); return n; });
-    }, 4000);
+    }, 3500);
   };
 
   const removeSection = (id: string) => {
@@ -1436,18 +1491,23 @@ export default function SiteEditor({
 
   const selectedSection = sections.find(s => s.id === selectedSectionId);
 
+  const confirmApplyTemplate = () => {
+    if (!pendingTemplateKey) return;
+    const tSections = TEMPLATES[pendingTemplateKey] || [];
+    const freshSections = tSections.map(s => ({
+      ...s,
+      id: `item-${s.type.toLowerCase()}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`
+    }));
+    setSections(freshSections);
+    setSelectedSectionId(freshSections[0]?.id || null);
+    setPendingTemplateKey(null);
+    addToast('Template applied!');
+  };
+
   // Render the left Sidebar panel for Adding blocks / Templates
   const renderAddPanel = () => {
     const applyTemplate = (key: string) => {
-      if (confirm(`Load "${key.replace('_', ' ')}" template? This will replace your current page layout.`)) {
-        const tSections = TEMPLATES[key] || [];
-        const freshSections = tSections.map(s => ({
-          ...s,
-          id: `item-${s.type.toLowerCase()}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`
-        }));
-        setSections(freshSections);
-        setSelectedSectionId(freshSections[0]?.id || null);
-      }
+      setPendingTemplateKey(key);
     };
 
     return (
@@ -1568,7 +1628,7 @@ export default function SiteEditor({
 
             {/* Mockup Add to collection button */}
             <button 
-              onClick={() => alert("Added custom selection to collection presets!")}
+              onClick={() => addToast('Section saved to your collections', 'info')}
               className="w-full py-2.5 bg-gray-50 hover:bg-gray-100 border border-dashed border-gray-300 text-gray-500 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shrink-0"
             >
               <Plus className="w-3.5 h-3.5" /> Add to collection
@@ -1579,10 +1639,23 @@ export default function SiteEditor({
           <div className="flex-1 overflow-y-auto space-y-4 custom-scrollbar pr-1">
             {[
               { key: 'northwood', name: 'Northwood Coffee Co.', desc: 'Cozy design ideal for cafés, restaurants, and local diners.', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400' },
+              { key: 'restaurant', name: 'Osteria Bella Restaurant', desc: 'Bold, elegant layout for full-service restaurants and eateries.', img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=400' },
               { key: 'greenscape', name: 'Greenscape Landscaping', desc: 'Fresh, professional layout for handymen, cleaners, and lawn care.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80' },
               { key: 'lauren', name: 'Lauren Wilson Photo', desc: 'Minimalist creative space for photographers, artists, and portfolios.', img: 'https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=400' },
               { key: 'brighter_solar', name: 'Brighter Solar Energy', desc: 'Sleek conversion-driven layout for eco businesses and clean energy.', img: 'https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=400&q=80' },
               { key: 'voltvikings', name: 'Volt Vikings Electricians', desc: 'High-impact premium layout for local home service and contracting businesses.', img: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400&auto=format&fit=crop' },
+              { key: 'law_firm', name: 'Sterling Law Group', desc: 'Professional, trust-building layout for law firms and legal services.', img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=400' },
+              { key: 'auto_repair', name: 'Ridge Line Auto Service', desc: 'Bold, high-converting design for auto repair and mechanic shops.', img: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=400' },
+              { key: 'hair_salon', name: 'Atelier Hair Studio', desc: 'Stylish, intimate layout for hair salons, barbers, and beauty studios.', img: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=400' },
+              { key: 'real_estate', name: 'Meridian Properties', desc: 'Clean, credibility-first design for real estate agents and brokerages.', img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=400' },
+              { key: 'personal_trainer', name: 'Iron Edge Fitness', desc: 'High-energy layout for personal trainers, coaches, and fitness studios.', img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400' },
+              { key: 'dental', name: 'Clarity Dental Studio', desc: 'Clean, welcoming design for dental practices and medical offices.', img: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=400' },
+              { key: 'dog_grooming', name: 'Paws & Pamper Pet Spa', desc: 'Friendly, warm layout for pet groomers, vets, and pet care services.', img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=400' },
+              { key: 'wedding_planner', name: 'The Golden Thread Events', desc: 'Romantic, elegant layout for wedding planners and event designers.', img: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400' },
+              { key: 'home_cleaning', name: 'Spotless Home Co.', desc: 'Fresh, trustworthy design for cleaning services and home care companies.', img: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=400' },
+              { key: 'yoga_studio', name: 'Solstice Yoga & Wellness', desc: 'Calm, community-driven layout for yoga studios and wellness centers.', img: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=400' },
+              { key: 'prohome_services', name: 'Valley ProHome Services', desc: 'Bold contractor layout for plumbers, electricians, and HVAC companies.', img: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=400' },
+              { key: 'maison_boutique', name: 'Maison Boutique', desc: 'Luxury editorial layout for fashion boutiques and lifestyle brands.', img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=400' },
             ].map(t => (
               <div key={t.key} className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm hover:border-blue-300 transition-colors flex flex-col">
                 <img src={t.img} className="h-28 w-full object-cover border-b border-gray-100" alt={t.name} />
@@ -1820,20 +1893,37 @@ export default function SiteEditor({
                   <Edit3 className="w-3.5 h-3.5" />
                 </button>
                 {pages.length > 1 && (
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (confirm(`Delete page "${page.name}"?`)) {
-                        const newPages = pages.filter(p => p.id !== page.id);
-                        setPages(newPages);
-                        if (activePageId === page.id) setActivePageId(newPages[0].id);
-                      }
-                    }}
-                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Delete Page"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  confirmDeletePageId === page.id ? (
+                    <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const newPages = pages.filter(p => p.id !== page.id);
+                          setPages(newPages);
+                          if (activePageId === page.id) setActivePageId(newPages[0].id);
+                          setConfirmDeletePageId(null);
+                          addToast(`Page "${page.name}" deleted`);
+                        }}
+                        className="px-2 py-1 text-[9px] font-black text-white bg-red-500 hover:bg-red-600 rounded-md transition-colors"
+                      >
+                        Delete
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setConfirmDeletePageId(null); }}
+                        className="px-2 py-1 text-[9px] font-black text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setConfirmDeletePageId(page.id); }}
+                      className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete Page"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )
                 )}
               </div>
             </div>
@@ -2176,7 +2266,7 @@ export default function SiteEditor({
                         if (mediaSelectorTarget) {
                           handleSelectMedia(photo.url);
                         } else {
-                          alert("Image Picker Mode: Please click on an image in the property inspector first, then click on the stock image here to select it.");
+                          addToast('Click an image field in the inspector panel first, then select a photo here', 'info');
                         }
                       }}
                       className={`group relative aspect-square bg-gray-50 rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${mediaSelectorTarget ? 'hover:border-blue-500 hover:scale-105 shadow-sm border-black/15' : 'border-black/15 hover:border-black'}`}
@@ -2900,17 +2990,40 @@ export default function SiteEditor({
                               />
                             </div>
                           ))}
-                          <button
-                            onClick={() => {
-                              const platformName = window.prompt("Enter social platform name (facebook, twitter, instagram, youtube, linkedin, etc.):", "facebook");
-                              if (!platformName) return;
-                              const newPlatforms = [...(selectedElement.props.platforms || []), { name: platformName.toLowerCase(), link: '#' }];
-                              updateProp('platforms', newPlatforms);
-                            }}
-                            className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
-                          >
-                            + Add Social Link
-                          </button>
+                          {showAddSocial ? (
+                            <div className="flex items-center gap-2 p-2 bg-blue-50 border border-blue-200 rounded-xl">
+                              <select
+                                value={newSocialName}
+                                onChange={e => setNewSocialName(e.target.value)}
+                                className="flex-1 bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-xs text-gray-800 focus:outline-none focus:border-blue-400"
+                              >
+                                {['facebook','instagram','twitter','linkedin','youtube','tiktok','pinterest','snapchat'].map(p => (
+                                  <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>
+                                ))}
+                              </select>
+                              <button
+                                onClick={() => {
+                                  const newPlatforms = [...(selectedElement.props.platforms || []), { name: newSocialName, link: '#' }];
+                                  updateProp('platforms', newPlatforms);
+                                  setShowAddSocial(false);
+                                  setNewSocialName('facebook');
+                                }}
+                                className="px-3 py-1.5 bg-blue-600 text-white text-[10px] font-black rounded-lg hover:bg-blue-700 transition-colors"
+                              >
+                                Add
+                              </button>
+                              <button onClick={() => setShowAddSocial(false)} className="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg transition-colors">
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => setShowAddSocial(true)}
+                              className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
+                            >
+                              + Add Social Link
+                            </button>
+                          )}
                         </div>
                       )}
                       {selectedElement.type === 'Spacer' && (
@@ -3335,15 +3448,13 @@ export default function SiteEditor({
                             ))}
                             <button
                               onClick={() => {
-                                const widgetType = window.prompt("Enter widget type (search, recent-posts, categories):", "search");
-                                if (!widgetType || !['search', 'recent-posts', 'categories'].includes(widgetType.toLowerCase().trim())) {
-                                  alert("Allowed types: search, recent-posts, categories");
-                                  return;
-                                }
-                                const cleanType = widgetType.toLowerCase().trim();
-                                const defaultTitle = cleanType === 'search' ? 'Search Blog' :
-                                                     cleanType === 'recent-posts' ? 'Recent Work' : 'Categories';
-                                const newWidgets = [...(selectedElement.props.widgets || []), { type: cleanType, title: defaultTitle }];
+                                const widgetOptions = [
+                                  { type: 'search', title: 'Search Blog' },
+                                  { type: 'recent-posts', title: 'Recent Work' },
+                                  { type: 'categories', title: 'Categories' },
+                                ];
+                                const next = widgetOptions.find(w => !(selectedElement.props.widgets || []).some((x: any) => x.type === w.type)) || widgetOptions[0];
+                                const newWidgets = [...(selectedElement.props.widgets || []), { type: next.type, title: next.title }];
                                 updateProp('widgets', newWidgets);
                               }}
                               className="w-full py-2 border border-dashed border-gray-300 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-50/50 hover:border-blue-200"
@@ -4137,11 +4248,16 @@ export default function SiteEditor({
 
           {/* Action triggers: Synced, Preview, Publish */}
           <div className="flex items-center gap-3">
-            <div 
-              className="p-1.5 text-green-600 bg-green-50 border border-green-200/50 rounded-lg"
-              title="All changes saved to cloud"
+            <div
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-bold border transition-colors ${isSaving || isPublishing ? 'text-amber-600 bg-amber-50 border-amber-200/60' : 'text-green-600 bg-green-50 border-green-200/50'}`}
+              title={isSaving ? 'Saving...' : isPublishing ? 'Publishing...' : 'All changes saved'}
             >
-              <Cloud className="w-4 h-4" />
+              {isSaving || isPublishing ? (
+                <div className="w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Cloud className="w-3.5 h-3.5" />
+              )}
+              <span className="hidden lg:block">{isSaving ? 'Saving' : isPublishing ? 'Publishing' : 'Saved'}</span>
             </div>
 
             {planTier === 'DIY' && (
@@ -4161,20 +4277,50 @@ export default function SiteEditor({
             </button>
             
             {onSave && (
-              <button 
-                className="flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 px-4.5 py-2 rounded-xl text-xs font-semibold transition-colors shadow-sm"
-                onClick={() => onSave(pages, globalTheme)}
+              <button
+                disabled={isSaving}
+                className="flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 px-4 py-2 rounded-xl text-xs font-semibold transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                onClick={async () => {
+                  setIsSaving(true);
+                  try {
+                    await onSave(pages, globalTheme);
+                    addToast('Changes saved successfully');
+                  } catch {
+                    addToast('Failed to save', 'error');
+                  } finally {
+                    setIsSaving(false);
+                  }
+                }}
               >
-                <Save className="w-3.5 h-3.5 text-gray-500" /> {planTier === 'DIY' ? 'Save Draft' : 'Save'}
+                {isSaving ? (
+                  <><div className="w-3.5 h-3.5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" /> Saving...</>
+                ) : (
+                  <><Save className="w-3.5 h-3.5 text-gray-500" /> {planTier === 'DIY' ? 'Save Draft' : 'Save'}</>
+                )}
               </button>
             )}
-            
+
             {onPublish && (
-              <button 
-                className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95"
-                onClick={() => onPublish(pages, globalTheme)}
+              <button
+                disabled={isPublishing}
+                className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+                onClick={async () => {
+                  setIsPublishing(true);
+                  try {
+                    await onPublish(pages, globalTheme);
+                    addToast('Site published successfully! 🚀');
+                  } catch {
+                    addToast('Failed to publish', 'error');
+                  } finally {
+                    setIsPublishing(false);
+                  }
+                }}
               >
-                <Globe className="w-3.5 h-3.5" /> Publish Site
+                {isPublishing ? (
+                  <><div className="w-3.5 h-3.5 border-2 border-white/60 border-t-white rounded-full animate-spin" /> Publishing...</>
+                ) : (
+                  <><Globe className="w-3.5 h-3.5" /> Publish Site</>
+                )}
               </button>
             )}
           </div>
@@ -4234,7 +4380,7 @@ export default function SiteEditor({
                 <Keyboard className="w-5 h-5" />
               </button>
               <button 
-                onClick={() => alert("Open global page settings")}
+                onClick={() => { setActiveLeftTool('theme'); setMediaSelectorTarget(null); }}
                 className="p-2 text-gray-400 hover:text-gray-800 hover:bg-gray-50 rounded-xl transition-all"
                 title="Workspace Settings"
               >
@@ -4612,6 +4758,55 @@ export default function SiteEditor({
                       </div>
                     </div>
                   ))}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ====== TOAST NOTIFICATIONS ====== */}
+        <ToastContainer toasts={toasts} />
+
+        {/* ====== TEMPLATE CONFIRMATION MODAL ====== */}
+        <AnimatePresence>
+          {pendingTemplateKey && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-[200] flex items-center justify-center backdrop-blur-sm"
+              onClick={() => setPendingTemplateKey(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.92, opacity: 0, y: 16 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.92, opacity: 0, y: 16 }}
+                transition={{ type: 'spring', duration: 0.3 }}
+                className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-[400px] max-w-[95vw] overflow-hidden"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="p-6">
+                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4">
+                    <LayoutTemplate className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <h3 className="font-black text-gray-900 text-lg mb-1">Load Template?</h3>
+                  <p className="text-sm text-gray-500 font-medium leading-relaxed">
+                    Loading <span className="font-bold text-gray-800">"{pendingTemplateKey.replace(/_/g, ' ')}"</span> will replace your current page layout. This cannot be undone.
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 px-6 pb-6">
+                  <button
+                    onClick={() => setPendingTemplateKey(null)}
+                    className="flex-1 py-2.5 border border-gray-200 text-gray-700 font-semibold text-sm rounded-xl hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmApplyTemplate}
+                    className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl transition-colors"
+                  >
+                    Apply Template
+                  </button>
                 </div>
               </motion.div>
             </motion.div>
