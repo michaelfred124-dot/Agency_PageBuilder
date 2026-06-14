@@ -1,18 +1,47 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { Wrench, ArrowRight, Check, Star, Zap, Droplets, Wind, Phone, MapPin, ChevronDown, Shield, Clock, AlertCircle } from 'lucide-react';
+import { Wrench, ArrowRight, Check, Star, Zap, Droplets, Wind, Phone, MapPin, ChevronDown, Shield, Clock, AlertCircle, Hammer } from 'lucide-react';
+import { useState } from 'react';
 
 const BASE = '/work/valley-prohome';
 const GREEN = '#1B4332';
 const GOLD = '#D4A853';
 const LIGHT = '#F5F5F0';
+const WHITE = '#FFFFFF';
+const DARK = '#111111';
 
-const SERVICES = [
-  { icon: Droplets, title: 'Plumbing', items: ['Leak detection & repair', 'Water heater install & repair', 'Drain cleaning & hydro-jet', 'Full repipes & re-routing', 'Sewer line inspection', 'Outdoor irrigation'], price: 'From $89' },
-  { icon: Zap, title: 'Electrical', items: ['Panel upgrades & replacements', 'Circuit installation', 'Outlet & switch replacement', 'Ceiling fan installation', 'EV charger installation', 'Whole-home generator hookup'], price: 'From $125' },
-  { icon: Wind, title: 'HVAC', items: ['AC service & repair', 'Furnace repair & tune-up', 'New system installation', 'Duct cleaning & sealing', 'Thermostat upgrade', 'Seasonal maintenance plans'], price: 'From $95' },
-  { icon: Wrench, title: 'General Repairs', items: ['Drywall patch & repair', 'Interior & exterior doors', 'Fixtures & faucet replacement', 'Tile & grout repair', 'Weatherstripping & caulking', 'Deck & fence repair'], price: 'From $75' },
-];
+type ServiceKey = 'Plumbing' | 'Electrical' | 'HVAC' | 'General Repairs';
+
+const SERVICES: Record<ServiceKey, { from: string; icon: React.ElementType; items: string[]; detail: string }> = {
+  Plumbing: {
+    from: '$89',
+    icon: Droplets,
+    items: ['Leak repair', 'Drain clearing', 'Water heater', 'Fixture install'],
+    detail: 'From emergency leak repair to full repiping — our licensed plumbers handle it all. Flat-rate pricing, no surprise charges. Same-day emergency service available 24/7.',
+  },
+  Electrical: {
+    from: '$125',
+    icon: Zap,
+    items: ['Outlet repair', 'Panel upgrade', 'Lighting install', 'GFCI install'],
+    detail: 'Licensed journeyman and master electricians. Panel upgrades, outlet repairs, EV charger installation, and whole-home electrical safety inspections.',
+  },
+  HVAC: {
+    from: '$95',
+    icon: Wind,
+    items: ['AC tune-up', 'Furnace repair', 'Duct cleaning', 'Filter change'],
+    detail: 'Stay cool in Phoenix summers. EPA-certified technicians service all major brands. New system installation, seasonal maintenance, and emergency breakdowns.',
+  },
+  'General Repairs': {
+    from: '$75',
+    icon: Hammer,
+    items: ['Drywall patch', 'Door/window fix', 'Caulking & sealing', 'Paint touch-up'],
+    detail: 'One call for all the little jobs around the house. Drywall, doors, fixtures, tile — our handyman team handles it right the first time with a 2-year warranty.',
+  },
+};
+
+const SERVICE_KEYS = Object.keys(SERVICES) as ServiceKey[];
 
 const STEPS = [
   { n: '1', title: 'Call or Book Online', desc: 'Same-day service for emergencies. Schedule for non-urgent work in 2–4 business days.' },
@@ -37,72 +66,264 @@ const FAQS = [
   { q: "Do you offer maintenance plans?", a: "Yes. Our ProHome Care Plan covers an annual HVAC tune-up, plumbing inspection, and electrical safety check. Members also receive priority scheduling, 10% off all service calls, and free emergency dispatch fees. Plans start at $199/year." },
 ];
 
+const SERVICE_AREAS = ['Phoenix', 'Scottsdale', 'Tempe', 'Mesa', 'Chandler', 'Gilbert', 'Glendale', 'Peoria', 'Surprise', 'Avondale', 'Goodyear', 'Queen Creek'];
+
 export default function ValleyProHomeHome() {
+  const [selected, setSelected] = useState<ServiceKey>('Plumbing');
+  const selectedService = SERVICES[selected];
+  const SelectedIcon = selectedService.icon;
+
   return (
     <>
-      {/* EMERGENCY BANNER */}
-      <div style={{ backgroundColor: GREEN }} className="py-3 px-6 text-center">
+      {/* EMERGENCY STRIP */}
+      <div style={{ backgroundColor: GREEN }} className="py-2.5 px-6 text-center">
         <div className="flex items-center justify-center gap-3 text-sm flex-wrap">
-          <AlertCircle className="w-4 h-4 text-yellow-400 shrink-0" />
-          <span className="text-white/80 text-xs uppercase tracking-widest font-bold">24/7 Emergency Service Available</span>
-          <a href="tel:5553829100" className="font-black text-sm text-yellow-400 inline-flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> (555) 382-9100</a>
+          <AlertCircle className="w-4 h-4 shrink-0" style={{ color: GOLD }} />
+          <span
+            className="text-white/80 text-xs uppercase tracking-widest font-bold"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            24/7 Emergency Line: (602) 555-0492 — Same-Day Service Available
+          </span>
+          <a
+            href="tel:6025550492"
+            className="font-black text-sm inline-flex items-center gap-1.5"
+            style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+          >
+            <Phone className="w-3.5 h-3.5" /> (602) 555-0492
+          </a>
         </div>
       </div>
 
-      {/* HERO */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(27,67,50,0.97) 0%, rgba(27,67,50,0.7) 50%, rgba(27,67,50,0.2) 100%)' }} />
-        </div>
-        <div className="relative z-10 px-8 md:px-16 max-w-2xl">
-          <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-5" style={{ color: GOLD }}>Phoenix Metro · Licensed · Bonded · Insured</div>
-          <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-5">Home repairs done<br />right. Every time.</h1>
-          <p className="text-white/60 text-lg mb-10 max-w-lg leading-relaxed">Plumbing, electrical, HVAC, and general repairs for Phoenix area homeowners. Licensed contractors, upfront flat-rate pricing, and a 2-year workmanship warranty on every job.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-[11px] px-8 py-4 text-black" style={{ backgroundColor: GOLD }}>Get Free Estimate <ArrowRight className="w-4 h-4" /></Link>
-            <a href="tel:5553829100" className="inline-flex items-center gap-2 border border-white/30 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4"><Phone className="w-4 h-4" /> 24/7 Emergency Line</a>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/15 text-white/55 font-bold uppercase tracking-widest text-[11px] px-8 py-4">All Services</Link>
+      {/* HERO — asymmetric split */}
+      <section
+        className="min-h-screen flex flex-col md:grid"
+        style={{ gridTemplateColumns: '50% 50%' }}
+      >
+        {/* Left: WHITE text panel */}
+        <div
+          className="flex flex-col justify-center px-10 md:px-14 lg:px-20 py-20 md:py-0 order-2 md:order-1"
+          style={{ backgroundColor: WHITE }}
+        >
+          <div
+            className="text-xs font-bold uppercase tracking-[0.35em] mb-4"
+            style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+          >
+            Valley ProHome
           </div>
+          <h1
+            className="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.95] mb-6"
+            style={{ color: DARK, fontFamily: 'var(--font-display)' }}
+          >
+            Phoenix's trusted home repair team.
+          </h1>
+          <div className="w-16 h-1 mb-6 rounded-full" style={{ backgroundColor: GREEN }} />
+          <p
+            className="text-base leading-relaxed mb-8 max-w-md"
+            style={{ color: '#555', fontFamily: 'var(--font-body)' }}
+          >
+            Plumbing, electrical, HVAC, and general repairs. Licensed, insured, and available when you need us.
+          </p>
+          {/* Trust badges */}
+          <div className="flex flex-wrap gap-3 mb-8">
+            {['Lic & Insured', '18+ Years', 'Flat-Rate Pricing'].map(badge => (
+              <span
+                key={badge}
+                className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
+                style={{
+                  backgroundColor: GREEN + '12',
+                  color: GREEN,
+                  fontFamily: 'var(--font-display)',
+                }}
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 text-white text-sm font-black uppercase tracking-widest px-8 py-4 transition-opacity hover:opacity-90"
+              style={{ backgroundColor: GREEN, fontFamily: 'var(--font-display)' }}
+            >
+              Get a Free Quote <ArrowRight className="w-4 h-4" />
+            </Link>
+            <a
+              href="tel:6025550492"
+              className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest"
+              style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+            >
+              <Phone className="w-4 h-4" /> Call Now: (602) 555-0492
+            </a>
+          </div>
+        </div>
+
+        {/* Right: photo */}
+        <div className="relative order-1 md:order-2" style={{ minHeight: '45vh' }}>
+          <Image
+            src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop"
+            alt="Valley ProHome technician at work"
+            fill
+            className="object-cover"
+            referrerPolicy="no-referrer"
+            priority
+          />
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section style={{ backgroundColor: GREEN }} className="py-12">
+      {/* TRUST STATS */}
+      <section style={{ backgroundColor: GREEN }} className="py-14">
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {[['18+ Years', 'in Business'], ['Licensed', 'All Trades'], ['2-Year', 'Warranty'], ['24/7', 'Emergency']].map(([v, l], i) => (
+          {[['18+ Years', 'in Business'], ['Licensed', 'All Trades'], ['Same-Day', 'Service Avail.'], ['100%', 'Guarantee']].map(([v, l], i) => (
             <div key={i}>
-              <div className="text-3xl font-bold text-white mb-1">{v}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: GOLD }}>{l}</div>
+              <div
+                className="text-3xl font-black text-white mb-1"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                {v}
+              </div>
+              <div
+                className="text-[10px] font-bold uppercase tracking-widest"
+                style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+              >
+                {l}
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* SERVICES */}
+      {/* SIGNATURE ELEMENT — Service Estimate Selector */}
       <section style={{ backgroundColor: LIGHT }} className="py-24 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GREEN }}>Services</div>
-            <h2 className="text-4xl font-bold mb-3" style={{ color: GREEN }}>What We Fix & Install</h2>
-            <p className="text-gray-500 text-sm max-w-md mx-auto">One call covers it all. Plumbing, electrical, HVAC, and general repairs — no need to coordinate multiple contractors.</p>
+            <div
+              className="text-[10px] font-black uppercase tracking-[0.5em] mb-4"
+              style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+            >
+              Services
+            </div>
+            <h2
+              className="text-4xl font-black mb-3"
+              style={{ color: DARK, fontFamily: 'var(--font-display)' }}
+            >
+              What's Your Project?
+            </h2>
+            <p className="text-gray-500 text-sm max-w-md mx-auto" style={{ fontFamily: 'var(--font-body)' }}>
+              Select a service category to see common work, starting prices, and get a quote.
+            </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {SERVICES.map(({ icon: Icon, title, items, price }, i) => (
-              <div key={i} className="bg-white p-7 border-t-4" style={{ borderTopColor: GOLD }}>
-                <div className="flex items-start justify-between mb-5">
-                  <Icon className="w-5 h-5" style={{ color: GREEN }} strokeWidth={1.5} />
-                  <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 text-white" style={{ backgroundColor: GREEN }}>{price}</span>
-                </div>
-                <h3 className="font-bold text-sm mb-4" style={{ color: GREEN }}>{title}</h3>
-                <ul className="space-y-1.5">
-                  {items.map((item, j) => <li key={j} className="flex items-center gap-2 text-xs text-gray-400"><Check className="w-3 h-3 shrink-0" style={{ color: GOLD }} />{item}</li>)}
-                </ul>
+
+          {/* 2×2 card grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            {SERVICE_KEYS.map(key => {
+              const svc = SERVICES[key];
+              const Icon = svc.icon;
+              const isActive = selected === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelected(key)}
+                  className="p-6 text-left rounded-2xl transition-all duration-200 cursor-pointer"
+                  style={{
+                    backgroundColor: isActive ? GREEN : WHITE,
+                    outline: isActive ? `2px solid ${GREEN}` : `1px solid rgba(0,0,0,0.08)`,
+                    color: isActive ? WHITE : DARK,
+                  }}
+                >
+                  <Icon
+                    className="w-7 h-7 mb-4"
+                    style={{ color: isActive ? GOLD : GREEN }}
+                    strokeWidth={isActive ? 2 : 1.5}
+                  />
+                  <div
+                    className="font-black text-sm mb-1"
+                    style={{ fontFamily: 'var(--font-display)', color: isActive ? WHITE : DARK }}
+                  >
+                    {key}
+                  </div>
+                  <div
+                    className="text-base font-black"
+                    style={{ color: isActive ? GOLD : GOLD }}
+                  >
+                    From {svc.from}
+                  </div>
+                  <ul className="mt-3 space-y-1">
+                    {svc.items.map(item => (
+                      <li
+                        key={item}
+                        className="text-[11px] flex items-center gap-1.5"
+                        style={{ color: isActive ? 'rgba(255,255,255,0.75)' : '#888', fontFamily: 'var(--font-body)' }}
+                      >
+                        <span className="w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: isActive ? GOLD : '#888' }} />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Expanded panel for selected service */}
+          <div
+            className="rounded-2xl p-8 flex flex-col md:flex-row gap-6 items-start transition-all duration-300"
+            style={{ backgroundColor: GREEN }}
+          >
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-4">
+                <SelectedIcon className="w-6 h-6" style={{ color: GOLD }} />
+                <h3
+                  className="font-black text-white text-xl"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  {selected}
+                </h3>
+                <span
+                  className="ml-auto font-black text-2xl"
+                  style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+                >
+                  From {selectedService.from}
+                </span>
               </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: GREEN }}>View All Services <ArrowRight className="w-4 h-4" /></Link>
+              <p
+                className="text-white/70 text-sm leading-relaxed mb-6"
+                style={{ fontFamily: 'var(--font-body)' }}
+              >
+                {selectedService.detail}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {selectedService.items.map(item => (
+                  <span
+                    key={item}
+                    className="text-[11px] font-bold px-3 py-1.5 rounded-full"
+                    style={{
+                      backgroundColor: 'rgba(255,255,255,0.1)',
+                      color: 'rgba(255,255,255,0.75)',
+                      fontFamily: 'var(--font-body)',
+                    }}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col gap-3 md:w-48 shrink-0">
+              <Link
+                href={`${BASE}/contact`}
+                className="inline-flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest px-6 py-3.5 rounded-lg text-white transition-opacity hover:opacity-90"
+                style={{ backgroundColor: GOLD, color: DARK, fontFamily: 'var(--font-display)' }}
+              >
+                Get a Quote <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+              <a
+                href="tel:6025550492"
+                className="inline-flex items-center justify-center gap-2 text-xs font-bold border border-white/25 text-white/75 px-6 py-3.5 rounded-lg"
+                style={{ fontFamily: 'var(--font-body)' }}
+              >
+                <Phone className="w-3.5 h-3.5" /> Call Now
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -111,61 +332,130 @@ export default function ValleyProHomeHome() {
       <section className="py-20 px-6 md:px-12 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GREEN }}>Our Process</div>
-            <h2 className="text-4xl font-bold" style={{ color: GREEN }}>Simple. Honest. Guaranteed.</h2>
+            <div
+              className="text-[10px] font-black uppercase tracking-[0.5em] mb-4"
+              style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+            >
+              Our Process
+            </div>
+            <h2
+              className="text-4xl font-black"
+              style={{ color: DARK, fontFamily: 'var(--font-display)' }}
+            >
+              Simple. Honest. Guaranteed.
+            </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {STEPS.map(({ n, title, desc }, i) => (
               <div key={i} className="text-center">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-lg text-white" style={{ backgroundColor: GREEN }}>{n}</div>
-                <h3 className="font-bold text-sm mb-2" style={{ color: GREEN }}>{title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{desc}</p>
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-black text-lg text-white"
+                  style={{ backgroundColor: GREEN, fontFamily: 'var(--font-display)' }}
+                >
+                  {n}
+                </div>
+                <h3
+                  className="font-black text-sm mb-2"
+                  style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+                >
+                  {title}
+                </h3>
+                <p className="text-xs text-gray-400 leading-relaxed" style={{ fontFamily: 'var(--font-body)' }}>
+                  {desc}
+                </p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WHY SECTION */}
-      <section className="grid lg:grid-cols-2 min-h-[55vh]">
-        <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
-          <Image src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2076&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
-        </div>
-        <div className="flex items-center px-10 md:px-16 py-16" style={{ backgroundColor: GREEN }}>
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-5" style={{ color: GOLD }}>Why Choose Us</div>
-            <h2 className="text-4xl font-bold text-white mb-6">No surprises. No callbacks. Just quality.</h2>
-            <p className="text-white/50 leading-relaxed mb-8">Founded in 2006 by master plumber Hector Morales, Valley ProHome has become Phoenix metro's most trusted multi-trade contractor. We grew by doing right by our neighbors — not by cutting corners.</p>
-            <div className="space-y-3 mb-8">
-              {["Free in-home estimates — no service call fee", "Flat-rate pricing before we start any work", "2-year workmanship warranty on all jobs", "Text updates when your tech is on the way", "Senior & veteran discounts available", "ProHome Care Plan — annual maintenance from $199"].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-white/50"><Check className="w-4 h-4 shrink-0" style={{ color: GOLD }} />{p}</div>
-              ))}
-            </div>
-            <Link href={`${BASE}/about`} className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b pb-0.5" style={{ color: GOLD, borderColor: GOLD }}>About Our Team <ArrowRight className="w-3.5 h-3.5" /></Link>
           </div>
         </div>
       </section>
 
       {/* REVIEWS */}
-      <section style={{ backgroundColor: LIGHT }} className="py-20 px-6 md:px-12">
+      <section style={{ backgroundColor: DARK }} className="py-20 px-6 md:px-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GREEN }}>Customer Reviews</div>
-            <h2 className="text-4xl font-bold mb-2" style={{ color: GREEN }}>4.9 Stars · 600+ Google Reviews</h2>
-            <div className="flex justify-center gap-1">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" style={{ color: GOLD }} />)}</div>
+            <div
+              className="text-[10px] font-black uppercase tracking-[0.5em] mb-4"
+              style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+            >
+              Customer Reviews
+            </div>
+            <h2
+              className="text-4xl font-black text-white mb-2"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              4.9 Stars · 600+ Google Reviews
+            </h2>
+            <div className="flex justify-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-current" style={{ color: GOLD }} />
+              ))}
+            </div>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white p-7 border-l-4" style={{ borderLeftColor: GOLD }}>
-                <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: GOLD }} />)}</div>
-                <p className="text-gray-600 italic text-sm leading-relaxed mb-4">"{r.text}"</p>
-                <div className="font-bold text-xs" style={{ color: GREEN }}>— {r.author} <span className="text-gray-400 font-normal">· {r.service}</span></div>
+              <div key={i} className="p-7 rounded-2xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                <div className="flex mb-3">
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: GOLD }} />
+                  ))}
+                </div>
+                <p className="text-white/75 italic text-sm leading-relaxed mb-4" style={{ fontFamily: 'var(--font-body)' }}>
+                  "{r.text}"
+                </p>
+                <div
+                  className="font-black text-xs"
+                  style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+                >
+                  — {r.author} <span className="text-white/35 font-normal">· {r.service}</span>
+                </div>
               </div>
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="text-[10px] font-bold uppercase tracking-widest" style={{ color: GREEN }}>Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" /></Link>
+            <Link
+              href={`${BASE}/reviews`}
+              className="text-xs font-black uppercase tracking-widest"
+              style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+            >
+              Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" />
+            </Link>
           </div>
+        </div>
+      </section>
+
+      {/* PROCARE PLAN BAND */}
+      <section
+        className="py-16 px-6 md:px-12"
+        style={{ backgroundColor: GOLD }}
+      >
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <div
+              className="text-[10px] font-black uppercase tracking-[0.4em] mb-3"
+              style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+            >
+              Annual Maintenance
+            </div>
+            <h2
+              className="text-3xl md:text-4xl font-black mb-3"
+              style={{ color: DARK, fontFamily: 'var(--font-display)' }}
+            >
+              ProHome Care Plan — $199/year
+            </h2>
+            <p
+              className="text-sm leading-relaxed max-w-xl"
+              style={{ color: 'rgba(17,17,17,0.7)', fontFamily: 'var(--font-body)' }}
+            >
+              Annual HVAC tune-up, plumbing inspection, and electrical safety check — plus priority scheduling, 10% off all service calls, and free emergency dispatch fees.
+            </p>
+          </div>
+          <Link
+            href={`${BASE}/contact`}
+            className="inline-flex items-center gap-2 text-white font-black text-sm uppercase tracking-widest px-8 py-4 rounded-lg whitespace-nowrap shrink-0"
+            style={{ backgroundColor: GREEN, fontFamily: 'var(--font-display)' }}
+          >
+            Learn More <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
 
@@ -173,18 +463,77 @@ export default function ValleyProHomeHome() {
       <section className="py-24 px-6 md:px-12 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GREEN }}>FAQ</div>
-            <h2 className="text-4xl font-bold" style={{ color: GREEN }}>Homeowner Questions</h2>
+            <div
+              className="text-[10px] font-black uppercase tracking-[0.5em] mb-4"
+              style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+            >
+              FAQ
+            </div>
+            <h2
+              className="text-4xl font-black"
+              style={{ color: DARK, fontFamily: 'var(--font-display)' }}
+            >
+              Homeowner Questions
+            </h2>
           </div>
           <div className="divide-y divide-gray-100">
             {FAQS.map(({ q, a }, i) => (
               <details key={i} className="group py-5">
-                <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-bold text-sm leading-snug" style={{ color: GREEN }}>{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: GOLD }} />
+                <summary className="flex items-center justify-between cursor-pointer gap-4 list-none">
+                  <span
+                    className="font-black text-sm leading-snug"
+                    style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+                  >
+                    {q}
+                  </span>
+                  <ChevronDown
+                    className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180"
+                    style={{ color: GOLD }}
+                  />
                 </summary>
-                <p className="mt-4 text-gray-500 text-sm leading-relaxed">{a}</p>
+                <p
+                  className="mt-4 text-gray-500 text-sm leading-relaxed"
+                  style={{ fontFamily: 'var(--font-body)' }}
+                >
+                  {a}
+                </p>
               </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICE AREAS */}
+      <section style={{ backgroundColor: LIGHT }} className="py-16 px-6 md:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <div
+              className="text-[10px] font-black uppercase tracking-[0.5em] mb-4"
+              style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+            >
+              Coverage
+            </div>
+            <h2
+              className="text-3xl font-black"
+              style={{ color: DARK, fontFamily: 'var(--font-display)' }}
+            >
+              Phoenix Metro Service Area
+            </h2>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            {SERVICE_AREAS.map(area => (
+              <span
+                key={area}
+                className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border"
+                style={{
+                  borderColor: GREEN + '30',
+                  color: GREEN,
+                  backgroundColor: WHITE,
+                  fontFamily: 'var(--font-display)',
+                }}
+              >
+                {area}
+              </span>
             ))}
           </div>
         </div>
@@ -194,36 +543,85 @@ export default function ValleyProHomeHome() {
       <section style={{ backgroundColor: GREEN }} className="py-16 px-6 md:px-12">
         <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10">
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: GOLD }}>Service Area</div>
-            <div className="flex items-start gap-2 text-white/65 text-sm">
+            <div
+              className="text-[10px] font-black uppercase tracking-widest mb-3"
+              style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+            >
+              Service Area
+            </div>
+            <div className="flex items-start gap-2 text-white/65 text-sm" style={{ fontFamily: 'var(--font-body)' }}>
               <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
               <span>Phoenix Metro Area<br />Scottsdale · Tempe · Mesa<br />Chandler · Gilbert · Glendale</span>
             </div>
           </div>
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: GOLD }}>Office Hours</div>
-            <div className="text-white/65 text-sm space-y-1">
+            <div
+              className="text-[10px] font-black uppercase tracking-widest mb-3"
+              style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+            >
+              Office Hours
+            </div>
+            <div className="text-white/65 text-sm space-y-1" style={{ fontFamily: 'var(--font-body)' }}>
               <div>Mon – Fri: 7:00am – 7:00pm</div>
               <div>Saturday: 8:00am – 5:00pm</div>
               <div className="font-bold mt-2" style={{ color: GOLD }}>Emergency line 24/7/365</div>
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: GOLD }}>Contact Us</div>
-            <a href="tel:5553829100" className="inline-flex items-center gap-2 text-white font-bold text-base"><Phone className="w-4 h-4" style={{ color: GOLD }} /> (555) 382-9100</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-[11px] px-7 py-3 text-black" style={{ backgroundColor: GOLD }}>Get Free Estimate <ArrowRight className="w-3.5 h-3.5" /></Link>
+            <div
+              className="text-[10px] font-black uppercase tracking-widest mb-1"
+              style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
+            >
+              Contact Us
+            </div>
+            <a
+              href="tel:6025550492"
+              className="inline-flex items-center gap-2 text-white font-black text-base"
+              style={{ fontFamily: 'var(--font-body)' }}
+            >
+              <Phone className="w-4 h-4" style={{ color: GOLD }} /> (602) 555-0492
+            </a>
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 font-black uppercase tracking-widest text-xs px-7 py-3 text-white rounded-lg"
+              style={{ backgroundColor: GOLD, color: DARK, fontFamily: 'var(--font-display)' }}
+            >
+              Get Free Estimate <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* FINAL CTA */}
-      <section style={{ backgroundColor: GOLD }} className="py-16 px-6 text-center">
-        <Shield className="w-8 h-8 mx-auto mb-5" style={{ color: GREEN }} strokeWidth={1.5} />
-        <h2 className="text-3xl font-bold mb-4" style={{ color: '#1A0F00' }}>Free estimate. Same-week scheduling. 2-year warranty.</h2>
-        <p className="mb-8 text-sm font-medium max-w-lg mx-auto" style={{ color: 'rgba(26,15,0,0.65)' }}>Phoenix metro. Emergency service 24/7/365. Licensed on every trade. Senior & veteran discounts available.</p>
+      <section style={{ backgroundColor: GREEN }} className="py-20 px-6 text-center border-t border-white/10">
+        <Shield className="w-8 h-8 mx-auto mb-6" style={{ color: GOLD }} strokeWidth={1.5} />
+        <h2
+          className="text-3xl md:text-4xl font-black text-white mb-4"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          Free estimate. Same-week scheduling. 2-year warranty.
+        </h2>
+        <p
+          className="mb-10 text-sm max-w-lg mx-auto"
+          style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-body)' }}
+        >
+          Phoenix metro. Emergency service 24/7/365. Licensed on every trade. Senior & veteran discounts available.
+        </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-[11px] px-10 py-4 text-white" style={{ backgroundColor: GREEN }}>Get Free Estimate <ArrowRight className="w-4 h-4" /></Link>
-          <a href="tel:5553829100" className="inline-flex items-center gap-2 border-2 font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ borderColor: GREEN, color: GREEN }}><Phone className="w-4 h-4" /> Call 24/7 Emergency</a>
+          <Link
+            href={`${BASE}/contact`}
+            className="inline-flex items-center gap-2 font-black uppercase tracking-widest text-xs px-10 py-4 rounded-lg"
+            style={{ backgroundColor: GOLD, color: DARK, fontFamily: 'var(--font-display)' }}
+          >
+            Get Free Estimate <ArrowRight className="w-4 h-4" />
+          </Link>
+          <a
+            href="tel:6025550492"
+            className="inline-flex items-center gap-2 border-2 border-white/25 text-white font-black uppercase tracking-widest text-xs px-10 py-4 rounded-lg"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            <Phone className="w-4 h-4" /> Call 24/7 Emergency
+          </a>
         </div>
       </section>
     </>
