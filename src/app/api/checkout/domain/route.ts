@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@/utils/supabase/server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2026-05-27.dahlia' as any,
-});
-
 export async function POST(request: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+    apiVersion: '2026-05-27.dahlia' as any,
+  });
+
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
