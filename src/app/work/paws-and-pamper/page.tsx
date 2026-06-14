@@ -1,24 +1,131 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ArrowRight, Check, Star, Scissors, ShowerHead, Zap, Phone, MapPin, ChevronDown, Clock, Shield } from 'lucide-react';
+import { useState } from 'react';
+import { Heart, ArrowRight, Check, Star, Scissors, ShowerHead, Zap, Phone, MapPin, ChevronDown, Shield } from 'lucide-react';
 
 const BASE = '/work/paws-and-pamper';
 const TEAL = '#0D9488';
-const DARK = '#134E4A';
-const LIGHT = '#F0FDFA';
+const FOREST = '#134E4A';
+const SKY = '#F0FDFA';
+const WARM = '#FEF3C7';
 
-const SVCS = [
-  { icon: ShowerHead, title: 'Bath & Brush', tag: 'Most Popular', starting: '$45', desc: 'A thorough bath with breed-appropriate shampoo, blow dry, brush out, ear cleaning, nail trim, and spritz.', sizes: [['XS (under 15 lb)', '$45'], ['S (15–30 lb)', '$55'], ['M (30–50 lb)', '$65'], ['L (50–70 lb)', '$75'], ['XL (70+ lb)', '$90']] },
-  { icon: Scissors, title: 'Full Groom', tag: 'Premium', starting: '$70', desc: 'Everything in Bath & Brush, plus a breed-specific cut, styling, and a bandana or bow of your choice.', sizes: [['XS (under 15 lb)', '$70'], ['S (15–30 lb)', '$85'], ['M (30–50 lb)', '$100'], ['L (50–70 lb)', '$120'], ['XL (70+ lb)', '$145']] },
-  { icon: Heart, title: 'Spa Add-Ons', tag: 'Upgrades', starting: '$12', desc: 'Elevate any groom with our spa treatments designed for coat health, comfort, and that extra glow.', sizes: [['Blueberry Facial', '$18'], ['Conditioning Mask', '$22'], ['Paw Balm Treatment', '$15'], ['Teeth Brushing', '$12'], ['De-shed Treatment', '$25']] },
-  { icon: Zap, title: 'Express Service', tag: 'Quick Visit', starting: '$20', desc: 'In and out services for between-groom maintenance. No appointment needed for most express services.', sizes: [['Nail Trim', '$20'], ['Ear Cleaning', '$18'], ['Paw Trim', '$22'], ['Quick Brush-Out', '$25'], ['Nail Grind', '$25']] },
+const headingFont = { fontFamily: 'var(--font-display)', fontWeight: 800 } as const;
+const subheadFont = { fontFamily: 'var(--font-display)', fontWeight: 700 } as const;
+const bodyFont = { fontFamily: 'var(--font-display)', fontWeight: 400 } as const;
+const semiBold = { fontFamily: 'var(--font-display)', fontWeight: 600 } as const;
+
+// ── Pricing data ──
+const SIZES = ['XS', 'S', 'M', 'L', 'XL'] as const;
+type Size = typeof SIZES[number];
+
+const PRICING: Record<Size, { bath: string; full: string; spa: string; nails: string }> = {
+  'XS': { bath: '$45', full: '$60', spa: '+$15', nails: '+$10' },
+  'S':  { bath: '$55', full: '$75', spa: '+$15', nails: '+$10' },
+  'M':  { bath: '$65', full: '$90', spa: '+$20', nails: '+$12' },
+  'L':  { bath: '$75', full: '$110', spa: '+$20', nails: '+$12' },
+  'XL': { bath: '$90', full: '$130', spa: '+$25', nails: '+$15' },
+};
+
+const SIZE_LABELS: Record<Size, string> = {
+  'XS': 'Under 15 lb',
+  'S':  '15–30 lb',
+  'M':  '30–50 lb',
+  'L':  '50–70 lb',
+  'XL': '70+ lb',
+};
+
+const SERVICES_ROW = [
+  { key: 'bath' as const, label: 'Bath & Brush', icon: ShowerHead, desc: 'Bath, blow dry, brush out, ear clean, spritz' },
+  { key: 'full' as const, label: 'Full Groom', icon: Scissors, desc: 'Bath & Brush + breed-specific cut & styling' },
+  { key: 'spa' as const, label: 'Spa Add-on', icon: Heart, desc: 'Conditioning mask, paw balm, blueberry facial' },
+  { key: 'nails' as const, label: 'Nail Trim', icon: Zap, desc: 'Nail clip or grind, quick express service' },
 ];
 
+function PricingSelector() {
+  const [selected, setSelected] = useState<Size>('M');
+  const prices = PRICING[selected];
+
+  return (
+    <div className="bg-white rounded-2xl p-8 shadow-sm border border-teal-50 max-w-2xl mx-auto">
+      {/* Size selector */}
+      <div className="mb-8">
+        <p className="text-xs uppercase tracking-widest text-gray-400 mb-4 text-center" style={semiBold}>Select Your Dog's Size</p>
+        <div className="flex gap-2 justify-center flex-wrap">
+          {SIZES.map(size => (
+            <button
+              key={size}
+              onClick={() => setSelected(size)}
+              className="flex flex-col items-center px-4 py-3 rounded-xl border-2 transition-all duration-200 min-w-[72px]"
+              style={{
+                borderColor: selected === size ? TEAL : '#E2F8F5',
+                backgroundColor: selected === size ? TEAL : 'white',
+                color: selected === size ? 'white' : FOREST,
+              }}
+            >
+              <span className="text-lg" style={{ ...headingFont, color: selected === size ? 'white' : FOREST }}>{size}</span>
+              <span className="text-[9px] mt-0.5" style={{ ...bodyFont, opacity: 0.75 }}>{SIZE_LABELS[size]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Services grid */}
+      <div className="grid grid-cols-2 gap-3">
+        {SERVICES_ROW.map(({ key, label, icon: Icon, desc }) => (
+          <div key={key} className="flex items-start gap-3 p-4 rounded-xl" style={{ backgroundColor: SKY }}>
+            <div
+              className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+              style={{ backgroundColor: TEAL + '20' }}
+            >
+              <Icon className="w-4 h-4" style={{ color: TEAL }} strokeWidth={1.5} />
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 mb-0.5" style={subheadFont}>{label}</div>
+              <div className="text-xl transition-all duration-300" style={{ ...headingFont, color: TEAL }}>{prices[key]}</div>
+              <div className="text-[10px] text-gray-400 mt-0.5 leading-snug" style={bodyFont}>{desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Size guide link */}
+      <div className="text-center mt-6">
+        <span className="text-xs text-gray-400" style={bodyFont}>Not sure of your dog's size? </span>
+        <Link href={`${BASE}/services`} className="text-xs underline" style={{ color: TEAL, ...semiBold }}>
+          Size Guide →
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+// ── Static content ──
 const STEPS = [
-  { icon: Phone, title: 'Book Your Appointment', desc: 'Call, text, or book online. First-time clients get a free 10-minute meet-and-greet to discuss your dog\'s needs.' },
-  { icon: Heart, title: 'Drop Off & Relax', desc: 'We take it from here. One dog at a time means your pup gets individual attention, never caged between services.' },
-  { icon: ShowerHead, title: 'Real-Time Updates', desc: 'We text you a photo mid-groom so you can see the progress. No news is good news — but we always send good news.' },
-  { icon: Scissors, title: 'Pickup a Happy Pup', desc: 'Your dog leaves clean, styled, and calm. We go over what we found and any notes for your next visit.' },
+  { icon: Phone, n: '1', title: 'Book Your Appointment', desc: 'Call, text, or book online. First-time clients get a free 10-minute meet-and-greet to discuss your dog\'s needs.' },
+  { icon: Heart, n: '2', title: 'Drop Off & Relax', desc: 'We take it from here. One dog at a time means your pup gets individual attention, never caged between services.' },
+  { icon: ShowerHead, n: '3', title: 'Real-Time Updates', desc: 'We text you a photo mid-groom so you can see the progress. No news is good news — but we always send good news.' },
+  { icon: Scissors, n: '4', title: 'Pickup a Happy Pup', desc: 'Your dog leaves clean, styled, and calm. We go over what we found and any notes for your next visit.' },
+];
+
+const TEAM = [
+  {
+    name: 'Casey Larson',
+    role: 'Lead Groomer & Co-owner',
+    years: '8 years grooming experience',
+    cert: 'Fear-Free Certified Professional',
+    img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=987&auto=format&fit=crop',
+    bio: 'Casey founded Paws & Pamper after years of working with rescue dogs. She specializes in anxious and senior pups.',
+  },
+  {
+    name: 'Jordan Kim',
+    role: 'Senior Groomer & Co-owner',
+    years: '6 years grooming experience',
+    cert: 'Fear-Free Certified + IPG Member',
+    img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=987&auto=format&fit=crop',
+    bio: 'Jordan is our double-coat and doodle specialist. He brings calm energy and steady hands to every appointment.',
+  },
 ];
 
 const REVIEWS = [
@@ -40,192 +147,247 @@ const FAQS = [
 export default function PawsAndPamperHome() {
   return (
     <>
-      {/* HERO */}
-      <section className="relative min-h-[88vh] flex items-end overflow-hidden">
+      {/* ── HERO — centered & spacious ── */}
+      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover object-center" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(19,78,74,0.97) 0%, rgba(19,78,74,0.45) 60%, transparent 100%)' }} />
+          <Image
+            src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2070&auto=format&fit=crop"
+            alt="Happy dog being groomed"
+            fill
+            className="object-cover object-center"
+            referrerPolicy="no-referrer"
+            priority
+          />
+          {/* Soft radial gradient — light in center, teal-tinted edges */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(13,148,136,0.15) 0%, rgba(19,78,74,0.65) 100%)',
+            }}
+          />
         </div>
-        <div className="relative z-10 px-8 md:px-16 pb-24 max-w-2xl">
-          <div className="flex items-center gap-3 mb-5"><div className="w-8 h-px" style={{ backgroundColor: '#5EEAD4' }} /><span className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/55">Seattle, WA · Fear-Free Certified · Est. 2018</span></div>
-          <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-5">Your dog deserves<br />to be <em style={{ color: '#5EEAD4' }}>pampered</em>.</h1>
-          <p className="text-white/65 text-lg mb-10 max-w-md leading-relaxed">Fear-free certified grooming for dogs of all breeds and sizes. A calm, loving environment where every pup leaves looking great and feeling great.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4 rounded-full" style={{ backgroundColor: TEAL }}>Book Appointment <ArrowRight className="w-4 h-4" /></Link>
-            <a href="tel:2065550374" className="inline-flex items-center gap-2 border border-white/30 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4 rounded-full"><Phone className="w-4 h-4" /> (206) 555-0374</a>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/15 text-white/55 font-bold uppercase tracking-widest text-[11px] px-8 py-4 rounded-full">Pricing & Menu</Link>
+
+        <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
+          {/* Pill badge */}
+          <div
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 text-white text-xs uppercase tracking-widest"
+            style={{ backgroundColor: TEAL, ...semiBold }}
+          >
+            Fear-Free Certified · Seattle, WA
+          </div>
+
+          {/* Headline */}
+          <h1
+            className="text-5xl md:text-7xl text-white leading-tight mb-6"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 900 }}
+          >
+            Every dog deserves<br />the royal treatment.
+          </h1>
+
+          <p className="text-white/80 text-lg md:text-xl mb-10 max-w-xl mx-auto leading-relaxed" style={subheadFont}>
+            Professional grooming done the gentle way.
+          </p>
+
+          {/* Two CTAs centered */}
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 text-white text-sm uppercase tracking-widest px-8 py-4 rounded-full"
+              style={{ backgroundColor: TEAL, ...semiBold }}
+            >
+              Book a Groom <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href={`${BASE}/services`}
+              className="inline-flex items-center gap-2 border-2 border-white text-white text-sm uppercase tracking-widest px-8 py-4 rounded-full"
+              style={semiBold}
+            >
+              See Services & Pricing
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section style={{ backgroundColor: TEAL }} className="py-10">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          {['Fear-Free Certified', 'No Cage Drying — Ever', '5.0 Stars · 190+ Reviews', 'One Dog at a Time'].map((s, i) => (
-            <div key={i} className="text-white font-bold text-sm">{s}</div>
-          ))}
+      {/* ── FEAR-FREE COMMITMENT BAND ── */}
+      <section style={{ backgroundColor: SKY }} className="py-10 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12">
+            {['Fear-Free Certified', 'No Cage Drying — Ever', '5.0 Stars · 190+ Reviews', 'One Dog at a Time'].map((s, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Check className="w-4 h-4 shrink-0" style={{ color: TEAL }} />
+                <span className="text-sm" style={{ color: FOREST, ...subheadFont }}>{s}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* SERVICES WITH PRICING */}
-      <section style={{ backgroundColor: LIGHT }} className="py-24 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
+      {/* ── TRANSPARENT PRICING SELECTOR ── */}
+      <section className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: TEAL, ...semiBold }}>No Surprises</div>
+            <h2 className="text-4xl mb-3" style={{ ...headingFont, color: FOREST }}>Transparent Pricing — Always</h2>
+            <p className="text-gray-500 text-sm max-w-sm mx-auto" style={bodyFont}>Pick your dog's size to see exact prices. What you see is what you pay.</p>
+          </div>
+          <PricingSelector />
+          <div className="text-center mt-8">
+            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-white text-[11px] uppercase tracking-widest px-10 py-4 rounded-full" style={{ backgroundColor: FOREST, ...semiBold }}>
+              Full Service Menu <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PROCESS — 4 horizontal steps ── */}
+      <section className="py-20 px-6 md:px-12 bg-white border-t border-teal-50">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: TEAL }}>Services & Pricing</div>
-            <h2 className="text-4xl font-bold mb-3" style={{ color: DARK }}>Grooming for Happy Dogs</h2>
-            <p className="text-gray-500 text-sm max-w-md mx-auto">Pricing is based on breed, coat condition, and size. Final price confirmed at drop-off after a brief assessment.</p>
+            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: TEAL, ...semiBold }}>How It Works</div>
+            <h2 className="text-4xl" style={{ ...headingFont, color: FOREST }}>Your Dog is in Good Paws</h2>
           </div>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {SVCS.map(({ icon: Icon, title, tag, starting, desc, sizes }, i) => (
-              <div key={i} className="bg-white p-8 border-t-4" style={{ borderTopColor: TEAL }}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: TEAL + '18' }}>
-                    <Icon className="w-5 h-5" style={{ color: TEAL }} strokeWidth={1.5} />
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[9px] font-bold uppercase tracking-widest mb-0.5" style={{ color: TEAL }}>{tag}</div>
-                    <div className="text-xs text-gray-400">Starting at <span className="font-bold" style={{ color: DARK }}>{starting}</span></div>
-                  </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {STEPS.map(({ icon: Icon, n, title, desc }, i) => (
+              <div key={i} className="text-center">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5"
+                  style={{ backgroundColor: SKY }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: TEAL }} strokeWidth={1.5} />
                 </div>
-                <h3 className="font-bold text-base mb-2" style={{ color: DARK }}>{title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed mb-5">{desc}</p>
-                <div className="space-y-1.5">
-                  {sizes.map(([size, price], j) => (
-                    <div key={j} className="flex items-center justify-between text-xs border-b border-gray-50 pb-1.5">
-                      <span className="text-gray-500">{size}</span>
-                      <span className="font-bold" style={{ color: DARK }}>{price}</span>
-                    </div>
-                  ))}
+                <div className="text-[10px] uppercase tracking-widest mb-2" style={{ color: TEAL, ...semiBold }}>Step {n}</div>
+                <h3 className="text-sm mb-2" style={{ ...subheadFont, color: FOREST }}>{title}</h3>
+                <p className="text-xs text-gray-400 leading-relaxed" style={bodyFont}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── MEET THE TEAM ── */}
+      <section style={{ backgroundColor: SKY }} className="py-24 px-6 md:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: TEAL, ...semiBold }}>The Team</div>
+            <h2 className="text-4xl" style={{ ...headingFont, color: FOREST }}>Meet Casey & Jordan</h2>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            {TEAM.map((m, i) => (
+              <div key={i} className="bg-white rounded-2xl p-8 text-center">
+                <div className="relative w-24 h-24 mx-auto mb-5 overflow-hidden rounded-full border-4 border-teal-100">
+                  <Image src={m.img} alt={m.name} fill className="object-cover" referrerPolicy="no-referrer" />
+                </div>
+                <div className="text-lg mb-1" style={{ ...subheadFont, color: FOREST }}>{m.name}</div>
+                <div className="text-[10px] uppercase tracking-widest mb-3" style={{ color: TEAL, ...semiBold }}>{m.role}</div>
+                <p className="text-xs text-gray-400 leading-relaxed mb-4" style={bodyFont}>{m.bio}</p>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-xs text-gray-500 justify-center" style={bodyFont}>
+                    <Check className="w-3.5 h-3.5" style={{ color: TEAL }} />{m.years}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-gray-500 justify-center" style={bodyFont}>
+                    <Check className="w-3.5 h-3.5" style={{ color: TEAL }} />{m.cert}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
           <div className="text-center mt-10">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4 rounded-full" style={{ backgroundColor: DARK }}>Full Service Menu <ArrowRight className="w-4 h-4" /></Link>
+            <Link href={`${BASE}/about`} className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest border-b pb-0.5" style={{ color: TEAL, borderColor: TEAL, ...semiBold }}>
+              More About Our Studio <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="py-20 px-6 md:px-12 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: TEAL }}>How It Works</div>
-            <h2 className="text-4xl font-bold" style={{ color: DARK }}>Your Dog is in Good Paws</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {STEPS.map(({ icon: Icon, title, desc }, i) => (
-              <div key={i} className="text-center">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5" style={{ backgroundColor: LIGHT }}>
-                  <Icon className="w-5 h-5" style={{ color: TEAL }} strokeWidth={1.5} />
-                </div>
-                <h3 className="font-bold text-sm mb-2" style={{ color: DARK }}>{title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PROMISE SPLIT */}
-      <section className="grid lg:grid-cols-2 min-h-[55vh]">
-        <div className="flex items-center px-10 md:px-16 py-16 bg-white">
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-5" style={{ color: TEAL }}>Our Promise</div>
-            <h2 className="text-4xl font-bold mb-6" style={{ color: DARK }}>Calm. Gentle. Professional.</h2>
-            <p className="text-gray-500 leading-relaxed mb-8">Every dog is different. We take time to understand your pet's needs, anxiety triggers, and preferences — then build a grooming experience around them. No rush. No cages. No fear.</p>
-            <div className="space-y-3 mb-8">
-              {["No cage drying — air dry or hand dry only", "One dog on the grooming floor at a time", "Anxious & senior dog specialists on staff", "Text photo updates mid-groom", "All-natural shampoo option available", "Anxiety wraps & calming sprays on hand"].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-gray-500"><Check className="w-4 h-4 shrink-0" style={{ color: TEAL }} />{p}</div>
-              ))}
-            </div>
-            <Link href={`${BASE}/about`} className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b pb-0.5" style={{ color: TEAL, borderColor: TEAL }}>Meet Casey & Jordan <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
-        </div>
-        <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
-          <Image src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=2069&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section style={{ backgroundColor: LIGHT }} className="py-20 px-6 md:px-12">
+      {/* ── REVIEWS ── */}
+      <section style={{ backgroundColor: SKY }} className="py-20 px-6 md:px-12 border-t border-teal-100">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: TEAL }}>Happy Pups</div>
-            <h2 className="text-4xl font-bold mb-2" style={{ color: DARK }}>What Pet Parents Say</h2>
-            <p className="text-gray-400 text-sm">5.0 Stars · 190+ Google Reviews</p>
+            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: TEAL, ...semiBold }}>Happy Pups</div>
+            <h2 className="text-4xl mb-2" style={{ ...headingFont, color: FOREST }}>What Pet Parents Say</h2>
+            <p className="text-gray-400 text-sm" style={bodyFont}>5.0 Stars · 190+ Google Reviews</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white p-7 border-t-4" style={{ borderTopColor: TEAL }}>
+              <div key={i} className="bg-white p-7 rounded-2xl">
                 <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: TEAL }} />)}</div>
-                <p className="text-gray-600 italic text-sm leading-relaxed mb-4">"{r.text}"</p>
-                <div className="font-bold text-xs" style={{ color: DARK }}>— {r.author}</div>
-                <div className="text-[10px] text-gray-400 uppercase tracking-widest">{r.dog}</div>
+                <p className="text-sm leading-relaxed mb-3 italic text-gray-600" style={bodyFont}>"{r.text}"</p>
+                <div className="text-xs" style={{ ...subheadFont, color: FOREST }}>— {r.author}</div>
+                <div className="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5" style={bodyFont}>{r.dog}</div>
               </div>
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="text-[10px] font-bold uppercase tracking-widest" style={{ color: TEAL }}>Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" /></Link>
+            <Link href={`${BASE}/reviews`} className="text-[10px] uppercase tracking-widest" style={{ color: TEAL, ...semiBold }}>
+              Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* ── FAQ ── */}
       <section className="py-24 px-6 md:px-12 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: TEAL }}>FAQ</div>
-            <h2 className="text-4xl font-bold" style={{ color: DARK }}>Questions From Pet Parents</h2>
+            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: TEAL, ...semiBold }}>FAQ</div>
+            <h2 className="text-4xl" style={{ ...headingFont, color: FOREST }}>Questions From Pet Parents</h2>
           </div>
           <div className="divide-y divide-teal-50">
             {FAQS.map(({ q, a }, i) => (
               <details key={i} className="group py-5">
                 <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-bold text-sm leading-snug" style={{ color: DARK }}>{q}</span>
+                  <span className="text-sm leading-snug" style={{ ...subheadFont, color: FOREST }}>{q}</span>
                   <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: TEAL }} />
                 </summary>
-                <p className="mt-4 text-gray-400 text-sm leading-relaxed">{a}</p>
+                <p className="mt-4 text-gray-400 text-sm leading-relaxed" style={bodyFont}>{a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CONTACT STRIP */}
-      <section style={{ backgroundColor: DARK }} className="py-16 px-6 md:px-12">
+      {/* ── CONTACT / LOCATION ── */}
+      <section style={{ backgroundColor: FOREST }} className="py-16 px-6 md:px-12">
         <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10">
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-teal-400">Find Us</div>
-            <div className="flex items-start gap-2 text-white/65 text-sm">
+            <div className="text-[10px] uppercase tracking-widest mb-3 text-teal-400" style={semiBold}>Find Us</div>
+            <div className="flex items-start gap-2 text-white/65 text-sm" style={bodyFont}>
               <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-teal-400" />
-              <span>2241 NW Market St<br />Seattle, WA 98107<br /><span className="text-white/30 text-xs">Free street parking on 22nd Ave NW</span></span>
+              <span>2241 NW Market St<br />Seattle, WA 98107<br /><span className="text-white/35 text-xs">Free street parking on 22nd Ave NW</span></span>
             </div>
           </div>
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-teal-400">Hours</div>
-            <div className="text-white/65 text-sm space-y-1">
+            <div className="text-[10px] uppercase tracking-widest mb-3 text-teal-400" style={semiBold}>Hours</div>
+            <div className="text-white/65 text-sm space-y-1" style={bodyFont}>
               <div>Tue – Fri: 9:00am – 6:00pm</div>
               <div>Saturday: 8:00am – 5:00pm</div>
               <div className="text-white/30">Sun & Mon: Closed</div>
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-1 text-teal-400">Book or Inquire</div>
-            <a href="tel:2065550374" className="inline-flex items-center gap-2 text-white font-bold text-base"><Phone className="w-4 h-4 text-teal-400" /> (206) 555-0374</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-7 py-3 rounded-full" style={{ backgroundColor: TEAL }}>Book a Grooming Appointment <ArrowRight className="w-3.5 h-3.5" /></Link>
+            <div className="text-[10px] uppercase tracking-widest mb-1 text-teal-400" style={semiBold}>Book or Inquire</div>
+            <a href="tel:2065550374" className="inline-flex items-center gap-2 text-white font-bold text-base" style={subheadFont}>
+              <Phone className="w-4 h-4 text-teal-400" /> (206) 555-0374
+            </a>
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white text-[11px] uppercase tracking-widest px-7 py-3 rounded-full" style={{ backgroundColor: TEAL, ...semiBold }}>
+              Book a Grooming Appointment <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section style={{ backgroundColor: DARK }} className="py-14 px-6 text-center border-t border-teal-800">
+      {/* ── FINAL CTA ── */}
+      <section style={{ backgroundColor: FOREST }} className="py-14 px-6 text-center border-t border-teal-800">
         <Heart className="w-8 h-8 mx-auto mb-5 text-teal-400" strokeWidth={1.5} />
-        <h2 className="text-3xl font-bold text-white mb-4">Every dog leaves happy. Guaranteed.</h2>
-        <p className="text-white/50 mb-8 max-w-md mx-auto">Book online or call. New client appointments available most weeks. First visit includes a free meet-and-greet.</p>
+        <h2 className="text-3xl text-white mb-4" style={headingFont}>Every dog leaves happy. Guaranteed.</h2>
+        <p className="text-white/50 mb-8 max-w-md mx-auto" style={bodyFont}>Book online or call. New client appointments available most weeks. First visit includes a free meet-and-greet.</p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4 rounded-full" style={{ backgroundColor: TEAL }}>Book Appointment <ArrowRight className="w-4 h-4" /></Link>
-          <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-teal-700 text-white/60 font-bold uppercase tracking-widest text-[11px] px-10 py-4 rounded-full"><Shield className="w-4 h-4" /> View All Services</Link>
+          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white text-[11px] uppercase tracking-widest px-10 py-4 rounded-full" style={{ backgroundColor: TEAL, ...semiBold }}>
+            Book Appointment <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-teal-700 text-white/60 text-[11px] uppercase tracking-widest px-10 py-4 rounded-full" style={semiBold}>
+            <Shield className="w-4 h-4" /> View All Services
+          </Link>
         </div>
       </section>
     </>
