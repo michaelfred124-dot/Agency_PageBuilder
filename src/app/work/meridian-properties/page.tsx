@@ -1,17 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Check, Star, ChevronDown, Phone, MapPin, Home, TrendingUp, Key, Users, Building2, Award } from 'lucide-react';
+import { ArrowRight, Check, Star, ChevronDown, MapPin, Home, TrendingUp, Users, Building2, Search, Calendar, ShieldCheck } from 'lucide-react';
 
 const BASE = '/work/meridian-properties';
-const BG = '#0D1117';
+const BG = '#FAF8F5';
+const SLATE = '#1F242E';
 const GOLD = '#B8A27A';
-const CARD = '#141C25';
-const BORDER = 'rgba(184,162,122,0.2)';
-const MUTED = 'rgba(255,255,255,0.4)';
+const MUTED = 'rgba(31,36,46,0.6)';
 
 const LISTINGS = [
   {
-    img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1200&auto=format&fit=crop',
     price: '$1,400,000',
     address: '4812 Chickering Lane',
     neighborhood: 'Belle Meade',
@@ -19,7 +18,7 @@ const LISTINGS = [
     tag: 'Just Listed',
   },
   {
-    img: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=2070&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1200&auto=format&fit=crop',
     price: '$875,000',
     address: '2219 Greybar Lane',
     neighborhood: 'Green Hills',
@@ -27,378 +26,329 @@ const LISTINGS = [
     tag: 'Active',
   },
   {
-    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200&auto=format&fit=crop',
     price: '$2,100,000',
     address: '1105 Governors Ridge',
     neighborhood: 'Brentwood',
     beds: 5, baths: 5, sqft: '6,100',
     tag: 'Coming Soon',
   },
+  {
+    img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop',
+    price: '$3,450,000',
+    address: '812 Jackson Boulevard',
+    neighborhood: 'Belle Meade',
+    beds: 6, baths: 7, sqft: '7,800',
+    tag: 'Premium Estate',
+  }
 ];
 
 const SERVICES = [
   {
     icon: Home,
     title: 'Buyer Representation',
-    desc: 'We advocate exclusively for you from your first showing to the closing table. Expert negotiation, market analysis, and total transparency.',
-    items: ['Pre-approval coordination', 'Comparative market analysis', 'Offer strategy & negotiation', 'Inspection guidance', 'Closing cost review'],
+    desc: 'Bespoke market analysis, off-market sourcing, and expert negotiation to secure your next Nashville estate.',
+    items: ['Pre-market tour planning', 'Comparative valuation analyses', 'Structured offer strategies'],
   },
   {
     icon: TrendingUp,
     title: 'Seller Marketing',
-    desc: 'Precision pricing, professional staging consultation, and omnichannel marketing designed to command maximum value for your home.',
-    items: ['Luxury photography & video', 'MLS + digital targeting', 'International buyer reach', 'Open house coordination', 'Offer management'],
+    desc: 'Luxury media distribution and targeted multi-channel promotion designed to command absolute peak value.',
+    items: ['Cinematic listing videos', 'Global buyer syndicate access', 'Omnichannel digital targeting'],
   },
   {
     icon: Building2,
-    title: 'Investment Properties',
-    desc: 'From single-family rentals to multi-unit acquisitions, we identify high-yield opportunities and model returns with institutional rigor.',
-    items: ['Cap rate & cash flow analysis', 'Off-market deal sourcing', '1031 exchange guidance', 'Portfolio diversification', 'Property management referrals'],
+    title: 'Investment Advisory',
+    desc: 'From high-yield acquisitions to portfolio restructures, backed by deep cash flow and tax modeling.',
+    items: ['Cap rate returns forecasting', '1031 exchange blueprints', 'Property management audits'],
   },
-  {
-    icon: Users,
-    title: 'Relocation Services',
-    desc: 'Moving to Nashville? We specialize in seamless transitions for executives, families, and corporate relocations.',
-    items: ['Virtual tour consultations', 'School district guidance', 'Neighborhood comparisons', 'Corporate timeline management', 'Remote offer process'],
-  },
-];
-
-const STEPS = [
-  { n: '01', title: 'Free Valuation', desc: 'We deliver a detailed market analysis and strategic roadmap for your property — at no cost or obligation.' },
-  { n: '02', title: 'Property Search', desc: 'Curated listings matched to your exact criteria. We surface on-market and off-market opportunities.' },
-  { n: '03', title: 'Offer & Negotiation', desc: 'Battle-tested negotiation strategy that has secured $1.4B in transactions for our clients.' },
-  { n: '04', title: 'Closing Day', desc: 'White-glove coordination through every step. Clear communication, zero surprises.' },
 ];
 
 const AGENTS = [
-  { img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop', name: 'Catherine Harlow', title: 'Principal Broker', sales: '$420M+ in career sales' },
-  { img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2070&auto=format&fit=crop', name: 'Isabelle Monroe', title: 'Luxury Specialist', sales: '$210M+ in career sales' },
-  { img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop', name: 'James Aldridge', title: 'Investment Advisor', sales: '$180M+ in career sales' },
+  { img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=600&auto=format&fit=crop', name: 'Catherine Harlow', title: 'Principal Broker', sales: '$420M+ Sales' },
+  { img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop', name: 'Isabelle Monroe', title: 'Luxury Specialist', sales: '$210M+ Sales' },
+  { img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop', name: 'James Aldridge', title: 'Investment Advisor', sales: '$180M+ Sales' },
 ];
 
 const TESTIMONIALS = [
-  { quote: "Catherine negotiated $140,000 above our asking price with multiple offers in hand. The process was flawless — from listing to closing in 18 days.", name: 'Robert & Claire S.', note: 'Sold in Green Hills' },
-  { quote: "Meridian found us an off-market Belle Meade property that never hit the MLS. Their network is simply unmatched in Nashville.", name: 'Thomas W.', note: 'Purchased in Belle Meade' },
-  { quote: "The investment analysis James prepared was the most thorough I have seen. We closed on two rental properties and cash flow is already exceeding projections.", name: 'Priya K.', note: 'Investor Portfolio' },
+  { quote: "Catherine Harlow secured $140,000 above our listing valuation with multiple offers in hand. Absolute elite-tier brokerage.", name: 'Robert & Claire S.', note: 'Sold in Green Hills' },
+  { quote: "Meridian Properties sourced an off-market Belle Meade estate that never hit the MLS. Their network is unmatched in Nashville.", name: 'Thomas W.', note: 'Bought in Belle Meade' },
 ];
 
 const FAQS = [
-  { q: "How does Meridian differ from other Nashville real estate firms?", a: "We are a boutique firm, not a volume shop. Every client works directly with a senior agent — never handed off to a junior assistant. We cap our client roster so every transaction receives full strategic attention. Our average days-on-market is 40% below the Nashville metro average." },
-  { q: "What neighborhoods does Meridian specialize in?", a: "We cover the full greater Nashville area with deep expertise in Belle Meade, Green Hills, Brentwood, Franklin, 12South, East Nashville, and the luxury lakefront communities. We also serve the Williamson County and Sumner County markets for clients relocating from out of state." },
-  { q: "How do you determine my home's listing price?", a: "We run a Comparative Market Analysis drawing on recent closed sales within a half-mile radius, your home's condition, finishes, and lot attributes, plus current buyer demand signals. We never guess and never overprice — homes priced correctly from day one sell faster and for more money." },
-  { q: "Do you work with first-time buyers?", a: "Absolutely. First-time buyers receive the same level of service as our highest-volume investors. We walk you through pre-approval, offer strategy, inspections, and closing — and we connect qualifying clients with THDA down payment assistance programs." },
-  { q: "What does your property valuation include?", a: "Our complimentary valuation is a full Broker Price Opinion — not an automated Zestimate. It includes a room-by-room condition assessment, comparable sales analysis, neighborhood absorption rate, and a written net proceeds estimate. We present it in person or via video call." },
-  { q: "Can you help with a simultaneous buy and sell?", a: "Yes — coordinating concurrent transactions is a core specialty. We sequence the listing and purchase timelines, negotiate contingencies that protect you from carrying two mortgages, and manage both closings with a single point of contact." },
+  { q: "How does Meridian Properties differ from other Nashville brokerages?", a: "We are a boutique firm by design. Every client partners directly with a senior advisor. We cap our client roster so your transaction receives maximum priority." },
+  { q: "What neighborhoods do you specialize in?", a: "We specialize in Belle Meade, Green Hills, Brentwood, Franklin, 12South, East Nashville, and luxury suburban estates in Williamson County." },
+  { q: "How do you calculate property valuations?", a: "We run custom comparative analyses factoring in room-by-room finishes, micro-market absorption rates, and off-market variables. It is a true broker estimate, not an automated system algorithm." },
 ];
 
 export default function MeridianProperties() {
   return (
-    <div style={{ backgroundColor: BG, color: '#fff', fontFamily: 'Georgia, serif' }}>
+    <div style={{ backgroundColor: BG, color: SLATE }} className="overflow-x-hidden pb-12">
 
-      {/* STICKY NAV */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-16 py-5" style={{ backgroundColor: BG, borderBottom: `1px solid ${BORDER}` }}>
-        <div className="flex items-center gap-2">
-          <span className="text-lg tracking-[0.2em] font-bold text-white" style={{ fontFamily: 'Georgia, serif' }}>MERIDIAN</span>
-          <span className="text-lg tracking-[0.15em] font-light text-white/70" style={{ fontFamily: 'Georgia, serif' }}>PROPERTIES</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8">
-          {['Buy', 'Sell', 'Invest', 'About'].map((item) => (
-            <Link key={item} href={`${BASE}/${item.toLowerCase()}`} className="text-xs tracking-widest uppercase font-light" style={{ color: MUTED }}>{item}</Link>
-          ))}
-        </div>
-        <Link href={`${BASE}/contact`} className="text-xs font-bold uppercase tracking-widest px-6 py-3" style={{ backgroundColor: GOLD, color: '#0D1117' }}>
-          Get a Valuation
-        </Link>
-      </nav>
-
-      {/* HERO */}
-      <section className="relative min-h-screen flex items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop"
-            alt="Luxury Nashville home"
-            fill
-            className="object-cover"
-            referrerPolicy="no-referrer"
-            priority
-          />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(13,17,23,0.95) 0%, rgba(13,17,23,0.4) 60%, rgba(13,17,23,0.2) 100%)' }} />
-        </div>
-        <div className="relative z-10 flex items-end pb-24 px-12 w-full">
-          <div className="max-w-3xl">
-            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-6" style={{ color: GOLD }}>
-              NASHVILLE&apos;S PREMIER REAL ESTATE FIRM
-            </p>
-            <h1 className="text-6xl md:text-7xl font-serif leading-tight mb-6 text-white">
-              Discover your<br />extraordinary home.
-            </h1>
-            <p className="text-lg mb-10 max-w-lg leading-relaxed" style={{ color: MUTED }}>
-              Eighteen years of precision real estate in Nashville&apos;s most coveted neighborhoods. Boutique service, extraordinary results.
-            </p>
-            <div className="flex flex-wrap gap-4 mb-10">
-              <Link href={`${BASE}/listings`} className="inline-flex items-center gap-2 px-8 py-4 text-sm font-bold uppercase tracking-widest" style={{ backgroundColor: GOLD, color: '#0D1117' }}>
-                Browse Listings <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-8 py-4 text-sm font-bold uppercase tracking-widest border text-white" style={{ borderColor: 'rgba(255,255,255,0.35)' }}>
-                Book a Valuation
-              </Link>
+      {/* HERO BENTO GRID */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Box 1: Hero Text & Call to Action (Spans 2 columns, 2 rows) */}
+          <div className="md:col-span-2 md:row-span-2 p-10 md:p-16 border border-white/85 bg-white/80 backdrop-blur-xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 flex flex-col justify-between min-h-[460px] text-left">
+            <div>
+              <span className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-[#B8A27A] block mb-6">
+                ESTABLISHED 2008 &nbsp;·&nbsp; NASHVILLE, TN
+              </span>
+              <h1 className="text-5xl md:text-7xl font-serif leading-[1.05] tracking-tight text-[#1F242E] mb-6">
+                Discover your<br />extraordinary<br /><span className="text-[#B8A27A] italic font-light">home.</span>
+              </h1>
+              <div className="w-16 h-0.5 mb-6" style={{ backgroundColor: GOLD }} />
+              <p className="text-sm max-w-md text-gray-500 leading-relaxed font-light mb-8">
+                Boutique luxury real estate brokerage. $1.4B in transactions negotiated across Nashville's most coveted communities.
+              </p>
             </div>
-            {/* Floating search bar */}
-            <div className="rounded-xl p-5 flex flex-col md:flex-row gap-4" style={{ backgroundColor: CARD, border: `1px solid ${BORDER}` }}>
-              <div className="flex-1">
-                <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: GOLD }}>Neighborhood</label>
-                <input readOnly defaultValue="Belle Meade, Green Hills, Brentwood..." className="w-full bg-transparent text-sm text-white/60 outline-none border-0" />
-              </div>
-              <div className="w-px hidden md:block" style={{ backgroundColor: BORDER }} />
-              <div className="flex-1">
-                <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: GOLD }}>Property Type</label>
-                <input readOnly defaultValue="Single Family, Condo, Land..." className="w-full bg-transparent text-sm text-white/60 outline-none border-0" />
-              </div>
-              <div className="w-px hidden md:block" style={{ backgroundColor: BORDER }} />
-              <div className="flex-1">
-                <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: GOLD }}>Price Range</label>
-                <input readOnly defaultValue="$500K – $5M+" className="w-full bg-transparent text-sm text-white/60 outline-none border-0" />
-              </div>
-              <Link href={`${BASE}/listings`} className="self-end px-6 py-2.5 text-xs font-bold uppercase tracking-widest shrink-0" style={{ backgroundColor: GOLD, color: '#0D1117' }}>
-                Search
+            
+            <div className="flex flex-wrap gap-4">
+              <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest text-white shadow-sm hover:opacity-90 transition-opacity" style={{ backgroundColor: GOLD }}>
+                Browse Units <ArrowRight className="w-4 h-4 text-white" />
+              </Link>
+              <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest border border-black/10 text-[#1F242E] hover:bg-black/5 transition-colors">
+                Book Valuation <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* STATS */}
-      <section style={{ backgroundColor: CARD }}>
-        <div className="max-w-6xl mx-auto px-8 py-16 grid grid-cols-2 md:grid-cols-4">
-          {[['$1.4B', 'Sold'], ['820+', 'Transactions'], ['18 Years', 'Experience'], ['4.9★', 'Rating']].map(([val, label], i) => (
-            <div key={i} className="text-center relative">
-              {i > 0 && <div className="absolute left-0 top-1/4 h-1/2 w-px hidden md:block" style={{ backgroundColor: BORDER }} />}
-              <div className="text-5xl font-bold mb-2" style={{ color: GOLD, fontFamily: 'Georgia, serif' }}>{val}</div>
-              <div className="text-xs uppercase tracking-[0.3em]" style={{ color: MUTED }}>{label}</div>
+          {/* Box 2: Hero Visual Feature Image (Spans 1 column, 2 rows) */}
+          <div className="relative overflow-hidden md:row-span-2 rounded-[32px] border border-white/85 shadow-[0_25px_60px_-15px_rgba(31,36,46,0.08)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.1)] transition-all duration-500 min-h-[380px] group">
+            <Image
+              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop"
+              alt="Luxury Nashville House"
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
+              referrerPolicy="no-referrer"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6 p-5 bg-white/75 backdrop-blur-md border border-white/50 rounded-2xl">
+              <span className="text-[9px] font-mono text-[#B8A27A] uppercase tracking-widest font-black block">Featured Unit</span>
+              <span className="text-sm font-bold text-[#1F242E] mt-1 block">Governors Ridge Estate</span>
+              <span className="text-[10px] text-gray-500 font-mono mt-0.5 block">Brentwood · $2,100,000</span>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
 
-      {/* FEATURED LISTINGS */}
-      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-end justify-between mb-14">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>Portfolio</p>
-              <h2 className="text-5xl font-serif text-white">Featured Listings</h2>
+          {/* Box 3: Horizontal Search Filter Bar (Spans 3 columns) */}
+          <div className="md:col-span-3 p-6 border border-[#B8A27A]/25 bg-white/80 backdrop-blur-xl rounded-[24px] shadow-[0_20px_50px_-12px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/50 hover:shadow-[0_25px_55px_-10px_rgba(31,36,46,0.08)] transition-all duration-500 flex flex-col lg:flex-row gap-6 items-center">
+            <div className="flex-1 w-full text-left">
+              <div className="flex items-center gap-2 text-[#B8A27A] mb-1">
+                <MapPin className="w-3.5 h-3.5" />
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider">Neighborhood</span>
+              </div>
+              <input readOnly defaultValue="Belle Meade, Green Hills, Brentwood..." className="w-full bg-transparent text-xs text-gray-500 border-0 outline-none p-0" />
             </div>
-            <Link href={`${BASE}/listings`} className="hidden md:inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest pb-0.5 border-b" style={{ color: GOLD, borderColor: GOLD }}>
-              View All Properties <ArrowRight className="w-3.5 h-3.5" />
+            <div className="w-full lg:w-px h-px lg:h-8 bg-black/5" />
+            
+            <div className="flex-1 w-full text-left">
+              <div className="flex items-center gap-2 text-[#B8A27A] mb-1">
+                <Home className="w-3.5 h-3.5" />
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider">Property Type</span>
+              </div>
+              <input readOnly defaultValue="Single Family, Condos, Estates..." className="w-full bg-transparent text-xs text-gray-500 border-0 outline-none p-0" />
+            </div>
+            <div className="w-full lg:w-px h-px lg:h-8 bg-black/5" />
+
+            <div className="flex-1 w-full text-left">
+              <div className="flex items-center gap-2 text-[#B8A27A] mb-1">
+                <Search className="w-3.5 h-3.5" />
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider">Budget Range</span>
+              </div>
+              <input readOnly defaultValue="$800,000 – $4,000,000+" className="w-full bg-transparent text-xs text-gray-500 border-0 outline-none p-0" />
+            </div>
+            
+            <Link href={`${BASE}/contact`} className="w-full lg:w-auto px-8 py-3 text-xs font-mono font-black uppercase tracking-widest text-white shrink-0 shadow-sm hover:opacity-95" style={{ backgroundColor: GOLD }}>
+              Launch Search
             </Link>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {LISTINGS.map((p, i) => (
-              <Link href={`${BASE}/listings`} key={i} className="group block overflow-hidden" style={{ backgroundColor: CARD, border: `1px solid ${BORDER}` }}>
-                <div className="relative h-64 overflow-hidden">
-                  <Image src={p.img} alt={p.address} fill className="object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(13,17,23,0.6) 0%, transparent 60%)' }} />
-                  <span className="absolute top-4 left-4 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5" style={{ backgroundColor: GOLD, color: '#0D1117' }}>{p.tag}</span>
-                </div>
-                <div className="p-6">
-                  <div className="text-2xl font-bold mb-1" style={{ color: GOLD, fontFamily: 'Georgia, serif' }}>{p.price}</div>
-                  <div className="text-white font-medium mb-1">{p.address}</div>
-                  <div className="text-xs mb-4" style={{ color: MUTED }}>{p.neighborhood} &nbsp;·&nbsp; {p.beds} bed &nbsp;·&nbsp; {p.baths} bath &nbsp;·&nbsp; {p.sqft} sqft</div>
-                  <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest" style={{ color: GOLD }}>
-                    View Property <ArrowRight className="w-3 h-3" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>What We Do</p>
-            <h2 className="text-5xl font-serif text-white mb-4">Comprehensive Real Estate Services</h2>
-            <p className="text-sm max-w-lg mx-auto leading-relaxed" style={{ color: MUTED }}>From first consultation to closing and beyond, we offer a full suite of services backed by 18 years of Nashville market expertise.</p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {SERVICES.map(({ icon: Icon, title, desc, items }, i) => (
-              <div key={i} className="p-8 relative" style={{ backgroundColor: BG, borderLeft: `3px solid ${GOLD}` }}>
-                <Icon className="w-6 h-6 mb-5" style={{ color: GOLD }} strokeWidth={1.5} />
-                <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Georgia, serif' }}>{title}</h3>
-                <p className="text-sm leading-relaxed mb-6" style={{ color: MUTED }}>{desc}</p>
-                <ul className="space-y-2">
-                  {items.map((item, j) => (
-                    <li key={j} className="flex items-center gap-2.5 text-xs" style={{ color: MUTED }}>
-                      <Check className="w-3.5 h-3.5 shrink-0" style={{ color: GOLD }} /> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PROCESS */}
-      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>Our Process</p>
-            <h2 className="text-5xl font-serif text-white">From first call to closing day.</h2>
-          </div>
-          <div className="grid md:grid-cols-4 gap-8 relative">
-            {/* Connecting line */}
-            <div className="absolute top-8 left-[12.5%] right-[12.5%] h-px hidden md:block" style={{ borderTop: `1px dashed ${GOLD}`, opacity: 0.35 }} />
-            {STEPS.map(({ n, title, desc }, i) => (
-              <div key={i} className="text-center relative">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-lg font-bold relative z-10" style={{ border: `1px solid ${GOLD}`, color: GOLD, backgroundColor: BG, fontFamily: 'Georgia, serif' }}>
-                  {n}
-                </div>
-                <h3 className="text-base font-bold text-white mb-3">{title}</h3>
-                <p className="text-xs leading-relaxed" style={{ color: MUTED }}>{desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-14">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold uppercase tracking-widest" style={{ backgroundColor: GOLD, color: '#0D1117' }}>
-              Begin Your Journey <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* AGENTS */}
-      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>Our Team</p>
-            <h2 className="text-5xl font-serif text-white">Featured Agents</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {AGENTS.map((agent, i) => (
-              <div key={i} className="text-center">
-                <div className="relative w-52 h-52 rounded-full overflow-hidden mx-auto mb-6" style={{ border: `2px solid ${BORDER}` }}>
-                  <Image src={agent.img} alt={agent.name} fill className="object-cover" referrerPolicy="no-referrer" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-1" style={{ fontFamily: 'Georgia, serif' }}>{agent.name}</h3>
-                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: GOLD }}>{agent.title}</div>
-                <div className="text-xs" style={{ color: MUTED }}>{agent.sales}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>Client Testimonials</p>
-            <h2 className="text-5xl font-serif text-white">What our clients say.</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="p-8" style={{ backgroundColor: CARD, borderTop: `2px solid ${GOLD}` }}>
-                <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: GOLD }} />)}
-                </div>
-                <p className="text-sm italic leading-relaxed mb-6" style={{ color: MUTED }}>
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <div className="text-sm font-bold text-white">{t.name}</div>
-                <div className="text-xs mt-1" style={{ color: GOLD }}>{t.note}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>FAQ</p>
-            <h2 className="text-5xl font-serif text-white">Common Questions</h2>
-          </div>
-          <div style={{ borderTop: `1px solid ${BORDER}` }}>
-            {FAQS.map(({ q, a }, i) => (
-              <details key={i} className="group" style={{ borderBottom: `1px solid ${BORDER}` }}>
-                <summary className="flex items-center justify-between cursor-pointer gap-4 py-6">
-                  <span className="font-bold text-sm text-white leading-snug">{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 group-open:rotate-180 transition-transform" style={{ color: GOLD }} />
-                </summary>
-                <p className="pb-6 text-sm leading-relaxed" style={{ color: MUTED }}>{a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-28 px-8 text-center" style={{ backgroundColor: GOLD }}>
-        <p className="text-xs font-bold uppercase tracking-[0.4em] mb-4" style={{ color: 'rgba(13,17,23,0.5)' }}>Get Started Today</p>
-        <h2 className="text-5xl md:text-6xl font-serif mb-6" style={{ color: '#0D1117' }}>Your next chapter<br />starts here.</h2>
-        <p className="text-base mb-10 max-w-md mx-auto" style={{ color: 'rgba(13,17,23,0.65)' }}>Schedule a complimentary valuation or buyer consultation with one of our senior agents. No pressure, no obligation.</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold uppercase tracking-widest" style={{ backgroundColor: '#0D1117', color: GOLD }}>
-            Book a Free Consultation <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link href={`${BASE}/listings`} className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold uppercase tracking-widest border" style={{ borderColor: 'rgba(13,17,23,0.3)', color: '#0D1117' }}>
-            Browse Listings
-          </Link>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="py-20 px-8 md:px-16" style={{ backgroundColor: BG, borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-base tracking-[0.2em] font-bold text-white" style={{ fontFamily: 'Georgia, serif' }}>MERIDIAN</span>
-                <span className="text-base tracking-[0.15em] font-light text-white/50" style={{ fontFamily: 'Georgia, serif' }}>PROPERTIES</span>
-              </div>
-              <p className="text-xs leading-relaxed" style={{ color: MUTED }}>Nashville&apos;s trusted luxury real estate firm since 2006. Serving Belle Meade, Green Hills, Brentwood, and beyond.</p>
+      {/* STATS BENTO SECTION */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            ['$1.4B', 'Negotiated Sales'],
+            ['820+', 'Units Transacted'],
+            ['18 Years', 'Boutique Service'],
+            ['4.9★', 'Google Review Avg'],
+          ].map(([val, label], i) => (
+            <div key={i} className="p-6 border border-[#B8A27A]/15 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-2xl shadow-[0_15px_35px_-10px_rgba(31,36,46,0.04)] hover:border-[#B8A27A]/35 hover:shadow-[0_20px_45px_-5px_rgba(31,36,46,0.06)] transition-all duration-300 text-center">
+              <div className="text-3xl font-serif font-black text-[#1F242E] mb-1">{val}</div>
+              <div className="text-[9px] font-mono uppercase tracking-widest text-gray-400 font-bold">{label}</div>
             </div>
-            <div>
-              <div className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Property Types</div>
-              <ul className="space-y-2">
-                {['Luxury Homes', 'Condos & Lofts', 'Investment Property', 'New Construction', 'Land & Lots'].map((item) => (
-                  <li key={item}><Link href={`${BASE}/listings`} className="text-xs hover:text-white transition-colors" style={{ color: MUTED }}>{item}</Link></li>
+          ))}
+        </div>
+      </section>
+
+      {/* HOUSE GALLERY / AVAILABLE UNITS */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 text-left">
+          <div>
+            <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Portfolio</span>
+            <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Available Units</h2>
+          </div>
+          <Link href={`${BASE}/contact`} className="mt-4 md:mt-0 inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest pb-0.5 border-b border-[#B8A27A] text-[#B8A27A] hover:text-black hover:border-black transition-all">
+            View All Properties <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {LISTINGS.map((p, i) => (
+            <Link href={`${BASE}/contact?property=${encodeURIComponent(p.address)}`} key={i} className="group block overflow-hidden rounded-[24px] border border-white/85 bg-white/85 backdrop-blur-md shadow-[0_10px_30px_-5px_rgba(31,36,46,0.04)] hover:shadow-[0_25px_50px_-12px_rgba(31,36,46,0.1)] hover:border-[#B8A27A]/30 transition-all duration-500">
+              <div className="relative h-56 overflow-hidden">
+                <Image src={p.img} alt={p.address} fill className="object-cover group-hover:scale-103 transition-transform duration-500" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                <span className="absolute top-4 left-4 text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1.5 bg-white/90 backdrop-blur-sm text-[#1F242E] rounded-md shadow-sm">{p.tag}</span>
+              </div>
+              <div className="p-6 text-left">
+                <div className="text-xl font-serif font-black text-[#1F242E] mb-1">{p.price}</div>
+                <div className="text-xs text-gray-800 font-bold mb-1">{p.address}</div>
+                <div className="text-[10px] text-gray-400 font-mono tracking-wide">{p.neighborhood} · {p.beds} Beds · {p.baths} Baths</div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* SERVICES - Bento Columns */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+        <div className="text-center mb-16">
+          <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Our Services</span>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Luxury Representation</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {SERVICES.map(({ icon: Icon, title, desc, items }, i) => (
+            <div key={i} className="p-8 border border-white/80 bg-gradient-to-b from-white/90 to-white/70 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] text-left flex flex-col justify-between min-h-[320px] group hover:border-[#B8A27A]/40 transition-all duration-500">
+              <div>
+                <div className="w-10 h-10 rounded-full bg-[#B8A27A]/10 flex items-center justify-center mb-6">
+                  <Icon className="w-4.5 h-4.5 text-[#B8A27A]" strokeWidth={1.5} />
+                </div>
+                <h3 className="text-lg font-serif font-black text-[#1F242E] mb-3 uppercase tracking-wide">{title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed mb-6 font-light">{desc}</p>
+              </div>
+              <ul className="space-y-2.5 border-t border-black/5 pt-4">
+                {items.map((item, j) => (
+                  <li key={j} className="flex items-center gap-2 text-[10px] text-gray-600 font-mono">
+                    <Check className="w-3.5 h-3.5 text-[#B8A27A] shrink-0" /> <span>{item}</span>
+                  </li>
                 ))}
               </ul>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* AGENTS BENTO */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+        <div className="text-center mb-16">
+          <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Our Team</span>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Luxury Advisors</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {AGENTS.map((agent, i) => (
+            <div key={i} className="p-6 border border-[#B8A27A]/15 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-center">
+              <div className="relative w-44 h-44 rounded-full overflow-hidden mx-auto mb-6 shadow-md border-2 border-white">
+                <Image src={agent.img} alt={agent.name} fill className="object-cover filter grayscale hover:grayscale-0 transition-all duration-700" referrerPolicy="no-referrer" />
+              </div>
+              <h3 className="text-lg font-serif font-black text-[#1F242E] mb-1">{agent.name}</h3>
+              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#B8A27A] mb-2">{agent.title}</div>
+              <div className="text-[10px] text-gray-400 font-mono tracking-wider">{agent.sales}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TESTIMONIALS & FAQ - Combined Bento Grid */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          
+          {/* Testimonials (Spans 1 Column, 2 Rows) */}
+          <div className="md:col-span-1 md:row-span-2 p-8 border border-white/80 bg-white/80 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 flex flex-col justify-between min-h-[420px]">
             <div>
-              <div className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Contact</div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-2 text-xs" style={{ color: MUTED }}>
-                  <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: GOLD }} />
-                  3210 West End Ave, Suite 500<br />Nashville, TN 37203
-                </div>
-                <a href="tel:6155550265" className="flex items-center gap-2 text-xs hover:text-white transition-colors" style={{ color: MUTED }}>
-                  <Phone className="w-3.5 h-3.5" style={{ color: GOLD }} /> (615) 555-0265
-                </a>
+              <span className="text-[#B8A27A] font-mono font-bold text-[9px] tracking-widest uppercase block mb-6">Client Experience</span>
+              <div className="flex gap-0.5 mb-6">
+                {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current text-[#B8A27A]" />)}
+              </div>
+              <div className="space-y-6">
+                {TESTIMONIALS.map((t, i) => (
+                  <div key={i} className="border-b border-black/5 pb-6 last:border-0 last:pb-0">
+                    <p className="text-xs italic text-gray-600 leading-relaxed font-light">"{t.quote}"</p>
+                    <div className="text-[10px] font-bold text-[#1F242E] mt-3">{t.name}</div>
+                    <div className="text-[9px] text-[#B8A27A] font-mono mt-0.5 uppercase tracking-wide">{t.note}</div>
+                  </div>
+                ))}
               </div>
             </div>
+            
+            <Link href={`${BASE}/reviews`} className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-widest text-[#B8A27A] hover:text-black transition-colors pt-4 border-t border-black/5">
+              Read Testimonials <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* FAQs (Spans 2 Columns) */}
+          <div className="md:col-span-2 p-8 border border-white/80 bg-white/80 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] transition-all duration-500 flex flex-col justify-between">
             <div>
-              <div className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Follow</div>
-              <div className="flex gap-3">
-                {['IG', 'FB', 'LI', 'YT'].map((s) => (
-                  <Link key={s} href="#" className="w-9 h-9 flex items-center justify-center text-xs font-bold border" style={{ color: GOLD, borderColor: BORDER }}>
-                    {s}
-                  </Link>
+              <span className="text-[#B8A27A] font-mono font-bold text-[9px] tracking-widest uppercase block mb-6">Common Inquiries</span>
+              <h3 className="text-xl font-serif text-[#1F242E] mb-6 tracking-tight">Frequently Asked Questions</h3>
+              <div className="space-y-2">
+                {FAQS.map(({ q, a }, i) => (
+                  <details key={i} className="group border-b border-black/5 pb-4 last:border-0 last:pb-0">
+                    <summary className="flex items-center justify-between cursor-pointer py-3 list-none">
+                      <span className="font-bold text-xs text-[#1F242E] uppercase tracking-wide">{q}</span>
+                      <ChevronDown className="w-4 h-4 text-[#B8A27A] transition-transform group-open:rotate-180" />
+                    </summary>
+                    <p className="text-xs leading-relaxed text-gray-500 font-light pt-2">
+                      {a}
+                    </p>
+                  </details>
                 ))}
               </div>
             </div>
           </div>
-          <div className="pt-8 flex flex-col md:flex-row justify-between gap-4" style={{ borderTop: `1px solid ${BORDER}` }}>
-            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>© 2026 Meridian Properties LLC. All rights reserved. Licensed in Tennessee.</p>
-            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>MLS information deemed reliable but not guaranteed. All listings subject to prior sale or withdrawal.</p>
+
+          {/* Trust Factors - Bento card (Spans 2 columns) */}
+          <div className="md:col-span-2 p-8 border border-[#B8A27A]/20 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <div className="text-left md:col-span-2">
+              <div className="text-[#B8A27A] font-mono text-[9px] uppercase tracking-wider mb-2">Accreditation</div>
+              <h4 className="text-md font-serif font-black text-[#1F242E]">Certified Luxury Home Marketing Specialists</h4>
+              <p className="text-[10px] text-gray-500 font-light mt-2 leading-relaxed">
+                Our advisors hold CRS and ABR accreditations, delivering institutional analysis and luxury marketing standards to every deal.
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <div className="w-20 h-20 rounded-2xl bg-[#B8A27A]/10 border border-[#B8A27A]/20 flex items-center justify-center shadow-inner">
+                <ShieldCheck className="w-10 h-10 text-[#B8A27A]" strokeWidth={1} />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* FINAL GLASS CTA BANNER */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12">
+        <div className="bg-gradient-to-tr from-[#B8A27A] to-[#E5D5BC] rounded-[48px] py-20 px-8 text-center shadow-lg relative overflow-hidden border border-white/50">
+          <div className="absolute inset-0 opacity-15 pointer-events-none bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=600')" }} />
+          <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] mb-6 tracking-tight relative z-10">Your next chapter starts here.</h2>
+          <p className="text-gray-800 text-xs font-mono font-bold tracking-wider mb-8 max-w-sm mx-auto uppercase relative z-10">Boutique service. Multi-channel marketing strategies.</p>
+          <div className="pt-2 relative z-10 flex flex-wrap justify-center gap-4">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#1F242E] hover:bg-white hover:text-black text-white font-mono font-black uppercase tracking-widest text-[10px] px-10 py-5 transition-all shadow-sm">
+              Schedule Consultation <Calendar className="w-4 h-4" />
+            </Link>
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white/40 backdrop-blur-md hover:bg-white text-[#1F242E] font-mono font-black uppercase tracking-widest text-[10px] px-10 py-5 transition-all shadow-sm border border-white/50">
+              Browse Available Units
+            </Link>
           </div>
         </div>
-      </footer>
+      </section>
+
     </div>
   );
 }
