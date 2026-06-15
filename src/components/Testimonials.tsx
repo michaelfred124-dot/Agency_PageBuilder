@@ -46,13 +46,13 @@ import AnimatedSquiggles from './AnimatedSquiggles';
 
 export default function Testimonials() {
   return (
-    <section className="py-20 lg:py-32 bg-[#F7F8FA] px-4 lg:px-6 border-t border-zinc-200/50 relative overflow-hidden">
+    <section className="py-20 lg:py-32 bg-[#0B0B0B] px-4 lg:px-6 border-t border-white/10 relative overflow-hidden">
       <AnimatedSquiggles />
       <div className="max-w-[1400px] mx-auto relative z-10">
         <div className="mb-16 lg:mb-24 text-center">
-          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Wall of Love</span>
-          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 mt-4 leading-none">
-            Client <span style={{ color: COLORS.purple }}>Praise</span>
+          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-[#D4AF37]">Wall of Love</span>
+          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-white mt-4 leading-none">
+            Client <span className="text-[#FF7F11]">Praise</span>
           </h2>
         </div>
 
@@ -64,29 +64,27 @@ export default function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -4, x: -4, boxShadow: `6px 6px 0px rgba(9,9,11,1)` }}
-              className="p-8 lg:p-10 border-2 border-zinc-950 rounded-3xl bg-white relative flex flex-col justify-between transition-all duration-300 group"
-              style={{ boxShadow: `4px 4px 0px rgba(9,9,11,1)` }}
+              className="p-8 lg:p-10 luxury-card rounded-3xl relative flex flex-col justify-between group cursor-pointer"
             >
               <div>
                 <div 
-                  className="w-10 h-10 border-2 border-zinc-950 shadow-[2px_2px_0px_rgba(9,9,11,1)] rounded-xl flex items-center justify-center absolute -top-5 left-8 z-10 group-hover:scale-105 transition-transform duration-300"
-                  style={{ backgroundColor: t.color }}
+                  className="w-10 h-10 border border-[#D4AF37]/20 bg-[#D4AF37]/10 rounded-xl flex items-center justify-center absolute -top-5 left-8 z-10 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(212,175,55,0.1)] text-[#D4AF37]"
                 >
-                  <Quote className="w-4 h-4 text-zinc-950 fill-zinc-950" />
+                  <Quote className="w-4 h-4 fill-current" />
                 </div>
-                <p className="text-lg lg:text-xl font-bold leading-relaxed mb-8 mt-4 uppercase tracking-tight text-zinc-900">
+                <p className="text-base lg:text-lg font-medium leading-relaxed mb-8 mt-4 text-white">
                   "{t.quote}"
                 </p>
               </div>
-              <div className="flex items-center gap-4 border-t border-zinc-200 pt-6">
+              <div className="flex items-center gap-4 border-t border-white/10 pt-6">
                 <div 
-                  className="w-10 h-10 rounded-full border-2 border-zinc-950 flex-shrink-0 shadow-[1.5px_1.5px_0px_rgba(9,9,11,1)]"
-                  style={{ backgroundColor: t.color }}
-                />
+                  className="w-10 h-10 rounded-full border border-[#D4AF37]/20 bg-[#D4AF37]/10 flex-shrink-0 flex items-center justify-center text-[#D4AF37] font-bold text-xs"
+                >
+                  {t.author.split(' ').map(n => n[0]).join('')}
+                </div>
                 <div>
-                  <div className="font-extrabold uppercase tracking-wider text-xs text-zinc-900">{t.author}</div>
-                  <div className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest mt-1">{t.role}</div>
+                  <div className="font-extrabold uppercase tracking-wider text-xs text-white">{t.author}</div>
+                  <div className="text-white/50 font-bold uppercase text-[10px] tracking-widest mt-1">{t.role}</div>
                 </div>
               </div>
             </motion.div>
