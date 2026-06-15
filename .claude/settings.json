@@ -5,7 +5,8 @@
       "WebFetch(domain:github.com)",
       "PowerShell(Get-Process -Name node -ErrorAction SilentlyContinue)",
       "PowerShell(Stop-Process -Force -Confirm:$false)",
-      "PowerShell(Stop-Process -Id 3208 -Force -Confirm:$false)"
+      "PowerShell(Stop-Process -Id 3208 -Force -Confirm:$false)",
+      "PowerShell(Get-Process -Id 42952 -ErrorAction SilentlyContinue)"
     ]
   }
 }

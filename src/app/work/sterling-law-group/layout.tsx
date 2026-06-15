@@ -4,50 +4,71 @@ import { Scale, Phone, Mail, MapPin } from 'lucide-react';
 import SLNav from '@/components/templates/sl/Nav';
 
 const BASE = '/work/sterling-law-group';
-const NAVY = '#1E2D5A';
-const GOLD = '#C49A3C';
+const BG = '#0A0A0A';
+const GOLD = '#C9A84C';
+const BORDER = 'rgba(201,168,76,0.15)';
 
 export default function SterlingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen font-sans bg-white text-gray-800">
+    <div className="min-h-screen font-sans bg-[#0A0A0A] text-gray-200">
       <SLNav />
       <main>{children}</main>
-      <footer style={{ backgroundColor: NAVY }} className="text-white pt-16 pb-8 px-6 md:px-12">
+      <footer className="bg-[#0A0A0A] text-white pt-20 pb-10 px-6 md:px-12 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-2 mb-5">
+          <div className="grid md:grid-cols-4 gap-12 mb-16 text-left">
+            <div className="md:col-span-2 space-y-5">
+              <div className="flex items-center gap-2.5">
                 <Scale className="w-5 h-5" style={{ color: GOLD }} />
                 <span className="font-bold tracking-widest text-sm uppercase">Sterling Law Group</span>
               </div>
-              <p className="text-white/50 text-sm leading-relaxed mb-5 max-w-sm">Experienced legal representation for personal injury, family law, and business disputes throughout Colorado. Free consultations. No fees unless we win.</p>
-              <div className="h-px w-12 mb-5" style={{ backgroundColor: GOLD }} />
-              <p className="text-white/35 text-xs uppercase tracking-widest">Licensed in Colorado · Member Colorado Bar Association</p>
+              <p className="text-white/50 text-xs leading-relaxed max-w-sm font-light">
+                Experienced legal representation for high-stakes business litigation, corporate law, and wealth preservation throughout Colorado. Free strategy consultations.
+              </p>
+              <div className="h-px w-12" style={{ backgroundColor: GOLD }} />
+              <p className="text-white/30 text-[9px] uppercase tracking-[0.2em] font-mono">
+                Licensed in Colorado · Member Colorado Bar Association
+              </p>
             </div>
+            
             <div>
-              <h4 className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/30 mb-6">Practice Areas</h4>
-              <div className="flex flex-col gap-3 text-[11px] font-bold uppercase tracking-widest text-white/50">
-                {['Personal Injury', 'Family Law', 'Business Law', 'Criminal Defense', 'Estate Planning'].map(s => (
+              <h4 className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-white/30 mb-6">Practice Areas</h4>
+              <div className="flex flex-col gap-3.5 text-[10px] font-mono uppercase tracking-widest text-white/50">
+                {['Business Litigation', 'Corporate Law', 'Mergers & Acquisitions', 'Estate Planning', 'Trust Administration'].map(s => (
                   <Link key={s} href={`${BASE}/services`} className="hover:text-white transition-colors">{s}</Link>
                 ))}
               </div>
             </div>
+            
             <div>
-              <h4 className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/30 mb-6">Contact</h4>
-              <div className="space-y-4 text-[11px] text-white/50">
-                <div className="flex gap-3"><MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: GOLD }} /><span>847 Justice Way, Suite 400<br />Colorado Springs, CO 80903</span></div>
-                <div className="flex gap-3"><Phone className="w-3.5 h-3.5 shrink-0" style={{ color: GOLD }} /><span>(719) 555-0183</span></div>
-                <div className="flex gap-3"><Mail className="w-3.5 h-3.5 shrink-0" style={{ color: GOLD }} /><span>info@sterlinglawco.com</span></div>
+              <h4 className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-white/30 mb-6">Contact</h4>
+              <div className="space-y-4 text-xs text-white/50">
+                <div className="flex gap-3">
+                  <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
+                  <span className="font-light">150 Fourth Ave North, Suite 1500<br />Nashville, TN 37219</span>
+                </div>
+                <div className="flex gap-3">
+                  <Phone className="w-4 h-4 shrink-0" style={{ color: GOLD }} />
+                  <span className="font-light">(615) 555-0190</span>
+                </div>
+                <div className="flex gap-3">
+                  <Mail className="w-4 h-4 shrink-0" style={{ color: GOLD }} />
+                  <span className="font-light">info@sterlinglawco.com</span>
+                </div>
               </div>
-              <div className="mt-5 text-[10px] font-bold uppercase tracking-widest text-white/35">
-                <div>Mon–Fri 8am–6pm</div>
-                <div>Sat 9am–1pm</div>
+              <div className="mt-6 text-[10px] font-mono uppercase tracking-widest text-[#C9A84C] font-bold">
+                <div>Mon–Fri: 8:00 AM – 6:00 PM</div>
+                <div className="mt-1">Saturday: 9:00 AM – 1:00 PM</div>
               </div>
             </div>
           </div>
+          
           <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-[9px] text-white/20 uppercase tracking-widest">© 2026 Sterling Law Group · All Rights Reserved · Colorado Springs, CO</p>
-            <Link href={`${BASE}/contact`} className="text-[9px] text-white/20 hover:text-white uppercase tracking-widest transition-colors">Schedule Free Consultation</Link>
+            <p className="text-[9px] font-mono uppercase tracking-widest text-white/20">
+              © {new Date().getFullYear()} Sterling Law Group · All Rights Reserved
+            </p>
+            <Link href={`${BASE}/contact`} className="text-[9px] font-mono text-white/20 hover:text-white uppercase tracking-widest transition-colors">
+              Schedule Free Consultation
+            </Link>
           </div>
         </div>
       </footer>

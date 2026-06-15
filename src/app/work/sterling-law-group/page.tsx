@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Scale, Check, Star, Phone, MapPin, ChevronDown, Award, Shield } from 'lucide-react';
+import { Scale, Check, Star, Phone, MapPin, ChevronDown, Award, Shield, ArrowRight } from 'lucide-react';
 
 const BASE = '/work/sterling-law-group';
 const BG = '#0A0A0A';
@@ -98,165 +98,149 @@ const FAQS = [
 
 export default function SterlingHome() {
   return (
-    <div style={{ backgroundColor: BG, color: '#fff' }}>
+    <div style={{ backgroundColor: BG, color: '#fff' }} className="overflow-x-hidden">
 
-      {/* STICKY NAV */}
-      <nav
-        className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-14 py-4"
-        style={{ backgroundColor: BG, borderBottom: `1px solid ${BORDER}` }}
-      >
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-black uppercase tracking-[0.25em] text-white">STERLING</span>
-          <span style={{ color: 'rgba(255,255,255,0.2)' }}>|</span>
-          <span className="text-sm font-light uppercase tracking-[0.2em]" style={{ color: MUTED }}>LAW GROUP</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8">
-          {['Practice Areas', 'Attorneys', 'Results', 'Contact'].map((item) => (
-            <Link key={item} href={`${BASE}/contact`} className="text-xs uppercase tracking-widest font-medium" style={{ color: MUTED }}>
-              {item}
-            </Link>
-          ))}
-        </div>
-        <Link
-          href={`${BASE}/contact`}
-          className="text-xs font-bold uppercase tracking-widest px-5 py-2.5"
-          style={{ backgroundColor: GOLD, color: '#0A0A0A' }}
-        >
-          Free Consultation
-        </Link>
-      </nav>
-
-      {/* HERO — split layout */}
-      <section className="min-h-screen grid md:grid-cols-[55fr_45fr]">
+      {/* HERO — split layout with custom roundings */}
+      <section className="min-h-[90vh] grid md:grid-cols-[55fr_45fr] items-center max-w-7xl mx-auto px-6 md:px-12 py-12 gap-12">
         {/* Left — text */}
-        <div className="flex flex-col justify-center px-10 md:px-16 lg:px-24 py-24" style={{ backgroundColor: BG }}>
-          <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-10" style={{ color: GOLD }}>
-            EST. 1996 &nbsp;&middot;&nbsp; NASHVILLE, TENNESSEE
+        <div className="flex flex-col justify-center text-left py-12">
+          <p className="text-[10px] font-mono font-bold uppercase tracking-[0.3em] mb-8" style={{ color: GOLD }}>
+            EST. 1996 &nbsp;·&nbsp; NASHVILLE, TENNESSEE
           </p>
-          <h1 className="text-7xl md:text-8xl font-bold leading-none text-white mb-8">
-            Justice,<br />argued<br />brilliantly.
+          <h1 className="text-5xl md:text-7xl font-sans font-black leading-[1.05] text-white mb-8 tracking-tight">
+            Justice,<br />argued<br /><span className="text-[#C9A84C] italic font-light font-serif">brilliantly.</span>
           </h1>
-          <div className="w-20 h-0.5 mb-8" style={{ backgroundColor: GOLD }} />
-          <p className="text-lg leading-relaxed mb-12 max-w-md" style={{ color: MUTED }}>
+          <div className="w-16 h-0.5 mb-8" style={{ backgroundColor: GOLD }} />
+          <p className="text-md leading-relaxed mb-10 max-w-md font-light text-gray-300">
             We represent corporations, executives, and families in matters that define their futures.
           </p>
+          
           <div className="flex flex-wrap gap-4 mb-16">
             <Link
               href={`${BASE}/contact`}
-              className="inline-flex items-center gap-2 px-7 py-4 text-xs font-bold uppercase tracking-widest"
+              className="inline-flex items-center gap-2 px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest transition-all rounded-none border border-[#C9A84C]/50 hover:border-[#C9A84C]"
               style={{ backgroundColor: GOLD, color: '#0A0A0A' }}
             >
-              Schedule Consultation
+              Schedule Consultation <ArrowRight className="w-4 h-4 text-[#0A0A0A]" />
             </Link>
             <Link
-              href={`${BASE}/results`}
-              className="inline-flex items-center gap-2 px-7 py-4 text-xs font-bold uppercase tracking-widest border text-white"
+              href={`${BASE}/services`}
+              className="inline-flex items-center gap-2 px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest border text-white hover:bg-white/5"
               style={{ borderColor: 'rgba(255,255,255,0.25)' }}
             >
-              View Case Results
+              Our Practices <ArrowRight className="w-4 h-4 text-gray-400" />
             </Link>
           </div>
-          <div className="flex items-center gap-10 flex-wrap">
-            {[['94.7%', 'Win Rate'], ['2,400+', 'Cases'], ['$2.1B', 'Recovered']].map(([val, lbl]) => (
-              <div key={lbl}>
-                <div className="text-xl font-bold text-white">{val}</div>
-                <div className="text-[10px] uppercase tracking-widest mt-0.5" style={{ color: MUTED }}>{lbl}</div>
+          
+          <div className="flex items-center gap-12 flex-wrap">
+            {[['94.7%', 'Win Rate'], ['2,400+', 'Cases Handled'], ['$2.1B', 'Recovered']].map(([val, lbl]) => (
+              <div key={lbl} className="border-l border-[#C9A84C]/30 pl-4">
+                <div className="text-2xl font-sans font-bold text-white">{val}</div>
+                <div className="text-[9px] font-mono uppercase tracking-widest mt-1 text-white/50">{lbl}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Right — full-height image with gradient bleed */}
-        <div className="relative overflow-hidden min-h-[60vh] md:min-h-0">
+        {/* Right — asymmetrical rounded image container */}
+        <div className="relative overflow-hidden aspect-[4/5] md:h-[650px] w-full rounded-tl-[64px] rounded-br-[64px] border border-[#C9A84C]/25 shadow-2xl">
           <Image
             src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop"
             alt="Sterling Law Group Nashville"
             fill
-            className="object-cover"
+            className="object-cover scale-102"
             referrerPolicy="no-referrer"
             priority
           />
           <div
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(to right, #0A0A0A 0%, transparent 30%)' }}
+            className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/80 via-transparent to-transparent"
           />
         </div>
       </section>
 
-      {/* STATS STRIP */}
-      <section className="py-16 px-6" style={{ backgroundColor: CARD }}>
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      {/* STATS STRIP - floating asymmetric panel */}
+      <section className="py-12 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="bg-[#111111] border border-[#C9A84C]/20 rounded-tr-[48px] rounded-bl-[48px] p-12 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center shadow-xl">
           {[
             ['94.7%', 'Win Rate'],
             ['2,400+', 'Cases Handled'],
             ['$2.1B', 'Recovered for Clients'],
             ['28 Years', 'Nashville Excellence'],
           ].map(([val, lbl]) => (
-            <div key={lbl}>
-              <div className="text-5xl font-bold mb-2" style={{ color: GOLD }}>{val}</div>
-              <div className="text-[10px] uppercase tracking-widest mt-2" style={{ color: MUTED }}>{lbl}</div>
+            <div key={lbl} className="space-y-1">
+              <div className="text-4xl font-sans font-black" style={{ color: GOLD }}>{val}</div>
+              <div className="text-[10px] font-mono uppercase tracking-widest text-white/50">{lbl}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* PRACTICE AREAS */}
-      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: BG }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-16">
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>Practice Areas</p>
-            <h2 className="text-5xl font-bold text-white leading-tight max-w-lg">
-              Counsel for the matters that matter most.
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {AREAS.map(({ icon: Icon, title, desc, items }) => (
-              <div
-                key={title}
-                className="p-8 border-t-2 flex flex-col"
-                style={{ backgroundColor: CARD, borderTopColor: GOLD }}
-              >
-                <Icon className="w-7 h-7 mb-6" style={{ color: GOLD }} strokeWidth={1.5} />
-                <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
-                <p className="text-sm leading-relaxed mb-6" style={{ color: MUTED }}>{desc}</p>
-                <ul className="space-y-2 mb-8 flex-1">
+      <section className="py-32 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="text-left mb-20">
+          <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Practice Areas</span>
+          <h2 className="text-4xl md:text-5xl font-sans font-black text-white leading-tight max-w-xl">
+            Counsel for the matters that matter most.
+          </h2>
+        </div>
+        
+        {/* Dynamic alternating roundings for cards */}
+        <div className="grid md:grid-cols-3 gap-8">
+          {AREAS.map(({ icon: Icon, title, desc, items }, i) => (
+            <div
+              key={title}
+              className={`p-8 border border-[#C9A84C]/15 hover:border-[#C9A84C]/60 flex flex-col justify-between min-h-[480px] shadow-lg transition-all duration-500 group ${
+                i % 2 === 0 ? 'rounded-tl-[32px] rounded-br-[32px]' : 'rounded-tr-[32px] rounded-bl-[32px]'
+              }`}
+              style={{ backgroundColor: CARD }}
+            >
+              <div>
+                <div className="w-12 h-12 rounded-full border border-[#C9A84C]/35 flex items-center justify-center mb-6 bg-white/5 transition-colors group-hover:bg-[#C9A84C]/10">
+                  <Icon className="w-5 h-5" style={{ color: GOLD }} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-xl font-sans font-bold text-white mb-4 uppercase tracking-wide">{title}</h3>
+                <p className="text-xs leading-relaxed mb-6 font-light text-white/70">{desc}</p>
+                <ul className="space-y-3 mb-8">
                   {items.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-xs" style={{ color: MUTED }}>
-                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: GOLD }} />
-                      {item}
+                    <li key={item} className="flex items-start gap-2.5 text-xs text-white/60 font-light">
+                      <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href={`${BASE}/practice-areas`}
-                  className="text-xs font-bold uppercase tracking-widest"
-                  style={{ color: GOLD }}
-                >
-                  Explore &rarr;
-                </Link>
               </div>
-            ))}
-          </div>
+              
+              <Link
+                href={`${BASE}/services`}
+                className="text-xs font-mono uppercase tracking-widest text-[#C9A84C] hover:text-white transition-colors flex items-center gap-1.5 pt-4 border-t border-white/5"
+              >
+                Explore Practices <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* WHY STERLING — split */}
-      <section className="grid md:grid-cols-2 min-h-[60vh]">
-        <div className="relative overflow-hidden min-h-[400px]">
-          <Image
-            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop"
-            alt="Sterling Law Group attorney office"
-            fill
-            className="object-cover"
-            referrerPolicy="no-referrer"
-          />
-        </div>
-        <div className="flex items-center px-10 md:px-16 py-20" style={{ backgroundColor: CARD }}>
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-5" style={{ color: GOLD }}>Why Sterling</p>
-            <h2 className="text-4xl font-bold text-white mb-12 leading-tight">
-              Why 2,400 clients<br />chose us.
-            </h2>
+      {/* WHY STERLING — split with offset rounded image */}
+      <section className="py-24 bg-[#111111] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-16 items-center">
+          <div className="relative overflow-hidden aspect-video md:h-[500px] rounded-tr-[64px] rounded-bl-[64px] border border-[#C9A84C]/20 shadow-2xl">
+            <Image
+              src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop"
+              alt="Sterling Law Group attorney office"
+              fill
+              className="object-cover scale-102"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className="text-left space-y-8">
+            <div>
+              <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Why Sterling</span>
+              <h2 className="text-3xl md:text-5xl font-sans font-black text-white leading-tight">
+                Why 2,400 clients<br />chose us.
+              </h2>
+            </div>
+            
             <div className="space-y-8">
               {[
                 { n: '01', title: 'Proven Trial Record', desc: '94.7% success rate across litigation and negotiated resolutions over 28 years of Tennessee practice.' },
@@ -264,11 +248,11 @@ export default function SterlingHome() {
                 { n: '03', title: 'Transparent Billing', desc: 'Clear, predictable fees established before work begins. No invoice surprises — ever.' },
                 { n: '04', title: "Nashville's Most Experienced", desc: 'Our attorneys average 22 years of Tennessee practice and federal court experience.' },
               ].map(({ n, title, desc }) => (
-                <div key={n} className="flex items-start gap-5">
-                  <span className="text-4xl font-bold leading-none shrink-0" style={{ color: `${GOLD}40` }}>{n}</span>
+                <div key={n} className="flex items-start gap-4">
+                  <span className="text-3xl font-mono leading-none shrink-0" style={{ color: `${GOLD}40` }}>{n}</span>
                   <div>
                     <div className="font-bold text-white text-sm mb-1">{title}</div>
-                    <div className="text-xs leading-relaxed" style={{ color: MUTED }}>{desc}</div>
+                    <div className="text-xs leading-relaxed text-white/50 font-light">{desc}</div>
                   </div>
                 </div>
               ))}
@@ -278,63 +262,62 @@ export default function SterlingHome() {
       </section>
 
       {/* PROCESS */}
-      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: BG }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>Our Process</p>
-            <h2 className="text-4xl font-bold text-white">From first call to final verdict.</h2>
-          </div>
-          <div className="grid md:grid-cols-4 gap-0 relative">
-            <div
-              className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px"
-              style={{ borderTop: `1px dashed ${GOLD}40` }}
-            />
-            {[
-              { n: '01', title: 'Initial Consultation', desc: 'A senior partner reviews your matter. We assess the facts, risks, and strategy with complete candor.' },
-              { n: '02', title: 'Case Evaluation', desc: 'Full analysis of legal exposure, precedent, and our recommended approach — presented within 5 business days.' },
-              { n: '03', title: 'Legal Strategy', desc: 'We build a documented strategy with milestones, resource allocation, and outcome probability modeling.' },
-              { n: '04', title: 'Resolution', desc: 'We pursue the optimal outcome with maximum force — negotiated settlement or courtroom verdict.' },
-            ].map(({ n, title, desc }) => (
-              <div key={n} className="relative text-center px-6 pt-4">
-                <div className="text-6xl font-bold mb-4" style={{ color: `${GOLD}20` }}>{n}</div>
-                <div className="font-bold text-white text-sm mb-2">{title}</div>
-                <div className="text-xs leading-relaxed" style={{ color: MUTED }}>{desc}</div>
-              </div>
-            ))}
-          </div>
+      <section className="py-32 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="text-center mb-20">
+          <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Our Process</span>
+          <h2 className="text-3xl md:text-5xl font-sans font-black text-white">From First Call to Final Verdict</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-4 gap-6 relative">
+          <div
+            className="hidden md:block absolute top-12 left-[10%] right-[10%] h-[1px]"
+            style={{ borderTop: `1px dashed ${GOLD}30` }}
+          />
+          {[
+            { n: '01', title: 'Initial Consultation', desc: 'A senior partner reviews your matter. We assess the facts, risks, and strategy with complete candor.' },
+            { n: '02', title: 'Case Evaluation', desc: 'Full analysis of legal exposure, precedent, and our recommended approach — presented within 5 business days.' },
+            { n: '03', title: 'Legal Strategy', desc: 'We build a documented strategy with milestones, resource allocation, and outcome probability modeling.' },
+            { n: '04', title: 'Resolution', desc: 'We pursue the optimal outcome with maximum force — negotiated settlement or courtroom verdict.' },
+          ].map(({ n, title, desc }) => (
+            <div key={n} className="relative text-center p-6 bg-[#111111]/40 border border-[#C9A84C]/10 rounded-xl hover:border-[#C9A84C]/30 transition-all shadow-sm">
+              <div className="text-5xl font-mono font-light mb-4" style={{ color: `${GOLD}30` }}>{n}</div>
+              <div className="font-bold text-white text-sm mb-2 uppercase tracking-wide">{title}</div>
+              <p className="text-xs leading-relaxed text-white/50 font-light">{desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ATTORNEYS */}
-      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: CARD }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-16">
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>Our Attorneys</p>
-            <h2 className="text-4xl font-bold text-white">The minds behind the record.</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {ATTORNEYS.map(({ name, title, photo, tags }) => (
-              <div key={name}>
-                <div className="relative aspect-square mb-5 overflow-hidden">
-                  <Image
-                    src={`https://images.unsplash.com/${photo}?q=80&w=800&auto=format&fit=crop`}
-                    alt={name}
-                    fill
-                    className="object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div
-                    className="absolute inset-0"
-                    style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.6) 0%, transparent 50%)' }}
-                  />
-                </div>
-                <div className="font-bold text-white text-lg mb-1">{name}</div>
-                <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: GOLD }}>{title}</div>
-                <div className="flex flex-wrap gap-2">
+      <section className="py-32 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="text-left mb-20">
+          <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Our Partners</span>
+          <h2 className="text-3xl md:text-5xl font-sans font-black text-white">The minds behind the record.</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+          {ATTORNEYS.map(({ name, title, photo, tags }, idx) => (
+            <div key={name} className="space-y-4">
+              {/* Asymmetrical profile images */}
+              <div className={`relative aspect-[4/5] overflow-hidden border border-[#C9A84C]/15 group cursor-pointer ${
+                idx % 2 === 0 ? 'rounded-tl-[48px] rounded-br-[48px]' : 'rounded-tr-[48px] rounded-bl-[48px]'
+              }`}>
+                <Image
+                  src={`https://images.unsplash.com/${photo}?q=80&w=800&auto=format&fit=crop`}
+                  alt={name}
+                  fill
+                  className="object-cover grayscale brightness-95 group-hover:grayscale-0 group-hover:scale-102 transition-all duration-700"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="text-left pl-2">
+                <div className="font-sans font-bold text-white text-lg">{name}</div>
+                <div className="text-[10px] font-mono uppercase tracking-[0.2em] mb-3" style={{ color: GOLD }}>{title}</div>
+                <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
                   {tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 border"
+                      className="text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 border rounded-full"
                       style={{ borderColor: BORDER, color: GOLD }}
                     >
                       {tag}
@@ -342,142 +325,86 @@ export default function SterlingHome() {
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: BG }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>Client Testimonials</p>
-            <h2 className="text-4xl font-bold text-white">Trusted by those with the most at stake.</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map(({ text, author, company }) => (
-              <div
-                key={author}
-                className="p-8 border-l-[3px]"
-                style={{ backgroundColor: CARD, borderLeftColor: GOLD }}
-              >
+      <section className="py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+        <div className="text-center mb-20">
+          <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Client Experience</span>
+          <h2 className="text-3xl md:text-5xl font-sans font-black text-white">Trusted by those with the most at stake.</h2>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+          {TESTIMONIALS.map(({ text, author, company }) => (
+            <div
+              key={author}
+              className="p-8 border border-[#C9A84C]/15 rounded-tr-3xl rounded-bl-3xl rounded-br-3xl flex flex-col justify-between min-h-[260px] text-left hover:border-[#C9A84C]/40 transition-colors shadow-md"
+              style={{ backgroundColor: CARD }}
+            >
+              <div>
                 <div className="flex gap-0.5 mb-5">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-3.5 h-3.5 fill-current" style={{ color: GOLD }} />
                   ))}
                 </div>
-                <p className="text-sm leading-relaxed italic mb-6" style={{ color: MUTED }}>
+                <p className="text-xs leading-relaxed italic mb-6 text-white/70 font-light">
                   &ldquo;{text}&rdquo;
                 </p>
-                <div className="font-bold text-white text-sm">{author}</div>
-                <div className="text-[10px] uppercase tracking-widest mt-0.5" style={{ color: `${GOLD}80` }}>{company}</div>
               </div>
-            ))}
-          </div>
+              <div className="pt-4 border-t border-white/5">
+                <div className="font-bold text-white text-sm">{author}</div>
+                <div className="text-[9px] font-mono uppercase tracking-widest mt-1 text-[#C9A84C]">{company}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: BG }}>
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>FAQ</p>
-            <h2 className="text-4xl font-bold text-white">Questions answered directly.</h2>
-          </div>
-          <div>
-            {FAQS.map(({ q, a }) => (
-              <details key={q} className="group border-b py-6" style={{ borderColor: BORDER }}>
-                <summary className="flex justify-between cursor-pointer gap-4 list-none">
-                  <span className="font-bold text-sm text-white leading-snug">{q}</span>
-                  <ChevronDown
-                    className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180"
-                    style={{ color: GOLD }}
-                  />
-                </summary>
-                <p className="mt-5 text-sm leading-relaxed" style={{ color: MUTED }}>{a}</p>
-              </details>
-            ))}
-          </div>
+      <section className="py-32 px-6 md:px-12 max-w-3xl mx-auto">
+        <div className="text-center mb-20">
+          <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">FAQ</span>
+          <h2 className="text-3xl md:text-5xl font-sans font-black text-white">Questions answered directly.</h2>
+        </div>
+        
+        <div className="space-y-4">
+          {FAQS.map(({ q, a }) => (
+            <details key={q} className="group border border-[#C9A84C]/15 rounded-xl p-6 text-left" style={{ backgroundColor: CARD }}>
+              <summary className="flex justify-between cursor-pointer gap-4 list-none">
+                <span className="font-bold text-sm text-white leading-snug">{q}</span>
+                <ChevronDown
+                  className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180"
+                  style={{ color: GOLD }}
+                />
+              </summary>
+              <p className="mt-4 text-xs leading-relaxed text-white/60 font-light border-t border-white/5 pt-4">{a}</p>
+            </details>
+          ))}
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="py-28 px-6 text-center" style={{ backgroundColor: GOLD }}>
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-5xl font-bold mb-5" style={{ color: '#0A0A0A' }}>Begin your case today.</h2>
-          <p className="text-base mb-10 leading-relaxed" style={{ color: 'rgba(10,10,10,0.6)' }}>
-            A senior partner is available for an initial consultation. Confidential. Candid. No obligation.
-          </p>
-          <Link
-            href={`${BASE}/contact`}
-            className="inline-flex items-center gap-2 px-10 py-5 text-xs font-bold uppercase tracking-widest"
-            style={{ backgroundColor: '#0A0A0A', color: '#fff' }}
-          >
-            Schedule a Consultation
-          </Link>
+      {/* CTA SECTION - wrapped in a gorgeous floating asymmetric container */}
+      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="bg-[#C9A84C] rounded-tl-[64px] rounded-br-[64px] py-20 px-8 text-center shadow-2xl relative overflow-hidden text-slate-900 border border-[#C9A84C]">
+          <div className="max-w-2xl mx-auto space-y-6 relative z-10">
+            <h2 className="text-4xl md:text-5xl font-sans font-black text-[#0A0A0A]">Begin your case today.</h2>
+            <p className="text-sm leading-relaxed max-w-md mx-auto text-[#0A0A0A]/75 font-light">
+              A senior partner is available for an initial consultation. Confidential. Candid. No obligation.
+            </p>
+            <div className="pt-6">
+              <Link
+                href={`${BASE}/contact`}
+                className="inline-flex items-center gap-3 px-10 py-5 text-xs font-mono font-bold uppercase tracking-widest hover:bg-[#FAF8F2] hover:text-[#0A0A0A] transition-all bg-[#0A0A0A] text-white shadow-xl"
+              >
+                Schedule Consultation <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer
-        className="px-8 md:px-14 pt-20 pb-10"
-        style={{ backgroundColor: BG, borderTop: `1px solid ${BORDER}` }}
-      >
-        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-12 mb-16">
-          <div>
-            <div className="text-sm font-black uppercase tracking-[0.25em] text-white mb-1">STERLING</div>
-            <div className="text-xs font-light uppercase tracking-[0.2em] mb-5" style={{ color: MUTED }}>LAW GROUP</div>
-            <p className="text-xs leading-relaxed mb-4" style={{ color: MUTED }}>
-              Precision legal counsel for high-stakes matters since 1996.
-            </p>
-            <p className="text-[10px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.2)' }}>
-              Admitted to the Tennessee State Bar. Licensed in TN, KY, and Federal Courts.
-            </p>
-          </div>
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Practice Areas</div>
-            <div className="space-y-2.5">
-              {['Business Litigation', 'Corporate Law', 'Estate Planning', 'Trust Administration', 'Mergers & Acquisitions'].map((item) => (
-                <div key={item}>
-                  <Link href={`${BASE}/practice-areas`} className="text-xs" style={{ color: GOLD }}>{item}</Link>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Our Office</div>
-            <div className="flex items-start gap-2 mb-4">
-              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: GOLD }} />
-              <address className="text-xs not-italic leading-relaxed" style={{ color: MUTED }}>
-                150 Fourth Ave North<br />
-                Suite 1500<br />
-                Nashville, TN 37219
-              </address>
-            </div>
-            <div className="flex items-center gap-2">
-              <Phone className="w-3.5 h-3.5 shrink-0" style={{ color: GOLD }} />
-              <a href="tel:6155550190" className="text-xs" style={{ color: MUTED }}>(615) 555-0190</a>
-            </div>
-          </div>
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Legal Notice</div>
-            <p className="text-[10px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.2)' }}>
-              The information on this website is for general informational purposes only and does not constitute legal advice. No attorney-client relationship is formed by viewing this site. Past results do not guarantee future outcomes. Attorney advertising.
-            </p>
-          </div>
-        </div>
-        <div
-          className="border-t flex flex-col md:flex-row items-center justify-between gap-3 pt-8 text-[10px]"
-          style={{ borderColor: BORDER, color: MUTED }}
-        >
-          <span>&copy; 2025 Sterling Law Group &nbsp;&middot;&nbsp; All Rights Reserved</span>
-          <div className="flex items-center gap-5">
-            <Link href={`${BASE}/privacy`} style={{ color: MUTED }}>Privacy Policy</Link>
-            <Link href={`${BASE}/terms`} style={{ color: MUTED }}>Terms of Use</Link>
-          </div>
-        </div>
-      </footer>
-
     </div>
   );
 }

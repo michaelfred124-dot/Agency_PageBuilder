@@ -1,68 +1,123 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Scale, Check } from 'lucide-react';
+import { ArrowRight, Scale, Check, Heart, Shield, Award } from 'lucide-react';
 
 const BASE = '/work/sterling-law-group';
-const NAVY = '#1E2D5A';
-const GOLD = '#C49A3C';
-const CREAM = '#FAF8F2';
+const BG = '#0A0A0A';
+const GOLD = '#C9A84C';
+const CARD = '#111111';
+const BORDER = 'rgba(201,168,76,0.15)';
+const MUTED = 'rgba(255,255,255,0.4)';
 
 const TEAM = [
-  { name: 'James Sterling', role: 'Founding Partner', focus: 'Personal Injury & Business Law', img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop', bio: "James founded Sterling Law Group in 1999 after a decade at Colorado's largest injury firm. His jury-trial record includes over $40M in verdicts and settlements for Colorado families." },
-  { name: 'Maria Lawson', role: 'Senior Partner', focus: 'Family Law', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop', bio: "Maria is recognized by Colorado Super Lawyers every year since 2015. She brings both legal precision and genuine empathy to every family law case she takes on." },
-  { name: 'Derek Chun', role: 'Associate Attorney', focus: 'Criminal Defense', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop', bio: "A former public defender, Derek brings an aggressive, client-first approach to criminal defense. He is known for his trial preparation and ability to spot constitutional issues." },
+  { 
+    name: 'James Sterling Sr.', 
+    role: 'Founding Partner', 
+    focus: 'Business Litigation & Trial Advocacy', 
+    img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=800&auto=format&fit=crop', 
+    bio: "James founded Sterling Law Group in 1996 after years leading corporate defense trials. His jury-trial record includes over $40M recovered in high-stakes partnership and contract disputes." 
+  },
+  { 
+    name: 'Catherine Abrams', 
+    role: 'Senior Partner', 
+    focus: 'Estate Planning & Tax Strategy', 
+    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop', 
+    bio: "Catherine is a certified specialist in trust structures and wealth preservation. She designs bespoke estate tax minimization systems trusted by Nashville's most prominent families." 
+  },
+  { 
+    name: 'David Park', 
+    role: 'Partner', 
+    focus: 'M&A & Securities Law', 
+    img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=800&auto=format&fit=crop', 
+    bio: "David advises corporations on complex mergers, private equity, and venture financing. He has guided acquisitions totaling over $800M across tech, logistics, and real estate sectors." 
+  },
 ];
 
 const VALUES = [
-  { title: 'Integrity', desc: 'We tell you what you need to hear, not what you want to hear. Honest counsel is the foundation of effective representation.' },
-  { title: 'Tenacity', desc: 'We do not settle for less than you deserve. We prepare every case as if it is going to trial.' },
-  { title: 'Access', desc: 'You have our direct cell phone numbers. No paralegals, no gatekeepers — just your attorney.' },
-  { title: 'Community', desc: 'Colorado is our home. We sponsor local youth sports and contribute to the Colorado Bar Foundation every year.' },
+  { title: 'Absolute Candor', desc: 'We tell you the hard truth, not what you want to hear. Realistic risk assessments are the foundation of effective strategy.' },
+  { title: ' courtroom Tenacity', desc: 'We do not settle for less than your business or estate deserves. We build every case with the preparation required for trial.' },
+  { title: 'Partner Commitment', desc: 'Every matter is led directly by a senior partner. You receive direct phone numbers and continuous, focused counsel.' },
+  { title: 'Generational Stewardship', desc: 'We protect legacies. We advise with long-term capital protection and business continuity in mind.' },
 ];
 
 export default function SterlingAbout() {
   return (
-    <>
-      <section style={{ backgroundColor: NAVY }} className="py-20 px-6 md:px-12 text-center">
-        <Scale className="w-8 h-8 mx-auto mb-5 text-white/20" strokeWidth={1} />
-        <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>Our Firm</div>
-        <h1 className="text-4xl md:text-5xl font-serif text-white mb-5">25 Years Fighting for Colorado</h1>
-        <p className="text-white/50 max-w-2xl mx-auto leading-relaxed">Sterling Law Group was founded in 1999 on a simple conviction: that every Coloradan deserves access to exceptional legal representation, regardless of their financial situation.</p>
+    <div style={{ backgroundColor: BG, color: '#fff' }} className="overflow-x-hidden">
+      
+      {/* Title Header */}
+      <section className="py-24 px-6 md:px-12 text-center bg-[#0A0A0A] border-b border-white/5 relative overflow-hidden">
+        <Scale className="w-10 h-10 mx-auto mb-6 text-[#C9A84C]/30" strokeWidth={1.2} />
+        <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Our Lineage</span>
+        <h1 className="text-4xl md:text-6xl font-sans font-black text-white mb-6 leading-none">A Legacy of Courtroom Excellence</h1>
+        <p className="text-gray-400 max-w-2xl mx-auto text-sm font-light leading-relaxed">
+          Sterling Law Group was founded on a simple conviction: that complex business litigation and wealth preservation deserve focused, senior-partner advocacy.
+        </p>
       </section>
 
-      <section style={{ backgroundColor: CREAM }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>Our Story</div>
-            <h2 className="text-3xl font-serif mb-5" style={{ color: NAVY }}>Built on belief. Proven in court.</h2>
-            <p className="text-gray-500 leading-relaxed mb-5">James Sterling spent ten years at a large Denver firm before realizing that big firms too often prioritized quick settlements over client outcomes. In 1999, he opened Sterling Law Group with one rule: fight every case as hard as the client deserves.</p>
-            <p className="text-gray-500 leading-relaxed mb-5">Today, our team of attorneys handles hundreds of cases annually across personal injury, family law, criminal defense, business law, and estate planning — all from our Colorado Springs office.</p>
-            <div className="space-y-2">
-              {["1,200+ cases won", "25+ years combined experience", "$40M+ recovered for clients", "Free initial consultations", "No fees unless we win on injury cases"].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-gray-600"><Check className="w-3.5 h-3.5 shrink-0" style={{ color: GOLD }} />{item}</div>
+      {/* Story Grid Section */}
+      <section className="py-32 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="text-left space-y-6">
+            <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block">Our Genesis</span>
+            <h2 className="text-3xl md:text-5xl font-sans font-black text-white leading-tight">Built on resolution. Argued with precision.</h2>
+            <p className="text-white/70 text-sm leading-relaxed font-light">
+              James Sterling spending a decade at a large regional firm noticed that massive firms frequently passed complex partnership disputes and estate structures to junior associates, sacrificing client outcomes. In 1996, he launched Sterling Law Group in Nashville to deliver highly personalized legal solutions.
+            </p>
+            <p className="text-white/70 text-sm leading-relaxed font-light">
+              Today, we restrict our engagements to high-value commercial trials, mergers, compliance transactions, and wealth preservation—allocating extensive resources to ensure our client’s interests are protected.
+            </p>
+            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+              {[
+                "28+ Years of Tennessee Practice",
+                "Partners Lead Every Matter",
+                "$2.1B+ Recovered/Protected",
+                "Bespoke Wealth Preservation"
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs text-white/60 font-light">
+                  <Check className="w-4 h-4 shrink-0" style={{ color: GOLD }} />
+                  <span>{item}</span>
+                </div>
               ))}
             </div>
           </div>
-          <div className="relative aspect-square overflow-hidden">
-            <Image src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
+          
+          <div className="relative aspect-[4/3] md:h-[450px] w-full rounded-tr-[64px] rounded-bl-[64px] border border-[#C9A84C]/20 overflow-hidden shadow-2xl">
+            <Image 
+              src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop" 
+              alt="Attorneys working" 
+              fill 
+              className="object-cover" 
+              referrerPolicy="no-referrer" 
+            />
           </div>
         </div>
       </section>
 
-      <section style={{ backgroundColor: NAVY }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12"><div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>The Team</div><h2 className="text-4xl font-serif text-white">Meet Your Attorneys</h2></div>
-          <div className="grid md:grid-cols-3 gap-6">
+      {/* Team / Partners Section */}
+      <section className="py-32 bg-[#111111] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
+          <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">The Advisors</span>
+          <h2 className="text-3xl md:text-5xl font-sans font-black text-white mb-24">The Minds Behind the Firm</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
             {TEAM.map((m, i) => (
-              <div key={i} className="bg-white/5 border border-white/10">
-                <div className="relative h-64">
-                  <Image src={m.img} alt={m.name} fill className="object-cover object-top" referrerPolicy="no-referrer" />
+              <div 
+                key={i} 
+                className="border border-[#C9A84C]/15 flex flex-col justify-between overflow-hidden shadow-xl"
+                style={{ backgroundColor: BG }}
+              >
+                <div className={`relative h-72 border-b border-[#C9A84C]/15 overflow-hidden ${
+                  i % 2 === 0 ? 'rounded-tl-[32px] rounded-br-[32px]' : 'rounded-tr-[32px] rounded-bl-[32px]'
+                }`}>
+                  <Image src={m.img} alt={m.name} fill className="object-cover object-top filter grayscale hover:grayscale-0 transition-all duration-700" referrerPolicy="no-referrer" />
                 </div>
-                <div className="p-6">
-                  <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: GOLD }}>{m.focus}</div>
-                  <div className="font-bold text-white mb-1">{m.name}</div>
-                  <div className="text-xs text-white/35 mb-4">{m.role}</div>
-                  <p className="text-white/45 text-xs leading-relaxed">{m.bio}</p>
+                <div className="p-8 text-left space-y-4 flex-1 flex flex-col justify-between">
+                  <div>
+                    <span className="text-[9px] font-mono uppercase tracking-[0.2em] font-bold" style={{ color: GOLD }}>{m.focus}</span>
+                    <h3 className="font-sans font-bold text-white text-lg mt-2">{m.name}</h3>
+                    <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mt-1">{m.role}</p>
+                  </div>
+                  <p className="text-white/60 text-xs leading-relaxed font-light pt-4 border-t border-white/5">{m.bio}</p>
                 </div>
               </div>
             ))}
@@ -70,24 +125,40 @@ export default function SterlingAbout() {
         </div>
       </section>
 
-      <section style={{ backgroundColor: CREAM }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12"><div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>Our Values</div><h2 className="text-4xl font-serif" style={{ color: NAVY }}>What We Stand For</h2></div>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {VALUES.map((v, i) => (
-              <div key={i} className="bg-white p-8 border-l-4" style={{ borderLeftColor: GOLD }}>
-                <h3 className="font-bold text-base mb-2" style={{ color: NAVY }}>{v.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{v.desc}</p>
-              </div>
-            ))}
-          </div>
+      {/* Core Values Section */}
+      <section className="py-32 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="text-center mb-24">
+          <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Our Values</span>
+          <h2 className="text-3xl md:text-5xl font-sans font-black text-white">Pragmatic Principles</h2>
+        </div>
+        
+        <div className="grid sm:grid-cols-2 gap-8">
+          {VALUES.map((v, i) => (
+            <div 
+              key={i} 
+              className={`p-8 border border-[#C9A84C]/15 flex flex-col justify-between min-h-[160px] text-left hover:border-[#C9A84C]/50 transition-colors shadow-lg ${
+                i % 2 === 0 ? 'rounded-tl-3xl rounded-br-3xl' : 'rounded-tr-3xl rounded-bl-3xl'
+              }`} 
+              style={{ backgroundColor: CARD }}
+            >
+              <h3 className="font-sans font-bold text-sm uppercase tracking-wider mb-3" style={{ color: GOLD }}>{v.title}</h3>
+              <p className="text-white/60 text-xs leading-relaxed font-light">{v.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section style={{ backgroundColor: GOLD }} className="py-14 px-6 text-center">
-        <h2 className="text-2xl font-serif text-white mb-4">Talk to an attorney today. The consultation is free.</h2>
-        <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ color: NAVY }}>Schedule Consultation <ArrowRight className="w-4 h-4" /></Link>
+      {/* Footer CTA */}
+      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="bg-[#C9A84C] rounded-tl-[64px] rounded-br-[64px] py-16 px-8 text-center shadow-2xl text-slate-900 border border-[#C9A84C]">
+          <h2 className="text-3xl font-sans font-black text-[#0A0A0A] mb-4">Talk to an attorney today. The consultation is confidential.</h2>
+          <div className="pt-6">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#0A0A0A] hover:bg-[#FAF8F2] hover:text-[#0A0A0A] text-white font-mono font-bold uppercase tracking-widest text-xs px-10 py-5 transition-all">
+              Schedule Consultation <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
       </section>
-    </>
+    </div>
   );
 }
