@@ -1,234 +1,493 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Scissors, ArrowRight, Star, Leaf, Sparkles, Check, Phone, MapPin, ChevronDown, Clock } from 'lucide-react';
+import { Scissors, Check, Star, Phone, MapPin, ChevronDown } from 'lucide-react';
 
 const BASE = '/work/atelier-hair-studio';
-const CHARCOAL = '#1A1A1A';
-const ROSE = '#B8778A';
-const BLUSH = '#F2DCE2';
+const BG = '#F5F0E8';
+const TEXT = '#1A1A1A';
+const ROSE = '#C49A6C';
+const WHITE = '#FDFAF5';
+const MUTED = 'rgba(26,26,26,0.45)';
 
-const SVCS = [
-  { title: 'Balayage & Highlights', price: 'From $180', desc: 'Hand-painted balayage, foil highlights, babylights, and toning. Each blend is uniquely created for your skin tone and features.' },
-  { title: 'Full Color', price: 'From $120', desc: 'Root touch-ups, full single-process color, and fashion-forward vivid tones. Formulated with Schwarzkopf and Olaplex.' },
-  { title: 'Precision Cuts', price: 'From $85', desc: 'Dry or wet cutting technique chosen for your texture. Every cut includes a consultation, shampoo, condition, and blowout.' },
-  { title: 'Keratin Treatment', price: 'From $250', desc: 'Smoothing treatments that eliminate frizz for 3–5 months. Safe for color-treated and chemically processed hair.' },
-  { title: 'Bridal Hair', price: 'Custom Quote', desc: 'Trial appointments, day-of bridal styling, and bridesmaid packages. Inquire 6+ months in advance for peak season dates.' },
-  { title: 'Treatments & Gloss', price: 'From $65', desc: 'Bond-building Olaplex treatments, deep conditioning masks, and glossing services to restore shine and strength.' },
+const SERVICES = [
+  {
+    title: 'Precision Cut & Style',
+    price: 'From $95',
+    features: ['Complimentary consultation', 'Blow-dry & finish included', 'Texture & movement specialists'],
+    photo: 'photo-1634449571010-02389ed0f9b0',
+  },
+  {
+    title: 'Hair Color & Highlights',
+    price: 'From $165',
+    features: ['Balayage & babylights', 'Schwarzkopf & Olaplex formulas', 'Glossing service available'],
+    photo: 'photo-1492106087820-71f1a00d2b11',
+  },
+  {
+    title: 'Extensions',
+    price: 'From $450',
+    features: ['Tape-in, hand-tied & fusion', 'Remy human hair only', 'Maintenance appointments included'],
+    photo: 'photo-1560066984-138daaa3d35d',
+  },
+  {
+    title: 'Bridal Hair',
+    price: 'Custom Quote',
+    features: ['Trial appointment included', 'Day-of coordination', 'Bridesmaid styling available'],
+    photo: 'photo-1522337360788-8b13dee7a37e',
+  },
 ];
 
-const STEPS = [
-  { icon: Sparkles, title: 'Book a Consultation', desc: 'New clients start with a complimentary 15-minute consultation — in-person or via DM. We review your hair history and goals.' },
-  { icon: Scissors, title: 'Your Custom Formulation', desc: 'Your stylist creates a personalized formula and service plan. No cookie-cutter approaches.' },
-  { icon: Leaf, title: 'The Service', desc: 'Relax in a quiet, boutique environment. Enjoy a scalp massage, quality products, and time devoted entirely to you.' },
-  { icon: Star, title: 'Maintain & Return', desc: 'Leave with a personalized aftercare kit recommendation and maintenance schedule. We are your long-term hair partner.' },
+const STYLISTS = [
+  {
+    name: 'Sophie Laurent',
+    title: 'Creative Director',
+    specialty: 'Color & Balayage',
+    photo: 'photo-1508214751196-bcfd4ca60f91',
+  },
+  {
+    name: 'Maya Chen',
+    title: 'Senior Stylist',
+    specialty: 'Extensions & Texture',
+    photo: 'photo-1580489944761-15a19d654956',
+  },
+  {
+    name: 'Isla Monroe',
+    title: 'Bridal Specialist',
+    specialty: 'Bridal & Updos',
+    photo: 'photo-1531746020798-e6953c6e8e04',
+  },
 ];
 
-const GALLERY = [
-  'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=2069&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2074&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=2071&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=2080&auto=format&fit=crop',
+const GALLERY_PHOTOS = [
+  'photo-1634449571010-02389ed0f9b0',
+  'photo-1492106087820-71f1a00d2b11',
+  'photo-1560066984-138daaa3d35d',
+  'photo-1522337360788-8b13dee7a37e',
 ];
 
-const REVIEWS = [
-  { text: "Maria is an absolute artist. My balayage looks so natural and the color is exactly what I dreamed of. I will never go anywhere else.", author: "Chloe T.", service: "Balayage" },
-  { text: "I have been to at least a dozen salons. Atelier is in a completely different league. The attention to detail and quality of care is unmatched.", author: "Priya N.", service: "Color + Cut" },
-  { text: "My wedding hair was absolutely perfect. Jamie executed my vision flawlessly and I felt beautiful all day.", author: "Emma W.", service: "Bridal Hair" },
+const TESTIMONIALS = [
+  {
+    text: "Sophie completely transformed my hair. I showed her a photo I had been too afraid to ask for elsewhere, and she delivered something even better. I cried happy tears.",
+    author: 'Claire R.',
+    service: 'Balayage & Cut',
+  },
+  {
+    text: "The most luxurious salon experience I have ever had. Every detail was considered. The consultation alone was worth the visit. My hair has never looked this healthy.",
+    author: 'Priya N.',
+    service: 'Color & Extensions',
+  },
+  {
+    text: "Isla did my entire bridal party on the wedding day. Every single person looked incredible and the styles lasted all night into the reception. Absolutely flawless.",
+    author: 'Emma W.',
+    service: 'Bridal Hair',
+  },
 ];
 
 const FAQS = [
-  { q: "Do I need a consultation before booking a color service?", a: "New color clients are required to book a complimentary consultation first, especially for vivid colors, major transformations, or if you have had box dye. This ensures we have enough time and the right formula. Returning clients can book directly." },
-  { q: "How far in advance should I book?", a: "Maria and Priya book 4–6 weeks out for color services. Jamie has more availability for cuts and bridal. For bridal styling, we recommend contacting us at least 6 months before your date — 12 months for peak season (May–October)." },
-  { q: "What is your cancellation policy?", a: "We require 48 hours notice to cancel or reschedule. Cancellations with less than 24 hours notice may be charged 50% of the service. No-shows are charged the full service amount." },
-  { q: "Do you use sustainable or natural products?", a: "Yes. We use Schwarzkopf Professional and Olaplex, both of which are free from ammonia and PPD. We also carry a selection of Davines styling products, which are certified carbon-neutral and sustainably packaged." },
-  { q: "Can I bring inspiration photos?", a: "Absolutely — we encourage it. Screenshots, Pinterest boards, and Instagram saves are all helpful. Please also include photos of hair that did not work so we can understand your preferences. A great consultation uses both." },
-  { q: "Do you accommodate textured, curly, or natural hair?", a: "Yes. Priya specializes in curly and textured hair and uses a curl-specific cutting technique (dry cutting for curls). We will never straighten your texture to cut it. Please book with Priya and mention your texture when scheduling." },
-  { q: "Is parking available nearby?", a: "Street parking is available on South Congress Ave and surrounding streets. There is also a small lot behind our building with two-hour free parking. We are easily accessible via the #1 CapMetro bus line." },
+  {
+    q: 'Do I need a consultation before booking a color service?',
+    a: "New color clients are required to start with a complimentary consultation, especially for vivid colors, major transformations, or if you have used box dye. This ensures we have the correct formula, time allotment, and realistic expectations. Returning clients may book directly.",
+  },
+  {
+    q: 'How far in advance should I book an appointment?',
+    a: "Sophie and Maya book 4-6 weeks out for color services. Isla has availability for precision cuts and is best booked 6 weeks out. For bridal services, we recommend reaching out at least 6 months before your date and up to 12 months for peak wedding season.",
+  },
+  {
+    q: 'What is your cancellation policy?',
+    a: "We ask for 48 hours notice to cancel or reschedule at no charge. Cancellations with less than 24 hours notice are charged 50% of the scheduled service. No-shows are charged the full service amount. We respect your time and ask the same in return.",
+  },
+  {
+    q: 'What products do you use?',
+    a: "We work exclusively with Schwarzkopf Professional color, Olaplex bond-building treatments, and Davines styling products. All are free from harmful chemicals, cruelty-free, and sustainably sourced. We include Olaplex protection in all color services at no additional charge.",
+  },
+  {
+    q: 'Can I bring inspiration photos?',
+    a: "Please do. Screenshots, Pinterest boards, and Instagram saves are incredibly helpful for our consultation. We also encourage you to bring photos of hair you did not like so we can fully understand your preferences. The best results come from great communication.",
+  },
+  {
+    q: 'Do you accommodate curly and textured hair?',
+    a: "Absolutely. Maya specializes in curly and naturally textured hair using a dry-cutting technique that honors your texture rather than fighting it. We will never straighten your curls to cut them. Please mention your hair type when booking so we can allocate the right time.",
+  },
 ];
 
 export default function AtelierHome() {
   return (
-    <>
-      {/* HERO */}
-      <section className="relative min-h-screen flex items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2074&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ backgroundColor: 'rgba(26,26,26,0.65)' }} />
+    <div style={{ backgroundColor: BG, color: TEXT }}>
+
+      {/* STICKY NAV */}
+      <nav
+        className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-14 py-4"
+        style={{ backgroundColor: BG, borderBottom: '1px solid rgba(26,26,26,0.1)' }}
+      >
+        <div>
+          <span className="font-serif italic text-xl" style={{ color: TEXT }}>Atelier</span>
         </div>
-        <div className="relative z-10 px-8 md:px-16 pb-24 max-w-2xl">
-          <div className="flex items-center gap-3 mb-6"><div className="w-8 h-px" style={{ backgroundColor: ROSE }} /><span className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/60">Austin, TX · Sustainable Luxury</span></div>
-          <h1 className="text-5xl md:text-7xl font-serif italic text-white leading-tight mb-6">Where Hair<br />Becomes Art.</h1>
-          <p className="text-white/65 text-lg mb-10 max-w-md leading-relaxed">A boutique hair studio dedicated to artisan color, precision cuts, and sustainable luxury. Every appointment is an experience crafted entirely for you.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4" style={{ backgroundColor: ROSE }}>Book a Consultation <ArrowRight className="w-4 h-4" /></Link>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/30 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4">Our Services & Pricing</Link>
+        <div className="hidden md:flex items-center gap-8">
+          {['Services', 'Stylists', 'Portfolio', 'Contact'].map((item) => (
+            <Link
+              key={item}
+              href={`${BASE}/contact`}
+              className="text-xs uppercase tracking-widest font-medium"
+              style={{ color: MUTED }}
+            >
+              {item}
+            </Link>
+          ))}
+        </div>
+        <Link
+          href={`${BASE}/contact`}
+          className="text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full border"
+          style={{ borderColor: TEXT, color: TEXT }}
+        >
+          Book Now
+        </Link>
+      </nav>
+
+      {/* HERO — two-column light/dark split */}
+      <section className="min-h-screen grid md:grid-cols-[55fr_45fr]">
+        {/* Left — light text side */}
+        <div
+          className="flex flex-col justify-center px-10 md:px-16 lg:px-24 py-24"
+          style={{ backgroundColor: BG }}
+        >
+          <p
+            className="text-[10px] font-bold uppercase tracking-[0.5em] mb-10"
+            style={{ color: ROSE }}
+          >
+            Nashville's Premier Salon
+          </p>
+          <h1
+            className="text-7xl font-serif italic leading-tight mb-8"
+            style={{ color: TEXT }}
+          >
+            Your most<br />beautiful self.
+          </h1>
+          <div className="w-16 mb-8" style={{ borderTop: `3px solid ${ROSE}` }} />
+          <p className="text-lg leading-relaxed mb-12 max-w-md" style={{ color: MUTED }}>
+            A boutique hair studio where artisan color, precision cuts, and genuine care come together for an experience unlike any other.
+          </p>
+          <div className="flex flex-wrap gap-4 mb-12">
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 px-7 py-4 text-xs font-bold uppercase tracking-widest text-white"
+              style={{ backgroundColor: TEXT }}
+            >
+              Book Appointment
+            </Link>
+            <Link
+              href={`${BASE}/services`}
+              className="inline-flex items-center gap-2 px-7 py-4 text-xs font-bold uppercase tracking-widest border"
+              style={{ borderColor: ROSE, color: TEXT }}
+            >
+              Explore Services
+            </Link>
           </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: ROSE }} />
+            <span className="text-xs" style={{ color: MUTED }}>
+              1,200+ guests trust Atelier each year
+            </span>
+          </div>
+        </div>
+
+        {/* Right — dark image panel */}
+        <div className="relative overflow-hidden min-h-[60vh] md:min-h-0" style={{ backgroundColor: TEXT }}>
+          <Image
+            src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=2069&auto=format&fit=crop"
+            alt="Atelier Hair Studio Nashville"
+            fill
+            className="object-cover"
+            referrerPolicy="no-referrer"
+            priority
+          />
+          {/* Warm ROSE overlay */}
+          <div
+            className="absolute inset-0"
+            style={{ backgroundColor: 'rgba(196,154,108,0.15)' }}
+          />
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section style={{ backgroundColor: CHARCOAL }} className="py-10">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          {['4.9 Stars · 200+ Reviews', 'Olaplex Certified', 'Sustainable Products', 'New Clients Welcome'].map((s, i) => (
-            <div key={i} className="font-bold text-sm" style={{ color: i % 2 === 0 ? '#fff' : ROSE }}>{s}</div>
+      {/* STATS */}
+      <section className="py-16 px-6" style={{ backgroundColor: WHITE }}>
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {[
+            ['1,200+', 'Happy Guests'],
+            ['8', 'Master Stylists'],
+            ['4.9★', 'Google Rating'],
+            ['Est. 2015', 'Nashville Studio'],
+          ].map(([val, lbl]) => (
+            <div key={lbl}>
+              <div className="text-5xl font-bold mb-2" style={{ color: TEXT }}>{val}</div>
+              <div className="w-10 mx-auto mb-2" style={{ borderTop: `2px solid ${ROSE}` }} />
+              <div className="text-[10px] uppercase tracking-widest" style={{ color: MUTED }}>{lbl}</div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section style={{ backgroundColor: BLUSH }} className="py-24 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>Services & Pricing</div>
-            <h2 className="text-4xl font-serif italic mb-3" style={{ color: CHARCOAL }}>Our Craft</h2>
-            <p className="text-gray-500 text-sm max-w-md mx-auto">Every service begins with a consultation. Pricing reflects the artisan skill and quality products used.</p>
+      {/* SERVICES — editorial layout with image thumbnails */}
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: WHITE }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-16">
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>Services</p>
+            <h2 className="text-5xl font-serif italic leading-tight" style={{ color: TEXT }}>
+              The art of beautiful hair.
+            </h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {SVCS.map(({ title, price, desc }, i) => (
-              <div key={i} className="bg-white p-7">
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="font-bold text-sm" style={{ color: CHARCOAL }}>{title}</h3>
-                  <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 ml-3 shrink-0" style={{ backgroundColor: ROSE + '20', color: ROSE }}>{price}</span>
+          <div className="divide-y" style={{ borderColor: 'rgba(26,26,26,0.08)' }}>
+            {SERVICES.map(({ title, price, features, photo }) => (
+              <div key={title} className="flex items-center gap-8 py-8">
+                <div className="relative w-16 h-16 shrink-0 overflow-hidden">
+                  <Image
+                    src={`https://images.unsplash.com/${photo}?q=80&w=200&auto=format&fit=crop`}
+                    alt={title}
+                    fill
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
-                <p className="text-xs text-gray-400 leading-relaxed">{desc}</p>
+                <div className="flex-1">
+                  <div className="flex items-baseline justify-between gap-4 mb-2">
+                    <h3 className="font-bold text-lg" style={{ color: TEXT }}>{title}</h3>
+                    <span className="text-sm font-bold shrink-0" style={{ color: ROSE }}>{price}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-4">
+                    {features.map((f) => (
+                      <span key={f} className="text-xs" style={{ color: MUTED }}>{f}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
-          <div className="text-center mt-10">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: CHARCOAL }}>Full Menu & Pricing <ArrowRight className="w-4 h-4" /></Link>
+          <div className="mt-10">
+            <Link
+              href={`${BASE}/services`}
+              className="inline-flex items-center gap-2 px-8 py-4 text-xs font-bold uppercase tracking-widest text-white"
+              style={{ backgroundColor: TEXT }}
+            >
+              View Full Menu
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* GALLERY STRIP */}
-      <section className="grid grid-cols-2 md:grid-cols-4">
-        {GALLERY.map((src, i) => (
-          <div key={i} className="relative overflow-hidden" style={{ paddingBottom: '100%' }}>
-            <Image src={src} alt="" fill className="object-cover hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+      {/* STYLISTS */}
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: BG }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-16">
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>Our Team</p>
+            <h2 className="text-5xl font-serif italic" style={{ color: TEXT }}>Meet Your Stylists</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {STYLISTS.map(({ name, title, specialty, photo }) => (
+              <div key={name}>
+                <div className="relative aspect-square mb-5 overflow-hidden">
+                  <Image
+                    src={`https://images.unsplash.com/${photo}?q=80&w=800&auto=format&fit=crop`}
+                    alt={name}
+                    fill
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="font-bold text-lg" style={{ color: TEXT }}>{name}</div>
+                <div
+                  className="text-[10px] font-bold uppercase tracking-widest mt-0.5 mb-2"
+                  style={{ color: MUTED }}
+                >
+                  {title}
+                </div>
+                <div className="text-sm" style={{ color: ROSE }}>{specialty}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* GALLERY — 4-col full-width zero-gap */}
+      <section className="grid grid-cols-4">
+        {GALLERY_PHOTOS.map((photo, i) => (
+          <div key={i} className="relative aspect-square overflow-hidden">
+            <Image
+              src={`https://images.unsplash.com/${photo}?q=80&w=800&auto=format&fit=crop`}
+              alt="Atelier Hair Studio portfolio"
+              fill
+              className="object-cover"
+              referrerPolicy="no-referrer"
+            />
           </div>
         ))}
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="py-24 px-6 md:px-12 bg-white">
+      {/* PROCESS — 4 horizontal steps */}
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: WHITE }}>
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>Your Experience</div>
-            <h2 className="text-4xl font-serif italic" style={{ color: CHARCOAL }}>The Atelier Process</h2>
+          <div className="text-center mb-16">
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>Your Experience</p>
+            <h2 className="text-4xl font-serif italic" style={{ color: TEXT }}>How it works</h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {STEPS.map(({ icon: Icon, title, desc }, i) => (
-              <div key={i} className="text-center">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5" style={{ backgroundColor: BLUSH }}>
-                  <Icon className="w-5 h-5" style={{ color: ROSE }} strokeWidth={1.5} />
+          <div className="grid md:grid-cols-4 gap-0 relative">
+            <div
+              className="hidden md:block absolute top-6 left-[12.5%] right-[12.5%] h-px"
+              style={{ borderTop: `1px dashed ${ROSE}60` }}
+            />
+            {[
+              { n: '1', title: 'Book Online', desc: 'Select your service, choose your stylist, and book in under 2 minutes.' },
+              { n: '2', title: 'Consultation', desc: 'Your stylist reviews your goals, history, and inspiration before a single cut.' },
+              { n: '3', title: 'Your Service', desc: 'Relax in a calm, boutique space dedicated entirely to your comfort.' },
+              { n: '4', title: 'Love Your Look', desc: 'Leave with a custom aftercare kit and a maintenance schedule tailored to you.' },
+            ].map(({ n, title, desc }) => (
+              <div key={n} className="text-center px-6">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5 font-bold text-white"
+                  style={{ backgroundColor: ROSE }}
+                >
+                  {n}
                 </div>
-                <h3 className="font-bold text-sm mb-2" style={{ color: CHARCOAL }}>{title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed">{desc}</p>
+                <h3 className="font-bold text-sm mb-2" style={{ color: TEXT }}>{title}</h3>
+                <p className="text-xs leading-relaxed" style={{ color: MUTED }}>{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SPLIT SECTION */}
-      <section className="grid lg:grid-cols-2 min-h-[60vh]">
-        <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
-          <Image src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=2069&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
-        </div>
-        <div className="flex items-center px-10 md:px-16 py-16" style={{ backgroundColor: CHARCOAL }}>
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-5" style={{ color: ROSE }}>Why Atelier</div>
-            <h2 className="text-4xl font-serif italic text-white mb-6">Hair transformed.<br />Confidence restored.</h2>
-            <p className="text-white/50 leading-relaxed mb-8">Every stylist at Atelier completes ongoing education — we do not sit still while the industry evolves. We use only Olaplex-compatible formulas, zero PPD, and sustainable tools.</p>
-            <div className="space-y-3 mb-8">
-              {["Complimentary 15-min new client consultation", "Olaplex bond protection included on all color", "Eco-conscious products — vegan & cruelty-free", "Private suite available for sensitive clients", "Bridal team specializing in textured hair"].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-white/50"><Check className="w-4 h-4 shrink-0" style={{ color: ROSE }} />{p}</div>
-              ))}
-            </div>
-            <Link href={`${BASE}/about`} className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b pb-0.5" style={{ color: ROSE, borderColor: ROSE }}>Meet Our Stylists <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section style={{ backgroundColor: BLUSH }} className="py-20 px-6 md:px-12">
+      {/* TESTIMONIALS */}
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: BG }}>
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>Client Love</div>
-            <h2 className="text-4xl font-serif italic" style={{ color: CHARCOAL }}>What Clients Say</h2>
-            <p className="text-gray-500 text-sm mt-2">4.9 Stars · 200+ Google Reviews</p>
+          <div className="text-center mb-16">
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>Reviews</p>
+            <h2 className="text-4xl font-serif italic" style={{ color: TEXT }}>Guests love Atelier.</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white p-7">
-                <div className="flex justify-center mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: ROSE }} />)}</div>
-                <p className="text-gray-600 italic text-sm leading-relaxed mb-4 text-center">"{r.text}"</p>
-                <div className="text-center font-bold text-xs" style={{ color: CHARCOAL }}>— {r.author} <span className="text-gray-400 font-normal">· {r.service}</span></div>
+            {TESTIMONIALS.map(({ text, author, service }) => (
+              <div
+                key={author}
+                className="p-8 rounded-none"
+                style={{ backgroundColor: WHITE }}
+              >
+                <div className="flex gap-0.5 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-current" style={{ color: ROSE }} />
+                  ))}
+                </div>
+                <p
+                  className="text-sm italic leading-relaxed mb-6"
+                  style={{ color: TEXT }}
+                >
+                  &ldquo;{text}&rdquo;
+                </p>
+                <div className="font-bold text-sm" style={{ color: TEXT }}>{author}</div>
+                <div className="text-[10px] uppercase tracking-widest mt-0.5" style={{ color: ROSE }}>{service}</div>
               </div>
             ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="text-[10px] font-bold uppercase tracking-widest" style={{ color: CHARCOAL }}>Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" /></Link>
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-24 px-6 md:px-12 bg-white">
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: WHITE }}>
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>FAQ</div>
-            <h2 className="text-4xl font-serif italic" style={{ color: CHARCOAL }}>Questions Answered</h2>
+          <div className="text-center mb-16">
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: ROSE }}>FAQ</p>
+            <h2 className="text-4xl font-serif italic" style={{ color: TEXT }}>Questions answered.</h2>
           </div>
-          <div className="divide-y divide-pink-50">
-            {FAQS.map(({ q, a }, i) => (
-              <details key={i} className="group py-5">
-                <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-bold text-sm leading-snug" style={{ color: CHARCOAL }}>{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: ROSE }} />
+          <div>
+            {FAQS.map(({ q, a }) => (
+              <details
+                key={q}
+                className="group border-b py-6"
+                style={{ borderColor: 'rgba(26,26,26,0.1)' }}
+              >
+                <summary className="flex justify-between cursor-pointer gap-4 list-none">
+                  <span className="font-bold text-sm leading-snug" style={{ color: TEXT }}>{q}</span>
+                  <ChevronDown
+                    className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180"
+                    style={{ color: ROSE }}
+                  />
                 </summary>
-                <p className="mt-4 text-gray-400 text-sm leading-relaxed">{a}</p>
+                <p className="mt-5 text-sm leading-relaxed" style={{ color: MUTED }}>{a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CONTACT STRIP */}
-      <section style={{ backgroundColor: CHARCOAL }} className="py-14 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 items-center">
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: ROSE }}>Find Us</div>
-            <div className="flex items-start gap-2 text-white/65 text-sm">
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: ROSE }} />
-              <span>1120 South Congress Ave, Suite 8<br />Austin, TX 78704</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: ROSE }}>Hours</div>
-            <div className="text-white/65 text-sm space-y-0.5">
-              <div>Tue – Fri: 9:00am – 7:00pm</div>
-              <div>Saturday: 9:00am – 6:00pm</div>
-              <div className="text-white/30">Sun & Mon: Closed</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <a href="tel:5125550293" className="inline-flex items-center gap-2 text-white font-bold text-base"><Phone className="w-4 h-4" style={{ color: ROSE }} /> (512) 555-0293</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-7 py-3" style={{ backgroundColor: ROSE }}>Book a Consultation <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
+      {/* CTA */}
+      <section className="py-28 px-6 text-center" style={{ backgroundColor: TEXT }}>
+        <div className="max-w-2xl mx-auto">
+          <Scissors className="w-7 h-7 mx-auto mb-6" style={{ color: ROSE }} strokeWidth={1.5} />
+          <h2 className="text-5xl font-serif italic mb-5" style={{ color: WHITE }}>
+            Ready for your transformation?
+          </h2>
+          <p className="text-base mb-10 leading-relaxed" style={{ color: 'rgba(253,250,245,0.5)' }}>
+            New guests receive a complimentary deep conditioning treatment with any color service. Book online or call us directly.
+          </p>
+          <Link
+            href={`${BASE}/contact`}
+            className="inline-flex items-center gap-2 px-10 py-5 text-xs font-bold uppercase tracking-widest text-white"
+            style={{ backgroundColor: ROSE }}
+          >
+            Book Your Appointment
+          </Link>
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section style={{ backgroundColor: BLUSH }} className="py-16 px-6 text-center">
-        <Scissors className="w-7 h-7 mx-auto mb-5" style={{ color: ROSE }} strokeWidth={1.5} />
-        <h2 className="text-3xl font-serif italic mb-4" style={{ color: CHARCOAL }}>Book your transformation today.</h2>
-        <p className="text-gray-500 mb-8 text-sm max-w-md mx-auto">New clients receive a complimentary deep conditioning treatment with any color service. Olaplex bond protection included.</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: CHARCOAL }}>Book Online <ArrowRight className="w-4 h-4" /></Link>
-          <a href="tel:5125550293" className="inline-flex items-center gap-2 border font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ borderColor: CHARCOAL, color: CHARCOAL }}><Clock className="w-4 h-4" /> Call for Same-Week Availability</a>
+      {/* FOOTER */}
+      <footer
+        className="px-8 md:px-14 pt-16 pb-10"
+        style={{ backgroundColor: BG }}
+      >
+        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
+          <div>
+            <span className="font-serif italic text-2xl mb-3 block" style={{ color: TEXT }}>Atelier</span>
+            <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
+              A boutique hair studio where artisan technique meets genuine care. Nashville, since 2015.
+            </p>
+          </div>
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-widest mb-5" style={{ color: ROSE }}>Services</div>
+            <div className="space-y-2.5">
+              {['Precision Cut & Style', 'Hair Color & Highlights', 'Extensions', 'Bridal Hair', 'Treatments & Gloss'].map((item) => (
+                <div key={item}>
+                  <Link href={`${BASE}/services`} className="text-xs" style={{ color: MUTED }}>{item}</Link>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-widest mb-5" style={{ color: ROSE }}>Contact</div>
+            <div className="flex items-start gap-2 mb-4">
+              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: ROSE }} />
+              <address className="text-xs not-italic leading-relaxed" style={{ color: MUTED }}>
+                212 Commerce St, Suite 400<br />
+                Nashville, TN 37201
+              </address>
+            </div>
+            <div className="flex items-center gap-2 mb-4">
+              <Phone className="w-3.5 h-3.5 shrink-0" style={{ color: ROSE }} />
+              <a href="tel:6155550221" className="text-xs" style={{ color: MUTED }}>(615) 555-0221</a>
+            </div>
+            <div className="text-xs space-y-1" style={{ color: MUTED }}>
+              <div>Tue &ndash; Fri: 9:00am &ndash; 7:00pm</div>
+              <div>Saturday: 9:00am &ndash; 6:00pm</div>
+              <div style={{ color: 'rgba(26,26,26,0.25)' }}>Sun & Mon: Closed</div>
+            </div>
+          </div>
         </div>
-      </section>
-    </>
+        <div
+          className="border-t flex flex-col md:flex-row items-center justify-between gap-3 pt-8 text-[10px]"
+          style={{ borderColor: 'rgba(26,26,26,0.1)', color: MUTED }}
+        >
+          <span>&copy; 2025 Atelier Hair Studio &nbsp;&middot;&nbsp; Nashville, TN</span>
+          <div className="flex items-center gap-5">
+            <Link href={`${BASE}/privacy`} style={{ color: MUTED }}>Privacy Policy</Link>
+            <Link href={`${BASE}/terms`} style={{ color: MUTED }}>Terms</Link>
+          </div>
+        </div>
+      </footer>
+
+    </div>
   );
 }

@@ -1,223 +1,433 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Dumbbell, ArrowRight, Check, Star, Zap, Users, Trophy, Phone, MapPin, ChevronDown, Clock } from 'lucide-react';
+import { ArrowRight, Check, Star, ChevronDown, Phone, MapPin, Zap, Dumbbell, Shield, Timer } from 'lucide-react';
 
 const BASE = '/work/iron-edge-fitness';
-const BLACK = '#0A0A0A';
-const ORANGE = '#F97316';
+const BG = '#050505';
+const ORANGE = '#FF6B00';
+const CARD = '#0F0F0F';
+const MUTED = 'rgba(255,255,255,0.4)';
 
 const PROGRAMS = [
-  { icon: Dumbbell, title: 'Personal Training', tag: '1-on-1', price: 'From $85/session', desc: 'Custom programming built around your body, goals, and schedule. Accountability and expertise in every session.', items: ['Initial body composition assessment', 'Fully custom periodized program', 'Daily check-ins via app', 'Nutrition fundamentals included', 'Monthly progress photos & measurements'] },
-  { icon: Users, title: 'Group Classes', tag: 'All Levels', price: 'From $25/class', desc: '20+ classes per week including HIIT, powerlifting, kettlebell, and cardio. All levels — beginners welcome.', items: ['Unlimited classes with membership', 'Coached form correction every class', 'Modifications always available', 'Competitive & community atmosphere', 'Morning, midday, evening options'] },
-  { icon: Zap, title: 'Nutrition Coaching', tag: 'Add-On or Standalone', price: 'From $149/month', desc: 'Real food, real habits. Macros and meal plans built around your lifestyle — not a cookie-cutter diet.', items: ['7-day food journal analysis', 'Macro targets & meal timing', 'Weekly accountability check-ins', 'Restaurant & travel strategies', 'Supplement guidance'] },
-  { icon: Trophy, title: 'Competition Prep', tag: 'Advanced', price: 'Custom Quote', desc: 'Elite prep for powerlifting, bodybuilding, CrossFit, and functional fitness competitions.', items: ['Meet/show selection guidance', 'Peak week programming', 'Weight class strategy', 'Posing & platform coaching', 'Coach present at competitions'] },
+  {
+    n: '01',
+    icon: Zap,
+    name: 'HIIT & Conditioning',
+    duration: '45 min',
+    level: 'All Levels',
+    desc: 'High-intensity interval training built around functional movement, metabolic conditioning, and real-world strength.',
+    items: ['Heart rate zone training', 'Battle ropes, sleds & kettlebells', 'Mobility & cooldown integrated', 'Scaled options every session'],
+  },
+  {
+    n: '02',
+    icon: Dumbbell,
+    name: 'Powerlifting',
+    duration: '60 min',
+    level: 'Beginner – Advanced',
+    desc: 'Squat, bench, deadlift. Periodized programming and expert coaching that builds raw, competition-ready strength.',
+    items: ['Eleiko competition barbells', 'Periodized mesocycles', 'Technique video review', 'Meet prep available'],
+  },
+  {
+    n: '03',
+    icon: Shield,
+    name: 'Boxing & Combat',
+    duration: '60 min',
+    level: 'All Levels',
+    desc: 'Technical boxing skill meets elite conditioning. Bags, mitts, and sparring in a controlled, coached environment.',
+    items: ['Head movement & footwork', 'Heavy bag & pad work', 'Optional light sparring', 'Full body cardio burn'],
+  },
+  {
+    n: '04',
+    icon: Timer,
+    name: 'Endurance Training',
+    duration: '75 min',
+    level: 'Intermediate – Advanced',
+    desc: 'Rowing, cycling, and running combined with strength work. Built for athletes who want to go longer and harder.',
+    items: ['VO2 max development', 'Lactate threshold training', 'Race & event prep', 'Heart rate data tracking'],
+  },
 ];
 
-const MEMBERSHIP = [
-  { name: 'Drop-In', price: '$25', per: '/day', features: ['Full gym access', 'All group classes', 'Locker & towel', 'No commitment'] },
-  { name: 'Monthly', price: '$89', per: '/month', features: ['Unlimited gym access', 'Unlimited group classes', 'Recovery room access', 'Guest pass (1/month)', '10% retail discount'], highlight: true },
-  { name: 'Annual', price: '$69', per: '/month', features: ['Everything in Monthly', 'Sauna & cold plunge', '2 guest passes/month', '15% retail discount', 'Free fitness assessment'] },
+const TIERS = [
+  {
+    name: 'Starter',
+    price: '$49',
+    per: '/mo',
+    features: ['Gym floor access', '8 classes/month', 'Locker room access', 'App access'],
+    featured: false,
+  },
+  {
+    name: 'Core',
+    price: '$89',
+    per: '/mo',
+    features: ['Unlimited gym access', 'Unlimited classes', 'Recovery room', '1 guest pass/month', 'Nutrition resources'],
+    featured: true,
+  },
+  {
+    name: 'Elite',
+    price: '$149',
+    per: '/mo',
+    features: ['Everything in Core', '2 PT sessions/month', 'Cold plunge & sauna', '2 guest passes/month', 'Free fitness assessment', 'Priority class booking'],
+    featured: false,
+  },
 ];
 
-const REVIEWS = [
-  { text: "Marcus completely changed how I train. In 6 months I lost 34 pounds and put on real muscle for the first time. Iron Edge is the real deal.", author: "Damien R.", type: "Personal Training" },
-  { text: "I was intimidated walking in. I should not have been. Everyone here is supportive and the coaches push you without making you feel like an outsider.", author: "Alexis P.", type: "Group Classes" },
-  { text: "Daniel prepped me for my first powerlifting meet. Peak week was dialed in perfectly and I hit all three PRs on the platform.", author: "Carlos V.", type: "Competition Prep" },
+const STEPS = [
+  { n: '01', title: 'Free Trial Week', desc: 'Seven full days of unlimited classes, gym access, and a facility tour. No credit card, no commitment.' },
+  { n: '02', title: 'Choose Your Plan', desc: 'Pick the membership tier that matches your goals and training frequency. Cancel anytime.' },
+  { n: '03', title: 'Orientation Session', desc: 'Every new member gets a 30-minute orientation with a certified coach to establish your baseline.' },
+  { n: '04', title: 'Train Daily', desc: 'Show up. Put in the work. We handle the programming, coaching, and accountability.' },
+];
+
+const TRAINERS = [
+  { img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop', name: 'Marcus Reid', specialty: 'Strength & Powerlifting', cert: 'CSCS, USAW Level 2' },
+  { img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop', name: 'Devon Sawyer', specialty: 'HIIT & Conditioning', cert: 'NASM-CPT, NASM-CES' },
+  { img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop', name: 'Alana Cruz', specialty: 'Boxing & Combat Sports', cert: 'USA Boxing Coach, CPT' },
+];
+
+const TESTIMONIALS = [
+  {
+    quote: "I dropped 45 lbs in 6 months and hit a 405 lb deadlift. Iron Edge didn't just change my body — it changed everything.",
+    name: 'Damien R.',
+    result: 'Lost 45 lbs in 6 months',
+  },
+  {
+    quote: "I was terrified walking in on day one. Now I coach the Thursday morning HIIT class as a volunteer. The community here is different.",
+    name: 'Alexis P.',
+    result: 'Down 3 dress sizes',
+  },
+  {
+    quote: "Marcus prepped me for my first powerlifting meet. I went 9 for 9 on attempts and set three PRs. The coaching here is elite.",
+    name: 'Carlos V.',
+    result: '3 competition PRs set',
+  },
 ];
 
 const FAQS = [
-  { q: "Is Iron Edge for beginners or experienced athletes only?", a: "Both. Our group classes have beginner modifications built in and coaches watch form closely. We run a Foundations course every month specifically for people who have never lifted before. Personal training starts from zero — we never assume prior experience." },
-  { q: "Can I try before committing to a membership?", a: "Yes. We offer a 7-day free trial that includes unlimited classes and full gym access. No credit card required. Just show up and meet us." },
-  { q: "What are your hours?", a: "We are open Monday through Friday 5:00am–11:00pm, Saturday 7:00am–8:00pm, and Sunday 8:00am–6:00pm. Classes start as early as 5:30am on weekdays." },
-  { q: "Do I need to bring my own equipment or gear?", a: "No. We supply barbells, dumbbells, kettlebells, resistance bands, mats, foam rollers, and all group class equipment. We have lockers, showers, and fresh towels for members. Bring your own lock or rent one at the front desk." },
-  { q: "What is your cancellation policy for memberships?", a: "Month-to-month memberships require 30 days written notice to cancel. Annual memberships can be paused for up to 3 months per year for travel or medical reasons. There is no cancellation fee for month-to-month plans." },
-  { q: "Do you offer nutrition coaching without personal training?", a: "Yes. Nutrition coaching is available as a standalone service starting at $149/month. You meet with Coach Tanya for an initial 60-minute strategy session and then check in weekly via video or messaging." },
-  { q: "Is there parking available?", a: "Yes. We have a dedicated 40-space lot directly behind the building, plus overflow street parking on Alberta St. We also have secure bike storage and are on the TriMet #72 bus line." },
+  { q: "Is Iron Edge right for beginners?", a: "Absolutely. Our HIIT and conditioning classes have scaled modifications built into every session, and coaches watch form closely. We run a Foundations program every month specifically for people who have never lifted before. Personal training also starts from zero — no prior experience assumed." },
+  { q: "Can I try before buying a membership?", a: "Yes. We offer a 7-day free trial that includes unlimited class access and full gym floor use. No credit card required. Just show up, introduce yourself at the front desk, and we will take it from there." },
+  { q: "What are the gym hours?", a: "Monday through Friday: 5:00am to 11:00pm. Saturday: 7:00am to 8:00pm. Sunday: 8:00am to 6:00pm. Classes start as early as 5:30am on weekdays. The gym floor is accessible any time we are open." },
+  { q: "What equipment does Iron Edge have?", a: "15,000 square feet of training space with Eleiko competition barbells and racks, dumbbells up to 150 lbs, a full cardio deck, turf lane with sleds, battle ropes, cable systems, kettlebell stations, boxing bags, and a dedicated stretching and mobility area." },
+  { q: "What is your membership cancellation policy?", a: "Month-to-month memberships can be cancelled with 30 days written notice — no cancellation fee. Annual memberships can be paused up to 3 months per year for travel or medical reasons. We never lock you in with punishing exit clauses." },
+  { q: "Do you offer nutrition coaching?", a: "Yes. Nutrition coaching is available as a standalone service starting at $149/month or as an add-on to any membership. You get an initial 60-minute strategy session and weekly check-ins with our certified nutrition coach." },
+  { q: "Is there parking at the gym?", a: "We have a dedicated 40-space parking lot behind the building plus overflow street parking on Brick Church Park Drive. There is also secure bike storage and we are accessible via bus route." },
 ];
 
-export default function IronEdgeHome() {
+export default function IronEdgeFitness() {
   return (
-    <>
-      {/* HERO */}
-      <section className="relative min-h-[92vh] flex items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ backgroundColor: 'rgba(10,10,10,0.85)' }} />
+    <div style={{ backgroundColor: BG, color: '#fff' }}>
+
+      {/* STICKY NAV */}
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-16 py-5" style={{ backgroundColor: BG, borderBottom: `1px solid rgba(255,107,0,0.3)` }}>
+        <div>
+          <span className="text-xl font-black uppercase tracking-wider text-white">IRON EDGE</span>
+          <div className="h-0.5 mt-0.5 w-full" style={{ backgroundColor: ORANGE }} />
         </div>
-        <div className="relative z-10 px-8 md:px-16 pb-24 max-w-3xl">
-          <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-6 text-white/25">Portland, OR · Since 2014 · 2,400+ Members</div>
-          <h1 className="text-6xl md:text-8xl font-black text-white leading-none mb-6 uppercase">Forge<br /><span style={{ color: ORANGE }}>Your</span><br />Edge.</h1>
-          <p className="text-white/55 text-lg mb-10 max-w-xl leading-relaxed">Portland's premier strength and conditioning gym. Personal training, group classes, and nutrition coaching. No excuses. No gimmicks. Just results.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-[11px] px-8 py-4" style={{ backgroundColor: ORANGE }}>Start Free 7-Day Trial <ArrowRight className="w-4 h-4" /></Link>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/20 text-white font-black uppercase tracking-widest text-[11px] px-8 py-4">View Programs</Link>
-            <a href="tel:5035550841" className="inline-flex items-center gap-2 border border-white/10 text-white/50 font-black uppercase tracking-widest text-[11px] px-8 py-4"><Phone className="w-4 h-4" /> (503) 555-0841</a>
+        <div className="hidden md:flex items-center gap-8">
+          {['Programs', 'Membership', 'Schedule', 'Contact'].map((item) => (
+            <Link key={item} href={`${BASE}/${item.toLowerCase()}`} className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>{item}</Link>
+          ))}
+        </div>
+        <Link href={`${BASE}/contact`} className="text-xs font-black uppercase tracking-widest px-6 py-3" style={{ backgroundColor: ORANGE, color: '#000' }}>
+          Start Free Week
+        </Link>
+      </nav>
+
+      {/* HERO — SPLIT LAYOUT */}
+      <section className="min-h-screen flex flex-col md:flex-row">
+        {/* Left copy panel */}
+        <div className="flex-[55] flex items-center px-8 md:px-16 py-24 min-h-[60vh]" style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(255,107,0,0.08) 0%, transparent 60%), #050505' }}>
+          <div className="max-w-xl">
+            <p className="text-xs font-black uppercase tracking-[0.4em] mb-8" style={{ color: ORANGE }}>
+              Nashville Elite Performance Gym
+            </p>
+            <h1 className="text-7xl md:text-8xl font-black italic uppercase leading-none tracking-tighter mb-8 text-white">
+              TRAIN<br />LIKE YOUR<br /><span style={{ color: ORANGE }}>LIFE</span><br />DEPENDS<br />ON IT.
+            </h1>
+            <p className="text-base leading-relaxed mb-10" style={{ color: MUTED }}>
+              Nashville&apos;s most results-driven gym. 3,200+ members, 48 classes per week, and 12 elite personal trainers pushing you past every limit you thought you had.
+            </p>
+            <div className="flex flex-wrap gap-4 mb-5">
+              <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-8 py-4 text-sm font-black uppercase tracking-widest" style={{ backgroundColor: ORANGE, color: '#000' }}>
+                Start Your Free Week <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link href={`${BASE}/programs`} className="inline-flex items-center gap-2 px-8 py-4 text-sm font-black uppercase tracking-widest border border-white/20 text-white">
+                View Programs
+              </Link>
+            </div>
+            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>No contracts. Cancel anytime.</p>
           </div>
+        </div>
+        {/* Right image panel */}
+        <div className="flex-[45] relative overflow-hidden min-h-[50vh]">
+          <Image
+            src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop"
+            alt="Iron Edge athlete training"
+            fill
+            className="object-cover"
+            referrerPolicy="no-referrer"
+            priority
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(255,107,0,0.15) 0%, rgba(5,5,5,0.3) 100%)' }} />
         </div>
       </section>
 
-      {/* STATS */}
-      <section style={{ backgroundColor: ORANGE }} className="py-10">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          {['2,400+ Members', '22 Certified Coaches', 'Open 5am–11pm Daily', '7-Day Free Trial'].map((s, i) => (
-            <div key={i} className="text-black font-black text-sm uppercase tracking-widest">{s}</div>
+      {/* STATS BAR */}
+      <section style={{ backgroundColor: CARD }}>
+        <div className="max-w-6xl mx-auto px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {[['3,200+', 'Members'], ['48', 'Classes/Week'], ['12', 'Personal Trainers'], ['4.9★', 'Google Rating']].map(([val, label], i) => (
+            <div key={i}>
+              <div className="text-5xl font-black mb-1.5" style={{ color: ORANGE }}>{val}</div>
+              <div className="text-xs font-bold uppercase tracking-widest text-white/40">{label}</div>
+            </div>
           ))}
         </div>
       </section>
 
       {/* PROGRAMS */}
-      <section style={{ backgroundColor: BLACK }} className="py-24 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: ORANGE }}>Training Programs</div>
-            <h2 className="text-4xl font-black text-white uppercase">What We Offer</h2>
-            <p className="text-white/30 mt-3 text-sm uppercase tracking-widest font-black">Every program is personalized. Every result is earned.</p>
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-black uppercase tracking-[0.4em] mb-3" style={{ color: ORANGE }}>What We Offer</p>
+            <h2 className="text-5xl font-black uppercase text-white">Programs Built for Results</h2>
           </div>
-          <div className="grid sm:grid-cols-2 gap-5">
-            {PROGRAMS.map(({ icon: Icon, title, tag, price, desc, items }, i) => (
-              <div key={i} className="p-8 border border-white/8 hover:border-orange-500/40 transition-colors">
-                <div className="flex items-start justify-between mb-5">
-                  <Icon className="w-6 h-6" style={{ color: ORANGE }} strokeWidth={1.5} />
-                  <div className="text-right">
-                    <div className="text-[9px] font-black uppercase tracking-widest text-white/30">{tag}</div>
-                    <div className="text-xs font-black" style={{ color: ORANGE }}>{price}</div>
-                  </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {PROGRAMS.map(({ n, icon: Icon, name, duration, level, desc, items }, i) => (
+              <div key={i} className="p-8 relative overflow-hidden" style={{ backgroundColor: CARD, borderLeft: `3px solid ${ORANGE}`, background: `linear-gradient(135deg, rgba(255,107,0,0.05) 0%, transparent 100%), ${CARD}` }}>
+                <div className="flex items-start justify-between mb-6">
+                  <span className="text-6xl font-black opacity-10 text-white leading-none">{n}</span>
+                  <Icon className="w-7 h-7" style={{ color: ORANGE }} strokeWidth={1.5} />
                 </div>
-                <h3 className="font-black text-white text-base mb-2 uppercase tracking-wide">{title}</h3>
-                <p className="text-white/35 text-xs leading-relaxed mb-5">{desc}</p>
-                <ul className="space-y-1.5">
-                  {items.map((item, j) => <li key={j} className="flex items-center gap-2 text-xs text-white/30"><Check className="w-3 h-3 shrink-0" style={{ color: ORANGE }} />{item}</li>)}
+                <h3 className="text-xl font-black uppercase text-white mb-2">{name}</h3>
+                <div className="flex gap-4 mb-4">
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>{duration}</span>
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>·</span>
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>{level}</span>
+                </div>
+                <p className="text-sm leading-relaxed mb-6" style={{ color: MUTED }}>{desc}</p>
+                <ul className="space-y-2">
+                  {items.map((item, j) => (
+                    <li key={j} className="flex items-center gap-2.5 text-xs" style={{ color: MUTED }}>
+                      <Check className="w-3.5 h-3.5 shrink-0" style={{ color: ORANGE }} /> {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
             ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 font-black uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: ORANGE, color: BLACK }}>Full Programs & Pricing <ArrowRight className="w-4 h-4" /></Link>
           </div>
         </div>
       </section>
 
       {/* MEMBERSHIP TIERS */}
-      <section className="py-20 px-6 md:px-12" style={{ backgroundColor: '#111' }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: ORANGE }}>Membership</div>
-            <h2 className="text-4xl font-black text-white uppercase">Choose Your Plan</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {MEMBERSHIP.map(({ name, price, per, features, highlight }, i) => (
-              <div key={i} className={`p-8 ${highlight ? 'border-2' : 'border border-white/8'}`} style={{ borderColor: highlight ? ORANGE : undefined }}>
-                {highlight && <div className="text-[9px] font-black uppercase tracking-widest mb-3" style={{ color: ORANGE }}>Most Popular</div>}
-                <div className="mb-5">
-                  <div className="font-black text-white text-base mb-1 uppercase tracking-wide">{name}</div>
-                  <div className="text-4xl font-black text-white">{price}<span className="text-sm font-normal text-white/35">{per}</span></div>
-                </div>
-                <ul className="space-y-2 mb-8">
-                  {features.map((f, j) => <li key={j} className="flex items-center gap-2 text-xs text-white/45"><Check className="w-3 h-3 shrink-0" style={{ color: ORANGE }} />{f}</li>)}
-                </ul>
-                <Link href={`${BASE}/contact`} className={`w-full block text-center text-[10px] font-black uppercase tracking-widest py-3 ${highlight ? 'text-black' : 'border border-white/15 text-white/60'}`} style={{ backgroundColor: highlight ? ORANGE : undefined }}>Get Started</Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WHY IRON EDGE */}
-      <section className="grid lg:grid-cols-2 min-h-[55vh]">
-        <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
-          <Image src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
-        </div>
-        <div className="flex items-center px-10 md:px-16 py-16 bg-gray-950">
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-5" style={{ color: ORANGE }}>Why Iron Edge</div>
-            <h2 className="text-4xl font-black text-white mb-7 uppercase leading-tight">Built Different. Built for You.</h2>
-            <div className="space-y-3 mb-8">
-              {["15,000 sq ft training floor", "State-of-the-art Eleiko barbells & racks", "Recovery room, sauna & cold plunge", "Online programming app included", "Childcare available weekday mornings", "In-house physical therapist on staff"].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-white/45"><Check className="w-4 h-4 shrink-0" style={{ color: ORANGE }} />{p}</div>
-              ))}
-            </div>
-            <Link href={`${BASE}/about`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest border-b pb-0.5" style={{ color: ORANGE, borderColor: ORANGE }}>Meet Our Coaches <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section style={{ backgroundColor: BLACK }} className="py-20 px-6 md:px-12">
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-black text-white uppercase mb-2">Member Results</h2>
-            <p className="text-white/25 text-xs uppercase tracking-widest font-black">4.9 Stars · 300+ Google Reviews</p>
+          <div className="text-center mb-16">
+            <p className="text-xs font-black uppercase tracking-[0.4em] mb-3" style={{ color: ORANGE }}>Pricing</p>
+            <h2 className="text-5xl font-black uppercase text-white">Choose Your Plan</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {REVIEWS.map((r, i) => (
-              <div key={i} className="p-7 border-l-4" style={{ backgroundColor: '#111', borderLeftColor: ORANGE }}>
-                <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: ORANGE }} />)}</div>
-                <p className="text-white/45 text-sm italic leading-relaxed mb-4">"{r.text}"</p>
-                <div className="font-black text-xs uppercase tracking-widest text-white/25">— {r.author} · {r.type}</div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {TIERS.map(({ name, price, per, features, featured }, i) => (
+              <div
+                key={i}
+                className="p-8 relative"
+                style={{
+                  backgroundColor: featured ? ORANGE : BG,
+                  color: featured ? '#000' : '#fff',
+                  boxShadow: featured ? `0 0 60px rgba(255,107,0,0.3)` : 'none',
+                }}
+              >
+                {featured && (
+                  <div className="text-[10px] font-black uppercase tracking-widest mb-4 opacity-70">Most Popular</div>
+                )}
+                <div className="mb-6">
+                  <div className={`text-xs font-black uppercase tracking-widest mb-2 ${featured ? 'text-black/60' : 'text-white/40'}`}>{name}</div>
+                  <div className={`text-5xl font-black ${featured ? 'text-black' : 'text-white'}`}>
+                    {price}<span className={`text-base font-normal ${featured ? 'text-black/50' : 'text-white/35'}`}>{per}</span>
+                  </div>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {features.map((f, j) => (
+                    <li key={j} className={`flex items-center gap-2.5 text-xs font-bold ${featured ? 'text-black/80' : 'text-white/45'}`}>
+                      <Check className="w-3.5 h-3.5 shrink-0" style={{ color: featured ? '#000' : ORANGE }} /> {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={`${BASE}/contact`}
+                  className="block w-full text-center text-xs font-black uppercase tracking-widest py-3"
+                  style={{ backgroundColor: featured ? '#000' : ORANGE, color: featured ? '#fff' : '#000' }}
+                >
+                  Get Started
+                </Link>
               </div>
             ))}
           </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="text-[10px] font-black uppercase tracking-widest" style={{ color: ORANGE }}>Read More Stories <ArrowRight className="w-3 h-3 inline ml-1" /></Link>
+          <p className="text-center text-xs mt-8 font-bold uppercase tracking-widest" style={{ color: MUTED }}>All memberships include app access & class booking. No long-term contracts required.</p>
+        </div>
+      </section>
+
+      {/* PROCESS */}
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-black uppercase tracking-[0.4em] mb-3" style={{ color: ORANGE }}>How It Works</p>
+            <h2 className="text-5xl font-black uppercase text-white">Getting Started is Simple</h2>
+          </div>
+          <div className="grid md:grid-cols-4 gap-8">
+            {STEPS.map(({ n, title, desc }, i) => (
+              <div key={i} className="text-center">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-black" style={{ backgroundColor: ORANGE, color: '#000' }}>
+                  {n}
+                </div>
+                <h3 className="text-base font-black uppercase text-white mb-3">{title}</h3>
+                <p className="text-xs leading-relaxed" style={{ color: MUTED }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-14">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-10 py-4 text-sm font-black uppercase tracking-widest" style={{ backgroundColor: ORANGE, color: '#000' }}>
+              Claim Your Free Week <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* TRAINERS */}
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-black uppercase tracking-[0.4em] mb-3" style={{ color: ORANGE }}>The Team</p>
+            <h2 className="text-5xl font-black uppercase text-white">Our Coaches</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {TRAINERS.map((t, i) => (
+              <div key={i} className="group overflow-hidden" style={{ backgroundColor: BG }}>
+                <div className="relative h-72 overflow-hidden">
+                  <Image src={t.img} alt={t.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(5,5,5,0.8) 0%, transparent 50%)' }} />
+                </div>
+                <div className="p-6">
+                  <div className="text-lg font-black uppercase text-white mb-1">{t.name}</div>
+                  <div className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: ORANGE }}>{t.specialty}</div>
+                  <div className="text-xs" style={{ color: MUTED }}>{t.cert}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-black uppercase tracking-[0.4em] mb-3" style={{ color: ORANGE }}>Member Results</p>
+            <h2 className="text-5xl font-black uppercase text-white">Real People. Real Results.</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t, i) => (
+              <div key={i} className="p-8" style={{ backgroundColor: CARD, borderLeft: `4px solid ${ORANGE}` }}>
+                <div className="flex gap-0.5 mb-5">
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: ORANGE }} />)}
+                </div>
+                <p className="text-lg font-black italic text-white leading-snug mb-6">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div className="text-sm font-bold text-white/60">{t.name}</div>
+                <div className="text-xs font-black uppercase tracking-widest mt-1" style={{ color: ORANGE }}>{t.result}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-24 px-6 md:px-12" style={{ backgroundColor: '#111' }}>
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: ORANGE }}>FAQ</div>
-            <h2 className="text-4xl font-black text-white uppercase">Got Questions</h2>
+          <div className="text-center mb-16">
+            <p className="text-xs font-black uppercase tracking-[0.4em] mb-3" style={{ color: ORANGE }}>FAQ</p>
+            <h2 className="text-5xl font-black uppercase text-white">Got Questions?</h2>
           </div>
-          <div className="divide-y divide-white/8">
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
             {FAQS.map(({ q, a }, i) => (
-              <details key={i} className="group py-5">
-                <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-black text-sm leading-snug text-white">{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: ORANGE }} />
+              <details key={i} className="group" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                <summary className="flex items-center justify-between cursor-pointer gap-4 py-6">
+                  <span className="font-black text-sm text-white leading-snug">{q}</span>
+                  <ChevronDown className="w-4 h-4 shrink-0 group-open:rotate-180 transition-transform" style={{ color: ORANGE }} />
                 </summary>
-                <p className="mt-4 text-white/40 text-sm leading-relaxed">{a}</p>
+                <p className="pb-6 text-sm leading-relaxed" style={{ color: MUTED }}>{a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CONTACT STRIP */}
-      <section style={{ backgroundColor: BLACK }} className="py-14 px-6 md:px-12 border-t border-white/8">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 items-center">
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: ORANGE }}>Location</div>
-            <div className="flex items-start gap-2 text-white/55 text-sm">
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: ORANGE }} />
-              <span>4201 NE Alberta St<br />Portland, OR 97218</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: ORANGE }}>Hours</div>
-            <div className="text-white/55 text-sm space-y-0.5">
-              <div>Mon – Fri: 5:00am – 11:00pm</div>
-              <div>Saturday: 7:00am – 8:00pm</div>
-              <div>Sunday: 8:00am – 6:00pm</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <a href="tel:5035550841" className="inline-flex items-center gap-2 text-white font-black text-base"><Phone className="w-4 h-4" style={{ color: ORANGE }} /> (503) 555-0841</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-black font-black uppercase tracking-widest text-[11px] px-7 py-3" style={{ backgroundColor: ORANGE }}>Claim Free Trial <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
+      {/* CTA */}
+      <section className="py-28 px-8 text-center" style={{ backgroundColor: ORANGE }}>
+        <h2 className="text-5xl md:text-6xl font-black uppercase text-black mb-6 leading-tight">
+          Your transformation<br />starts Monday.
+        </h2>
+        <p className="text-base font-bold text-black/60 mb-10 max-w-lg mx-auto">
+          7 days completely free. No credit card. No commitment. Just show up and see what this gym can do for you.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-10 py-4 text-sm font-black uppercase tracking-widest bg-black text-white">
+            Claim Free Trial <ArrowRight className="w-4 h-4" />
+          </Link>
+          <a href="tel:6155550418" className="inline-flex items-center gap-2 px-10 py-4 text-sm font-black uppercase tracking-widest border-2 border-black text-black">
+            <Phone className="w-4 h-4" /> Call a Coach
+          </a>
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section style={{ backgroundColor: ORANGE }} className="py-16 px-6 text-center">
-        <h2 className="text-3xl font-black text-black uppercase mb-4">7 Days Free. No Credit Card. No Commitment.</h2>
-        <p className="text-black/60 mb-8 text-sm font-bold uppercase tracking-widest">Try any class, meet your coach, experience the facility. Then decide.</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-black uppercase tracking-widest text-[11px] px-10 py-4 bg-black text-white">Claim Your Free Trial <ArrowRight className="w-4 h-4" /></Link>
-          <a href="tel:5035550841" className="inline-flex items-center gap-2 border-2 border-black text-black font-black uppercase tracking-widest text-[11px] px-10 py-4"><Clock className="w-4 h-4" /> Call to Talk to a Coach</a>
+      {/* FOOTER */}
+      <footer className="py-16 px-8 md:px-16" style={{ backgroundColor: BG, borderTop: `2px solid ${ORANGE}` }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-12 mb-12">
+            <div>
+              <div className="mb-1">
+                <span className="text-xl font-black uppercase tracking-wider text-white">IRON EDGE</span>
+              </div>
+              <div className="h-0.5 w-20 mb-4" style={{ backgroundColor: ORANGE }} />
+              <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
+                Nashville&apos;s elite performance gym. Strength, conditioning, and community since 2014.
+              </p>
+            </div>
+            <div>
+              <div className="text-xs font-black uppercase tracking-widest mb-5" style={{ color: ORANGE }}>Classes & Schedule</div>
+              <ul className="space-y-2">
+                {['HIIT & Conditioning', 'Powerlifting', 'Boxing & Combat', 'Endurance Training', 'Personal Training', 'Full Schedule'].map((item) => (
+                  <li key={item}><Link href={`${BASE}/programs`} className="text-xs hover:text-white transition-colors" style={{ color: MUTED }}>{item}</Link></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div className="text-xs font-black uppercase tracking-widest mb-5" style={{ color: ORANGE }}>Find Us</div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2 text-xs" style={{ color: MUTED }}>
+                  <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: ORANGE }} />
+                  425 Brick Church Park Dr<br />Nashville, TN 37207
+                </div>
+                <a href="tel:6155550418" className="flex items-center gap-2 text-xs" style={{ color: MUTED }}>
+                  <Phone className="w-3.5 h-3.5" style={{ color: ORANGE }} /> (615) 555-0418
+                </a>
+                <div className="text-xs" style={{ color: MUTED }}>
+                  Mon–Fri: 5:00am – 11:00pm<br />
+                  Sat: 7:00am – 8:00pm<br />
+                  Sun: 8:00am – 6:00pm
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="pt-8 flex flex-col md:flex-row justify-between gap-4" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>© 2026 Iron Edge Fitness LLC. All rights reserved. Nashville, TN.</p>
+            <div className="flex gap-4">
+              {['Privacy', 'Terms', 'Waiver'].map((item) => (
+                <Link key={item} href="#" className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>{item}</Link>
+              ))}
+            </div>
+          </div>
         </div>
-      </section>
-    </>
+      </footer>
+    </div>
   );
 }

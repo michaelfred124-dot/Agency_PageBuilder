@@ -1,218 +1,449 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Wrench, ArrowRight, Check, Star, Phone, Shield, Car, Zap, Clock, MapPin, ChevronDown, Battery } from 'lucide-react';
+import { Wrench, Check, Star, Phone, MapPin, ChevronDown, Zap, Settings, Gauge, Layers } from 'lucide-react';
 
 const BASE = '/work/ridge-line-auto';
-const CHARCOAL = '#1C1C1C';
-const RED = '#C0392B';
+const BG = '#0D0D0D';
+const RED = '#E5242A';
+const CARD = '#161616';
+const MUTED = 'rgba(255,255,255,0.45)';
 
-const SVCS = [
-  { icon: Wrench, title: 'Oil & Fluids', price: 'From $29', desc: 'Conventional, synthetic, and high-mileage options. Full fluid check included.', items: ['Conventional oil change', 'Synthetic oil change', 'Transmission fluid', 'Coolant flush'] },
-  { icon: Shield, title: 'Brake Service', price: 'From $149', desc: 'Brake pad replacement, rotor resurfacing, caliper service, and brake fluid.', items: ['Brake pad replacement', 'Rotor resurfacing', 'Brake fluid flush', 'Caliper replacement'] },
-  { icon: Car, title: 'Engine & Transmission', price: 'Free Estimate', desc: 'Full engine diagnostics, repair, and transmission service.', items: ['Check engine light', 'Timing belt/chain', 'Transmission service', 'Head gasket'] },
-  { icon: Zap, title: 'Electrical Systems', price: 'From $75', desc: 'Battery, alternator, starter, and full electrical diagnostics.', items: ['Battery replacement', 'Alternator repair', 'Starter replacement', 'Fuse diagnosis'] },
-  { icon: Battery, title: 'Tires & Alignment', price: 'From $79', desc: 'Tire mounting, balancing, rotation, and 4-wheel alignment.', items: ['Tire mounting & balance', 'Tire rotation', '4-wheel alignment', 'TPMS reset'] },
-  { icon: Clock, title: 'Preventive Maintenance', price: 'From $49', desc: 'Scheduled maintenance to keep your vehicle running trouble-free.', items: ['30/60/90k service', 'Cabin air filter', 'Spark plug replacement', 'Fuel system cleaning'] },
+const SERVICES = [
+  {
+    n: '01',
+    title: 'Engine & Performance',
+    price: 'From $299',
+    icon: Gauge,
+    items: ['Full engine diagnostics & rebuild', 'Cold air intake & exhaust systems', 'Supercharger & turbo installation', 'ECU tuning & dyno calibration'],
+  },
+  {
+    n: '02',
+    title: 'Brake Systems',
+    price: 'From $249',
+    icon: Layers,
+    items: ['High-performance brake pads & rotors', 'Brake line upgrades (stainless)', 'Big brake kit installation', 'Brake fluid flush & bleed'],
+  },
+  {
+    n: '03',
+    title: 'Suspension Tuning',
+    price: 'From $399',
+    icon: Settings,
+    items: ['Coilover & lowering spring install', '4-wheel alignment (performance)', 'Sway bar & strut brace upgrades', 'Lift kit & leveling systems'],
+  },
+  {
+    n: '04',
+    title: 'Auto Detailing',
+    price: 'From $199',
+    icon: Wrench,
+    items: ['Paint correction & ceramic coating', 'Interior deep clean & conditioning', 'Engine bay detail', 'Headlight restoration'],
+  },
+  {
+    n: '05',
+    title: 'Diagnostic & Electrical',
+    price: 'From $125',
+    icon: Zap,
+    items: ['OBD-II scan & code clearing', 'Wiring harness repair', 'Audio & remote start install', 'Battery, alternator & starter'],
+  },
+  {
+    n: '06',
+    title: 'Transmission Service',
+    price: 'From $349',
+    icon: Settings,
+    items: ['Manual & automatic fluid service', 'Clutch replacement & adjustment', 'Differential service', 'Transfer case service'],
+  },
 ];
 
-const STEPS = [
-  { n: '1', title: 'Drop Off or Schedule', desc: 'Book online, call, or just drive in. Most services can be done same day.' },
-  { n: '2', title: 'Digital Inspection Report', desc: 'We send you a detailed inspection to your phone with photos — no surprises.' },
-  { n: '3', title: 'You Approve, We Repair', desc: 'No work starts without your sign-off. Flat-rate pricing, nothing added later.' },
-  { n: '4', title: 'Pickup & Drive Confident', desc: 'Most repairs come with our 24-month / 24,000-mile warranty.' },
+const ACHIEVEMENTS = [
+  { label: '4-Year ASE Certified', desc: 'Every technician holds current ASE Master certification.' },
+  { label: '2x Best of Nashville Award', desc: 'Voted Nashville\'s top performance shop 2022 & 2023.' },
+  { label: '22 Years Family Owned', desc: 'Founded by Rick Holloway in 2002. Still family-run today.' },
+  { label: '100% Satisfaction Guarantee', desc: 'We stand behind every repair or we make it right. Period.' },
 ];
 
-const REVIEWS = [
-  { text: "Rick and his team are the only people I trust with my truck. Honest, fast, never push unnecessary repairs. 7 years and counting.", author: "Tony B.", service: "Transmission" },
-  { text: "Brought in my car for a mystery noise two other shops could not diagnose. Ridge Line found it in 30 minutes. Fixed same day.", author: "Sarah M.", service: "Diagnostics" },
-  { text: "Night and day difference from the dealer. Real deal — honest estimate, quick turnaround, and the repair held up perfectly.", author: "James H.", service: "Brakes" },
+const TESTIMONIALS = [
+  {
+    text: "Brought my Challenger in for a full suspension build and tune. Ridge Line transformed it. Handles like it was factory-designed for the track. These guys are the real deal.",
+    author: 'Marcus D.',
+    vehicle: '2021 Dodge Challenger R/T',
+  },
+  {
+    text: "I have taken my truck to three shops for a persistent engine knock. Ridge Line diagnosed it in under an hour and fixed it properly. Night and day difference.",
+    author: 'Tyler B.',
+    vehicle: '2019 Ford F-150 Raptor',
+  },
+  {
+    text: "The ceramic coating on my Mustang is flawless. 6 months later and it still looks like it just rolled off the lot. Worth every dollar.",
+    author: 'Sarah K.',
+    vehicle: '2022 Ford Mustang GT500',
+  },
 ];
 
 const FAQS = [
-  { q: "Do I need an appointment or can I walk in?", a: "Both work. Walk-ins are welcome and we service most same-day. Scheduling online guarantees your preferred time and reduces wait. Oil changes often have no wait even for walk-ins." },
-  { q: "How long does a typical repair take?", a: "Oil changes take 30–45 minutes. Brake jobs usually 1.5–2 hours. Most diagnostics are resolved same-day. Complex engine or transmission jobs may take 1–3 business days, and we provide loaner vehicles for those." },
-  { q: "Do you work on all makes and models?", a: "Yes. We service all domestic and foreign vehicles — cars, trucks, SUVs, and vans. We carry parts for most common makes in stock and can source anything else quickly." },
-  { q: "What is included in the digital inspection?", a: "Every vehicle gets a 50-point inspection at no extra charge. You receive a digital report via text or email with photos of any items needing attention, color-coded by urgency (good / monitor / needs attention)." },
-  { q: "What warranty do repairs come with?", a: "Most repairs are covered by our 24-month / 24,000-mile warranty on both parts and labor. Oil changes are excluded, but tires, brakes, and major mechanical work are all covered." },
-  { q: "Do you offer financing or payment plans?", a: "Yes. We partner with Synchrony Car Care for 0% financing on repairs over $199. Apply in minutes at the counter. We also accept all major credit cards and contactless payment." },
-  { q: "Can I get an estimate before bringing my car in?", a: "Absolutely. Call us with your year, make, model, and symptoms and we can give you a ballpark over the phone. For a firm quote, we offer free in-shop estimates with no obligation." },
+  {
+    q: 'Do I need an appointment or can I walk in?',
+    a: "Walk-ins are always welcome, though scheduling guarantees your time slot and lets us pre-order any specialty parts. For performance builds and major installs, we recommend booking at least a week out. Oil changes and diagnostics are typically same-day.",
+  },
+  {
+    q: 'What vehicles do you work on?',
+    a: "We specialize in American muscle, trucks, and import performance vehicles — but we service everything. Domestic, foreign, diesel, and hybrid. If it has wheels and an engine, we work on it.",
+  },
+  {
+    q: 'Can you source aftermarket and OEM parts?',
+    a: "Yes. We have direct accounts with major aftermarket suppliers (Borla, Roush, Bilstein, Brembo, Holley, and more) and all major OEM part distributors. We will match you with the right part for your build and budget.",
+  },
+  {
+    q: 'Do you offer a warranty on your work?',
+    a: "All labor carries a 12-month / 12,000-mile warranty. Parts warranties vary by manufacturer — OEM parts typically carry 24 months. Performance parts carry manufacturer warranties. We will walk you through coverage before any work begins.",
+  },
+  {
+    q: 'How long does a performance build take?',
+    a: "It depends entirely on scope. A basic intake and exhaust install can be done in a day. A full engine build, tune, and alignment can run 3-7 business days. We give you a firm timeline before we start and keep you updated daily on progress.",
+  },
+  {
+    q: 'Do you offer financing?',
+    a: "Yes. We offer 6-month same-as-cash financing through our lending partner on jobs over $500. Apply at the front desk — most approvals are instant. We accept all major credit cards, cash, and digital payment.",
+  },
+  {
+    q: "Is Ridge Line a dealership or independent shop?",
+    a: "Independent — and proud of it. We are family owned and operated since 2002. No upsell quotas, no corporate protocols. Just honest technicians who love cars doing excellent work at fair prices.",
+  },
 ];
 
 export default function RidgeLineHome() {
   return (
-    <>
-      {/* HERO */}
-      <section className="relative min-h-[88vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ backgroundColor: 'rgba(28,28,28,0.88)' }} />
+    <div style={{ backgroundColor: BG, color: '#fff' }}>
+
+      {/* STICKY NAV */}
+      <nav
+        className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-14 py-4"
+        style={{ backgroundColor: BG, borderBottom: '1px solid rgba(229,36,42,0.3)' }}
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-base font-black uppercase tracking-[0.15em] text-white">RIDGE LINE</span>
+          <span className="text-base font-black uppercase tracking-[0.15em]" style={{ color: RED }}>AUTO</span>
         </div>
-        <div className="absolute left-0 top-0 bottom-0 w-1.5" style={{ backgroundColor: RED }} />
-        <div className="relative z-10 px-12 md:px-20 max-w-2xl">
-          <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-5 text-white/35">ASE Certified · Denver, CO · Est. 2006</div>
-          <h1 className="text-5xl md:text-7xl font-black text-white leading-none mb-6 uppercase">Your Car.<br /><span style={{ color: RED }}>Our</span> Expertise.<br />Zero Runaround.</h1>
-          <p className="text-white/55 text-base mb-10 leading-relaxed max-w-lg">Honest diagnostics. Fair pricing. Same-day service on most repairs. No upsells, no unnecessary work — just quality done right the first time.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-[11px] px-8 py-4" style={{ backgroundColor: RED }}>Book Service Online <ArrowRight className="w-4 h-4" /></Link>
-            <a href="tel:3035550247" className="inline-flex items-center gap-2 border border-white/25 text-white font-black uppercase tracking-widest text-[11px] px-8 py-4"><Phone className="w-4 h-4" /> (303) 555-0247</a>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/15 text-white/60 font-black uppercase tracking-widest text-[11px] px-8 py-4">View All Services</Link>
+        <div className="hidden md:flex items-center gap-8">
+          {['Services', 'Gallery', 'Reviews', 'Contact'].map((item) => (
+            <Link key={item} href={`${BASE}/contact`} className="text-xs uppercase tracking-widest font-medium" style={{ color: MUTED }}>
+              {item}
+            </Link>
+          ))}
+        </div>
+        <Link
+          href={`${BASE}/contact`}
+          className="text-xs font-black uppercase tracking-widest px-5 py-2.5 text-white"
+          style={{ backgroundColor: RED }}
+        >
+          Book Service
+        </Link>
+      </nav>
+
+      {/* HERO — full-bleed image */}
+      <section className="relative min-h-screen flex items-center">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1493238792000-8113da705763?q=80&w=2070&auto=format&fit=crop"
+            alt="Ridge Line Auto Performance Shop Nashville"
+            fill
+            className="object-cover"
+            referrerPolicy="no-referrer"
+            priority
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to right, rgba(13,13,13,0.92) 45%, rgba(13,13,13,0.3) 100%)' }}
+          />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-8 md:px-14 py-24">
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-8" style={{ color: RED }}>
+            Nashville's Performance Shop
+          </p>
+          <h1 className="text-8xl md:text-9xl font-black uppercase leading-none tracking-tighter text-white mb-8">
+            BUILT<br />TO<br />PERFORM.
+          </h1>
+          <div className="w-20 mb-8" style={{ borderTop: `3px solid ${RED}` }} />
+          <p className="text-lg leading-relaxed mb-10 max-w-lg" style={{ color: MUTED }}>
+            Nashville's most trusted performance and auto service shop. 22 years of expertise. Zero compromises.
+          </p>
+          <div className="flex flex-wrap gap-4 mb-10">
+            <Link
+              href={`${BASE}/contact`}
+              className="inline-flex items-center gap-2 px-8 py-4 text-xs font-black uppercase tracking-widest text-white"
+              style={{ backgroundColor: RED }}
+            >
+              Book Service
+            </Link>
+            <Link
+              href={`${BASE}/services`}
+              className="inline-flex items-center gap-2 px-8 py-4 text-xs font-black uppercase tracking-widest border"
+              style={{ borderColor: 'rgba(229,36,42,0.5)', color: RED }}
+            >
+              View Services
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <Phone className="w-4 h-4" style={{ color: RED }} />
+            <a href="tel:6155550174" className="text-base font-black text-white tracking-wide">(615) 555-0174</a>
           </div>
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section style={{ backgroundColor: RED }} className="py-10">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          {['14,000+ Vehicles Serviced', 'ASE Certified Technicians', 'Same-Day Service Available', '24-Mo / 24K-Mi Warranty'].map((s, i) => (
-            <div key={i} className="text-white font-black text-sm uppercase tracking-widest">{s}</div>
+      {/* RED TRUST BAR */}
+      <section className="py-5" style={{ backgroundColor: RED }}>
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          {[
+            '4,200+ Vehicles Served',
+            '22 Years Nashville',
+            '4.9★ Google',
+            'Same-Day Available',
+          ].map((item, i) => (
+            <div key={i} className="py-2 text-white font-black text-sm uppercase tracking-widest">
+              {item}
+            </div>
           ))}
         </div>
       </section>
 
-      {/* SERVICES GRID */}
-      <section className="py-24 px-6 md:px-12 bg-gray-50">
+      {/* SERVICES — 2-col grid of 6 cards */}
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: CARD }}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>Services & Pricing</div>
-            <h2 className="text-4xl font-black uppercase" style={{ color: CHARCOAL }}>Everything Your Vehicle Needs</h2>
-            <p className="text-gray-400 mt-3 text-sm">Flat-rate pricing · No hidden fees · No work without your approval</p>
+          <div className="mb-16">
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>Services</p>
+            <h2 className="text-5xl font-black uppercase text-white leading-none">
+              What we do<br />best.
+            </h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {SVCS.map(({ icon: Icon, title, price, desc, items }, i) => (
-              <div key={i} className="bg-white p-7 border-b-4 hover:shadow-md transition-shadow" style={{ borderBottomColor: RED }}>
-                <div className="flex items-start justify-between mb-5">
-                  <Icon className="w-6 h-6 text-gray-300" strokeWidth={1.5} />
-                  <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 text-white" style={{ backgroundColor: RED }}>{price}</span>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px" style={{ backgroundColor: 'rgba(229,36,42,0.1)' }}>
+            {SERVICES.map(({ n, title, price, icon: Icon, items }) => (
+              <div
+                key={n}
+                className="p-8 flex flex-col"
+                style={{ backgroundColor: CARD }}
+              >
+                <div className="text-5xl font-black mb-4" style={{ color: `${RED}30` }}>{n}</div>
+                <div className="flex items-start justify-between mb-4">
+                  <h3 className="font-black text-white text-lg leading-tight">{title}</h3>
+                  <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1.5 shrink-0 ml-3 text-white" style={{ backgroundColor: RED }}>
+                    {price}
+                  </span>
                 </div>
-                <h3 className="font-black text-base mb-2" style={{ color: CHARCOAL }}>{title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed mb-4">{desc}</p>
-                <ul className="space-y-1">
-                  {items.map((item, j) => <li key={j} className="flex items-center gap-2 text-xs text-gray-400"><Check className="w-3 h-3 shrink-0" style={{ color: RED }} />{item}</li>)}
+                <ul className="space-y-2 flex-1 mb-6">
+                  {items.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-xs" style={{ color: MUTED }}>
+                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: RED }} />
+                      {item}
+                    </li>
+                  ))}
                 </ul>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: CHARCOAL }}>Full Pricing & Services <ArrowRight className="w-4 h-4" /></Link>
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section style={{ backgroundColor: CHARCOAL }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>The Process</div>
-            <h2 className="text-4xl font-black text-white uppercase">Simple. Honest. Fast.</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {STEPS.map(({ n, title, desc }, i) => (
-              <div key={i} className="text-center">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 font-black text-lg text-white" style={{ backgroundColor: RED }}>{n}</div>
-                <h3 className="font-black text-white text-sm mb-2">{title}</h3>
-                <p className="text-white/35 text-xs leading-relaxed">{desc}</p>
+                <Link
+                  href={`${BASE}/services`}
+                  className="text-xs font-black uppercase tracking-widest"
+                  style={{ color: RED }}
+                >
+                  Schedule &rarr;
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* WHY RIDGE LINE */}
-      <section className="grid lg:grid-cols-2 min-h-[55vh]">
-        <div className="flex items-center px-10 md:px-16 py-16" style={{ backgroundColor: CHARCOAL }}>
+      {/* SHOP SHOWCASE — split */}
+      <section className="grid md:grid-cols-2 min-h-[60vh]">
+        <div className="relative overflow-hidden min-h-[400px]">
+          <Image
+            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop"
+            alt="Ridge Line Auto shop interior"
+            fill
+            className="object-cover"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+        <div className="flex items-center px-10 md:px-16 py-20" style={{ backgroundColor: BG }}>
           <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-5" style={{ color: RED }}>Why Ridge Line</div>
-            <h2 className="text-4xl font-black text-white mb-7 uppercase leading-tight">Honest Auto Repair. Our Guarantee.</h2>
-            <div className="space-y-3 mb-8">
-              {["Digital inspection reports texted to your phone", "No repair starts without your written approval", "ASE-certified technician on every job", "24-month / 24,000-mile parts & labor warranty", "Loaner vehicles for repairs over 1 day", "Veteran & senior discount — ask us"].map((p, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-white/55"><Check className="w-4 h-4 shrink-0" style={{ color: RED }} />{p}</div>
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-5" style={{ color: RED }}>Our Shop</p>
+            <h2 className="text-4xl font-black uppercase text-white leading-tight mb-12">
+              Nashville's most trusted performance shop.
+            </h2>
+            <div className="space-y-5">
+              {ACHIEVEMENTS.map(({ label, desc }) => (
+                <div
+                  key={label}
+                  className="flex items-start gap-4 border-l-4 pl-5 py-1"
+                  style={{ borderLeftColor: RED }}
+                >
+                  <div>
+                    <div className="font-black text-white text-sm">{label}</div>
+                    <div className="text-xs mt-0.5" style={{ color: MUTED }}>{desc}</div>
+                  </div>
+                </div>
               ))}
             </div>
-            <Link href={`${BASE}/about`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest border-b pb-0.5" style={{ color: RED, borderColor: RED }}>Meet the Team <ArrowRight className="w-3.5 h-3.5" /></Link>
           </div>
-        </div>
-        <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
-          <Image src="https://images.unsplash.com/photo-1504222490345-c075b626eba5?q=80&w=2070&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" />
         </div>
       </section>
 
-      {/* REVIEWS */}
-      <section className="py-20 px-6 md:px-12 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-black uppercase mb-2" style={{ color: CHARCOAL }}>4.8 Stars · 350+ Google Reviews</h2>
-            <div className="flex justify-center gap-1">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" style={{ color: RED }} />)}</div>
+      {/* PROCESS — 4-step horizontal */}
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: CARD }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>How It Works</p>
+            <h2 className="text-4xl font-black uppercase text-white">Simple. Honest. Fast.</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white p-7 border-t-4" style={{ borderTopColor: RED }}>
-                <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: RED }} />)}</div>
-                <p className="text-gray-600 text-sm italic leading-relaxed mb-4">"{r.text}"</p>
-                <div className="font-black text-xs uppercase tracking-widest text-gray-400">— {r.author} · {r.service}</div>
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              { n: '1', title: 'Schedule Online', desc: 'Book your service in 60 seconds. Pick your date, describe your needs, we do the rest.' },
+              { n: '2', title: 'Drop Your Vehicle', desc: 'Pull in any time during business hours. We perform a complimentary multi-point inspection.' },
+              { n: '3', title: 'Expert Service', desc: 'ASE-certified technicians execute every job with precision. No corners cut. Ever.' },
+              { n: '4', title: 'Pick Up and Drive', desc: "Your vehicle returns better than it arrived. We call you first — then it's yours to claim." },
+            ].map(({ n, title, desc }) => (
+              <div key={n} className="text-center">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5 font-black text-lg text-white"
+                  style={{ backgroundColor: RED }}
+                >
+                  {n}
+                </div>
+                <h3 className="font-black text-white text-sm mb-2">{title}</h3>
+                <p className="text-xs leading-relaxed" style={{ color: MUTED }}>{desc}</p>
               </div>
             ))}
           </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="text-[10px] font-black uppercase tracking-widest" style={{ color: RED }}>Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" /></Link>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: BG }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>Reviews</p>
+            <h2 className="text-4xl font-black uppercase text-white">4.9 Stars. 600+ Reviews.</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map(({ text, author, vehicle }) => (
+              <div
+                key={author}
+                className="p-8 border-t-4"
+                style={{ backgroundColor: CARD, borderTopColor: RED }}
+              >
+                <div className="flex gap-0.5 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-current" style={{ color: RED }} />
+                  ))}
+                </div>
+                <p className="text-sm italic leading-relaxed mb-6" style={{ color: MUTED }}>
+                  &ldquo;{text}&rdquo;
+                </p>
+                <div className="font-black text-white text-sm">{author}</div>
+                <div className="text-[10px] uppercase tracking-widest mt-0.5" style={{ color: `${RED}90` }}>{vehicle}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-24 px-6 md:px-12 bg-white">
+      <section className="py-28 px-6 md:px-14" style={{ backgroundColor: CARD }}>
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>FAQ</div>
-            <h2 className="text-4xl font-black uppercase" style={{ color: CHARCOAL }}>Common Questions</h2>
+          <div className="text-center mb-16">
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>FAQ</p>
+            <h2 className="text-4xl font-black uppercase text-white">Common Questions</h2>
           </div>
-          <div className="divide-y divide-gray-100">
-            {FAQS.map(({ q, a }, i) => (
-              <details key={i} className="group py-5">
-                <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-black text-sm leading-snug" style={{ color: CHARCOAL }}>{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: RED }} />
+          <div>
+            {FAQS.map(({ q, a }) => (
+              <details
+                key={q}
+                className="group border-b py-6"
+                style={{ borderColor: 'rgba(229,36,42,0.2)' }}
+              >
+                <summary className="flex justify-between cursor-pointer gap-4 list-none">
+                  <span className="font-black text-sm text-white leading-snug">{q}</span>
+                  <ChevronDown
+                    className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180"
+                    style={{ color: RED }}
+                  />
                 </summary>
-                <p className="mt-4 text-gray-500 text-sm leading-relaxed">{a}</p>
+                <p className="mt-5 text-sm leading-relaxed" style={{ color: MUTED }}>{a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CONTACT STRIP */}
-      <section style={{ backgroundColor: CHARCOAL }} className="py-14 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 items-center">
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: RED }}>Location</div>
-            <div className="flex items-start gap-2 text-white/65 text-sm">
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
-              <span>4820 Tennyson St<br />Denver, CO 80212</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: RED }}>Hours</div>
-            <div className="text-white/65 text-sm space-y-0.5">
-              <div>Mon – Fri: 7:00am – 6:00pm</div>
-              <div>Saturday: 8:00am – 4:00pm</div>
-              <div className="text-white/30">Sunday: Closed</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <a href="tel:3035550247" className="inline-flex items-center gap-2 text-white font-black text-base"><Phone className="w-4 h-4" style={{ color: RED }} /> (303) 555-0247</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-[11px] px-7 py-3" style={{ backgroundColor: RED }}>Book Service Now <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
+      {/* CTA */}
+      <section className="py-28 px-6 text-center" style={{ backgroundColor: RED }}>
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-5xl font-black uppercase mb-5 text-white">Ready to transform your vehicle?</h2>
+          <p className="text-base mb-10 leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>
+            Same-day service available. Performance builds scheduled same week. Call or book online.
+          </p>
+          <Link
+            href={`${BASE}/contact`}
+            className="inline-flex items-center gap-2 px-10 py-5 text-xs font-black uppercase tracking-widest"
+            style={{ backgroundColor: '#0D0D0D', color: '#fff' }}
+          >
+            Book Service Now
+          </Link>
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section style={{ backgroundColor: RED }} className="py-16 px-6 text-center">
-        <h2 className="text-3xl font-black text-white uppercase mb-4">Get Back on the Road Today.</h2>
-        <p className="text-white/75 mb-8 text-sm font-bold uppercase tracking-widest">Same-day service available Monday through Friday. No appointment needed.</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-black uppercase tracking-widest text-[11px] px-10 py-4" style={{ color: CHARCOAL }}>Book Service <ArrowRight className="w-4 h-4" /></Link>
-          <a href="tel:3035550247" className="inline-flex items-center gap-2 border-2 border-white text-white font-black uppercase tracking-widest text-[11px] px-10 py-4"><Phone className="w-4 h-4" /> Call Now</a>
+      {/* FOOTER */}
+      <footer
+        className="px-8 md:px-14 pt-20 pb-10"
+        style={{ backgroundColor: BG, borderTop: `3px solid ${RED}` }}
+      >
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-16">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-base font-black uppercase tracking-[0.15em] text-white">RIDGE LINE</span>
+              <span className="text-base font-black uppercase tracking-[0.15em]" style={{ color: RED }}>AUTO</span>
+            </div>
+            <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
+              Nashville's premier performance and auto service shop since 2002. Family owned. ASE certified. Zero compromises.
+            </p>
+          </div>
+          <div>
+            <div className="text-[10px] font-black uppercase tracking-widest mb-5" style={{ color: RED }}>Services</div>
+            <div className="space-y-2.5">
+              {['Engine & Performance', 'Brake Systems', 'Suspension Tuning', 'Auto Detailing', 'Diagnostic & Electrical', 'Transmission Service'].map((item) => (
+                <div key={item}>
+                  <Link href={`${BASE}/services`} className="text-xs" style={{ color: MUTED }}>{item}</Link>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-[10px] font-black uppercase tracking-widest mb-5" style={{ color: RED }}>Contact & Hours</div>
+            <div className="flex items-start gap-2 mb-4">
+              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: RED }} />
+              <address className="text-xs not-italic leading-relaxed" style={{ color: MUTED }}>
+                4820 Nolensville Pike<br />
+                Nashville, TN 37211
+              </address>
+            </div>
+            <div className="flex items-center gap-2 mb-4">
+              <Phone className="w-3.5 h-3.5 shrink-0" style={{ color: RED }} />
+              <a href="tel:6155550174" className="text-xs" style={{ color: MUTED }}>(615) 555-0174</a>
+            </div>
+            <div className="text-xs space-y-1" style={{ color: MUTED }}>
+              <div>Mon &ndash; Fri: 7:00am &ndash; 6:00pm</div>
+              <div>Saturday: 8:00am &ndash; 4:00pm</div>
+              <div style={{ color: 'rgba(255,255,255,0.2)' }}>Sunday: Closed</div>
+            </div>
+          </div>
         </div>
-      </section>
-    </>
+        <div
+          className="border-t flex flex-col md:flex-row items-center justify-between gap-3 pt-8 text-[10px]"
+          style={{ borderColor: 'rgba(229,36,42,0.2)', color: MUTED }}
+        >
+          <span>&copy; 2025 Ridge Line Auto &nbsp;&middot;&nbsp; Nashville, TN</span>
+          <div className="flex items-center gap-5">
+            <Link href={`${BASE}/privacy`} style={{ color: MUTED }}>Privacy Policy</Link>
+            <Link href={`${BASE}/terms`} style={{ color: MUTED }}>Terms</Link>
+          </div>
+        </div>
+      </footer>
+
+    </div>
   );
 }

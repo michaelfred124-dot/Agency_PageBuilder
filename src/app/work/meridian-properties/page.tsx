@@ -1,234 +1,404 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Home, ArrowRight, Check, Star, MapPin, TrendingUp, Key, Phone, ChevronDown, Users } from 'lucide-react';
+import { ArrowRight, Check, Star, ChevronDown, Phone, MapPin, Home, TrendingUp, Key, Users, Building2, Award } from 'lucide-react';
 
 const BASE = '/work/meridian-properties';
-const FOREST = '#2D6A4F';
-const SLATE = '#2E3A47';
-const CREAM = '#F7F5F0';
+const BG = '#0D1117';
+const GOLD = '#B8A27A';
+const CARD = '#141C25';
+const BORDER = 'rgba(184,162,122,0.2)';
+const MUTED = 'rgba(255,255,255,0.4)';
 
-const SVCS = [
-  { icon: Home, title: 'Buyer Representation', tag: 'Most Popular', desc: 'Expert guidance from first showing to closing day. We negotiate on your behalf and protect your interests at every step.', items: ['Pre-approval coordination', 'Neighborhood & market analysis', 'Offer strategy & negotiation', 'Inspection & contingency guidance', 'Closing cost analysis'] },
-  { icon: TrendingUp, title: 'Listing & Selling', tag: 'Top Results', desc: 'Strategic pricing, professional photography, and targeted marketing to sell your home fast and for the most money.', items: ['Comparative market analysis', 'Professional photography & staging consult', 'MLS + digital marketing', 'Open house coordination', 'Offer review & negotiation'] },
-  { icon: Key, title: 'Property Management', tag: 'Passive Income', desc: 'Full-service property management for investors and accidental landlords. We handle everything so you do not have to.', items: ['Tenant screening & placement', 'Rent collection & accounting', 'Maintenance coordination', 'Annual lease renewals', 'Monthly owner reports'] },
-  { icon: Users, title: 'Relocation Services', tag: 'Corporate', desc: 'Relocating to Portland? We specialize in helping remote workers, families, and corporate transfers navigate the move.', items: ['Virtual tours available', 'Neighborhood comparisons', 'School district guidance', 'First-time buyer programs', 'Remote offer process'] },
+const LISTINGS = [
+  {
+    img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070&auto=format&fit=crop',
+    price: '$1,400,000',
+    address: '4812 Chickering Lane',
+    neighborhood: 'Belle Meade',
+    beds: 4, baths: 4, sqft: '4,820',
+    tag: 'Just Listed',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=2070&auto=format&fit=crop',
+    price: '$875,000',
+    address: '2219 Greybar Lane',
+    neighborhood: 'Green Hills',
+    beds: 3, baths: 3, sqft: '2,940',
+    tag: 'Active',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop',
+    price: '$2,100,000',
+    address: '1105 Governors Ridge',
+    neighborhood: 'Brentwood',
+    beds: 5, baths: 5, sqft: '6,100',
+    tag: 'Coming Soon',
+  },
 ];
 
-const FEATURED = [
-  { img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop', label: 'Just Sold', price: '$685,000', beds: '4 bd', baths: '3 ba', city: 'Portland Heights' },
-  { img: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1974&auto=format&fit=crop', label: 'Active', price: '$520,000', beds: '3 bd', baths: '2 ba', city: 'Beaverton' },
-  { img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070&auto=format&fit=crop', label: 'Active', price: '$1,100,000', beds: '5 bd', baths: '4 ba', city: 'Lake Oswego' },
+const SERVICES = [
+  {
+    icon: Home,
+    title: 'Buyer Representation',
+    desc: 'We advocate exclusively for you from your first showing to the closing table. Expert negotiation, market analysis, and total transparency.',
+    items: ['Pre-approval coordination', 'Comparative market analysis', 'Offer strategy & negotiation', 'Inspection guidance', 'Closing cost review'],
+  },
+  {
+    icon: TrendingUp,
+    title: 'Seller Marketing',
+    desc: 'Precision pricing, professional staging consultation, and omnichannel marketing designed to command maximum value for your home.',
+    items: ['Luxury photography & video', 'MLS + digital targeting', 'International buyer reach', 'Open house coordination', 'Offer management'],
+  },
+  {
+    icon: Building2,
+    title: 'Investment Properties',
+    desc: 'From single-family rentals to multi-unit acquisitions, we identify high-yield opportunities and model returns with institutional rigor.',
+    items: ['Cap rate & cash flow analysis', 'Off-market deal sourcing', '1031 exchange guidance', 'Portfolio diversification', 'Property management referrals'],
+  },
+  {
+    icon: Users,
+    title: 'Relocation Services',
+    desc: 'Moving to Nashville? We specialize in seamless transitions for executives, families, and corporate relocations.',
+    items: ['Virtual tour consultations', 'School district guidance', 'Neighborhood comparisons', 'Corporate timeline management', 'Remote offer process'],
+  },
 ];
 
 const STEPS = [
-  { n: '01', title: 'Free Strategy Call', desc: 'We discuss your timeline, goals, and budget — buyers, sellers, and investors all start here.' },
-  { n: '02', title: 'Market Analysis', desc: 'We deliver a detailed report on pricing trends, comparable homes, and your best move in today\'s market.' },
-  { n: '03', title: 'Execute the Plan', desc: 'Whether buying, selling, or both — we handle negotiations, paperwork, and every detail in between.' },
-  { n: '04', title: 'Close With Confidence', desc: 'Clear communication to closing day. No surprises, no last-minute chaos. Just results.' },
+  { n: '01', title: 'Free Valuation', desc: 'We deliver a detailed market analysis and strategic roadmap for your property — at no cost or obligation.' },
+  { n: '02', title: 'Property Search', desc: 'Curated listings matched to your exact criteria. We surface on-market and off-market opportunities.' },
+  { n: '03', title: 'Offer & Negotiation', desc: 'Battle-tested negotiation strategy that has secured $1.4B in transactions for our clients.' },
+  { n: '04', title: 'Closing Day', desc: 'White-glove coordination through every step. Clear communication, zero surprises.' },
 ];
 
-const REVIEWS = [
-  { text: "Sarah guided us through our first home purchase without any pressure. She knew the market and fought hard on our offer. We closed under asking.", author: "Chris & Amy P.", type: "Buyer" },
-  { text: "Sold our home in 6 days at $22,000 over asking. Tom had a strategy from day one — photos, marketing, perfect timing.", author: "Robert L.", type: "Seller" },
-  { text: "Aisha has managed our rental duplex for two years. Zero vacancy, rent on time every month. I never have to worry.", author: "Pat H.", type: "Property Mgmt" },
+const AGENTS = [
+  { img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop', name: 'Catherine Harlow', title: 'Principal Broker', sales: '$420M+ in career sales' },
+  { img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2070&auto=format&fit=crop', name: 'Isabelle Monroe', title: 'Luxury Specialist', sales: '$210M+ in career sales' },
+  { img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop', name: 'James Aldridge', title: 'Investment Advisor', sales: '$180M+ in career sales' },
+];
+
+const TESTIMONIALS = [
+  { quote: "Catherine negotiated $140,000 above our asking price with multiple offers in hand. The process was flawless — from listing to closing in 18 days.", name: 'Robert & Claire S.', note: 'Sold in Green Hills' },
+  { quote: "Meridian found us an off-market Belle Meade property that never hit the MLS. Their network is simply unmatched in Nashville.", name: 'Thomas W.', note: 'Purchased in Belle Meade' },
+  { quote: "The investment analysis James prepared was the most thorough I have seen. We closed on two rental properties and cash flow is already exceeding projections.", name: 'Priya K.', note: 'Investor Portfolio' },
 ];
 
 const FAQS = [
-  { q: "How is Meridian Properties different from other Portland agents?", a: "We are a boutique team, not a big box brokerage. Every client works directly with a senior agent — no hand-offs to assistants. We cap our client load so every transaction gets full attention. Our average list-to-close time is 21 days faster than the Portland metro average." },
-  { q: "What are your agent fees for buyers?", a: "Buyer representation is at no cost to you in most transactions — the seller typically pays both agents' commissions. Oregon's new buyer agreement rules require us to discuss and sign a representation agreement before we can show homes, which we handle in our first call." },
-  { q: "How do you determine the right listing price for my home?", a: "We run a Comparative Market Analysis using recent sales within a half-mile, your property condition, upgrades, and current buyer demand. We do not guess — we price based on data. Overpricing kills listings, and we never do it." },
-  { q: "Do you work with first-time buyers?", a: "Absolutely — first-time buyers are a priority for us. We walk you through every step: pre-approval, offer strategy, inspections, and closing. We also connect clients with Oregon Bond and OHCS down payment assistance programs when eligible." },
-  { q: "Can you help if I need to buy and sell at the same time?", a: "Yes. Coordinating a simultaneous buy/sell is a specialty of ours. We can often negotiate contingencies that protect you from owning two homes at once, and we sequence the process so it runs smoothly." },
-  { q: "Do you work outside of Portland proper?", a: "Yes — we serve the full Portland metro including Beaverton, Hillsboro, Lake Oswego, Tigard, Tualatin, and into Clark County, WA. If you are unsure whether your area is covered, just ask." },
+  { q: "How does Meridian differ from other Nashville real estate firms?", a: "We are a boutique firm, not a volume shop. Every client works directly with a senior agent — never handed off to a junior assistant. We cap our client roster so every transaction receives full strategic attention. Our average days-on-market is 40% below the Nashville metro average." },
+  { q: "What neighborhoods does Meridian specialize in?", a: "We cover the full greater Nashville area with deep expertise in Belle Meade, Green Hills, Brentwood, Franklin, 12South, East Nashville, and the luxury lakefront communities. We also serve the Williamson County and Sumner County markets for clients relocating from out of state." },
+  { q: "How do you determine my home's listing price?", a: "We run a Comparative Market Analysis drawing on recent closed sales within a half-mile radius, your home's condition, finishes, and lot attributes, plus current buyer demand signals. We never guess and never overprice — homes priced correctly from day one sell faster and for more money." },
+  { q: "Do you work with first-time buyers?", a: "Absolutely. First-time buyers receive the same level of service as our highest-volume investors. We walk you through pre-approval, offer strategy, inspections, and closing — and we connect qualifying clients with THDA down payment assistance programs." },
+  { q: "What does your property valuation include?", a: "Our complimentary valuation is a full Broker Price Opinion — not an automated Zestimate. It includes a room-by-room condition assessment, comparable sales analysis, neighborhood absorption rate, and a written net proceeds estimate. We present it in person or via video call." },
+  { q: "Can you help with a simultaneous buy and sell?", a: "Yes — coordinating concurrent transactions is a core specialty. We sequence the listing and purchase timelines, negotiate contingencies that protect you from carrying two mortgages, and manage both closings with a single point of contact." },
 ];
 
-export default function MeridianHome() {
+export default function MeridianProperties() {
   return (
-    <>
-      {/* HERO */}
-      <section className="relative min-h-[90vh] flex items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?q=80&w=2066&auto=format&fit=crop" alt="" fill className="object-cover" referrerPolicy="no-referrer" priority />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(46,58,71,0.97) 0%, rgba(46,58,71,0.5) 55%, transparent 100%)' }} />
+    <div style={{ backgroundColor: BG, color: '#fff', fontFamily: 'Georgia, serif' }}>
+
+      {/* STICKY NAV */}
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-16 py-5" style={{ backgroundColor: BG, borderBottom: `1px solid ${BORDER}` }}>
+        <div className="flex items-center gap-2">
+          <span className="text-lg tracking-[0.2em] font-bold text-white" style={{ fontFamily: 'Georgia, serif' }}>MERIDIAN</span>
+          <span className="text-lg tracking-[0.15em] font-light text-white/70" style={{ fontFamily: 'Georgia, serif' }}>PROPERTIES</span>
         </div>
-        <div className="relative z-10 px-8 md:px-16 pb-24 max-w-3xl">
-          <div className="flex items-center gap-3 mb-5"><div className="w-8 h-px" style={{ backgroundColor: FOREST }} /><span className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/50">Portland Metro · Est. 2011 · $290M+ Sold</span></div>
-          <h1 className="text-5xl md:text-6xl font-serif text-white leading-tight mb-5">Portland real estate,<br />done with <em>integrity</em>.</h1>
-          <p className="text-white/65 text-lg mb-10 max-w-xl leading-relaxed">Buyer's agents, listing specialists, and property managers serving Portland and the surrounding metro since 2011. Boutique service, big results.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4" style={{ backgroundColor: FOREST }}>Free Strategy Call <ArrowRight className="w-4 h-4" /></Link>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/30 text-white font-bold uppercase tracking-widest text-[11px] px-8 py-4">Our Services</Link>
-            <a href="tel:5035550182" className="inline-flex items-center gap-2 border border-white/15 text-white/60 font-bold uppercase tracking-widest text-[11px] px-8 py-4"><Phone className="w-4 h-4" /> (503) 555-0182</a>
+        <div className="hidden md:flex items-center gap-8">
+          {['Buy', 'Sell', 'Invest', 'About'].map((item) => (
+            <Link key={item} href={`${BASE}/${item.toLowerCase()}`} className="text-xs tracking-widest uppercase font-light" style={{ color: MUTED }}>{item}</Link>
+          ))}
+        </div>
+        <Link href={`${BASE}/contact`} className="text-xs font-bold uppercase tracking-widest px-6 py-3" style={{ backgroundColor: GOLD, color: '#0D1117' }}>
+          Get a Valuation
+        </Link>
+      </nav>
+
+      {/* HERO */}
+      <section className="relative min-h-screen flex items-end overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070&auto=format&fit=crop"
+            alt="Luxury Nashville home"
+            fill
+            className="object-cover"
+            referrerPolicy="no-referrer"
+            priority
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(13,17,23,0.95) 0%, rgba(13,17,23,0.4) 60%, rgba(13,17,23,0.2) 100%)' }} />
+        </div>
+        <div className="relative z-10 flex items-end pb-24 px-12 w-full">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-6" style={{ color: GOLD }}>
+              NASHVILLE&apos;S PREMIER REAL ESTATE FIRM
+            </p>
+            <h1 className="text-6xl md:text-7xl font-serif leading-tight mb-6 text-white">
+              Discover your<br />extraordinary home.
+            </h1>
+            <p className="text-lg mb-10 max-w-lg leading-relaxed" style={{ color: MUTED }}>
+              Eighteen years of precision real estate in Nashville&apos;s most coveted neighborhoods. Boutique service, extraordinary results.
+            </p>
+            <div className="flex flex-wrap gap-4 mb-10">
+              <Link href={`${BASE}/listings`} className="inline-flex items-center gap-2 px-8 py-4 text-sm font-bold uppercase tracking-widest" style={{ backgroundColor: GOLD, color: '#0D1117' }}>
+                Browse Listings <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-8 py-4 text-sm font-bold uppercase tracking-widest border text-white" style={{ borderColor: 'rgba(255,255,255,0.35)' }}>
+                Book a Valuation
+              </Link>
+            </div>
+            {/* Floating search bar */}
+            <div className="rounded-xl p-5 flex flex-col md:flex-row gap-4" style={{ backgroundColor: CARD, border: `1px solid ${BORDER}` }}>
+              <div className="flex-1">
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: GOLD }}>Neighborhood</label>
+                <input readOnly defaultValue="Belle Meade, Green Hills, Brentwood..." className="w-full bg-transparent text-sm text-white/60 outline-none border-0" />
+              </div>
+              <div className="w-px hidden md:block" style={{ backgroundColor: BORDER }} />
+              <div className="flex-1">
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: GOLD }}>Property Type</label>
+                <input readOnly defaultValue="Single Family, Condo, Land..." className="w-full bg-transparent text-sm text-white/60 outline-none border-0" />
+              </div>
+              <div className="w-px hidden md:block" style={{ backgroundColor: BORDER }} />
+              <div className="flex-1">
+                <label className="block text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: GOLD }}>Price Range</label>
+                <input readOnly defaultValue="$500K – $5M+" className="w-full bg-transparent text-sm text-white/60 outline-none border-0" />
+              </div>
+              <Link href={`${BASE}/listings`} className="self-end px-6 py-2.5 text-xs font-bold uppercase tracking-widest shrink-0" style={{ backgroundColor: GOLD, color: '#0D1117' }}>
+                Search
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* STATS BAR */}
-      <section style={{ backgroundColor: SLATE }} className="py-12">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {[['$290M+', 'Total Volume Sold'], ['850+', 'Transactions Closed'], ['13 Years', 'Serving Portland'], ['4.9 ★', '240+ Reviews']].map(([v, l], i) => (
-            <div key={i}>
-              <div className="text-3xl font-serif font-bold text-white mb-1">{v}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: FOREST }}>{l}</div>
+      {/* STATS */}
+      <section style={{ backgroundColor: CARD }}>
+        <div className="max-w-6xl mx-auto px-8 py-16 grid grid-cols-2 md:grid-cols-4">
+          {[['$1.4B', 'Sold'], ['820+', 'Transactions'], ['18 Years', 'Experience'], ['4.9★', 'Rating']].map(([val, label], i) => (
+            <div key={i} className="text-center relative">
+              {i > 0 && <div className="absolute left-0 top-1/4 h-1/2 w-px hidden md:block" style={{ backgroundColor: BORDER }} />}
+              <div className="text-5xl font-bold mb-2" style={{ color: GOLD, fontFamily: 'Georgia, serif' }}>{val}</div>
+              <div className="text-xs uppercase tracking-[0.3em]" style={{ color: MUTED }}>{label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section style={{ backgroundColor: CREAM }} className="py-24 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: FOREST }}>What We Do</div>
-            <h2 className="text-4xl font-serif mb-3" style={{ color: SLATE }}>Full-Service Real Estate</h2>
-            <p className="text-gray-500 text-sm max-w-md mx-auto">Whether buying, selling, or investing — we have the expertise and local knowledge to deliver exceptional results.</p>
+      {/* FEATURED LISTINGS */}
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-end justify-between mb-14">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>Portfolio</p>
+              <h2 className="text-5xl font-serif text-white">Featured Listings</h2>
+            </div>
+            <Link href={`${BASE}/listings`} className="hidden md:inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest pb-0.5 border-b" style={{ color: GOLD, borderColor: GOLD }}>
+              View All Properties <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {SVCS.map(({ icon: Icon, title, tag, desc, items }, i) => (
-              <div key={i} className="bg-white p-8 border-t-4" style={{ borderTopColor: FOREST }}>
-                <div className="flex items-start justify-between mb-5">
-                  <Icon className="w-5 h-5" style={{ color: FOREST }} strokeWidth={1.5} />
-                  <span className="text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 text-white" style={{ backgroundColor: FOREST }}>{tag}</span>
+          <div className="grid md:grid-cols-3 gap-6">
+            {LISTINGS.map((p, i) => (
+              <Link href={`${BASE}/listings`} key={i} className="group block overflow-hidden" style={{ backgroundColor: CARD, border: `1px solid ${BORDER}` }}>
+                <div className="relative h-64 overflow-hidden">
+                  <Image src={p.img} alt={p.address} fill className="object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(13,17,23,0.6) 0%, transparent 60%)' }} />
+                  <span className="absolute top-4 left-4 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5" style={{ backgroundColor: GOLD, color: '#0D1117' }}>{p.tag}</span>
                 </div>
-                <h3 className="font-bold text-lg mb-2" style={{ color: SLATE }}>{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-5">{desc}</p>
-                <ul className="space-y-1.5">
-                  {items.map((item, j) => <li key={j} className="flex items-center gap-2 text-xs text-gray-500"><Check className="w-3.5 h-3.5 shrink-0" style={{ color: FOREST }} />{item}</li>)}
+                <div className="p-6">
+                  <div className="text-2xl font-bold mb-1" style={{ color: GOLD, fontFamily: 'Georgia, serif' }}>{p.price}</div>
+                  <div className="text-white font-medium mb-1">{p.address}</div>
+                  <div className="text-xs mb-4" style={{ color: MUTED }}>{p.neighborhood} &nbsp;·&nbsp; {p.beds} bed &nbsp;·&nbsp; {p.baths} bath &nbsp;·&nbsp; {p.sqft} sqft</div>
+                  <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest" style={{ color: GOLD }}>
+                    View Property <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICES */}
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>What We Do</p>
+            <h2 className="text-5xl font-serif text-white mb-4">Comprehensive Real Estate Services</h2>
+            <p className="text-sm max-w-lg mx-auto leading-relaxed" style={{ color: MUTED }}>From first consultation to closing and beyond, we offer a full suite of services backed by 18 years of Nashville market expertise.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {SERVICES.map(({ icon: Icon, title, desc, items }, i) => (
+              <div key={i} className="p-8 relative" style={{ backgroundColor: BG, borderLeft: `3px solid ${GOLD}` }}>
+                <Icon className="w-6 h-6 mb-5" style={{ color: GOLD }} strokeWidth={1.5} />
+                <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Georgia, serif' }}>{title}</h3>
+                <p className="text-sm leading-relaxed mb-6" style={{ color: MUTED }}>{desc}</p>
+                <ul className="space-y-2">
+                  {items.map((item, j) => (
+                    <li key={j} className="flex items-center gap-2.5 text-xs" style={{ color: MUTED }}>
+                      <Check className="w-3.5 h-3.5 shrink-0" style={{ color: GOLD }} /> {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
             ))}
           </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-[11px] px-8 py-3 border" style={{ borderColor: FOREST, color: FOREST }}>All Services & FAQs <ArrowRight className="w-4 h-4" /></Link>
-          </div>
         </div>
       </section>
 
-      {/* FEATURED LISTINGS */}
-      <section className="py-20 px-6 md:px-12 bg-white">
+      {/* PROCESS */}
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: FOREST }}>Portfolio</div>
-            <h2 className="text-4xl font-serif" style={{ color: SLATE }}>Recent Properties</h2>
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>Our Process</p>
+            <h2 className="text-5xl font-serif text-white">From first call to closing day.</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {FEATURED.map((p, i) => (
-              <div key={i} className="overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow">
-                <div className="relative h-56">
-                  <Image src={p.img} alt="" fill className="object-cover" referrerPolicy="no-referrer" />
-                  <div className="absolute top-3 left-3 text-[9px] font-black uppercase tracking-widest px-2.5 py-1 text-white" style={{ backgroundColor: FOREST }}>{p.label}</div>
-                </div>
-                <div className="p-5">
-                  <div className="font-bold text-xl mb-1" style={{ color: SLATE }}>{p.price}</div>
-                  <div className="text-xs text-gray-400 flex items-center gap-2"><MapPin className="w-3 h-3" />{p.beds} · {p.baths} · {p.city}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section style={{ backgroundColor: FOREST }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4 text-white/50">Our Process</div>
-            <h2 className="text-4xl font-serif text-white">From First Call to Closing Day</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-4 gap-8 relative">
+            {/* Connecting line */}
+            <div className="absolute top-8 left-[12.5%] right-[12.5%] h-px hidden md:block" style={{ borderTop: `1px dashed ${GOLD}`, opacity: 0.35 }} />
             {STEPS.map(({ n, title, desc }, i) => (
-              <div key={i} className="border border-white/20 p-7">
-                <div className="text-4xl font-serif font-bold mb-4 text-white/20">{n}</div>
-                <h3 className="font-bold text-white text-sm mb-2">{title}</h3>
-                <p className="text-white/40 text-xs leading-relaxed">{desc}</p>
+              <div key={i} className="text-center relative">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-lg font-bold relative z-10" style={{ border: `1px solid ${GOLD}`, color: GOLD, backgroundColor: BG, fontFamily: 'Georgia, serif' }}>
+                  {n}
+                </div>
+                <h3 className="text-base font-bold text-white mb-3">{title}</h3>
+                <p className="text-xs leading-relaxed" style={{ color: MUTED }}>{desc}</p>
               </div>
             ))}
           </div>
-          <div className="text-center mt-10">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ color: FOREST }}>Schedule a Free Call <ArrowRight className="w-4 h-4" /></Link>
+          <div className="text-center mt-14">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold uppercase tracking-widest" style={{ backgroundColor: GOLD, color: '#0D1117' }}>
+              Begin Your Journey <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* REVIEWS */}
-      <section style={{ backgroundColor: CREAM }} className="py-24 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: FOREST }}>Client Stories</div>
-            <h2 className="text-4xl font-serif" style={{ color: SLATE }}>What Our Clients Say</h2>
-            <p className="text-gray-500 text-sm mt-2">4.9 Stars · 240+ Reviews</p>
+      {/* AGENTS */}
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>Our Team</p>
+            <h2 className="text-5xl font-serif text-white">Featured Agents</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {REVIEWS.map((r, i) => (
-              <div key={i} className="bg-white p-8 border-l-4" style={{ borderLeftColor: FOREST }}>
-                <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: FOREST }} />)}</div>
-                <p className="text-gray-600 italic text-sm leading-relaxed mb-4">"{r.text}"</p>
-                <div className="font-bold text-xs" style={{ color: SLATE }}>— {r.author} <span className="text-gray-400 font-normal">· {r.type}</span></div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {AGENTS.map((agent, i) => (
+              <div key={i} className="text-center">
+                <div className="relative w-52 h-52 rounded-full overflow-hidden mx-auto mb-6" style={{ border: `2px solid ${BORDER}` }}>
+                  <Image src={agent.img} alt={agent.name} fill className="object-cover" referrerPolicy="no-referrer" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-1" style={{ fontFamily: 'Georgia, serif' }}>{agent.name}</h3>
+                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: GOLD }}>{agent.title}</div>
+                <div className="text-xs" style={{ color: MUTED }}>{agent.sales}</div>
               </div>
             ))}
           </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest justify-center" style={{ color: FOREST }}>Read All Reviews <ArrowRight className="w-3.5 h-3.5" /></Link>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: BG }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>Client Testimonials</p>
+            <h2 className="text-5xl font-serif text-white">What our clients say.</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t, i) => (
+              <div key={i} className="p-8" style={{ backgroundColor: CARD, borderTop: `2px solid ${GOLD}` }}>
+                <div className="flex gap-0.5 mb-5">
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: GOLD }} />)}
+                </div>
+                <p className="text-sm italic leading-relaxed mb-6" style={{ color: MUTED }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div className="text-sm font-bold text-white">{t.name}</div>
+                <div className="text-xs mt-1" style={{ color: GOLD }}>{t.note}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-24 px-6 md:px-12 bg-white">
+      <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: FOREST }}>FAQ</div>
-            <h2 className="text-4xl font-serif" style={{ color: SLATE }}>Common Questions</h2>
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-[0.4em] mb-3" style={{ color: GOLD }}>FAQ</p>
+            <h2 className="text-5xl font-serif text-white">Common Questions</h2>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div style={{ borderTop: `1px solid ${BORDER}` }}>
             {FAQS.map(({ q, a }, i) => (
-              <details key={i} className="group py-5">
-                <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-bold text-sm leading-snug" style={{ color: SLATE }}>{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: FOREST }} />
+              <details key={i} className="group" style={{ borderBottom: `1px solid ${BORDER}` }}>
+                <summary className="flex items-center justify-between cursor-pointer gap-4 py-6">
+                  <span className="font-bold text-sm text-white leading-snug">{q}</span>
+                  <ChevronDown className="w-4 h-4 shrink-0 group-open:rotate-180 transition-transform" style={{ color: GOLD }} />
                 </summary>
-                <p className="mt-4 text-gray-500 text-sm leading-relaxed">{a}</p>
+                <p className="pb-6 text-sm leading-relaxed" style={{ color: MUTED }}>{a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CONTACT STRIP */}
-      <section style={{ backgroundColor: SLATE }} className="py-16 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10">
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: FOREST }}>Our Office</div>
-            <div className="flex items-start gap-2 text-white/70 text-sm">
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: FOREST }} />
-              <span>1420 NW Lovejoy St, Suite 210<br />Portland, OR 97209</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: FOREST }}>Hours</div>
-            <div className="text-white/70 text-sm space-y-1">
-              <div>Mon – Fri: 8:30am – 6:00pm</div>
-              <div>Sat – Sun: By appointment</div>
-              <div className="font-bold text-sm mt-2" style={{ color: FOREST }}>Evening showings available</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: FOREST }}>Talk to Us</div>
-            <a href="tel:5035550182" className="inline-flex items-center gap-2 text-white font-bold text-base"><Phone className="w-4 h-4" style={{ color: FOREST }} /> (503) 555-0182</a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-[11px] px-7 py-3 text-white" style={{ backgroundColor: FOREST }}>Free Strategy Consultation <ArrowRight className="w-3.5 h-3.5" /></Link>
-          </div>
+      {/* CTA */}
+      <section className="py-28 px-8 text-center" style={{ backgroundColor: GOLD }}>
+        <p className="text-xs font-bold uppercase tracking-[0.4em] mb-4" style={{ color: 'rgba(13,17,23,0.5)' }}>Get Started Today</p>
+        <h2 className="text-5xl md:text-6xl font-serif mb-6" style={{ color: '#0D1117' }}>Your next chapter<br />starts here.</h2>
+        <p className="text-base mb-10 max-w-md mx-auto" style={{ color: 'rgba(13,17,23,0.65)' }}>Schedule a complimentary valuation or buyer consultation with one of our senior agents. No pressure, no obligation.</p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold uppercase tracking-widest" style={{ backgroundColor: '#0D1117', color: GOLD }}>
+            Book a Free Consultation <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link href={`${BASE}/listings`} className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold uppercase tracking-widest border" style={{ borderColor: 'rgba(13,17,23,0.3)', color: '#0D1117' }}>
+            Browse Listings
+          </Link>
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section style={{ backgroundColor: FOREST }} className="py-16 px-6 text-center">
-        <h2 className="text-3xl font-serif text-white mb-4">Ready to find your next home?</h2>
-        <p className="text-white/65 mb-8 max-w-lg mx-auto">Free market analysis for sellers. Free buyer consultation. No obligation. Let us guide you from first step to closing day.</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ color: FOREST }}>Schedule a Consultation <ArrowRight className="w-4 h-4" /></Link>
-          <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/30 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4">View Listings</Link>
+      {/* FOOTER */}
+      <footer className="py-20 px-8 md:px-16" style={{ backgroundColor: BG, borderTop: `1px solid ${BORDER}` }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-12 mb-16">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-base tracking-[0.2em] font-bold text-white" style={{ fontFamily: 'Georgia, serif' }}>MERIDIAN</span>
+                <span className="text-base tracking-[0.15em] font-light text-white/50" style={{ fontFamily: 'Georgia, serif' }}>PROPERTIES</span>
+              </div>
+              <p className="text-xs leading-relaxed" style={{ color: MUTED }}>Nashville&apos;s trusted luxury real estate firm since 2006. Serving Belle Meade, Green Hills, Brentwood, and beyond.</p>
+            </div>
+            <div>
+              <div className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Property Types</div>
+              <ul className="space-y-2">
+                {['Luxury Homes', 'Condos & Lofts', 'Investment Property', 'New Construction', 'Land & Lots'].map((item) => (
+                  <li key={item}><Link href={`${BASE}/listings`} className="text-xs hover:text-white transition-colors" style={{ color: MUTED }}>{item}</Link></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Contact</div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2 text-xs" style={{ color: MUTED }}>
+                  <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: GOLD }} />
+                  3210 West End Ave, Suite 500<br />Nashville, TN 37203
+                </div>
+                <a href="tel:6155550265" className="flex items-center gap-2 text-xs hover:text-white transition-colors" style={{ color: MUTED }}>
+                  <Phone className="w-3.5 h-3.5" style={{ color: GOLD }} /> (615) 555-0265
+                </a>
+              </div>
+            </div>
+            <div>
+              <div className="text-xs font-bold uppercase tracking-widest mb-5" style={{ color: GOLD }}>Follow</div>
+              <div className="flex gap-3">
+                {['IG', 'FB', 'LI', 'YT'].map((s) => (
+                  <Link key={s} href="#" className="w-9 h-9 flex items-center justify-center text-xs font-bold border" style={{ color: GOLD, borderColor: BORDER }}>
+                    {s}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="pt-8 flex flex-col md:flex-row justify-between gap-4" style={{ borderTop: `1px solid ${BORDER}` }}>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>© 2026 Meridian Properties LLC. All rights reserved. Licensed in Tennessee.</p>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>MLS information deemed reliable but not guaranteed. All listings subject to prior sale or withdrawal.</p>
+          </div>
         </div>
-      </section>
-    </>
+      </footer>
+    </div>
   );
 }
