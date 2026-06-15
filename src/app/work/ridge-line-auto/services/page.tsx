@@ -1,81 +1,112 @@
 import Link from 'next/link';
-import { ArrowRight, Wrench, Shield, Car, Zap, Check } from 'lucide-react';
+import { ArrowRight, Wrench, Shield, Car, Zap, Check, Flame } from 'lucide-react';
 
 const BASE = '/work/ridge-line-auto';
-const CHARCOAL = '#1C1C1C';
-const RED = '#C0392B';
+const BG = '#0D0D0D';
+const CARD = '#161616';
+const RED = '#E5242A';
 
 const SERVICES = [
   {
-    icon: Wrench,
-    title: 'Oil Changes & Fluid Service',
-    items: ['Conventional oil change — $29', 'Synthetic blend — $49', 'Full synthetic — $69', 'Transmission fluid flush', 'Coolant flush', 'Brake fluid exchange', 'Power steering service'],
-    note: 'Includes multi-point inspection at no extra charge.',
+    icon: Flame,
+    title: 'Engine Tuning & Performance',
+    items: ['Custom dyno mapping & ECU calibration', 'Cold air intake & exhaust upgrades', 'Supercharger & turbo installations', 'Engine building & cylinder head porting', 'Performance camshaft installation'],
+    note: 'Includes baseline dyno run and full safety parameters data logging.',
   },
   {
     icon: Shield,
-    title: 'Brakes & Suspension',
-    items: ['Brake pad replacement — from $149/axle', 'Brake rotor resurfacing or replacement', 'Brake caliper service', 'ABS diagnosis & repair', 'Strut & shock replacement', 'Ball joint & tie rod replacement', 'Wheel bearing replacement'],
-    note: 'All brake work includes road test and written warranty.',
+    title: 'Brake Systems & Upgrades',
+    items: ['Brake pad replacement (performance & OEM) — from $149/axle', 'High-performance slotted/drilled rotors', 'Big brake kit (BBK) installation & fitting', 'Stainless steel braided brake line upgrades', 'Brake system fluid exchange & bleed'],
+    note: 'All braking services carry written 24-month warranties.',
   },
   {
     icon: Car,
-    title: 'Engine & Transmission',
-    items: ['Engine diagnostics (OBD-II & advanced)', 'Timing belt & chain replacement', 'Head gasket repair', 'Valve cover gaskets & seals', 'Transmission service & fluid', 'Transmission rebuild & replacement', 'Clutch replacement (manual)'],
-    note: 'Free loaner vehicle on jobs over $500.',
+    title: 'Suspension Tuning & Setup',
+    items: ['Coilover & lowering spring installations', 'Strut & shock replacement & tuning', 'Performance sway bars & strut brace setups', 'Track alignment & corner balancing', 'Lift kit & leveling setups for offroad/trucks'],
+    note: 'Includes a complimentary 4-wheel road track alignment scan.',
   },
   {
     icon: Zap,
-    title: 'Electrical & Diagnostics',
-    items: ['Battery test & replacement', 'Alternator & starter repair', 'Check engine light diagnosis', 'AC diagnosis & recharge', 'Window, lock & door repairs', 'Headlight & lighting repair', 'Module programming'],
-    note: 'Digital inspection report sent to your phone or email.',
+    title: 'Advanced Diagnostics & Logging',
+    items: ['OBD-II computer scans & error resolution', 'Custom wiring harness repair & re-routing', 'Solenoid, battery & alternator updates', 'A/C charging & climate diagnostics', 'Telemetry & gauge custom integration'],
+    note: 'Full digital diagnostic reports sent directly to your phone.',
   },
   {
     icon: Wrench,
-    title: 'Tires & Wheels',
-    items: ['Tire rotation — $19', 'Wheel alignment — from $79', 'Tire balancing — from $59', 'New tire sales & installation', 'TPMS service & sensor replacement', 'Flat repair', 'Seasonal tire changeover'],
-    note: 'We carry major brands — Cooper, Michelin, BFGoodrich, and more.',
+    title: 'Tires & Track Setup',
+    items: ['Tire rotation & high-speed balance — from $59', 'Track tire sales, mounting & balancing', 'TPMS sensor installation & programming', 'Custom wheel offsets & spacers configuration', 'Performance road-force alignment balancing'],
+    note: 'Direct suppliers of Michelin, Toyo, Nitto, and Pirelli.',
   },
   {
     icon: Shield,
     title: 'Preventive Maintenance',
-    items: ['30/60/90k mile service packages', 'Air & cabin filter replacement', 'Spark plug replacement', 'Fuel injector cleaning', 'Serpentine belt replacement', 'Coolant system inspection', 'Pre-purchase inspection'],
-    note: 'Pre-purchase inspections available for used car buyers.',
+    items: ['30/60/90k mile scheduled maintenance plans', 'Synthetic fluid flushes (coolant, power steering)', 'Iridium spark plug & coil pack replacement', 'Multi-point safety inspection & diagnostics', 'Pre-purchase vehicle inspections'],
+    note: 'Required for warranty preservation on modified vehicles.',
   },
 ];
 
 export default function RidgeLineServices() {
   return (
-    <>
-      <section style={{ backgroundColor: CHARCOAL }} className="py-20 px-6 md:px-12 text-center">
-        <div className="text-[10px] font-black uppercase tracking-[0.5em] mb-4" style={{ color: RED }}>Services & Pricing</div>
-        <h1 className="text-4xl md:text-5xl font-black text-white uppercase mb-5">What We Do</h1>
-        <p className="text-white/45 max-w-xl mx-auto text-sm leading-relaxed">ASE-certified mechanics. Same-day service on most repairs. 24-month/24,000-mile warranty. No repairs without your approval.</p>
+    <div className="overflow-x-hidden" style={{ backgroundColor: BG, color: '#fff' }}>
+      
+      {/* Title Banner */}
+      <section className="py-24 px-6 md:px-12 text-center bg-[#0D0D0D] border-b border-white/5 relative overflow-hidden">
+        <span className="text-[#E5242A] font-mono font-black text-xs tracking-[0.25em] uppercase block mb-4">Services & Pricing</span>
+        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-none uppercase">Precision Engineering</h1>
+        <p className="text-white/50 max-w-xl mx-auto text-sm font-light leading-relaxed">
+          ASE-certified mechanics. Dyno-tested upgrades. 24-month/24,000-mile warranty on all diagnostic and general mechanical work.
+        </p>
       </section>
 
-      <section className="py-16 px-6 md:px-12 bg-gray-50">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
+      {/* Services Grid with unique alternating roundings */}
+      <section className="py-24 px-6 md:px-12 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8">
           {SERVICES.map(({ icon: Icon, title, items, note }, i) => (
-            <div key={i} className="bg-white p-8 border-t-4" style={{ borderTopColor: RED }}>
-              <div className="flex items-center gap-3 mb-5">
-                <Icon className="w-5 h-5 text-gray-300" strokeWidth={1.5} />
-                <h2 className="font-black text-base uppercase tracking-wide" style={{ color: CHARCOAL }}>{title}</h2>
+            <div 
+              key={i} 
+              className={`p-8 border border-white/5 hover:border-[#E5242A]/40 transition-all duration-500 flex flex-col justify-between min-h-[380px] shadow-lg ${
+                i % 2 === 0 ? 'rounded-tl-[40px] rounded-br-[40px]' : 'rounded-tr-[40px] rounded-bl-[40px]'
+              }`}
+              style={{ backgroundColor: CARD }}
+            >
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full border border-[#E5242A]/30 flex items-center justify-center bg-white/5">
+                    <Icon className="w-4.5 h-4.5" style={{ color: RED }} strokeWidth={1.5} />
+                  </div>
+                  <h2 className="font-black text-base text-white uppercase tracking-wide">{title}</h2>
+                </div>
+                <div className="space-y-2.5">
+                  {items.map((item, j) => (
+                    <div key={j} className="flex items-start gap-2.5 text-xs text-white/70 font-light leading-relaxed">
+                      <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="space-y-2 mb-4">
-                {items.map((item, j) => (
-                  <div key={j} className="flex items-start gap-2 text-sm text-gray-600"><Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: RED }} />{item}</div>
-                ))}
+              <div className="text-[10px] font-mono text-white/40 border-t border-white/5 pt-4 mt-6 uppercase tracking-wider">
+                {note}
               </div>
-              <div className="text-xs text-gray-400 border-t pt-3 mt-3">{note}</div>
             </div>
           ))}
         </div>
       </section>
 
-      <section style={{ backgroundColor: CHARCOAL }} className="py-12 px-6 text-center">
-        <p className="text-white/35 text-xs uppercase tracking-widest mb-5">All prices are estimates. Final quote provided after inspection.</p>
-        <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: RED }}>Book Service Appointment <ArrowRight className="w-4 h-4" /></Link>
+      {/* Footer CTA */}
+      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+        <div className="bg-[#E5242A] rounded-tl-[64px] rounded-br-[64px] py-16 px-8 text-center shadow-2xl text-white border border-[#E5242A] relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 pointer-events-none bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=600')" }} />
+          <h2 className="text-3xl font-black text-white mb-4 uppercase">Schedule a professional service slot.</h2>
+          <p className="text-white/85 text-xs font-light mb-8 max-w-sm mx-auto uppercase tracking-wider">ASE Master certified mechanics. Digital health estimates sent directly to you.</p>
+          <div className="pt-2">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#0D0D0D] hover:bg-white hover:text-[#0D0D0D] text-white font-mono font-black uppercase tracking-widest text-[10px] px-10 py-5 transition-all">
+              Request Service Slot <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
       </section>
-    </>
+    </div>
   );
 }
+
