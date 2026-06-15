@@ -122,7 +122,7 @@ export default function GoldenThreadEventsPage() {
         <Link
           href={`${BASE}/contact`}
           className="text-xs font-bold px-5 py-2.5 border transition-colors hover:opacity-80"
-          style={{ borderColor: GOLD, color: GOLD }}
+          style={{ borderColor: GOLD, color: GOLD, boxShadow: '0 2px 12px rgba(0,0,0,0.25)' }}
         >
           Begin Planning
         </Link>
@@ -166,7 +166,7 @@ export default function GoldenThreadEventsPage() {
               <Link
                 href={`${BASE}/contact`}
                 className="px-8 py-4 font-bold text-sm transition-opacity hover:opacity-90"
-                style={{ backgroundColor: GOLD, color: '#0A0A0A' }}
+                style={{ backgroundColor: GOLD, color: '#0A0A0A', boxShadow: '0 6px 28px rgba(212,175,112,0.30)' }}
               >
                 Begin Planning
               </Link>
@@ -191,7 +191,7 @@ export default function GoldenThreadEventsPage() {
             { num: '$2M+', label: 'Budgets Managed' },
             { num: '4.9★', label: 'Average Rating' },
           ].map(({ num, label }) => (
-            <div key={label}>
+            <div key={label} style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.25)' }}>
               <div className="text-5xl font-serif mb-2" style={{ color: GOLD }}>{num}</div>
               <div className="text-xs uppercase tracking-widest" style={{ color: MUTED }}>{label}</div>
             </div>
@@ -215,6 +215,7 @@ export default function GoldenThreadEventsPage() {
                   backgroundColor: CARD,
                   border: '1px solid rgba(212,175,112,0.15)',
                   borderTop: `2px solid ${GOLD}`,
+                  boxShadow: '0 6px 28px rgba(0,0,0,0.35)',
                 }}
               >
                 <h3 className="font-serif text-xl mb-2" style={{ color: CREAM }}>{name}</h3>
@@ -329,7 +330,7 @@ export default function GoldenThreadEventsPage() {
               <div
                 key={name}
                 className="p-8 text-center"
-                style={{ border: '1px solid rgba(212,175,112,0.15)', backgroundColor: BG }}
+                style={{ border: '1px solid rgba(212,175,112,0.15)', backgroundColor: BG, boxShadow: '0 16px 48px rgba(0,0,0,0.45)' }}
               >
                 <div className="flex justify-center gap-1 mb-6">
                   {[...Array(5)].map((_, i) => (

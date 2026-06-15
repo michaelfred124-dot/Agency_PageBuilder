@@ -151,7 +151,7 @@ export default function SpotlessHome() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {PACKAGES.map(({ name, price, per, tag, desc, features }, i) => (
-              <div key={i} className="relative rounded-2xl p-8 flex flex-col" style={{ border: i === 1 ? `2px solid ${GREEN}` : '2px solid #E5E7EB', backgroundColor: i === 1 ? '#ECFDF5' : 'white' }}>
+              <div key={i} className="relative rounded-2xl p-8 flex flex-col" style={{ border: i === 1 ? `2px solid ${GREEN}` : '2px solid #E5E7EB', backgroundColor: i === 1 ? '#ECFDF5' : 'white', boxShadow: '0 6px 28px rgba(0,0,0,0.10)' }}>
                 {tag && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 text-white rounded-full" style={{ backgroundColor: GREEN }}>{tag}</div>
                 )}
@@ -186,7 +186,7 @@ export default function SpotlessHome() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {STEPS.map(({ icon: Icon, step, title, desc }, i) => (
-              <div key={i} className="bg-white rounded-2xl p-8">
+              <div key={i} className="bg-white rounded-2xl p-8" style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.10)' }}>
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style={{ backgroundColor: '#ECFDF5' }}>
                   <Icon className="w-6 h-6" style={{ color: GREEN }} />
                 </div>
@@ -221,18 +221,26 @@ export default function SpotlessHome() {
             <h2 className="font-black text-4xl" style={{ color: BLACK }}>What our clients say.</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {REVIEWS.map((r, i) => (
-              <div key={i} className="rounded-2xl p-7" style={{ backgroundColor: GRAY }}>
+            {REVIEWS.map((r, i) => {
+              const PASTELS = [
+                { bg: '#FCE7F3', border: '#F9A8D4', star: '#EC4899' },
+                { bg: '#EDE9FE', border: '#C4B5FD', star: '#7C3AED' },
+                { bg: '#FEF3C7', border: '#FCD34D', star: '#D97706' },
+              ];
+              const pastel = PASTELS[i % 3];
+              return (
+              <div key={i} className="rounded-2xl p-7" style={{ backgroundColor: pastel.bg, border: `1.5px solid ${pastel.border}`, boxShadow: `0 8px 32px ${pastel.border}55` }}>
                 <div className="flex gap-0.5 mb-4">
-                  {[...Array(r.stars)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: '#F59E0B' }} />)}
+                  {[...Array(r.stars)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: pastel.star }} />)}
                 </div>
                 <p className="text-sm leading-relaxed mb-5" style={{ color: '#374151' }}>"{r.text}"</p>
                 <div>
                   <div className="font-bold text-sm" style={{ color: BLACK }}>{r.author}</div>
-                  <div className="text-xs mt-0.5" style={{ color: MUTED }}>{r.tag}</div>
+                  <div className="text-xs mt-0.5" style={{ color: pastel.star }}>{r.tag}</div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
           <div className="text-center mt-8">
             <Link href={`${BASE}/reviews`} className="text-xs font-bold uppercase tracking-widest" style={{ color: GREEN }}>View All 840+ Reviews <ArrowRight className="w-3 h-3 inline ml-1" /></Link>

@@ -88,7 +88,7 @@ export default function MeridianReviews() {
             </p>
           </div>
           
-          <div className="p-6 border border-[#B8A27A]/25 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] min-w-[240px] shrink-0 text-left">
+          <div className="p-6 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-2xl shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] min-w-[240px] shrink-0 text-left">
             <div className="flex gap-1 mb-2">
               {[...Array(5)].map((_, i) => <Star key={i} className="w-4.5 h-4.5 fill-current text-[#B8A27A]" />)}
             </div>
@@ -99,14 +99,15 @@ export default function MeridianReviews() {
       </section>
 
       {/* REVIEWS BENTO GRID */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6 relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
           {REVIEWS.map((r, i) => {
             const isLarge = r.size === 'lg';
             return (
               <div
                 key={i}
-                className={`p-8 border border-white/85 bg-white/80 backdrop-blur-xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 flex flex-col justify-between text-left ${
+                className={`p-8 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 flex flex-col justify-between text-left ${
                   isLarge ? 'md:col-span-2 min-h-[320px]' : 'md:col-span-1 min-h-[320px]'
                 }`}
               >

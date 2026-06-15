@@ -65,7 +65,7 @@ export default function MaisonBoutique() {
               Sustainably curated women's fashion. Personal styling, included. New arrivals every Thursday.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 font-bold text-xs uppercase tracking-widest px-8 py-4" style={{ backgroundColor: GOLD, color: BG }}>
+              <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 font-bold text-xs uppercase tracking-widest px-8 py-4" style={{ backgroundColor: GOLD, color: BG, boxShadow: '0 6px 28px rgba(197,160,82,0.30)' }}>
                 Shop New Arrivals <ArrowRight className="w-3.5 h-3.5" />
               </Link>
               <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold text-xs uppercase tracking-widest px-8 py-4 border" style={{ borderColor: 'rgba(245,239,227,0.25)', color: CREAM }}>
@@ -166,7 +166,7 @@ export default function MaisonBoutique() {
                 </div>
               ))}
             </div>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold text-xs uppercase tracking-widest px-8 py-4" style={{ backgroundColor: GOLD, color: BG }}>
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold text-xs uppercase tracking-widest px-8 py-4" style={{ backgroundColor: GOLD, color: BG, boxShadow: '0 6px 28px rgba(197,160,82,0.30)' }}>
               Book Styling Session <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -212,7 +212,7 @@ export default function MaisonBoutique() {
               { t: "The best boutique in Nashville. The curation is extraordinary — every piece feels chosen, not curated. Staff is warm and knows fashion deeply.", a: 'Grace M.', s: 'In-Store Visit' },
               { t: "I love that I can shop here knowing every brand is ethical. The quality is real and the styling service makes it feel like a personal experience every time.", a: 'Rachel H.', s: 'Sustainable Collection' },
             ].map((r, i) => (
-              <div key={i} className="p-7" style={{ backgroundColor: CARD }}>
+              <div key={i} className="p-7" style={{ backgroundColor: CARD, boxShadow: '0 16px 48px rgba(0,0,0,0.45)' }}>
                 <div className="flex gap-0.5 mb-4">
                   {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: GOLD }} />)}
                 </div>

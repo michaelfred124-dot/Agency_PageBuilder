@@ -163,7 +163,7 @@ export default function SolsticeYoga() {
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {MEMBERSHIPS.map(({ name, price, note, features, featured }, i) => (
-              <div key={i} className="rounded-2xl p-8" style={{ backgroundColor: featured ? DARK : CREAM }}>
+              <div key={i} className="rounded-2xl p-8" style={{ backgroundColor: featured ? DARK : CREAM, boxShadow: '0 6px 28px rgba(0,0,0,0.10)' }}>
                 <h3 className="font-bold text-sm mb-5 uppercase tracking-widest" style={{ color: featured ? 'rgba(255,255,255,0.5)' : MUTED }}>{name}</h3>
                 <div className="font-serif italic text-5xl mb-1" style={{ color: featured ? WHITE : DARK }}>{price}</div>
                 <div className="text-xs mb-6" style={{ color: featured ? 'rgba(255,255,255,0.4)' : MUTED }}>{note}</div>
@@ -207,13 +207,21 @@ export default function SolsticeYoga() {
               { t: "I walked in as a complete beginner. Within three weeks I understood why people dedicate years to this. The teachers here genuinely care.", a: 'Olivia B.', s: 'Hatha Flow' },
               { t: "The Yin class on Sunday evenings has become non-negotiable for me. It is the only hour in my week where I am completely offline and present.", a: 'David L.', s: 'Yin & Restorative' },
               { t: "Best investment in my health. The unlimited monthly membership pays for itself in one week if you actually use it. I go 4-5 times a week.", a: 'Naomi K.', s: 'Monthly Unlimited' },
-            ].map((r, i) => (
-              <div key={i} className="bg-white p-7 rounded-2xl">
-                <div className="flex gap-0.5 mb-4">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: TERRA }} />)}</div>
+            ].map((r, i) => {
+              const PASTELS = [
+                { bg: '#FCE7F3', border: '#F9A8D4', star: '#EC4899' },
+                { bg: '#EDE9FE', border: '#C4B5FD', star: '#7C3AED' },
+                { bg: '#FEF3C7', border: '#FCD34D', star: '#D97706' },
+              ];
+              const pastel = PASTELS[i % 3];
+              return (
+              <div key={i} className="p-7 rounded-2xl" style={{ backgroundColor: pastel.bg, border: `1.5px solid ${pastel.border}`, boxShadow: `0 8px 32px ${pastel.border}55` }}>
+                <div className="flex gap-0.5 mb-4">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: pastel.star }} />)}</div>
                 <p className="text-sm italic leading-relaxed mb-4" style={{ color: MUTED }}>"{r.t}"</p>
-                <div className="font-bold text-xs" style={{ color: DARK }}>— {r.a} <span className="font-normal" style={{ color: MUTED }}>· {r.s}</span></div>
+                <div className="font-bold text-xs" style={{ color: DARK }}>— {r.a} <span className="font-normal" style={{ color: pastel.star }}>· {r.s}</span></div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

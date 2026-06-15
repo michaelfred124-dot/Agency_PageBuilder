@@ -119,7 +119,7 @@ export default function SterlingHome() {
             <Link
               href={`${BASE}/contact`}
               className="inline-flex items-center gap-2 px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest transition-all rounded-none border border-[#C9A84C]/50 hover:border-[#C9A84C]"
-              style={{ backgroundColor: GOLD, color: '#0A0A0A' }}
+              style={{ backgroundColor: GOLD, color: '#0A0A0A', boxShadow: '0 4px 20px rgba(201,168,76,0.35)' }}
             >
               Schedule Consultation <ArrowRight className="w-4 h-4 text-[#0A0A0A]" />
             </Link>
@@ -160,7 +160,7 @@ export default function SterlingHome() {
 
       {/* STATS STRIP - floating asymmetric panel */}
       <section className="py-12 px-6 md:px-12 max-w-7xl mx-auto">
-        <div className="bg-[#111111] border border-[#C9A84C]/20 rounded-tr-[48px] rounded-bl-[48px] p-12 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center shadow-xl">
+        <div className="bg-[#111111] border border-[#C9A84C]/20 rounded-tr-[48px] rounded-bl-[48px] p-12 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center" style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.35)' }}>
           {[
             ['94.7%', 'Win Rate'],
             ['2,400+', 'Cases Handled'],
@@ -189,10 +189,10 @@ export default function SterlingHome() {
           {AREAS.map(({ icon: Icon, title, desc, items }, i) => (
             <div
               key={title}
-              className={`p-8 border border-[#C9A84C]/15 hover:border-[#C9A84C]/60 flex flex-col justify-between min-h-[480px] shadow-lg transition-all duration-500 group ${
+              className={`p-8 border border-[#C9A84C]/15 hover:border-[#C9A84C]/60 flex flex-col justify-between min-h-[480px] transition-all duration-500 group ${
                 i % 2 === 0 ? 'rounded-tl-[32px] rounded-br-[32px]' : 'rounded-tr-[32px] rounded-bl-[32px]'
               }`}
-              style={{ backgroundColor: CARD }}
+              style={{ backgroundColor: CARD, boxShadow: '0 6px 28px rgba(0,0,0,0.35)' }}
             >
               <div>
                 <div className="w-12 h-12 rounded-full border border-[#C9A84C]/35 flex items-center justify-center mb-6 bg-white/5 transition-colors group-hover:bg-[#C9A84C]/10">
@@ -279,7 +279,7 @@ export default function SterlingHome() {
             { n: '03', title: 'Legal Strategy', desc: 'We build a documented strategy with milestones, resource allocation, and outcome probability modeling.' },
             { n: '04', title: 'Resolution', desc: 'We pursue the optimal outcome with maximum force — negotiated settlement or courtroom verdict.' },
           ].map(({ n, title, desc }) => (
-            <div key={n} className="relative text-center p-6 bg-[#111111]/40 border border-[#C9A84C]/10 rounded-xl hover:border-[#C9A84C]/30 transition-all shadow-sm">
+            <div key={n} className="relative text-center p-6 bg-[#111111]/40 border border-[#C9A84C]/10 rounded-xl hover:border-[#C9A84C]/30 transition-all" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.25)' }}>
               <div className="text-5xl font-mono font-light mb-4" style={{ color: `${GOLD}30` }}>{n}</div>
               <div className="font-bold text-white text-sm mb-2 uppercase tracking-wide">{title}</div>
               <p className="text-xs leading-relaxed text-white/50 font-light">{desc}</p>
@@ -341,8 +341,8 @@ export default function SterlingHome() {
           {TESTIMONIALS.map(({ text, author, company }) => (
             <div
               key={author}
-              className="p-8 border border-[#C9A84C]/15 rounded-tr-3xl rounded-bl-3xl rounded-br-3xl flex flex-col justify-between min-h-[260px] text-left hover:border-[#C9A84C]/40 transition-colors shadow-md"
-              style={{ backgroundColor: CARD }}
+              className="p-8 border border-[#C9A84C]/15 rounded-tr-3xl rounded-bl-3xl rounded-br-3xl flex flex-col justify-between min-h-[260px] text-left hover:border-[#C9A84C]/40 transition-colors"
+              style={{ backgroundColor: CARD, boxShadow: '0 6px 28px rgba(0,0,0,0.35)' }}
             >
               <div>
                 <div className="flex gap-0.5 mb-5">
@@ -372,7 +372,7 @@ export default function SterlingHome() {
         
         <div className="space-y-4">
           {FAQS.map(({ q, a }) => (
-            <details key={q} className="group border border-[#C9A84C]/15 rounded-xl p-6 text-left" style={{ backgroundColor: CARD }}>
+            <details key={q} className="group border border-[#C9A84C]/15 rounded-xl p-6 text-left" style={{ backgroundColor: CARD, boxShadow: '0 2px 12px rgba(0,0,0,0.25)' }}>
               <summary className="flex justify-between cursor-pointer gap-4 list-none">
                 <span className="font-bold text-sm text-white leading-snug">{q}</span>
                 <ChevronDown
@@ -397,7 +397,8 @@ export default function SterlingHome() {
             <div className="pt-6">
               <Link
                 href={`${BASE}/contact`}
-                className="inline-flex items-center gap-3 px-10 py-5 text-xs font-mono font-bold uppercase tracking-widest hover:bg-[#FAF8F2] hover:text-[#0A0A0A] transition-all bg-[#0A0A0A] text-white shadow-xl"
+                className="inline-flex items-center gap-3 px-10 py-5 text-xs font-mono font-bold uppercase tracking-widest hover:bg-[#FAF8F2] hover:text-[#0A0A0A] transition-all bg-[#0A0A0A] text-white"
+                style={{ boxShadow: '0 8px 32px rgba(201,168,76,0.35)' }}
               >
                 Schedule Consultation <ArrowRight className="w-4 h-4" />
               </Link>

@@ -147,7 +147,7 @@ export default function ClarityDental() {
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             {SERVICES.map(({ icon: Icon, title, desc, items }, i) => (
-              <div key={i} className="p-8 rounded-2xl shadow-sm border bg-white" style={{ borderColor: BORDER }}>
+              <div key={i} className="p-8 rounded-2xl border bg-white" style={{ borderColor: BORDER, boxShadow: '0 6px 28px rgba(0,0,0,0.10)' }}>
                 <div className="flex items-start gap-4 mb-5">
                   <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: BLUE + '18' }}>
                     <Icon className="w-5 h-5" style={{ color: BLUE }} strokeWidth={1.5} />
@@ -260,18 +260,34 @@ export default function ClarityDental() {
             <p className="text-sm mt-2" style={{ color: MUTED }}>480+ verified patient reviews</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="p-8 rounded-2xl shadow-sm border" style={{ borderColor: BORDER, backgroundColor: BG }}>
-                <div className="flex gap-0.5 mb-5">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: BLUE }} />)}
+            {TESTIMONIALS.map((t, i) => {
+              const pastels = [
+                { bg: '#FCE7F3', border: '#F9A8D4', star: '#EC4899' },
+                { bg: '#EDE9FE', border: '#C4B5FD', star: '#7C3AED' },
+                { bg: '#FEF3C7', border: '#FCD34D', star: '#D97706' },
+              ];
+              const pastel = pastels[i % 3];
+              return (
+                <div
+                  key={i}
+                  className="p-8 rounded-2xl"
+                  style={{
+                    backgroundColor: pastel.bg,
+                    border: `1.5px solid ${pastel.border}`,
+                    boxShadow: `0 8px 32px ${pastel.border}55`,
+                  }}
+                >
+                  <div className="flex gap-0.5 mb-5">
+                    {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: pastel.star }} />)}
+                  </div>
+                  <p className="text-sm italic leading-relaxed mb-6" style={{ color: MUTED }}>
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+                  <div className="text-sm font-bold" style={{ color: NAVY }}>{t.name}</div>
+                  <div className="text-xs mt-1 px-2.5 py-1 rounded-full inline-block font-bold" style={{ backgroundColor: pastel.border + '44', color: pastel.star }}>{t.note}</div>
                 </div>
-                <p className="text-sm italic leading-relaxed mb-6" style={{ color: MUTED }}>
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <div className="text-sm font-bold" style={{ color: NAVY }}>{t.name}</div>
-                <div className="text-xs mt-1 px-2.5 py-1 rounded-full inline-block font-bold" style={{ backgroundColor: LIGHT, color: BLUE }}>{t.note}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

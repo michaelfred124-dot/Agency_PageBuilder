@@ -163,7 +163,7 @@ export default function RidgeLineHome() {
 
       {/* STATS STRIP - floating asymmetric dark panel */}
       <section className="py-12 px-6 md:px-12 max-w-7xl mx-auto">
-        <div className="bg-[#121212] border border-[#E5242A]/15 rounded-tl-[48px] rounded-br-[48px] p-10 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center shadow-xl relative overflow-hidden">
+        <div className="bg-[#121212] border border-[#E5242A]/15 rounded-tl-[48px] rounded-br-[48px] p-10 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center relative overflow-hidden" style={{ boxShadow: '0 6px 28px rgba(0,0,0,0.35)' }}>
           {/* Subtle background image texture */}
           <div className="absolute inset-0 opacity-5 pointer-events-none bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=600')" }} />
           {[
@@ -194,10 +194,10 @@ export default function RidgeLineHome() {
           {SERVICES.map(({ n, title, price, icon: Icon, items }, i) => (
             <div
               key={title}
-              className={`p-8 border border-white/5 hover:border-[#E5242A]/40 flex flex-col justify-between min-h-[460px] shadow-lg transition-all duration-500 group ${
+              className={`p-8 border border-white/5 hover:border-[#E5242A]/40 flex flex-col justify-between min-h-[460px] transition-all duration-500 group ${
                 i % 2 === 0 ? 'rounded-tl-[32px] rounded-br-[32px]' : 'rounded-tr-[32px] rounded-bl-[32px]'
               }`}
-              style={{ backgroundColor: CARD }}
+              style={{ backgroundColor: CARD, boxShadow: '0 6px 28px rgba(0,0,0,0.35)' }}
             >
               <div>
                 <div className="flex justify-between items-start mb-6">

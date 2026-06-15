@@ -86,11 +86,12 @@ export default function MeridianProperties() {
     <div style={{ backgroundColor: BG, color: SLATE }} className="overflow-x-hidden pb-12">
 
       {/* HERO BENTO GRID */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12 relative">
+        <div className="absolute inset-0 opacity-[0.06] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
           
           {/* Box 1: Hero Text & Call to Action (Spans 2 columns, 2 rows) */}
-          <div className="md:col-span-2 md:row-span-2 p-10 md:p-16 border border-white/85 bg-white/80 backdrop-blur-xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 flex flex-col justify-between min-h-[460px] text-left">
+          <div className="md:col-span-2 md:row-span-2 p-10 md:p-16 border border-white/70 bg-white/50 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 flex flex-col justify-between min-h-[460px] text-left">
             <div>
               <span className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-[#B8A27A] block mb-6">
                 ESTABLISHED 2008 &nbsp;·&nbsp; NASHVILLE, TN
@@ -133,7 +134,7 @@ export default function MeridianProperties() {
           </div>
 
           {/* Box 3: Horizontal Search Filter Bar (Spans 3 columns) */}
-          <div className="md:col-span-3 p-6 border border-[#B8A27A]/25 bg-white/80 backdrop-blur-xl rounded-[24px] shadow-[0_20px_50px_-12px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/50 hover:shadow-[0_25px_55px_-10px_rgba(31,36,46,0.08)] transition-all duration-500 flex flex-col lg:flex-row gap-6 items-center">
+          <div className="md:col-span-3 p-6 border border-[#B8A27A]/25 bg-white/55 backdrop-blur-2xl rounded-[24px] shadow-[0_20px_50px_-12px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/50 hover:shadow-[0_25px_55px_-10px_rgba(31,36,46,0.08)] transition-all duration-500 flex flex-col lg:flex-row gap-6 items-center">
             <div className="flex-1 w-full text-left">
               <div className="flex items-center gap-2 text-[#B8A27A] mb-1">
                 <MapPin className="w-3.5 h-3.5" />
@@ -186,8 +187,9 @@ export default function MeridianProperties() {
       </section>
 
       {/* HOUSE GALLERY / AVAILABLE UNITS */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 text-left">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600')" }} />
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 text-left relative z-10">
           <div>
             <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Portfolio</span>
             <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Available Units</h2>
@@ -197,9 +199,9 @@ export default function MeridianProperties() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
           {LISTINGS.map((p, i) => (
-            <Link href={`${BASE}/contact?property=${encodeURIComponent(p.address)}`} key={i} className="group block overflow-hidden rounded-[24px] border border-white/85 bg-white/85 backdrop-blur-md shadow-[0_10px_30px_-5px_rgba(31,36,46,0.04)] hover:shadow-[0_25px_50px_-12px_rgba(31,36,46,0.1)] hover:border-[#B8A27A]/30 transition-all duration-500">
+            <Link href={`${BASE}/contact?property=${encodeURIComponent(p.address)}`} key={i} className="group block overflow-hidden rounded-[24px] border border-white/70 bg-white/55 backdrop-blur-2xl shadow-[0_10px_30px_-5px_rgba(31,36,46,0.04)] hover:shadow-[0_25px_50px_-12px_rgba(31,36,46,0.1)] hover:border-[#B8A27A]/30 transition-all duration-500">
               <div className="relative h-56 overflow-hidden">
                 <Image src={p.img} alt={p.address} fill className="object-cover group-hover:scale-103 transition-transform duration-500" referrerPolicy="no-referrer" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -216,15 +218,16 @@ export default function MeridianProperties() {
       </section>
 
       {/* SERVICES - Bento Columns */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
-        <div className="text-center mb-16">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1600')" }} />
+        <div className="text-center mb-16 relative z-10">
           <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Our Services</span>
           <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Luxury Representation</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
           {SERVICES.map(({ icon: Icon, title, desc, items }, i) => (
-            <div key={i} className="p-8 border border-white/80 bg-gradient-to-b from-white/90 to-white/70 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] text-left flex flex-col justify-between min-h-[320px] group hover:border-[#B8A27A]/40 transition-all duration-500">
+            <div key={i} className="p-8 border border-white/70 bg-gradient-to-b from-white/70 to-white/50 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] text-left flex flex-col justify-between min-h-[320px] group hover:border-[#B8A27A]/40 transition-all duration-500">
               <div>
                 <div className="w-10 h-10 rounded-full bg-[#B8A27A]/10 flex items-center justify-center mb-6">
                   <Icon className="w-4.5 h-4.5 text-[#B8A27A]" strokeWidth={1.5} />
@@ -245,15 +248,16 @@ export default function MeridianProperties() {
       </section>
 
       {/* AGENTS BENTO */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
-        <div className="text-center mb-16">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1600')" }} />
+        <div className="text-center mb-16 relative z-10">
           <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Our Team</span>
           <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Luxury Advisors</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
           {AGENTS.map((agent, i) => (
-            <div key={i} className="p-6 border border-[#B8A27A]/15 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-center">
+            <div key={i} className="p-6 border border-[#B8A27A]/15 bg-gradient-to-br from-white/70 to-[#B8A27A]/5 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-center">
               <div className="relative w-44 h-44 rounded-full overflow-hidden mx-auto mb-6 shadow-md border-2 border-white">
                 <Image src={agent.img} alt={agent.name} fill className="object-cover filter grayscale hover:grayscale-0 transition-all duration-700" referrerPolicy="no-referrer" />
               </div>
@@ -266,11 +270,12 @@ export default function MeridianProperties() {
       </section>
 
       {/* TESTIMONIALS & FAQ - Combined Bento Grid */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left relative z-10">
           
           {/* Testimonials (Spans 1 Column, 2 Rows) */}
-          <div className="md:col-span-1 md:row-span-2 p-8 border border-white/80 bg-white/80 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 flex flex-col justify-between min-h-[420px]">
+          <div className="md:col-span-1 md:row-span-2 p-8 border border-white/70 bg-white/55 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 flex flex-col justify-between min-h-[420px]">
             <div>
               <span className="text-[#B8A27A] font-mono font-bold text-[9px] tracking-widest uppercase block mb-6">Client Experience</span>
               <div className="flex gap-0.5 mb-6">
@@ -293,7 +298,7 @@ export default function MeridianProperties() {
           </div>
 
           {/* FAQs (Spans 2 Columns) */}
-          <div className="md:col-span-2 p-8 border border-white/80 bg-white/80 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] transition-all duration-500 flex flex-col justify-between">
+          <div className="md:col-span-2 p-8 border border-white/70 bg-white/55 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] transition-all duration-500 flex flex-col justify-between">
             <div>
               <span className="text-[#B8A27A] font-mono font-bold text-[9px] tracking-widest uppercase block mb-6">Common Inquiries</span>
               <h3 className="text-xl font-serif text-[#1F242E] mb-6 tracking-tight">Frequently Asked Questions</h3>
@@ -314,7 +319,7 @@ export default function MeridianProperties() {
           </div>
 
           {/* Trust Factors - Bento card (Spans 2 columns) */}
-          <div className="md:col-span-2 p-8 border border-[#B8A27A]/20 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <div className="md:col-span-2 p-8 border border-[#B8A27A]/20 bg-gradient-to-br from-white/70 to-[#B8A27A]/5 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             <div className="text-left md:col-span-2">
               <div className="text-[#B8A27A] font-mono text-[9px] uppercase tracking-wider mb-2">Accreditation</div>
               <h4 className="text-md font-serif font-black text-[#1F242E]">Certified Luxury Home Marketing Specialists</h4>

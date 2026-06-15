@@ -186,7 +186,7 @@ export default function PawsAndPamperPage() {
               <div
                 key={name}
                 className="p-8 rounded-2xl"
-                style={{ backgroundColor: CARD, border: '1px solid rgba(126,168,122,0.2)' }}
+                style={{ backgroundColor: CARD, border: '1px solid rgba(126,168,122,0.2)', boxShadow: '0 6px 28px rgba(0,0,0,0.10)' }}
               >
                 <div className="flex items-start justify-between mb-5">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(126,168,122,0.15)' }}>
@@ -307,26 +307,38 @@ export default function PawsAndPamperPage() {
             <h2 className="text-4xl font-serif" style={{ color: CREAM }}>What pet parents say.</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map(({ quote, owner, dog, service }) => (
-              <div
-                key={owner}
-                className="p-8 rounded-2xl"
-                style={{ backgroundColor: CARD, border: '1px solid rgba(126,168,122,0.15)' }}
-              >
-                <div className="flex gap-1 mb-5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" style={{ color: SAGE }} />
-                  ))}
+            {TESTIMONIALS.map(({ quote, owner, dog, service }, i) => {
+              const pastels = [
+                { bg: '#FCE7F3', border: '#F9A8D4', star: '#EC4899' },
+                { bg: '#EDE9FE', border: '#C4B5FD', star: '#7C3AED' },
+                { bg: '#FEF3C7', border: '#FCD34D', star: '#D97706' },
+              ];
+              const pastel = pastels[i % 3];
+              return (
+                <div
+                  key={owner}
+                  className="p-8 rounded-2xl"
+                  style={{
+                    backgroundColor: pastel.bg,
+                    border: `1.5px solid ${pastel.border}`,
+                    boxShadow: `0 8px 32px ${pastel.border}55`,
+                  }}
+                >
+                  <div className="flex gap-1 mb-5">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} className="w-4 h-4 fill-current" style={{ color: pastel.star }} />
+                    ))}
+                  </div>
+                  <p className="font-serif italic text-base leading-relaxed mb-6" style={{ color: '#1E3020' }}>
+                    &ldquo;{quote}&rdquo;
+                  </p>
+                  <div>
+                    <p className="font-bold text-sm" style={{ color: '#1E3020' }}>{owner} &mdash; {dog}</p>
+                    <p className="text-xs mt-1 font-bold" style={{ color: pastel.star }}>{service}</p>
+                  </div>
                 </div>
-                <p className="font-serif italic text-base leading-relaxed mb-6" style={{ color: CREAM }}>
-                  &ldquo;{quote}&rdquo;
-                </p>
-                <div>
-                  <p className="font-bold text-sm" style={{ color: CREAM }}>{owner} &mdash; {dog}</p>
-                  <p className="text-xs mt-1" style={{ color: MUTED }}>{service}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

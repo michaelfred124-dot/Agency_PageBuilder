@@ -36,11 +36,12 @@ export default function MeridianContact() {
       </section>
 
       {/* CONTACT BENTO GRID */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6 relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
           
           {/* Card 1: Form intake (Spans 2 columns) */}
-          <div className="lg:col-span-2 p-10 border border-white/85 bg-white/85 backdrop-blur-xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 text-left min-h-[500px]">
+          <div className="lg:col-span-2 p-10 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 text-left min-h-[500px]">
             {sent ? (
               <div className="flex flex-col items-center justify-center text-center h-full py-16">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6 bg-[#B8A27A]/15 border border-[#B8A27A]/30">
@@ -74,7 +75,7 @@ export default function MeridianContact() {
                       required
                       value={form.name}
                       onChange={e => setForm({ ...form, name: e.target.value })}
-                      className="w-full bg-white/60 border border-black/10 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all shadow-inner"
+                      className="w-full bg-white/45 backdrop-blur-md border border-white/80 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all shadow-inner"
                       placeholder="Your full name"
                     />
                   </div>
@@ -83,7 +84,7 @@ export default function MeridianContact() {
                     <input
                       value={form.phone}
                       onChange={e => setForm({ ...form, phone: e.target.value })}
-                      className="w-full bg-white/60 border border-black/10 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all shadow-inner"
+                      className="w-full bg-white/45 backdrop-blur-md border border-white/80 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all shadow-inner"
                       placeholder="(615) 555-0000"
                     />
                   </div>
@@ -96,7 +97,7 @@ export default function MeridianContact() {
                     type="email"
                     value={form.email}
                     onChange={e => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-white/40 border border-black/10 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all"
+                    className="w-full bg-white/45 backdrop-blur-md border border-white/80 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all"
                     placeholder="you@email.com"
                   />
                 </div>
@@ -108,7 +109,7 @@ export default function MeridianContact() {
                       required
                       value={form.service}
                       onChange={e => setForm({ ...form, service: e.target.value })}
-                      className="w-full bg-white/40 border border-black/10 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-600 transition-all appearance-none"
+                      className="w-full bg-white/45 backdrop-blur-md border border-white/80 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-650 transition-all appearance-none"
                     >
                       <option value="">Select service...</option>
                       {['Buy a Home', 'Sell My Home', 'Both — Buy & Sell', 'Investment Portfolio Advisory', 'Commercial Syndicates', 'General Consultation'].map(o => (
@@ -121,7 +122,7 @@ export default function MeridianContact() {
                     <input
                       value={form.budget}
                       onChange={e => setForm({ ...form, budget: e.target.value })}
-                      className="w-full bg-white/60 border border-black/10 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all shadow-inner"
+                      className="w-full bg-white/45 backdrop-blur-md border border-white/80 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all shadow-inner"
                       placeholder="e.g. $1M – $3M+"
                     />
                   </div>
@@ -133,7 +134,7 @@ export default function MeridianContact() {
                     value={form.message}
                     onChange={e => setForm({ ...form, message: e.target.value })}
                     rows={4}
-                    className="w-full bg-white/40 border border-black/10 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all resize-none"
+                    className="w-full bg-white/45 backdrop-blur-md border border-white/80 focus:border-[#B8A27A] focus:ring-1 focus:ring-[#B8A27A] rounded-xl outline-none px-4 py-3.5 text-xs text-gray-800 placeholder-gray-400 transition-all resize-none"
                     placeholder="Timeline, specific properties, or area considerations..."
                   />
                 </div>
@@ -153,7 +154,7 @@ export default function MeridianContact() {
           <div className="space-y-6 lg:col-span-1">
             
             {/* Card 2: Contact Details */}
-            <div className="p-8 border border-[#B8A27A]/15 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left">
+            <div className="p-8 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left">
               <span className="text-[9px] font-mono text-[#B8A27A] uppercase tracking-widest font-black block mb-6">Brokerage Office</span>
               <div className="space-y-6">
                 <div className="flex gap-4">
@@ -195,7 +196,7 @@ export default function MeridianContact() {
             </div>
 
             {/* Card 3: Office Hours */}
-            <div className="p-8 border border-white/85 bg-white/80 backdrop-blur-xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] transition-all duration-500 text-left">
+            <div className="p-8 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] transition-all duration-500 text-left">
               <span className="text-[9px] font-mono text-[#B8A27A] uppercase tracking-widest font-black block mb-4">Availability</span>
               <div className="space-y-3 text-xs">
                 <div className="flex justify-between border-b border-black/5 pb-2">

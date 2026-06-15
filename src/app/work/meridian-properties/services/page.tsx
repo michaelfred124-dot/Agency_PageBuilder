@@ -82,11 +82,12 @@ export default function MeridianServices() {
       </section>
 
       {/* SERVICES BENTO GRID */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6 relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
           
           {/* Card 1: Buyer Representation (Spans 2 columns) */}
-          <div className="lg:col-span-2 p-10 border border-white/85 bg-white/85 backdrop-blur-xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 grid md:grid-cols-2 gap-8 items-center min-h-[380px]">
+          <div className="lg:col-span-2 p-10 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 grid md:grid-cols-2 gap-8 items-center min-h-[380px]">
             <div className="text-left flex flex-col justify-between h-full py-2">
               <div>
                 <div className="w-10 h-10 rounded-full bg-[#B8A27A]/10 flex items-center justify-center mb-6">
@@ -116,7 +117,7 @@ export default function MeridianServices() {
           </div>
 
           {/* Card 2: Seller Marketing (Spans 1 column) */}
-          <div className="p-8 border border-[#B8A27A]/15 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left flex flex-col justify-between min-h-[380px]">
+          <div className="p-8 border border-white/70 bg-white/40 backdrop-blur-2xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left flex flex-col justify-between min-h-[380px]">
             <div>
               <div className="w-10 h-10 rounded-full bg-[#B8A27A]/10 flex items-center justify-center mb-6">
                 <TrendingUp className="w-4.5 h-4.5 text-[#B8A27A]" strokeWidth={1.5} />
@@ -141,7 +142,7 @@ export default function MeridianServices() {
           </div>
 
           {/* Card 3: Investment Advisory (Spans 1 column) */}
-          <div className="p-8 border border-[#B8A27A]/15 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left flex flex-col justify-between min-h-[380px]">
+          <div className="p-8 border border-white/70 bg-white/40 backdrop-blur-2xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left flex flex-col justify-between min-h-[380px]">
             <div>
               <div className="w-10 h-10 rounded-full bg-[#B8A27A]/10 flex items-center justify-center mb-6">
                 <Building className="w-4.5 h-4.5 text-[#B8A27A]" strokeWidth={1.5} />
@@ -166,7 +167,7 @@ export default function MeridianServices() {
           </div>
 
           {/* Card 4: Areas We Serve (Spans 2 columns) */}
-          <div className="lg:col-span-2 p-10 border border-white/85 bg-white/80 backdrop-blur-xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 text-left flex flex-col justify-between min-h-[380px]">
+          <div className="lg:col-span-2 p-10 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 text-left flex flex-col justify-between min-h-[380px]">
             <div>
               <div className="flex items-center gap-2 text-[#B8A27A] mb-3">
                 <MapPin className="w-4 h-4" />
@@ -178,7 +179,7 @@ export default function MeridianServices() {
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {NEIGHBORHOODS.map((n, i) => (
-                  <div key={i} className="p-4 bg-white/65 border border-white/80 rounded-2xl shadow-[0_4px_15px_rgba(31,36,46,0.02)] flex flex-col justify-between hover:border-[#B8A27A]/30 transition-all duration-300">
+                  <div key={i} className="p-4 bg-white/40 border border-white/60 rounded-2xl shadow-[0_4px_15px_rgba(31,36,46,0.02)] flex flex-col justify-between hover:border-[#B8A27A]/30 transition-all duration-300">
                     <div>
                       <div className="text-[9px] font-mono text-[#B8A27A] uppercase tracking-wider font-bold mb-1">{n.tag}</div>
                       <div className="font-bold text-xs text-[#1F242E] uppercase">{n.name}</div>

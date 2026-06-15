@@ -62,11 +62,12 @@ export default function MeridianAbout() {
       </section>
 
       {/* BENTO GRID: STORY & CREDENTIALS */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6 relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
           
           {/* Card 1: Our Story (Spans 2 columns) */}
-          <div className="lg:col-span-2 p-10 border border-white/85 bg-white/80 backdrop-blur-xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 text-left flex flex-col justify-between min-h-[380px]">
+          <div className="lg:col-span-2 p-10 border border-white/70 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 text-left flex flex-col justify-between min-h-[380px]">
             <div>
               <span className="text-[9px] font-mono text-[#B8A27A] uppercase tracking-widest font-black block mb-4">The Boutique Model</span>
               <h2 className="text-3xl font-serif text-[#1F242E] mb-6">Uncompromising service, by design.</h2>
@@ -132,7 +133,7 @@ export default function MeridianAbout() {
           </div>
 
           {/* Card 4: Credentials (Spans 2 columns) */}
-          <div className="lg:col-span-2 p-10 border border-[#B8A27A]/20 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left flex flex-col justify-between min-h-[300px]">
+          <div className="lg:col-span-2 p-10 border border-[#B8A27A]/20 bg-gradient-to-br from-white/70 to-[#B8A27A]/5 backdrop-blur-2xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left flex flex-col justify-between min-h-[300px]">
             <div>
               <span className="text-[9px] font-mono text-[#B8A27A] uppercase tracking-widest font-black block mb-4">Accreditation</span>
               <h2 className="text-2xl font-serif text-[#1F242E] mb-6">Industry Certification & Credentials</h2>
@@ -153,15 +154,16 @@ export default function MeridianAbout() {
       </section>
 
       {/* TEAM SECTION */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12">
-        <div className="text-center mb-12">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12 relative">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600')" }} />
+        <div className="text-center mb-12 relative z-10">
           <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Our Team</span>
           <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">The Advisors</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
           {TEAM.map((agent, i) => (
-            <div key={i} className="p-8 border border-[#B8A27A]/15 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left flex flex-col justify-between min-h-[460px]">
+            <div key={i} className="p-8 border border-[#B8A27A]/15 bg-gradient-to-br from-white/70 to-[#B8A27A]/5 backdrop-blur-2xl rounded-[32px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-left flex flex-col justify-between min-h-[460px]">
               <div>
                 <div className="relative w-32 h-32 rounded-full overflow-hidden mb-6 border-2 border-white shadow-sm">
                   <Image
