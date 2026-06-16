@@ -24,7 +24,7 @@ export default function ValleyProHomeAbout() {
     <>
       <section style={{ backgroundColor: GREEN }} className="py-20 px-6 md:px-12 text-center">
         <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>About Valley ProHome</div>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-5">18 Years. 12,000+ Projects. One Standard.</h1>
+        <h1 className="text-4xl md:text-5xl text-white mb-5" style={{ fontFamily: 'var(--font-display)', fontWeight: 900 }}>18 Years. 12,000+ Projects. One Standard.</h1>
         <p className="text-white/50 max-w-xl mx-auto leading-relaxed">Founded in 2006 by master plumber Hector Morales, Valley ProHome has grown into Phoenix metro's most trusted multi-trade home services contractor.</p>
       </section>
 
@@ -32,7 +32,7 @@ export default function ValleyProHomeAbout() {
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GREEN }}>Our Story</div>
-            <h2 className="text-3xl font-bold mb-5" style={{ color: GREEN }}>Built on a handshake and a reputation.</h2>
+            <h2 className="text-3xl mb-5" style={{ fontFamily: 'var(--font-display)', fontWeight: 900 }} style={{ color: GREEN }}>Built on a handshake and a reputation.</h2>
             <p className="text-gray-500 leading-relaxed mb-4">Hector Morales started Valley ProHome with a service van, a set of tools, and a commitment to do every job right the first time. His first clients were his neighbors. They told their friends. The friends told theirs.</p>
             <p className="text-gray-500 leading-relaxed mb-4">Today, Valley ProHome has 35 licensed tradespeople covering plumbing, electrical, HVAC, roofing, and general repairs across the entire Phoenix metro area. We still answer every call personally.</p>
             <p className="text-gray-500 leading-relaxed mb-6">In 18 years, we have never missed an emergency call window and have maintained a 4.8-star rating on 600+ Google reviews.</p>
@@ -50,7 +50,7 @@ export default function ValleyProHomeAbout() {
 
       <section style={{ backgroundColor: GREEN }} className="py-20 px-6 md:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12"><div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>The Team</div><h2 className="text-4xl font-bold text-white">Who Does the Work</h2></div>
+          <div className="text-center mb-12"><div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GOLD }}>The Team</div><h2 className="text-4xl text-white" style={{ fontFamily: 'var(--font-display)', fontWeight: 900 }}>Who Does the Work</h2></div>
           <div className="grid md:grid-cols-3 gap-6">
             {TEAM.map((m, i) => (
               <div key={i} className="bg-white/5 border border-white/15">
@@ -85,7 +85,7 @@ export default function ValleyProHomeAbout() {
       </section>
 
       <section style={{ backgroundColor: GOLD }} className="py-14 px-6 text-center">
-        <h2 className="text-2xl font-bold mb-4" style={{ color: '#1A0F00' }}>Free estimate. Same-week scheduling.</h2>
+        <h2 className="text-2xl mb-4" style={{ fontFamily: 'var(--font-display)', fontWeight: 900 }} style={{ color: '#1A0F00' }}>Free estimate. Same-week scheduling.</h2>
         <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: GREEN }}>Request Free Estimate <ArrowRight className="w-4 h-4" /></Link>
       </section>
     </>
