@@ -148,7 +148,7 @@ export default function PawsAndPamperServices() {
             <div
               key={i}
               style={{ backgroundColor: WHITE }}
-              className="rounded-2xl overflow-hidden border-2"
+              className="rounded-2xl overflow-hidden"
               style={{ backgroundColor: WHITE, border: `2px solid ${TEAL}22` }}
             >
               {/* Card Header */}
