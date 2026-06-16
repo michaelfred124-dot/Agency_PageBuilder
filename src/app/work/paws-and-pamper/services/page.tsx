@@ -1,40 +1,60 @@
 import Link from 'next/link';
-import { ArrowRight, ShowerHead, Scissors, Heart, Zap, Check } from 'lucide-react';
+import { ArrowRight, ShowerHead, Scissors, Heart, Zap, Check, Star } from 'lucide-react';
 
 const BASE = '/work/paws-and-pamper';
 const TEAL = '#0D9488';
-const DARK = '#134E4A';
-const LIGHT = '#F0FDFA';
+const FOREST = '#134E4A';
+const SKY = '#F0FDFA';
+const WARM = '#FEF3C7';
+const WHITE = '#FFFFFF';
 
 const SERVICES = [
   {
     icon: ShowerHead,
     title: 'Bath & Brush',
-    desc: 'Perfect for dogs who need freshening up between full grooms.',
+    emoji: '🛁',
+    desc: 'Perfect for dogs who need freshening up between full grooms. We use gentle, all-natural shampoos and take the time to properly brush out every coat type.',
     items: [
-      { name: 'Small (under 20 lbs)', price: '$45' },
-      { name: 'Medium (20–50 lbs)', price: '$65' },
-      { name: 'Large (50–80 lbs)', price: '$85' },
-      { name: 'X-Large (80+ lbs)', price: '$105+' },
+      { name: 'XS — under 10 lbs', price: '$38' },
+      { name: 'Small — 10–20 lbs', price: '$45' },
+      { name: 'Medium — 20–50 lbs', price: '$65' },
+      { name: 'Large — 50–80 lbs', price: '$85' },
+      { name: 'XL — 80+ lbs', price: '$105+' },
     ],
-    includes: ['Gentle shampoo & rinse', 'Blow dry & brush out', 'Ear cleaning', 'Spritz of cologne/deodorant'],
+    includes: [
+      'Gentle all-natural shampoo & rinse',
+      'Hand dry or low-heat air dry (no cage)',
+      'Thorough brush out',
+      'Ear cleaning',
+      'Spritz of natural deodorant',
+    ],
   },
   {
     icon: Scissors,
     title: 'Full Groom',
-    desc: 'A complete grooming experience with breed-appropriate styling.',
+    emoji: '✂️',
+    desc: 'A complete grooming experience from snout to tail with breed-appropriate styling. Our most popular service — your dog comes home looking and smelling incredible.',
     items: [
-      { name: 'Small (under 20 lbs)', price: '$70' },
-      { name: 'Medium (20–50 lbs)', price: '$95' },
-      { name: 'Large (50–80 lbs)', price: '$120' },
-      { name: 'X-Large (80+ lbs)', price: '$145+' },
+      { name: 'XS — under 10 lbs', price: '$58' },
+      { name: 'Small — 10–20 lbs', price: '$70' },
+      { name: 'Medium — 20–50 lbs', price: '$95' },
+      { name: 'Large — 50–80 lbs', price: '$120' },
+      { name: 'XL — 80+ lbs', price: '$145+' },
     ],
-    includes: ['Everything in Bath & Brush', 'Breed-specific haircut', 'Nail trim & filing', 'Bandana or bow', 'Teeth brushing add-on available'],
+    includes: [
+      'Everything in Bath & Brush',
+      'Breed-specific haircut & styling',
+      'Nail trim & filing (smooth edges)',
+      'Bandana or bow of choice',
+      'Teeth brushing add-on available',
+      'Photo text when ready',
+    ],
   },
   {
     icon: Heart,
     title: 'Spa Add-Ons',
-    desc: 'Treat your dog to a little extra luxury.',
+    emoji: '💆',
+    desc: 'Treat your dog to a little extra luxury. All add-ons use natural, non-toxic products and can be added to any bath or groom service.',
     items: [
       { name: 'Paw Balm Treatment', price: '$12' },
       { name: 'Blueberry Facial', price: '$15' },
@@ -43,12 +63,18 @@ const SERVICES = [
       { name: 'De-Shed Treatment', price: '$20+' },
       { name: 'Aromatherapy Rinse', price: '$12' },
     ],
-    includes: ['Can be added to any service', 'Calming essential oil options', 'Natural, non-toxic products only'],
+    includes: [
+      'Combinable with any service',
+      'Calming essential oil options available',
+      'Natural, non-toxic products only',
+      'Great for anxious dogs',
+    ],
   },
   {
     icon: Zap,
     title: 'Express Services',
-    desc: 'Quick services available while you wait.',
+    emoji: '⚡',
+    desc: 'Quick, focused services available while you wait. No full appointment needed — just call ahead so we can get your pup in and out comfortably.',
     items: [
       { name: 'Nail Trim', price: '$18' },
       { name: 'Nail Grind (Dremel)', price: '$22' },
@@ -56,7 +82,12 @@ const SERVICES = [
       { name: 'Anal Gland Expression', price: '$18' },
       { name: 'Quick Brush-Out', price: '$20+' },
     ],
-    includes: ['No appointment needed for nail trims (call ahead)', 'Anxiety-sensitive handling', 'Takes 15–30 minutes'],
+    includes: [
+      'No appointment for nail trims (call ahead)',
+      'Anxiety-sensitive, gentle handling',
+      'Takes 15–30 minutes',
+      'Perfect between full grooms',
+    ],
   },
 ];
 
@@ -68,54 +99,190 @@ const POLICIES = [
   '24-hour cancellation required. Late cancellations may be charged 50% of service.',
 ];
 
+const FEAR_FREE_POINTS = [
+  'We never restrain excessively or use force',
+  'High-value treats used throughout (bring your dog\'s favorites!)',
+  'Calming music and aromatherapy in the studio',
+  'We take breaks whenever your dog needs one',
+  'Dogs who need it get "happy visits" before their first groom',
+];
+
 export default function PawsAndPamperServices() {
   return (
     <>
-      <section style={{ backgroundColor: DARK }} className="py-20 px-6 md:px-12 text-center">
-        <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4 text-teal-400">Services & Pricing</div>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-5">Grooming Menu</h1>
-        <p className="text-white/45 max-w-xl mx-auto text-sm leading-relaxed">Fear-free certified grooming for dogs of all breeds and sizes. All-natural products. No cage drying.</p>
+      {/* Page Header */}
+      <section
+        className="py-24 px-6 md:px-12 relative overflow-hidden"
+        style={{ background: `linear-gradient(135deg, ${FOREST} 0%, ${TEAL} 100%)` }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
+            style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
+          >
+            <Scissors className="w-3.5 h-3.5 text-white" strokeWidth={2} />
+            <span
+              className="text-[10px] font-bold uppercase tracking-[0.4em] text-white"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              Services & Pricing
+            </span>
+          </div>
+          <h1
+            className="text-5xl md:text-6xl text-white mb-6 leading-tight"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}
+          >
+            Grooming Menu
+          </h1>
+          <p className="text-white/70 max-w-xl leading-relaxed text-base">
+            Fear-free certified grooming for dogs of all breeds and sizes. All-natural products. No cage drying.
+            Every dog treated like the VIP they are.
+          </p>
+        </div>
       </section>
 
-      <section style={{ backgroundColor: LIGHT }} className="py-16 px-6 md:px-12">
+      {/* Services Grid */}
+      <section style={{ backgroundColor: SKY }} className="py-16 px-6 md:px-12">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
-          {SERVICES.map(({ icon: Icon, title, desc, items, includes }, i) => (
-            <div key={i} className="bg-white p-8 border-t-4" style={{ borderTopColor: TEAL }}>
-              <div className="flex items-center gap-3 mb-2">
-                <Icon className="w-5 h-5" style={{ color: TEAL }} strokeWidth={1.5} />
-                <h2 className="font-bold text-base" style={{ color: DARK }}>{title}</h2>
+          {SERVICES.map(({ icon: Icon, title, emoji, desc, items, includes }, i) => (
+            <div
+              key={i}
+              style={{ backgroundColor: WHITE }}
+              className="rounded-2xl overflow-hidden border-2"
+              style={{ backgroundColor: WHITE, border: `2px solid ${TEAL}22` }}
+            >
+              {/* Card Header */}
+              <div
+                className="px-8 pt-7 pb-5 flex items-center gap-3"
+                style={{ backgroundColor: SKY }}
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: TEAL }}
+                >
+                  <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h2
+                    className="text-lg leading-tight"
+                    style={{ color: FOREST, fontFamily: 'var(--font-display)', fontWeight: 800 }}
+                  >
+                    {title}
+                  </h2>
+                  <p className="text-xs text-gray-400 mt-0.5">{desc}</p>
+                </div>
               </div>
-              <p className="text-xs text-gray-400 mb-5">{desc}</p>
-              <div className="space-y-2 mb-5">
-                {items.map((item, j) => (
-                  <div key={j} className="flex justify-between items-center py-1.5 border-b border-gray-50 last:border-0">
-                    <span className="text-sm text-gray-600">{item.name}</span>
-                    <span className="font-bold text-xs" style={{ color: TEAL }}>{item.price}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="border-t pt-4 space-y-1.5">
-                {includes.map((item, j) => (
-                  <div key={j} className="flex items-center gap-2 text-xs text-gray-500"><Check className="w-3 h-3 shrink-0" style={{ color: TEAL }} />{item}</div>
-                ))}
+
+              <div className="px-8 py-6">
+                {/* Pricing by size */}
+                <div
+                  className="text-[10px] font-bold uppercase tracking-widest mb-3"
+                  style={{ color: TEAL, fontFamily: 'var(--font-display)' }}
+                >
+                  Pricing by Size
+                </div>
+                <div className="space-y-1 mb-6">
+                  {items.map((item, j) => (
+                    <div
+                      key={j}
+                      className="flex justify-between items-center py-2 border-b last:border-0"
+                      style={{ borderColor: `${TEAL}15` }}
+                    >
+                      <span className="text-sm text-gray-600">{item.name}</span>
+                      <span
+                        className="font-bold text-sm"
+                        style={{ color: TEAL, fontFamily: 'var(--font-display)', fontWeight: 800 }}
+                      >
+                        {item.price}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* What's included */}
+                <div
+                  className="text-[10px] font-bold uppercase tracking-widest mb-3"
+                  style={{ color: FOREST, fontFamily: 'var(--font-display)' }}
+                >
+                  What's Included
+                </div>
+                <div className="space-y-2">
+                  {includes.map((item, j) => (
+                    <div key={j} className="flex items-start gap-2 text-xs text-gray-500">
+                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: TEAL }} />
+                      {item}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="max-w-5xl mx-auto mt-6 bg-white p-6">
-          <h3 className="font-bold text-sm mb-4" style={{ color: DARK }}>Policies & Notes</h3>
-          <div className="space-y-3">
-            {POLICIES.map((p, i) => (
-              <div key={i} className="flex items-start gap-2 text-xs text-gray-500"><Check className="w-3 h-3 shrink-0 mt-0.5" style={{ color: TEAL }} />{p}</div>
-            ))}
+        {/* Fear-Free Philosophy Sidebar Section */}
+        <div className="max-w-5xl mx-auto mt-8 grid md:grid-cols-[2fr_1fr] gap-6">
+          {/* Policies */}
+          <div style={{ backgroundColor: WHITE }} className="p-8 rounded-2xl">
+            <h3
+              className="text-base mb-5"
+              style={{ color: FOREST, fontFamily: 'var(--font-display)', fontWeight: 800 }}
+            >
+              Policies & Notes
+            </h3>
+            <div className="space-y-3">
+              {POLICIES.map((p, i) => (
+                <div key={i} className="flex items-start gap-3 text-sm text-gray-500">
+                  <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: TEAL }} />
+                  {p}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Fear-Free Sidebar */}
+          <div
+            className="p-8 rounded-2xl"
+            style={{ backgroundColor: WARM }}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <Star className="w-4 h-4" style={{ color: TEAL }} />
+              <h3
+                className="text-sm"
+                style={{ color: FOREST, fontFamily: 'var(--font-display)', fontWeight: 800 }}
+              >
+                Our Fear-Free Promise
+              </h3>
+            </div>
+            <div className="space-y-3">
+              {FEAR_FREE_POINTS.map((p, i) => (
+                <div key={i} className="flex items-start gap-2 text-xs text-gray-600">
+                  <Heart className="w-3 h-3 shrink-0 mt-0.5" style={{ color: TEAL }} strokeWidth={2} />
+                  {p}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <section style={{ backgroundColor: TEAL }} className="py-14 px-6 text-center">
-        <h2 className="text-2xl font-bold text-white mb-4">Book your dog's next spa day.</h2>
-        <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-bold uppercase tracking-widest text-[11px] px-10 py-4 rounded-full" style={{ color: DARK }}>Book Appointment <ArrowRight className="w-4 h-4" /></Link>
+      {/* CTA */}
+      <section style={{ backgroundColor: TEAL }} className="py-16 px-6 text-center">
+        <h2
+          className="text-3xl text-white mb-4"
+          style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}
+        >
+          Book your dog's next spa day.
+        </h2>
+        <p className="text-white/70 mb-10 max-w-md mx-auto">
+          New clients welcome. Anxious dogs always accommodated. We love all breeds!
+        </p>
+        <Link
+          href={`${BASE}/contact`}
+          className="inline-flex items-center gap-2 bg-white font-bold uppercase tracking-widest text-[11px] px-10 py-4 rounded-full"
+          style={{ color: FOREST, fontFamily: 'var(--font-display)' }}
+        >
+          Book Appointment <ArrowRight className="w-4 h-4" />
+        </Link>
       </section>
     </>
   );
