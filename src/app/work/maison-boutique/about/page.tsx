@@ -37,7 +37,7 @@ export default function MaisonAbout() {
   return (
     <>
       {/* Page Header */}
-      <section style={{ backgroundColor: CREAM }} className="py-20 px-6 md:px-16 border-b" style2={{ borderColor: `${ESPRESSO}10` }}>
+      <section style={{ backgroundColor: CREAM }} className="py-20 px-6 md:px-16 border-b border-black/5">
         <div className="max-w-4xl">
           <span
             className="text-[10px] font-bold uppercase tracking-[0.5em] block mb-6"
