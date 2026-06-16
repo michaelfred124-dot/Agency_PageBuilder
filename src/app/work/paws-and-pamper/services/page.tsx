@@ -147,7 +147,6 @@ export default function PawsAndPamperServices() {
           {SERVICES.map(({ icon: Icon, title, emoji, desc, items, includes }, i) => (
             <div
               key={i}
-              style={{ backgroundColor: WHITE }}
               className="rounded-2xl overflow-hidden"
               style={{ backgroundColor: WHITE, border: `2px solid ${TEAL}22` }}
             >

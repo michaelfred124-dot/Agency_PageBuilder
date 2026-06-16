@@ -32,7 +32,7 @@ export default function ValleyProHomeAbout() {
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-4" style={{ color: GREEN }}>Our Story</div>
-            <h2 className="text-3xl mb-5" style={{ fontFamily: 'var(--font-display)', fontWeight: 900 }} style={{ color: GREEN }}>Built on a handshake and a reputation.</h2>
+            <h2 className="text-3xl mb-5" style={{ fontFamily: 'var(--font-display)', fontWeight: 900, color: GREEN }}>Built on a handshake and a reputation.</h2>
             <p className="text-gray-500 leading-relaxed mb-4">Hector Morales started Valley ProHome with a service van, a set of tools, and a commitment to do every job right the first time. His first clients were his neighbors. They told their friends. The friends told theirs.</p>
             <p className="text-gray-500 leading-relaxed mb-4">Today, Valley ProHome has 35 licensed tradespeople covering plumbing, electrical, HVAC, roofing, and general repairs across the entire Phoenix metro area. We still answer every call personally.</p>
             <p className="text-gray-500 leading-relaxed mb-6">In 18 years, we have never missed an emergency call window and have maintained a 4.8-star rating on 600+ Google reviews.</p>
@@ -85,7 +85,7 @@ export default function ValleyProHomeAbout() {
       </section>
 
       <section style={{ backgroundColor: GOLD }} className="py-14 px-6 text-center">
-        <h2 className="text-2xl mb-4" style={{ fontFamily: 'var(--font-display)', fontWeight: 900 }} style={{ color: '#1A0F00' }}>Free estimate. Same-week scheduling.</h2>
+        <h2 className="text-2xl mb-4" style={{ fontFamily: 'var(--font-display)', fontWeight: 900, color: '#1A0F00' }}>Free estimate. Same-week scheduling.</h2>
         <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white font-bold uppercase tracking-widest text-[11px] px-10 py-4" style={{ backgroundColor: GREEN }}>Request Free Estimate <ArrowRight className="w-4 h-4" /></Link>
       </section>
     </>

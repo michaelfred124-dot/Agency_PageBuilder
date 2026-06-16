@@ -1,7 +1,9 @@
 'use client';
+import Link from 'next/link';
 import { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Sun, Check, ArrowRight } from 'lucide-react';
 
+const BASE = '/work/solstice-yoga';
 const DARK = '#2C2018';
 const SAGE = '#7D9B76';
 const ROSE = '#C4869A';

@@ -334,8 +334,8 @@ export default function ServicesPage() {
           </div>
           <div className="grid md:grid-cols-4 gap-10">
             {[
-              { step: '01', label: 'Reach Out', desc: 'Fill out the inquiry form and I'll respond within 48 hours.' },
-              { step: '02', label: 'Discovery Call', desc: 'We'll chat about your vision, location, and wardrobe ideas.' },
+              { step: '01', label: 'Reach Out', desc: "Fill out the inquiry form and I'll respond within 48 hours." },
+              { step: '02', label: 'Discovery Call', desc: "We'll chat about your vision, location, and wardrobe ideas." },
               { step: '03', label: 'The Session', desc: 'A relaxed, candid shoot — I guide gently, never stifly.' },
               { step: '04', label: 'Your Gallery', desc: 'Delivered in 2–4 weeks. Full-resolution, ready to print.' },
             ].map(({ step, label, desc }, i) => (
