@@ -1213,7 +1213,7 @@ export default function DashboardLayout() {
 
   const renderContent = () => {
     // Gate backend pages under 1-month free trial
-    if (!isOnboardedPaid && activeSection !== 'My Sites') {
+    if (!isOnboardedPaid && activeSection !== 'My Sites' && activeSection !== 'Domains') {
       return renderLockedFeatureGate();
     }
 
