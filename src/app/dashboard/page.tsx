@@ -67,7 +67,7 @@ import {
 import SiteEditor from '@/components/SiteEditor';
 import { TEMPLATES, TEMPLATE_PAGES } from '@/lib/templates';
 import DomainManagerModal from '@/components/DomainManagerModal';
-import DomainSearch from '@/components/DomainSearch';
+import DomainManager from '@/components/DomainManager';
 import PricingModal from '@/components/PricingModal';
 import PublishWizardModal from '@/components/PublishWizardModal';
 import { getSupabaseBrowserClient } from '@/lib/supabase';
@@ -1779,7 +1779,7 @@ export default function DashboardLayout() {
       // CMS Collections view removed
 
       case 'Domains':
-        return <DomainSearch mySites={mySites} />;
+        return <DomainManager mySites={mySites} user={user} />;
 
       case 'My Sites':
         return (
