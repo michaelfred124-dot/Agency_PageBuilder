@@ -51,9 +51,9 @@ const SERVICES = [
     cta: 'Explore Portfolio Services',
   },
   {
-    icon: Users,
+    icon: Key,
     title: 'Relocation Services',
-    subtitle: 'Moving to or from Portland?',
+    subtitle: 'Moving to Nashville?',
     img: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?q=80&w=2070&auto=format&fit=crop',
     desc: "Moving to Portland from another city is an entirely different challenge. We work with relocating buyers and sellers to ensure a seamless transition — from remote video tours to coordinated timelines.",
     items: [
@@ -125,55 +125,6 @@ export default function MeridianServices() {
               <div className="mt-8">
                 <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest pb-0.5 border-b border-[#B8A27A] text-[#B8A27A] hover:text-black hover:border-black transition-all">
                   {SERVICES[0].cta} <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-
-              {/* Content Panel */}
-              <div className="p-10">
-                <div className="flex items-center gap-3 mb-2">
-                  <div
-                    className="w-8 h-8 flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: FOREST }}
-                  >
-                    <Icon className="w-4 h-4 text-white" strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <div
-                      className="text-white text-lg leading-tight"
-                      style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}
-                    >
-                      {title}
-                    </div>
-                    <div
-                      className="text-[10px] uppercase tracking-widest font-bold"
-                      style={{ color: FOREST }}
-                    >
-                      {subtitle}
-                    </div>
-                  </div>
-                </div>
-
-                <p className="text-white/50 text-sm leading-relaxed mt-5 mb-6">{desc}</p>
-
-                <div className="grid sm:grid-cols-2 gap-x-6 gap-y-2 mb-7">
-                  {items.map((item, j) => (
-                    <div key={j} className="flex items-start gap-2 text-sm text-white/60">
-                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: FOREST }} />
-                      {item}
-                    </div>
-                  ))}
-                </div>
-
-                <Link
-                  href={`${BASE}/contact`}
-                  className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b pb-0.5"
-                  style={{
-                    color: FOREST,
-                    borderColor: FOREST,
-                    fontFamily: 'var(--font-display)',
-                  }}
-                >
-                  {cta} <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>

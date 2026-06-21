@@ -10,7 +10,7 @@ const GOLD = '#B8A27A';
 
 export default function MeridianContact() {
   const [sent, setSent] = useState(false);
-  const [clientType, setClientType] = useState<ClientType>('buyer');
+  const [clientType, setClientType] = useState('buyer');
   const [form, setForm] = useState({
     name: '',
     email: '',

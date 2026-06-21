@@ -49,64 +49,6 @@ const PROMISES = [
   { label: 'Certified groomers only', desc: 'Fear-Free certified and continually trained staff.' },
 ];
 
-function PricingSelector() {
-  const [selected, setSelected] = useState<Size>('M');
-  const prices = PRICING[selected];
-
-  return (
-    <div className="bg-white rounded-2xl p-8 shadow-sm border border-teal-50 max-w-2xl mx-auto">
-      {/* Size selector */}
-      <div className="mb-8">
-        <p className="text-xs uppercase tracking-widest text-gray-400 mb-4 text-center" style={semiBold}>Select Your Dog's Size</p>
-        <div className="flex gap-2 justify-center flex-wrap">
-          {SIZES.map(size => (
-            <button
-              key={size}
-              onClick={() => setSelected(size)}
-              className="flex flex-col items-center px-4 py-3 rounded-xl border-2 transition-all duration-200 min-w-[72px]"
-              style={{
-                borderColor: selected === size ? TEAL : '#E2F8F5',
-                backgroundColor: selected === size ? TEAL : 'white',
-                color: selected === size ? 'white' : FOREST,
-              }}
-            >
-              <span className="text-lg" style={{ ...headingFont, color: selected === size ? 'white' : FOREST }}>{size}</span>
-              <span className="text-[9px] mt-0.5" style={{ ...bodyFont, opacity: 0.75 }}>{SIZE_LABELS[size]}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Services grid */}
-      <div className="grid grid-cols-2 gap-3">
-        {SERVICES_ROW.map(({ key, label, icon: Icon, desc }) => (
-          <div key={key} className="flex items-start gap-3 p-4 rounded-xl" style={{ backgroundColor: SKY }}>
-            <div
-              className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-              style={{ backgroundColor: TEAL + '20' }}
-            >
-              <Icon className="w-4 h-4" style={{ color: TEAL }} strokeWidth={1.5} />
-            </div>
-            <div>
-              <div className="text-xs text-gray-500 mb-0.5" style={subheadFont}>{label}</div>
-              <div className="text-xl transition-all duration-300" style={{ ...headingFont, color: TEAL }}>{prices[key]}</div>
-              <div className="text-[10px] text-gray-400 mt-0.5 leading-snug" style={bodyFont}>{desc}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Size guide link */}
-      <div className="text-center mt-6">
-        <span className="text-xs text-gray-400" style={bodyFont}>Not sure of your dog's size? </span>
-        <Link href={`${BASE}/services`} className="text-xs underline" style={{ color: TEAL, ...semiBold }}>
-          Size Guide →
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 // ── Static content ──
 const STEPS = [
   { n: '01', title: 'Book Online', desc: 'Select your service, date, and breed. First-time clients receive a complimentary 10-minute meet-and-greet.' },

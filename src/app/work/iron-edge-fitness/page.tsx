@@ -219,9 +219,6 @@ export default function IronEdgeFitness() {
         </div>
       </section>
 
-      {/* INTENSITY BARS — signature element */}
-      <IntensityBars />
-
       {/* MEMBERSHIP TIERS */}
       <section className="py-28 px-8 md:px-16" style={{ backgroundColor: CARD }}>
         <div className="max-w-5xl mx-auto">

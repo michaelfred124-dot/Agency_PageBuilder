@@ -180,6 +180,7 @@ export default function GoldenThreadEventsPage() {
             </div>
           </div>
         </div>
+      </section>
 
       {/* STATS BAR */}
       <section className="py-14" style={{ backgroundColor: CARD }}>

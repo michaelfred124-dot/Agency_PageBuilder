@@ -217,7 +217,7 @@ export default function AtelierHome() {
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* SERVICES — with full-bleed image behind the header */}
       <section className="py-28 px-6 md:px-14" style={{ backgroundColor: WHITE }}>

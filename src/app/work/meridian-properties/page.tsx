@@ -182,53 +182,7 @@ export default function MeridianProperties() {
               <div className="text-3xl font-serif font-black text-[#1F242E] mb-1">{val}</div>
               <div className="text-[9px] font-mono uppercase tracking-widest text-gray-400 font-bold">{label}</div>
             </div>
-            <Link href={`${BASE}/services`} className="hidden md:inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest border-b pb-0.5" style={{ color: FOREST, borderColor: FOREST, ...semiBold }}>
-              View All <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {LISTINGS.map((p, i) => (
-              <div key={i} className="group overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-                {/* Photo with hover overlay */}
-                <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
-                  <Image
-                    src={p.img}
-                    alt={p.address}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
-                  {/* Status badge */}
-                  <div
-                    className="absolute top-3 left-3 text-[9px] uppercase tracking-widest px-2.5 py-1 text-white z-10"
-                    style={{ backgroundColor: p.status === 'Sold' ? SLATE : FOREST, ...semiBold }}
-                  >
-                    {p.status}
-                  </div>
-                  {/* Price overlay — slides up from bottom on hover */}
-                  <div
-                    className="absolute inset-x-0 bottom-0 flex flex-col justify-end px-5 py-5 translate-y-full group-hover:translate-y-0 transition-transform duration-400 ease-out z-10"
-                    style={{ backgroundColor: FOREST }}
-                  >
-                    <div className="text-3xl text-white mb-1" style={{ fontFamily: 'var(--font-display)', fontWeight: 700 }}>{p.price}</div>
-                    <div className="text-white/70 text-xs uppercase tracking-widest" style={semiBold}>{p.address}</div>
-                  </div>
-                </div>
-                {/* Card info */}
-                <div className="p-5" style={{ backgroundColor: CREAM }}>
-                  <div className="font-bold text-base mb-1" style={{ ...bold, color: SLATE }}>{p.address}</div>
-                  <div className="flex items-center gap-3 text-xs text-gray-500" style={bodyFont}>
-                    <span>{p.beds} bd</span>
-                    <span className="w-1 h-1 rounded-full bg-gray-300 inline-block" />
-                    <span>{p.baths} ba</span>
-                    <span className="w-1 h-1 rounded-full bg-gray-300 inline-block" />
-                    <span>{p.sqft} sqft</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 

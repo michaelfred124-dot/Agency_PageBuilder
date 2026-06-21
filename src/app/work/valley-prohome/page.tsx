@@ -97,63 +97,6 @@ export default function ValleyProHome() {
               View All Services
             </Link>
           </div>
-          <h1
-            className="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.95] mb-6"
-            style={{ color: DARK, fontFamily: 'var(--font-display)' }}
-          >
-            Phoenix's trusted home repair team.
-          </h1>
-          <div className="w-16 h-1 mb-6 rounded-full" style={{ backgroundColor: GREEN }} />
-          <p
-            className="text-base leading-relaxed mb-8 max-w-md"
-            style={{ color: '#555', fontFamily: 'var(--font-body)' }}
-          >
-            Plumbing, electrical, HVAC, and general repairs. Licensed, insured, and available when you need us.
-          </p>
-          {/* Trust badges */}
-          <div className="flex flex-wrap gap-3 mb-8">
-            {['Lic & Insured', '18+ Years', 'Flat-Rate Pricing'].map(badge => (
-              <span
-                key={badge}
-                className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
-                style={{
-                  backgroundColor: GREEN + '12',
-                  color: GREEN,
-                  fontFamily: 'var(--font-display)',
-                }}
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              href={`${BASE}/contact`}
-              className="inline-flex items-center gap-2 text-white text-sm font-black uppercase tracking-widest px-8 py-4 transition-opacity hover:opacity-90"
-              style={{ backgroundColor: GREEN, fontFamily: 'var(--font-display)' }}
-            >
-              Get a Free Quote <ArrowRight className="w-4 h-4" />
-            </Link>
-            <a
-              href="tel:6025550492"
-              className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest"
-              style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
-            >
-              <Phone className="w-4 h-4" /> Call Now: (602) 555-0492
-            </a>
-          </div>
-        </div>
-
-        {/* Right: photo */}
-        <div className="relative order-1 md:order-2" style={{ minHeight: '45vh' }}>
-          <Image
-            src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop"
-            alt="Valley ProHome technician at work"
-            fill
-            className="object-cover"
-            referrerPolicy="no-referrer"
-            priority
-          />
         </div>
       </section>
 
@@ -283,33 +226,33 @@ export default function ValleyProHome() {
       {/* PROCARE PLAN BAND */}
       <section
         className="py-16 px-6 md:px-12"
-        style={{ backgroundColor: GOLD }}
+        style={{ backgroundColor: AMBER }}
       >
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <div
               className="text-[10px] font-black uppercase tracking-[0.4em] mb-3"
-              style={{ color: GREEN, fontFamily: 'var(--font-display)' }}
+              style={{ color: BG }}
             >
               Annual Maintenance
             </div>
             <h2
               className="text-3xl md:text-4xl font-black mb-3"
-              style={{ color: DARK, fontFamily: 'var(--font-display)' }}
+              style={{ color: BG }}
             >
               ProHome Care Plan — $199/year
             </h2>
             <p
               className="text-sm leading-relaxed max-w-xl"
-              style={{ color: 'rgba(17,17,17,0.7)', fontFamily: 'var(--font-body)' }}
+              style={{ color: 'rgba(17,17,17,0.7)' }}
             >
               Annual HVAC tune-up, plumbing inspection, and electrical safety check — plus priority scheduling, 10% off all service calls, and free emergency dispatch fees.
             </p>
           </div>
           <Link
             href={`${BASE}/contact`}
-            className="inline-flex items-center gap-2 text-white font-black text-sm uppercase tracking-widest px-8 py-4 rounded-lg whitespace-nowrap shrink-0"
-            style={{ backgroundColor: GREEN, fontFamily: 'var(--font-display)' }}
+            className="inline-flex items-center gap-2 text-white font-black text-sm uppercase tracking-widest px-8 py-4 whitespace-nowrap shrink-0"
+            style={{ backgroundColor: BG }}
           >
             Learn More <ArrowRight className="w-4 h-4" />
           </Link>

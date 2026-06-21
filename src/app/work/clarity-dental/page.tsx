@@ -158,9 +158,6 @@ export default function ClarityDental() {
                     <h3 className="text-lg font-bold mb-1" style={{ color: NAVY }}>{title}</h3>
                     <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{desc}</p>
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 text-white" style={{ backgroundColor: NAVY }}>
-                    {price}
-                  </span>
                 </div>
                 <ul className="space-y-2 mb-5">
                   {items.map((item, j) => (
