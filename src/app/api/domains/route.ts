@@ -29,51 +29,61 @@ export async function GET(request: NextRequest) {
 
     // 1. Handle Domain Availability Search
     if (searchQuery) {
-      const query = searchQuery.trim().toLowerCase().replace(/\s+/g, '');
-      const hasExtension = /\.[a-z]{2,}$/i.test(query);
-      const baseDomain = hasExtension ? query.split('.')[0] : query;
-      
-      const extensions = ['.com', '.co', '.net', '.org'];
+      const query = searchQuery.trim().toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9-]/g, '');
+      const hasExtension = /\.[a-z]{2,}$/i.test(searchQuery.trim());
+      const baseDomain = hasExtension ? searchQuery.trim().split('.')[0].toLowerCase() : query;
+
+      // Default prices per TLD when Vercel API is not available
+      const TLD_DEFAULTS: Record<string, number> = {
+        '.com': 14.99, '.co': 29.99, '.net': 13.99, '.org': 11.99,
+        '.io': 49.99, '.biz': 12.99, '.info': 9.99, '.us': 8.99,
+      };
+      const extensions = Object.keys(TLD_DEFAULTS);
       const results = [];
 
-      for (const ext of extensions) {
+      // Fire all checks in parallel
+      const checks = extensions.map(async (ext) => {
         const fullDomain = `${baseDomain}${ext}`;
-        let available = true;
-        let price = 12;
+        let available = true; // optimistic fallback
+        let price = TLD_DEFAULTS[ext];
 
         if (VERCEL_AUTH_TOKEN) {
           try {
-            // Check availability
-            const statusRes = await fetch(`https://api.vercel.com/v4/domains/status?name=${fullDomain}${VERCEL_TEAM_ID ? `&teamId=${VERCEL_TEAM_ID}` : ''}`, {
-              headers: { Authorization: `Bearer ${VERCEL_AUTH_TOKEN}` }
-            });
+            const [statusRes, priceRes] = await Promise.all([
+              fetch(`https://api.vercel.com/v4/domains/status?name=${fullDomain}${VERCEL_TEAM_ID ? `&teamId=${VERCEL_TEAM_ID}` : ''}`, {
+                headers: { Authorization: `Bearer ${VERCEL_AUTH_TOKEN}` }
+              }),
+              fetch(`https://api.vercel.com/v4/domains/price?name=${fullDomain}${VERCEL_TEAM_ID ? `&teamId=${VERCEL_TEAM_ID}` : ''}`, {
+                headers: { Authorization: `Bearer ${VERCEL_AUTH_TOKEN}` }
+              }),
+            ]);
             if (statusRes.ok) {
-              const statusData = await statusRes.json();
-              available = statusData.available;
+              const d = await statusRes.json();
+              available = d.available ?? true;
             }
-
-            // Check price
-            const priceRes = await fetch(`https://api.vercel.com/v4/domains/price?name=${fullDomain}${VERCEL_TEAM_ID ? `&teamId=${VERCEL_TEAM_ID}` : ''}`, {
-              headers: { Authorization: `Bearer ${VERCEL_AUTH_TOKEN}` }
-            });
             if (priceRes.ok) {
-              const priceData = await priceRes.json();
-              price = priceData.price || 12;
+              const d = await priceRes.json();
+              price = d.price || TLD_DEFAULTS[ext];
             }
-          } catch (err) {
-            console.error(`Vercel Registrar check failed for ${fullDomain}:`, err);
-            available = true; // Fallback in sandbox
+          } catch {
+            // keep defaults
           }
+        } else {
+          // Sandbox: simulate .com being "taken" so we can show the full UI
+          if (ext === '.com') available = Math.random() > 0.4;
         }
 
-        if (available) {
-          results.push({
-            domain: fullDomain,
-            price: `$${price.toFixed(2)}/yr`,
-            extension: ext
-          });
-        }
-      }
+        return { domain: fullDomain, available, price: `$${price.toFixed(2)}/yr`, priceNum: price, extension: ext };
+      });
+
+      const settled = await Promise.all(checks);
+      // Sort: available first, then .com/.co/.net/.org before the rest
+      const priority = ['.com', '.co', '.net', '.org', '.io', '.biz', '.info', '.us'];
+      settled.sort((a, b) => {
+        if (a.available !== b.available) return a.available ? -1 : 1;
+        return priority.indexOf(a.extension) - priority.indexOf(b.extension);
+      });
+      results.push(...settled);
 
       return NextResponse.json({ success: true, results });
     }
