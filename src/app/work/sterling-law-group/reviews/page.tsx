@@ -1,209 +1,124 @@
 import Link from 'next/link';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, Scale } from 'lucide-react';
 
 const BASE = '/work/sterling-law-group';
-const NAVY = '#1E2D5A';
-const GOLD = '#C49A3C';
-const CREAM = '#FAF8F2';
-const DARK = '#0F1A33';
-const WHITE = '#FFFFFF';
+const BG = '#0A0A0A';
+const GOLD = '#C9A84C';
+const CARD = '#111111';
+const BORDER = 'rgba(201,168,76,0.15)';
+const MUTED = 'rgba(255,255,255,0.4)';
 
 const REVIEWS = [
-  {
-    author: 'Rachel M.',
-    rating: 5,
-    type: 'Personal Injury',
-    attorney: 'James Sterling',
-    date: 'March 2024',
-    text: 'Sterling Law Group fought tirelessly for my family after our auto accident. James Sterling was accessible, compassionate, and fierce in negotiations. We received a settlement that truly changed our lives. I cannot thank them enough for their commitment to our case.',
+  { 
+    author: 'Rachel M.', 
+    rating: 5, 
+    type: 'Business Litigation', 
+    date: 'March 2026', 
+    text: "When our partnership dispute threatened to halt operations, James Sterling moved with incredible speed. They filed a counter-motion and resolved the issue, recovering full damages. Exceptional trial lawyers." 
   },
-  {
-    author: 'David K.',
-    rating: 5,
-    type: 'Family Law',
-    attorney: 'Maria Lawson',
-    date: 'January 2024',
-    text: 'During my divorce, Maria Lawson provided not just legal expertise but genuine compassion. She helped me navigate a painful process with clarity and dignity. My parenting plan was fair and completely focused on my children. I always felt like I had someone truly in my corner.',
+  { 
+    author: 'David K.', 
+    rating: 5, 
+    type: 'Corporate Law', 
+    date: 'January 2026', 
+    text: "David Park guided us through a complex board restructuring. His corporate counsel was practical, strategic, and kept us fully compliant with state securities regulations." 
   },
-  {
-    author: 'Tina R.',
-    rating: 5,
-    type: 'Criminal Defense',
-    attorney: 'Derek Chun',
-    date: 'November 2023',
-    text: 'Derek Chun took on my DUI case when I felt hopeless. He identified a procedural issue that changed everything. Professional, strategic, and he actually cared about the outcome. My record is clean thanks to him. He returned every call and always told me the truth.',
+  { 
+    author: 'Tina R.', 
+    rating: 5, 
+    type: 'Mergers & Acquisitions', 
+    date: 'November 2025', 
+    text: "David Park and his M&A team advised us on our asset acquisition. They uncovered a hidden valuation issue during due diligence that saved us millions. We won't close another deal without them." 
   },
-  {
-    author: 'Marcus A.',
-    rating: 5,
-    type: 'Business Law',
-    attorney: 'Sterling Law Group',
-    date: 'September 2023',
-    text: 'Sterling helped us negotiate a business acquisition contract that saved us from a bad deal. Their business attorneys are sharp, practical, and genuinely understand what we were trying to accomplish. The contract they drafted has protected us multiple times since.',
+  { 
+    author: 'Marcus A.', 
+    rating: 5, 
+    type: 'Business Litigation', 
+    date: 'September 2025', 
+    text: "Sterling helped us negotiate a partnership buyout that was heading to litigation. Their commercial attorneys are sharp, practical, and highly strategic." 
   },
-  {
-    author: 'Linda T.',
-    rating: 5,
-    type: 'Estate Planning',
-    attorney: 'Sterling Law Group',
-    date: 'August 2023',
-    text: 'After putting off estate planning for years, I finally called Sterling. They made the process simple, clear, and thorough. My family now has real peace of mind about the future. The pricing was fair and there were no surprise fees. Highly recommend to anyone.',
+  { 
+    author: 'Linda T.', 
+    rating: 5, 
+    type: 'Estate Planning', 
+    date: 'August 2025', 
+    text: "After putting off estate planning for years, Catherine designed a comprehensive family trust. Her command of tax law and business succession is superb. Real peace of mind." 
   },
-  {
-    author: 'Jason H.',
-    rating: 5,
-    type: 'Personal Injury',
-    attorney: 'James Sterling',
-    date: 'June 2023',
-    text: 'Slipped and fell at a commercial property. James Sterling took my case on contingency and won a settlement three times what the insurance company originally offered. He never once made me feel like a burden. They earn their fee many times over.',
-  },
-  {
-    author: 'Carla N.',
-    rating: 5,
-    type: 'Family Law',
-    attorney: 'Maria Lawson',
-    date: 'April 2023',
-    text: 'The custody arrangement Maria negotiated was fair, thoughtful, and focused entirely on my children. The process was stressful but she kept me grounded through all of it. I left every meeting feeling more confident than when I walked in.',
-  },
-  {
-    author: 'Tom B.',
-    rating: 5,
-    type: 'Criminal Defense',
-    attorney: 'Derek Chun',
-    date: 'February 2023',
-    text: 'Facing felony charges was the scariest moment of my life. Derek Chun built a defense that got the charges reduced significantly. He returned every call, always told me the truth, and never overpromised. The outcome changed my life. I am forever grateful.',
+  { 
+    author: 'Jason H.', 
+    rating: 5, 
+    type: 'Trust Administration', 
+    date: 'June 2025', 
+    text: "We faced a probate litigation challenge to our family trust. Catherine Abrams defended our interests aggressively in court. We prevailed on every count." 
   },
 ];
 
 const STATS = [
   { label: 'Average Rating', value: '4.9', sub: 'across 180+ reviews' },
-  { label: 'Google Reviews', value: '4.9★', sub: '112 reviews' },
-  { label: 'Avvo Rating', value: '10.0', sub: 'Superb' },
-  { label: 'Cases Won', value: '1,200+', sub: 'since 1999' },
+  { label: 'Firm Avvo Rating', value: '10.0', sub: 'Superb Rated' },
+  { label: 'Jury Verdicts', value: '$40M+', sub: 'Recovered' },
+  { label: 'Cases Resolved', value: '2,400+', sub: 'since 1996' },
 ];
 
 export default function SterlingReviews() {
   return (
-    <>
-      {/* Hero */}
-      <section style={{ backgroundColor: NAVY }} className="py-24 px-6 md:px-12 text-center">
-        <div
-          className="text-[10px] uppercase tracking-[0.3em] mb-5"
-          style={{ color: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.3em' }}
-        >Client Reviews</div>
-        <h1
-          className="text-5xl md:text-6xl text-white mb-6 leading-tight"
-          style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.05em' }}
-        >What Our Clients Say</h1>
-        {/* Classical gold rule */}
-        <div className="flex items-center justify-center gap-4 mb-10">
-          <div className="h-px w-20" style={{ backgroundColor: GOLD }} />
-          <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: GOLD }} />
-          <div className="h-px w-20" style={{ backgroundColor: GOLD }} />
-        </div>
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
+    <div style={{ backgroundColor: BG, color: '#fff' }} className="overflow-x-hidden">
+      
+      {/* Header Stat Board */}
+      <section className="py-24 px-6 md:px-12 text-center bg-[#0A0A0A] border-b border-white/5 relative overflow-hidden">
+        <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Client Experience</span>
+        <h1 className="text-4xl md:text-6xl font-sans font-black text-white mb-8 leading-none">Verified Client Success</h1>
+        <div className="flex justify-center gap-10 flex-wrap mt-12 max-w-4xl mx-auto">
           {STATS.map(({ label, value, sub }, i) => (
-            <div key={i} className="text-center">
-              <div
-                className="text-3xl text-white mb-1"
-                style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.05em' }}
-              >{value}</div>
-              <div
-                className="text-[10px] uppercase tracking-widest mb-1"
-                style={{ color: GOLD, fontFamily: 'var(--font-display)' }}
-              >{label}</div>
-              <div
-                className="text-white/35 text-xs"
-                style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
-              >{sub}</div>
+            <div key={i} className="text-center border-l border-[#C9A84C]/30 pl-6 min-w-[150px]">
+              <div className="text-3xl font-sans font-bold text-white mb-2">{value}</div>
+              <div className="text-[9px] font-mono font-bold uppercase tracking-widest mb-1" style={{ color: GOLD }}>{label}</div>
+              <div className="text-white/40 text-[10px] font-light">{sub}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Reviews Grid */}
-      <section style={{ backgroundColor: CREAM }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-5">
+      {/* Review cards with custom asymmetrical roundings */}
+      <section className="py-24 px-6 md:px-12 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8">
           {REVIEWS.map((r, i) => (
-            <div
-              key={i}
-              className="p-8"
-              style={{ backgroundColor: WHITE, borderLeft: `3px solid ${GOLD}` }}
+            <div 
+              key={i} 
+              className={`p-8 border border-[#C9A84C]/15 hover:border-[#C9A84C]/50 transition-all flex flex-col justify-between min-h-[240px] text-left shadow-lg ${
+                i % 2 === 0 ? 'rounded-tl-3xl rounded-br-3xl' : 'rounded-tr-3xl rounded-bl-3xl'
+              }`}
+              style={{ backgroundColor: CARD }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div
-                    className="text-sm mb-0.5"
-                    style={{ color: NAVY, fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}
-                  >{r.author}</div>
-                  <div
-                    className="text-[10px] uppercase tracking-widest"
-                    style={{ color: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.15em' }}
-                  >{r.type}</div>
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  <div className="flex gap-0.5">
-                    {[...Array(r.rating)].map((_, j) => (
-                      <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: GOLD }} />
-                    ))}
+              <div className="space-y-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-sans font-bold text-md text-white">{r.author}</h3>
+                    <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#C9A84C] block mt-0.5">{r.type}</span>
                   </div>
-                  <div
-                    className="text-[10px] text-gray-300"
-                    style={{ fontFamily: 'var(--font-body)' }}
-                  >{r.date}</div>
+                  <div className="flex flex-col items-end gap-1 font-mono">
+                    <div className="flex">{[...Array(r.rating)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: GOLD }} />)}</div>
+                    <span className="text-[9px] text-white/30">{r.date}</span>
+                  </div>
                 </div>
-              </div>
-
-              {/* EB Garamond italic quote */}
-              <p
-                className="leading-relaxed mb-4 text-base"
-                style={{ color: '#4B5563', fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
-              >
-                &ldquo;{r.text}&rdquo;
-              </p>
-
-              {/* Gold attribution */}
-              <div
-                className="text-xs pt-3 border-t"
-                style={{ color: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.1em', borderColor: '#F0EBE0' }}
-              >
-                — Represented by {r.attorney}
+                <p className="text-white/70 italic text-xs leading-relaxed font-light">"{r.text}"</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CTA */}
-      <section style={{ backgroundColor: DARK }} className="py-20 px-6 text-center">
-        <div
-          className="text-[10px] uppercase tracking-[0.3em] mb-5"
-          style={{ color: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.3em' }}
-        >Free Consultation</div>
-        <h2
-          className="text-4xl text-white mb-4"
-          style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.05em' }}
-        >Ready to Add Your Success Story?</h2>
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <div className="h-px w-16" style={{ backgroundColor: GOLD + '60' }} />
-          <div className="w-1 h-1 rotate-45" style={{ backgroundColor: GOLD }} />
-          <div className="h-px w-16" style={{ backgroundColor: GOLD + '60' }} />
+      {/* Footer CTA */}
+      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+        <div className="bg-[#C9A84C] rounded-tl-[64px] rounded-br-[64px] py-16 px-8 text-center shadow-2xl text-slate-900 border border-[#C9A84C]">
+          <h2 className="text-3xl font-sans font-black text-[#0A0A0A] mb-4">Partner with award-winning advocates.</h2>
+          <div className="pt-4">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#0A0A0A] hover:bg-[#FAF8F2] hover:text-[#0A0A0A] text-white font-mono font-bold uppercase tracking-widest text-xs px-10 py-5 transition-all">
+              Schedule Free Consultation <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
-        <p
-          className="text-white/50 mb-10 max-w-md mx-auto"
-          style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
-        >
-          Schedule your free, confidential consultation. No fees unless we win.
-        </p>
-        <Link
-          href={`${BASE}/contact`}
-          className="inline-flex items-center gap-3 text-white uppercase tracking-widest text-[11px] px-12 py-5 hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.15em' }}
-        >
-          Schedule Free Consultation <ArrowRight className="w-4 h-4" />
-        </Link>
       </section>
-    </>
+    </div>
   );
 }

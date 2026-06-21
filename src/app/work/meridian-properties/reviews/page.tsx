@@ -1,206 +1,165 @@
 import Link from 'next/link';
-import { ArrowRight, Star, Quote } from 'lucide-react';
+import { ArrowRight, Star, Quote, ShieldCheck } from 'lucide-react';
 
 const BASE = '/work/meridian-properties';
-const FOREST = '#2D6A4F';
-const SLATE = '#2E3A47';
-const CREAM = '#F7F5F0';
-const WHITE = '#FFFFFF';
+const BG = '#FAF8F5';
+const SLATE = '#1F242E';
+const GOLD = '#B8A27A';
 
 const REVIEWS = [
   {
-    author: 'Chris & Amy P.',
-    rating: 5,
-    type: 'Buyer',
-    neighborhood: 'Sellwood-Moreland',
-    agent: 'Sarah Chen',
-    date: 'March 2024',
-    outcome: 'Closed under asking in competitive market',
-    text: 'Sarah guided us through our first home purchase without any pressure. She knew the market inside and out, helped us understand every step, and fought hard on our offer. We closed under asking in a competitive neighborhood. Could not have done it without her.',
+    author: 'Robert & Claire S.',
+    type: 'Seller Representative',
+    agent: 'Catherine Harlow',
+    neighborhood: 'Green Hills',
+    date: 'April 2026',
+    text: "Catherine Harlow secured $140,000 above our listing valuation with multiple offers in hand. Her contract negotiation and absolute focus on details saved us from a complex contingency dispute. Elite-tier representation.",
+    stars: 5,
+    size: 'lg',
   },
   {
-    author: 'Robert L.',
-    rating: 5,
-    type: 'Seller',
-    neighborhood: 'NW Portland',
-    agent: 'Tom Reeves',
-    date: 'January 2024',
-    outcome: 'Sold in 6 days · $22k over asking',
-    text: 'Sold our home in 6 days at $22,000 over asking. Tom had a strategy from day one — professional photos, targeted marketing, and a well-timed open house. The results speak for themselves.',
+    author: 'Thomas W.',
+    type: 'Buyer Representative',
+    agent: 'Catherine Harlow',
+    neighborhood: 'Belle Meade',
+    date: 'February 2026',
+    text: "Meridian Properties sourced an off-market Belle Meade estate that never hit the MLS. Their network in Middle Tennessee is completely unmatched.",
+    stars: 5,
+    size: 'sm',
   },
   {
-    author: 'Diane M.',
-    rating: 5,
-    type: 'Investment',
-    neighborhood: 'Alberta Arts District',
-    agent: 'Sarah Chen',
-    date: 'November 2023',
-    outcome: 'Acquired 3rd investment property below market',
-    text: 'Sarah helped me acquire my third investment property. Her knowledge of rental yield and neighborhood trends saved me from one deal and found me a better one. Exceptional expertise.',
+    author: 'Marcus & Evelyn K.',
+    type: 'Seller Representative',
+    agent: 'Isabelle Monroe',
+    neighborhood: 'Brentwood',
+    date: 'January 2026',
+    text: "Isabelle's architectural staging recommendations transformed our property. We received 4 cash offers in the first weekend of listing, closing with zero repair contingencies. Her process is phenomenal.",
+    stars: 5,
+    size: 'sm',
   },
   {
-    author: 'Kevin T.',
-    rating: 5,
-    type: 'Buyer',
-    neighborhood: 'Lake Oswego',
-    agent: 'Tom Reeves',
-    date: 'September 2023',
-    outcome: 'Found perfect home in 3 weeks — remotely',
-    text: 'Moved from San Francisco to Portland and Tom made the remote buying process seamless. Video tours, detailed neighborhood breakdowns, and he always answered within the hour. Found our perfect home in three weeks.',
+    author: 'Dr. Julian H.',
+    type: 'Investment Advisory',
+    agent: 'James Aldridge',
+    neighborhood: 'Franklin / The Gulch',
+    date: 'November 2025',
+    text: "James helped us structure a complex 1031 Exchange into three luxury multi-family properties. His cash flow projections and market absorption models were precise down to the dollar.",
+    stars: 5,
+    size: 'lg',
   },
   {
-    author: 'Sandra & Mike R.',
-    rating: 5,
-    type: 'Seller',
-    neighborhood: 'Beaverton',
-    agent: 'Sarah Chen',
-    date: 'July 2023',
-    outcome: 'Multiple offers · accepted above asking',
-    text: 'We had a tricky property with some deferred maintenance. Sarah priced it right, marketed the strengths, and managed the negotiations with multiple offers beautifully. We walked away thrilled.',
+    author: 'Cynthia & David R.',
+    type: 'Relocation Buyer',
+    agent: 'Isabelle Monroe',
+    neighborhood: 'Green Hills',
+    date: 'October 2025',
+    text: "Moving from Chicago to Nashville, Isabelle made the remote relocation process effortless. Video walk-throughs, neighborhood analyses, and zoning investigations were all organized in digital reports. Outstanding communication.",
+    stars: 5,
+    size: 'lg',
   },
   {
-    author: 'Pat H.',
-    rating: 5,
-    type: 'Property Mgmt',
-    neighborhood: 'Pearl District',
-    agent: 'Aisha Johnson',
-    date: 'May 2023',
-    outcome: 'Zero vacancy over 2 years',
-    text: "Aisha has managed our rental duplex for two years. Zero vacancy, responsive tenants, and I never have to worry. The rent arrives on time every month and maintenance issues are handled before I even know about them.",
-  },
-];
-
-const SUMMARY = [
-  { value: '4.9★', label: 'Average Rating' },
-  { value: '240+', label: 'Google Reviews' },
-  { value: '98%', label: 'Would Recommend' },
-  { value: '13 yrs', label: 'Serving Portland' },
+    author: 'Alden Developments',
+    type: 'Asset Portfolio Advisory',
+    agent: 'James Aldridge',
+    neighborhood: 'Davidson County Portfolio',
+    date: 'August 2025',
+    text: "James's investment modeling and underwriting analysis have been pristine. He operates like an institutional partner, not just a broker.",
+    stars: 5,
+    size: 'sm',
+  }
 ];
 
 export default function MeridianReviews() {
   return (
-    <>
-      {/* Page Header */}
-      <section style={{ backgroundColor: SLATE }} className="py-24 px-6 md:px-12 relative overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: FOREST }} />
-        <div className="max-w-5xl mx-auto">
-          <div
-            className="text-[10px] font-bold uppercase tracking-[0.5em] mb-5"
-            style={{ color: FOREST, fontFamily: 'var(--font-display)' }}
-          >
-            Client Reviews
+    <div style={{ backgroundColor: BG, color: SLATE }} className="overflow-x-hidden pb-12">
+      
+      {/* HERO SECTION */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 pt-16 pb-8 text-left">
+        <div className="max-w-3xl flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <span className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-[#B8A27A] block mb-4">
+              Client Experiences &nbsp;·&nbsp; Testimonials
+            </span>
+            <h1 className="text-5xl md:text-6xl font-serif leading-[1.1] tracking-tight text-[#1F242E] mb-6">
+              A reputation built on <span className="text-[#B8A27A] italic font-light">results.</span>
+            </h1>
+            <p className="text-sm text-gray-500 leading-relaxed font-light">
+              We measure our success by the satisfaction of our clients and the strength of their investment outcomes. Here is how we represent buyers, sellers, and portfolio builders across Middle Tennessee.
+            </p>
           </div>
-          <h1
-            className="text-5xl md:text-6xl text-white mb-6 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}
-          >
-            Client<br />Testimonials
-          </h1>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="flex gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-current" style={{ color: FOREST }} />
-              ))}
+          
+          <div className="p-6 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-2xl shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] min-w-[240px] shrink-0 text-left">
+            <div className="flex gap-1 mb-2">
+              {[...Array(5)].map((_, i) => <Star key={i} className="w-4.5 h-4.5 fill-current text-[#B8A27A]" />)}
             </div>
-            <span className="text-white/40 text-sm">4.9 Stars · 240+ Google Reviews</span>
+            <div className="text-2xl font-serif font-black text-[#1F242E]">4.9 / 5.0</div>
+            <div className="text-[8px] font-mono uppercase tracking-widest text-gray-400 font-bold">240+ Certified Google Reviews</div>
           </div>
         </div>
       </section>
 
-      {/* Summary Stats */}
-      <section style={{ backgroundColor: FOREST }} className="py-8 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-          {SUMMARY.map((s, i) => (
-            <div key={i} className="text-center">
+      {/* REVIEWS BENTO GRID */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6 relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+          {REVIEWS.map((r, i) => {
+            const isLarge = r.size === 'lg';
+            return (
               <div
-                className="text-3xl text-white mb-1"
-                style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}
+                key={i}
+                className={`p-8 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 flex flex-col justify-between text-left ${
+                  isLarge ? 'md:col-span-2 min-h-[320px]' : 'md:col-span-1 min-h-[320px]'
+                }`}
               >
-                {s.value}
-              </div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-white/50">
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Reviews Grid */}
-      <section style={{ backgroundColor: CREAM }} className="py-16 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-5">
-          {REVIEWS.map((r, i) => (
-            <div
-              key={i}
-              style={{ backgroundColor: WHITE, borderLeft: `4px solid ${FOREST}` }}
-              className="p-8"
-            >
-              {/* Outcome badge */}
-              <div
-                className="inline-block text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 mb-5"
-                style={{ backgroundColor: FOREST, color: WHITE, fontFamily: 'var(--font-display)' }}
-              >
-                {r.outcome}
-              </div>
-
-              {/* Quote */}
-              <Quote className="w-5 h-5 mb-3 opacity-20" style={{ color: SLATE }} />
-              <p className="text-gray-600 text-sm leading-relaxed mb-6 italic">
-                "{r.text}"
-              </p>
-
-              {/* Footer */}
-              <div className="flex items-start justify-between pt-5 border-t border-gray-100">
                 <div>
-                  <div
-                    className="text-sm font-bold"
-                    style={{ color: SLATE, fontFamily: 'var(--font-display)', fontWeight: 800 }}
-                  >
-                    {r.author}
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="w-8 h-8 rounded-full bg-[#B8A27A]/10 flex items-center justify-center">
+                      <Quote className="w-3.5 h-3.5 text-[#B8A27A]" />
+                    </div>
+                    <div className="flex gap-0.5">
+                      {[...Array(r.stars)].map((_, j) => (
+                        <Star key={j} className="w-3.5 h-3.5 fill-current text-[#B8A27A]" />
+                      ))}
+                    </div>
                   </div>
-                  <div className="text-[10px] text-gray-400 mt-0.5">
-                    <span
-                      className="font-bold uppercase tracking-wider"
-                      style={{ color: FOREST, fontFamily: 'var(--font-display)' }}
-                    >
-                      {r.type}
-                    </span>
-                    {' · '}{r.neighborhood}
-                  </div>
-                  <div className="text-[10px] text-gray-300 mt-0.5">
-                    via {r.agent} · {r.date}
-                  </div>
+                  
+                  <p className="text-xs text-gray-600 leading-relaxed font-light italic mb-8">
+                    "{r.text}"
+                  </p>
                 </div>
-                <div className="flex gap-0.5">
-                  {[...Array(r.rating)].map((_, j) => (
-                    <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: FOREST }} />
-                  ))}
+
+                <div className="pt-4 border-t border-black/5 flex justify-between items-end">
+                  <div>
+                    <div className="text-xs font-bold text-[#1F242E] uppercase tracking-wide">{r.author}</div>
+                    <div className="text-[9px] text-[#B8A27A] font-mono uppercase tracking-widest font-black mt-0.5">
+                      {r.neighborhood}
+                    </div>
+                  </div>
+                  <div className="text-[8px] text-gray-400 font-mono font-bold uppercase tracking-wider text-right">
+                    <div>{r.type}</div>
+                    <div className="text-gray-300 font-light mt-0.5">{r.agent}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
-      {/* CTA */}
-      <section style={{ backgroundColor: FOREST }} className="py-16 px-6 text-center">
-        <h2
-          className="text-3xl text-white mb-4"
-          style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}
-        >
-          Ready to work with Portland's trusted team?
-        </h2>
-        <p className="text-white/60 mb-10 max-w-md mx-auto">
-          Join hundreds of Portland families who have trusted Meridian with their most important financial decision.
-        </p>
-        <Link
-          href={`${BASE}/contact`}
-          className="inline-flex items-center gap-2 bg-white font-bold uppercase tracking-widest text-[11px] px-10 py-4"
-          style={{ color: FOREST, fontFamily: 'var(--font-display)' }}
-        >
-          Schedule Consultation <ArrowRight className="w-4 h-4" />
-        </Link>
+      {/* FINAL GLASS CTA BANNER */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12">
+        <div className="bg-gradient-to-tr from-[#B8A27A] to-[#E5D5BC] rounded-[48px] py-20 px-8 text-center shadow-lg relative overflow-hidden border border-white/50">
+          <div className="absolute inset-0 opacity-15 pointer-events-none bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=600')" }} />
+          <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] mb-6 tracking-tight relative z-10">Write your own success story.</h2>
+          <p className="text-gray-800 text-xs font-mono font-bold tracking-wider mb-8 max-w-sm mx-auto uppercase relative z-10">Honest advice. Dedicated focus. Outstanding results.</p>
+          <div className="pt-2 relative z-10">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#1F242E] hover:bg-white hover:text-black text-white font-mono font-black uppercase tracking-widest text-[10px] px-10 py-5 transition-all shadow-sm">
+              Schedule Consultation <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
       </section>
-    </>
+
+    </div>
   );
 }

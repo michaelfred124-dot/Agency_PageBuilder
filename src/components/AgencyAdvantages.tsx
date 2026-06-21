@@ -33,11 +33,11 @@ const QUALITIES = [
 
 export default function AgencyAdvantages() {
   return (
-    <section className="py-20 lg:py-32 bg-white text-zinc-900 px-4 lg:px-6 relative overflow-hidden">
+    <section className="py-20 lg:py-32 bg-[#0B0B0B] text-white px-4 lg:px-6 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-full h-full opacity-[0.03] pointer-events-none">
         <svg width="100%" height="100%">
           <pattern id="grid-advantages" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="black" strokeWidth="1.5" />
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1.5" />
           </pattern>
           <rect width="100%" height="100%" fill="url(#grid-advantages)" />
         </svg>
@@ -48,9 +48,9 @@ export default function AgencyAdvantages() {
 
       <div className="max-w-[1400px] mx-auto relative z-10">
         <div className="flex flex-col space-y-4 mb-16 lg:mb-24 text-center items-center">
-          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-405 text-zinc-400">The Advantages</span>
-          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight leading-none max-w-4xl text-zinc-950">
-            Why choose <span style={{ color: COLORS.purple }}>our agency?</span>
+          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-[#D4AF37]">The Advantages</span>
+          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight leading-none max-w-4xl text-white">
+            Why choose <span className="text-[#FF7F11]">our agency?</span>
           </h2>
         </div>
 
@@ -59,26 +59,24 @@ export default function AgencyAdvantages() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-2 p-8 lg:p-12 rounded-3xl border-2 border-zinc-950 bg-white transition-all group lg:hover:-translate-y-1 lg:hover:translate-x-1 relative overflow-hidden"
-            style={{ boxShadow: `4px 4px 0px rgba(9,9,11,1)` }}
+            className="md:col-span-2 p-8 lg:p-12 rounded-3xl luxury-card relative overflow-hidden group cursor-pointer"
           >
             <div className="relative z-10 w-full md:w-3/5">
               <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border-2 border-zinc-950 shadow-[2.5px_2.5px_0px_rgba(9,9,11,1)]"
-                style={{ backgroundColor: COLORS.green }}
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:scale-110 transition-transform duration-300"
               >
-                <RefreshCcw className="w-6 h-6 text-zinc-950" strokeWidth={2.5} />
+                <RefreshCcw className="w-6 h-6" strokeWidth={2.5} />
               </div>
-              <h3 className="text-xl lg:text-3xl font-extrabold uppercase tracking-tight mb-4 text-zinc-950">
+              <h3 className="text-xl lg:text-3xl font-extrabold uppercase tracking-tight mb-4 text-white">
                 Pause or Cancel Anytime
               </h3>
-              <p className="text-zinc-650 font-normal text-base leading-relaxed">
+              <p className="text-white/60 font-normal text-base leading-relaxed">
                 No long-term contracts. Don't have enough work for the month? Simply pause your subscription and resume when you do.
               </p>
             </div>
             
             <div className="absolute right-0 bottom-0 top-0 w-2/5 hidden md:block">
-               <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover border-l-2 border-zinc-950 grayscale group-hover:grayscale-0 transition-all duration-500" alt="Collaboration" referrerPolicy="no-referrer" />
+               <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover border-l border-white/10 grayscale group-hover:grayscale-0 transition-all duration-500" alt="Collaboration" referrerPolicy="no-referrer" />
             </div>
           </motion.div>
 
@@ -87,25 +85,23 @@ export default function AgencyAdvantages() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="col-span-1 p-8 lg:p-12 rounded-3xl border-2 border-zinc-950 bg-white transition-all group lg:hover:-translate-y-1 lg:hover:translate-x-1 flex flex-col justify-between"
-            style={{ boxShadow: `4px 4px 0px rgba(9,9,11,1)` }}
+            className="col-span-1 p-8 lg:p-12 rounded-3xl luxury-card flex flex-col justify-between cursor-pointer"
           >
              <div>
               <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border-2 border-zinc-950 shadow-[2.5px_2.5px_0px_rgba(9,9,11,1)]"
-                style={{ backgroundColor: COLORS.blue }}
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:scale-110 transition-transform duration-300"
               >
-                <HandCoins className="w-6 h-6 text-zinc-950" strokeWidth={2.5} />
+                <HandCoins className="w-6 h-6" strokeWidth={2.5} />
               </div>
-              <h3 className="text-xl lg:text-2xl font-extrabold uppercase tracking-tight mb-4 text-zinc-950">
+              <h3 className="text-xl lg:text-2xl font-extrabold uppercase tracking-tight mb-4 text-white">
                 Flat Monthly Rate
               </h3>
-              <p className="text-zinc-650 font-normal text-base leading-relaxed mb-6">
+              <p className="text-white/60 font-normal text-base leading-relaxed mb-6">
                 No surprise bills, hourly rates, or endless negotiations. You pay the exact same flat fee every single month.
               </p>
              </div>
-             <div className="w-full h-28 rounded-xl border-2 border-zinc-950 border-dashed overflow-hidden flex items-center justify-center bg-zinc-50">
-                <span className="text-xl font-extrabold text-zinc-400">$0 Hidden fees</span>
+             <div className="w-full h-28 rounded-xl border border-white/10 border-dashed overflow-hidden flex items-center justify-center bg-white/5">
+                <span className="text-xl font-extrabold text-[#D4AF37]">$0 Hidden fees</span>
              </div>
           </motion.div>
 
@@ -114,19 +110,17 @@ export default function AgencyAdvantages() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="col-span-1 p-8 lg:p-12 rounded-3xl border-2 border-zinc-950 bg-white transition-all group lg:hover:-translate-y-1 lg:hover:translate-x-1"
-            style={{ boxShadow: `4px 4px 0px rgba(9,9,11,1)` }}
+            className="col-span-1 p-8 lg:p-12 rounded-3xl luxury-card cursor-pointer"
           >
              <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border-2 border-zinc-950 shadow-[2.5px_2.5px_0px_rgba(9,9,11,1)]"
-                style={{ backgroundColor: COLORS.yellow }}
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:scale-110 transition-transform duration-300"
               >
-                <Users className="w-6 h-6 text-zinc-950" strokeWidth={2.5} />
+                <Users className="w-6 h-6" strokeWidth={2.5} />
               </div>
-              <h3 className="text-xl lg:text-2xl font-extrabold uppercase tracking-tight mb-4 text-zinc-950">
+              <h3 className="text-xl lg:text-2xl font-extrabold uppercase tracking-tight mb-4 text-white">
                 Your Dedicated Team
               </h3>
-              <p className="text-zinc-650 font-normal text-base leading-relaxed">
+              <p className="text-white/60 font-normal text-base leading-relaxed">
                 Stop playing roulette with freelancers. Get design and development from a senior-level team that learns your brand perfectly.
               </p>
           </motion.div>
@@ -136,26 +130,24 @@ export default function AgencyAdvantages() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="md:col-span-2 p-8 lg:p-12 rounded-3xl border-2 border-zinc-950 bg-white transition-all group lg:hover:-translate-y-1 lg:hover:translate-x-1 relative overflow-hidden"
-            style={{ boxShadow: `4px 4px 0px rgba(9,9,11,1)` }}
+            className="md:col-span-2 p-8 lg:p-12 rounded-3xl luxury-card relative overflow-hidden group cursor-pointer"
           >
             <div className="relative z-10 w-full md:w-1/2">
               <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border-2 border-zinc-950 shadow-[2.5px_2.5px_0px_rgba(9,9,11,1)]"
-                style={{ backgroundColor: COLORS.pink }}
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:scale-110 transition-transform duration-300"
               >
-                <Rocket className="w-6 h-6 text-zinc-950" strokeWidth={2.5} />
+                <Rocket className="w-6 h-6" strokeWidth={2.5} />
               </div>
-              <h3 className="text-xl lg:text-3xl font-extrabold uppercase tracking-tight mb-4 text-zinc-950">
+              <h3 className="text-xl lg:text-3xl font-extrabold uppercase tracking-tight mb-4 text-white">
                 Lightning Fast
               </h3>
-              <p className="text-zinc-650 font-normal text-base leading-relaxed">
+              <p className="text-white/60 font-normal text-base leading-relaxed">
                 Submit a request and get it back in an average of 48 hours. We iterate rapidly until you are 100% satisfied with the result.
               </p>
             </div>
             
             <div className="absolute right-0 bottom-0 top-0 w-1/2 hidden md:block">
-               <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover border-l-2 border-zinc-950 grayscale group-hover:grayscale-0 transition-all duration-500" alt="Performance dashboard" referrerPolicy="no-referrer" />
+               <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover border-l border-white/10 grayscale group-hover:grayscale-0 transition-all duration-500" alt="Performance dashboard" referrerPolicy="no-referrer" />
             </div>
           </motion.div>
         </div>

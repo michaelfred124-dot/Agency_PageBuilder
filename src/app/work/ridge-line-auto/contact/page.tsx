@@ -1,11 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Check, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MapPin, Check } from 'lucide-react';
 
-const CHARCOAL = '#1C1C1C';
-const RED = '#C0392B';
-const SILVER = '#8C8C8C';
-const CONCRETE = '#F5F5F5';
+const BG = '#0D0D0D';
+const CARD = '#161616';
+const RED = '#E5242A';
+const BORDER = 'rgba(229,36,42,0.15)';
 
 export default function RidgeLineContact() {
   const [sent, setSent] = useState(false);
@@ -24,218 +24,157 @@ export default function RidgeLineContact() {
   };
 
   return (
-    <>
-      {/* Page Header */}
-      <section style={{ backgroundColor: CHARCOAL }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div
-            className="text-[10px] font-black uppercase tracking-[0.5em] mb-4"
-            style={{ color: RED, fontFamily: 'var(--font-display)' }}
-          >
-            Contact
-          </div>
-          <h1
-            className="text-5xl md:text-6xl text-white mb-5 leading-none"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.02em',
-            }}
-          >
-            Book a Service
-            <br />
-            Appointment
-          </h1>
-          <div style={{ width: 60, height: 3, backgroundColor: RED }} className="mb-6" />
-          <p
-            className="text-white/50 max-w-lg text-sm leading-relaxed"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
-            Same-day service on most repairs. ASE certified. Honest pricing with no hidden fees.
-          </p>
-        </div>
+    <div style={{ backgroundColor: BG, color: '#fff' }} className="min-h-[80vh] overflow-x-hidden">
+      
+      {/* Title Header */}
+      <section className="py-24 px-6 md:px-12 text-center bg-[#0D0D0D] border-b border-white/5 relative overflow-hidden">
+        <span className="text-[#E5242A] font-mono font-black text-xs tracking-[0.25em] uppercase block mb-4">Request Service</span>
+        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-none uppercase">Book Consultation</h1>
+        <p className="text-white/50 max-w-xl mx-auto text-sm font-light leading-relaxed">
+          Connect directly with our performance tuners or service advisors to schedule dyno slots or general repairs.
+        </p>
       </section>
 
-      {/* Main Content: Sidebar Info + Form */}
-      <section style={{ backgroundColor: CONCRETE }} className="py-16 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-[1fr_1.6fr] gap-8">
-
-          {/* LEFT: Shop Info Panel */}
-          <div className="space-y-0">
-            <div
-              className="p-8"
-              style={{ backgroundColor: CHARCOAL }}
-            >
-              <div
-                className="text-[9px] font-black uppercase tracking-[0.4em] mb-6"
-                style={{ color: RED, fontFamily: 'var(--font-display)' }}
-              >
-                Find Us
+      {/* Form and info grid */}
+      <section className="py-24 px-6 md:px-12 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-[1.4fr_1fr] gap-12 items-start">
+          
+          {/* Form container */}
+          <div className="rounded-tl-[40px] rounded-br-[40px] overflow-hidden border border-white/5 shadow-xl p-8 md:p-12 text-left" style={{ backgroundColor: CARD }}>
+            {sent ? (
+              <div className="py-16 text-center space-y-6">
+                <div className="w-14 h-14 border border-[#E5242A] text-[#0D0D0D] bg-[#E5242A]/10 rounded-full flex items-center justify-center mx-auto shadow-md">
+                  <Check className="w-6 h-6 text-[#E5242A]" strokeWidth={3} />
+                </div>
+                <h3 className="text-2xl font-black text-white uppercase tracking-wide">Appointment Logged</h3>
+                <p className="text-white/60 text-xs max-w-sm mx-auto font-light leading-relaxed">
+                  Your appointment request has been recorded. Our service advisor will contact you within two business hours to confirm your slot.
+                </p>
+                <button onClick={() => setSent(false)} className="text-[10px] font-mono font-black uppercase tracking-widest border-b border-[#E5242A] pb-1 hover:text-[#E5242A] transition-colors" style={{ color: RED }}>
+                  Request Another Appointment
+                </button>
               </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <h2 className="font-black text-xl text-white uppercase tracking-wide pb-4 border-b border-white/5 mb-4">Request Details</h2>
+                
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="flex flex-col">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#E5242A] font-black mb-2">Full Name*</label>
+                    <input 
+                      required 
+                      value={form.name} 
+                      onChange={e => setForm({ ...form, name: e.target.value })} 
+                      className="bg-[#0D0D0D] border border-white/10 px-4 py-3.5 text-xs text-white focus:outline-none focus:border-[#E5242A]/60 rounded-md transition-colors" 
+                      placeholder="e.g. Johnathan Smith" 
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#E5242A] font-black mb-2">Direct Email</label>
+                    <input 
+                      type="email"
+                      value={form.email} 
+                      onChange={e => setForm({ ...form, email: e.target.value })} 
+                      className="bg-[#0D0D0D] border border-white/10 px-4 py-3.5 text-xs text-white focus:outline-none focus:border-[#E5242A]/60 rounded-md transition-colors" 
+                      placeholder="e.g. j.smith@company.com" 
+                    />
+                  </div>
+                </div>
 
-              {/* Phone — prominent */}
-              <a
-                href="tel:+13035550247"
-                className="flex items-center gap-3 mb-6 group"
-              >
-                <div
-                  className="w-10 h-10 flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: RED }}
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="flex flex-col">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#E5242A] font-black mb-2">Contact Number*</label>
+                    <input 
+                      required
+                      value={form.phone} 
+                      onChange={e => setForm({ ...form, phone: e.target.value })} 
+                      className="bg-[#0D0D0D] border border-white/10 px-4 py-3.5 text-xs text-white focus:outline-none focus:border-[#E5242A]/60 rounded-md transition-colors" 
+                      placeholder="e.g. (615) 555-0100" 
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#E5242A] font-black mb-2">Vehicle (Year, Make, Model)*</label>
+                    <input 
+                      required 
+                      value={form.vehicle} 
+                      onChange={e => setForm({ ...form, vehicle: e.target.value })} 
+                      className="bg-[#0D0D0D] border border-white/10 px-4 py-3.5 text-xs text-white focus:outline-none focus:border-[#E5242A]/60 rounded-md transition-colors" 
+                      placeholder="e.g. 2021 Mustang GT500" 
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#E5242A] font-black mb-2">Service Selection*</label>
+                  <select 
+                    required 
+                    value={form.service} 
+                    onChange={e => setForm({ ...form, service: e.target.value })} 
+                    className="bg-[#0D0D0D] border border-white/10 px-4 py-3.5 text-xs text-white focus:outline-none focus:border-[#E5242A]/60 rounded-md transition-colors cursor-pointer appearance-none"
+                  >
+                    <option value="" className="text-gray-500">Select service type...</option>
+                    {['Engine Tuning & Dyno', 'Brakes & Upgrades', 'Suspension & Setup', 'Track Wheel Setup', 'Advanced Diagnostics', 'Preventive Maintenance'].map(o => (
+                      <option key={o} value={o} className="text-gray-900">{o}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#E5242A] font-black mb-2">Diagnostic details</label>
+                  <textarea 
+                    value={form.message} 
+                    onChange={e => setForm({ ...form, message: e.target.value })} 
+                    rows={4} 
+                    className="bg-[#0D0D0D] border border-white/10 px-4 py-3.5 text-xs text-white focus:outline-none focus:border-[#E5242A]/60 rounded-md transition-colors resize-none leading-relaxed" 
+                    placeholder="Describe any performance goals, mechanical issues, or error codes..." 
+                  />
+                </div>
+
+                <button 
+                  type="submit" 
+                  className="w-full py-4.5 bg-[#E5242A] text-white hover:bg-white hover:text-black transition-all font-mono font-black uppercase tracking-widest text-[10px]"
                 >
-                  <Phone className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <div
-                    className="text-lg text-white leading-tight"
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontWeight: 700,
-                    }}
-                  >
-                    (303) 555-0247
-                  </div>
-                  <div
-                    className="text-[10px] uppercase tracking-widest"
-                    style={{ color: SILVER, fontFamily: 'var(--font-body)' }}
-                  >
-                    Call or Text
-                  </div>
-                </div>
-              </a>
-
-              {/* Call Now CTA */}
-              <a
-                href="tel:+13035550247"
-                className="flex items-center justify-center gap-2 w-full py-3 mb-7 font-black uppercase tracking-widest text-[11px] text-white"
-                style={{ backgroundColor: RED, fontFamily: 'var(--font-display)' }}
-              >
-                <Phone className="w-3.5 h-3.5" />
-                Call Now
-                <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-
-              {/* Address */}
-              <div className="flex gap-3 mb-5">
-                <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
-                <div>
-                  <div
-                    className="text-white text-sm mb-0.5"
-                    style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase' }}
-                  >
-                    4821 W Colfax Ave
-                    <br />
-                    Denver, CO 80204
-                  </div>
-                  <div
-                    className="text-[11px]"
-                    style={{ color: SILVER, fontFamily: 'var(--font-body)' }}
-                  >
-                    Easy parking — drive-in service bay
-                  </div>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="flex gap-3 mb-8">
-                <Mail className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
-                <div
-                  className="text-sm"
-                  style={{ color: SILVER, fontFamily: 'var(--font-body)' }}
-                >
-                  service@ridgelineauto.com
-                </div>
-              </div>
-
-              {/* Hours */}
-              <div
-                className="border-t pt-6"
-                style={{ borderColor: 'rgba(255,255,255,0.1)' }}
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <Clock className="w-3.5 h-3.5" style={{ color: RED }} />
-                  <div
-                    className="text-[9px] font-black uppercase tracking-[0.4em]"
-                    style={{ color: SILVER, fontFamily: 'var(--font-display)' }}
-                  >
-                    Shop Hours
-                  </div>
-                </div>
-                <div className="space-y-2 text-sm">
-                  {[
-                    ['Mon – Fri', '7am – 6pm'],
-                    ['Saturday', '8am – 4pm'],
-                    ['Sunday', 'Closed'],
-                  ].map(([day, hours], i) => (
-                    <div key={i} className="flex justify-between items-center">
-                      <span
-                        style={{ color: SILVER, fontFamily: 'var(--font-body)' }}
-                      >
-                        {day}
-                      </span>
-                      <span
-                        className={hours === 'Closed' ? '' : 'text-white'}
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          fontWeight: hours === 'Closed' ? 400 : 700,
-                          color: hours === 'Closed' ? SILVER : '#FFFFFF',
-                          fontSize: '0.8rem',
-                        }}
-                      >
-                        {hours}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Warranty note */}
-              <div
-                className="mt-6 border-t pt-5 text-[11px] text-white/40 leading-relaxed"
-                style={{ borderColor: 'rgba(255,255,255,0.1)', fontFamily: 'var(--font-body)' }}
-              >
-                All repairs backed by our 24-month / 24,000-mile warranty. No surprises. No hidden fees.
-              </div>
-            </div>
+                  Send Appointment Brief
+                </button>
+              </form>
+            )}
           </div>
 
-          {/* RIGHT: Form */}
-          <div>
-            {sent ? (
-              <div
-                className="flex flex-col items-center justify-center p-14 text-center h-full"
-                style={{ backgroundColor: CHARCOAL, borderTop: `4px solid ${RED}` }}
-              >
-                <div
-                  className="w-14 h-14 rounded-full flex items-center justify-center mb-5"
-                  style={{ backgroundColor: RED }}
-                >
-                  <Check className="w-7 h-7 text-white" />
+          {/* Info cards */}
+          <div className="space-y-6 text-left">
+            <div className="border border-white/5 p-8 rounded-tr-3xl rounded-bl-3xl shadow-lg" style={{ backgroundColor: CARD }}>
+              <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#E5242A] font-black mb-6 block">Nashville Shop</span>
+              <div className="space-y-5">
+                <div className="flex gap-3">
+                  <Phone className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
+                  <div>
+                    <div className="font-black text-white text-sm">(615) 555-0174</div>
+                    <div className="text-[10px] text-white/40 font-mono uppercase mt-0.5">Dyno & Service Desk</div>
+                  </div>
                 </div>
-                <h2
-                  className="text-2xl text-white mb-3"
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.02em',
-                  }}
-                >
-                  Got it. We Will Call You Shortly.
-                </h2>
-                <p
-                  className="text-white/50 text-sm mb-8 max-w-sm"
-                  style={{ fontFamily: 'var(--font-body)' }}
-                >
-                  Our service advisor will confirm your appointment via phone or email within 2 business hours.
-                </p>
-                <button
-                  onClick={() => setSent(false)}
-                  className="text-[10px] font-black uppercase tracking-widest border-b pb-0.5"
-                  style={{ color: RED, borderColor: RED, fontFamily: 'var(--font-display)' }}
-                >
-                  Book Another Appointment
-                </button>
+                <div className="flex gap-3">
+                  <Mail className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
+                  <div>
+                    <div className="font-black text-white text-sm">service@ridgelineauto.com</div>
+                    <div className="text-[10px] text-white/40 font-mono uppercase mt-0.5">Inquiries</div>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
+                  <div>
+                    <div className="font-black text-white text-sm">4820 Nolensville Pike<br />Nashville, TN 37211</div>
+                    <div className="text-[10px] text-white/40 font-mono uppercase mt-0.5">Workshop Address</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-white/5 p-8 rounded-tl-3xl rounded-br-3xl shadow-lg" style={{ backgroundColor: CARD }}>
+              <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-[#E5242A] font-black mb-6 block">Shop Hours</span>
+              <div className="space-y-3.5 text-xs font-light">
+                <div className="flex justify-between"><span className="text-white/50">Mon – Fri</span><span className="font-mono font-bold text-white">7:00 AM – 6:00 PM</span></div>
+                <div className="flex justify-between"><span className="text-white/50">Saturday</span><span className="font-mono font-bold text-white">8:00 AM – 4:00 PM</span></div>
+                <div className="flex justify-between"><span className="text-white/50">Sunday</span><span className="font-mono font-bold text-white/20">Closed</span></div>
               </div>
             ) : (
               <form
@@ -399,8 +338,11 @@ export default function RidgeLineContact() {
               </form>
             )}
           </div>
+
         </div>
       </section>
-    </>
+
+    </div>
   );
 }
+

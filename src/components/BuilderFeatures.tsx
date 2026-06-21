@@ -59,19 +59,19 @@ export default function BuilderFeatures() {
   };
 
   return (
-    <section id="features" className="py-20 lg:py-32 bg-[#F7F8FA] text-zinc-900 px-6 relative overflow-hidden border-b border-zinc-200/50">
+    <section id="features" className="py-20 lg:py-32 bg-[#0B0B0B] text-white px-6 relative overflow-hidden border-b border-white/10">
       {/* Decorative dot background */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
       
       <div className="max-w-[1400px] mx-auto relative z-10">
         
         {/* Header Block */}
         <div className="flex flex-col space-y-4 mb-16 lg:mb-24 text-center items-center">
-          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Visual Platform</span>
-          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight leading-none max-w-4xl text-zinc-950">
-            The power of a <span className="bg-gradient-to-r from-zinc-900 to-zinc-550 bg-clip-text text-transparent">Web App</span>,<br className="hidden md:block" /> engineered for <span style={{ color: COLORS.green }}>local growth</span>
+          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-[#D4AF37]">Visual Platform</span>
+          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight leading-none max-w-4xl text-white">
+            The power of a <span className="luxury-gradient-text">Web App</span>,<br className="hidden md:block" /> engineered for <span className="text-[#FF7F11]">local growth</span>
           </h2>
-          <p className="max-w-2xl text-zinc-600 text-base md:text-lg font-normal pt-2">
+          <p className="max-w-2xl text-white/70 text-base md:text-lg font-normal pt-2">
             No technical knowledge needed. Drag-and-drop layouts, edit text inline, manage SEO, and sync your favorite business tools in minutes.
           </p>
         </div>
@@ -83,33 +83,33 @@ export default function BuilderFeatures() {
           <div className="lg:col-span-7 flex flex-col space-y-6">
             
             {/* Control Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-white border border-zinc-200 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+            <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-white/[0.02] border border-white/10 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
               <div className="flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-zinc-200" />
-                <span className="w-2.5 h-2.5 rounded-full bg-zinc-200" />
-                <span className="w-2.5 h-2.5 rounded-full bg-zinc-200" />
-                <span className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase ml-2 hidden sm:inline">LIVE BUILDER SIMULATOR</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                <span className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                <span className="w-2.5 h-2.5 rounded-full bg-white/10" />
+                <span className="text-[10px] font-bold text-white/40 tracking-wider uppercase ml-2 hidden sm:inline">LIVE BUILDER SIMULATOR</span>
               </div>
               
               {/* Viewport Selectors */}
-              <div className="flex items-center gap-1 bg-zinc-100/80 rounded-lg p-1 border border-zinc-200/50">
+              <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1 border border-white/10">
                 <button 
                   onClick={() => setActiveDevice('desktop')}
-                  className={`p-1.5 rounded transition-all cursor-pointer ${activeDevice === 'desktop' ? 'bg-white text-zinc-950 shadow-sm' : 'text-zinc-500 hover:text-zinc-900'}`}
+                  className={`p-1.5 rounded transition-all cursor-pointer ${activeDevice === 'desktop' ? 'bg-white/10 text-white shadow-sm' : 'text-white/40 hover:text-white'}`}
                   title="Desktop View"
                 >
                   <Monitor className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={() => setActiveDevice('tablet')}
-                  className={`p-1.5 rounded transition-all cursor-pointer ${activeDevice === 'tablet' ? 'bg-white text-zinc-950 shadow-sm' : 'text-zinc-500 hover:text-zinc-900'}`}
+                  className={`p-1.5 rounded transition-all cursor-pointer ${activeDevice === 'tablet' ? 'bg-white/10 text-white shadow-sm' : 'text-white/40 hover:text-white'}`}
                   title="Tablet View"
                 >
                   <Tablet className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={() => setActiveDevice('mobile')}
-                  className={`p-1.5 rounded transition-all cursor-pointer ${activeDevice === 'mobile' ? 'bg-white text-zinc-950 shadow-sm' : 'text-zinc-500 hover:text-zinc-900'}`}
+                  className={`p-1.5 rounded transition-all cursor-pointer ${activeDevice === 'mobile' ? 'bg-white/10 text-white shadow-sm' : 'text-white/40 hover:text-white'}`}
                   title="Mobile View"
                 >
                   <Smartphone className="w-4 h-4" />
@@ -121,45 +121,45 @@ export default function BuilderFeatures() {
             <div className="relative w-full flex justify-center items-start">
               
               {/* Floating Layout Elements Panel (Simulation) */}
-              <div className="absolute -left-4 top-20 z-20 w-38 hidden xl:flex flex-col gap-2 p-3 bg-white border border-zinc-200 rounded-xl shadow-xl select-none">
-                <div className="text-[9px] font-bold uppercase text-zinc-400 tracking-wider">Blocks</div>
-                <div className="flex items-center gap-2 p-1.5 bg-zinc-50 border border-zinc-200/60 rounded text-[10px] font-medium text-zinc-700">
-                  <GripVertical className="w-3 h-3 text-zinc-300 shrink-0" />
+              <div className="absolute -left-4 top-20 z-20 w-38 hidden xl:flex flex-col gap-2 p-3 bg-[#121212]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-xl select-none">
+                <div className="text-[9px] font-bold uppercase text-white/40 tracking-wider">Blocks</div>
+                <div className="flex items-center gap-2 p-1.5 bg-white/5 border border-white/10 rounded text-[10px] font-medium text-white/80">
+                  <GripVertical className="w-3 h-3 text-white/20 shrink-0" />
                   Hero Section
                 </div>
-                <div className="flex items-center gap-2 p-1.5 bg-zinc-50 border border-zinc-200/60 rounded text-[10px] font-medium text-zinc-700">
-                  <GripVertical className="w-3 h-3 text-zinc-300 shrink-0" />
+                <div className="flex items-center gap-2 p-1.5 bg-white/5 border border-white/10 rounded text-[10px] font-medium text-white/80">
+                  <GripVertical className="w-3 h-3 text-white/20 shrink-0" />
                   Services Grid
                 </div>
-                <div className="flex items-center gap-2 p-1.5 bg-zinc-50 border border-zinc-200/60 rounded text-[10px] font-medium text-zinc-400 border-zinc-100">
-                  <GripVertical className="w-3 h-3 text-zinc-200 shrink-0" />
+                <div className="flex items-center gap-2 p-1.5 bg-white/5 border border-white/5 rounded text-[10px] font-medium text-white/30">
+                  <GripVertical className="w-3 h-3 text-white/10 shrink-0" />
                   Calendly Block
                 </div>
               </div>
 
               {/* Floating Styling Inspector Panel (Simulation) */}
-              <div className="absolute -right-4 top-32 z-20 w-44 hidden xl:flex flex-col gap-3 p-3 bg-white border border-zinc-200 rounded-xl shadow-xl select-none">
-                <div className="text-[9px] font-bold uppercase text-zinc-400 tracking-wider">Canvas Theme</div>
+              <div className="absolute -right-4 top-32 z-20 w-44 hidden xl:flex flex-col gap-3 p-3 bg-[#121212]/95 backdrop-blur-md border border-white/10 rounded-xl shadow-xl select-none">
+                <div className="text-[9px] font-bold uppercase text-white/40 tracking-wider">Canvas Theme</div>
                 <div className="flex gap-1.5">
                   <button 
                     onClick={() => setSimulatedTheme('light')}
-                    className={`w-6 h-6 rounded-full bg-stone-100 border-2 transition-all cursor-pointer ${simulatedTheme === 'light' ? 'border-blue-500 scale-110' : 'border-zinc-200'}`}
+                    className={`w-6 h-6 rounded-full bg-stone-100 border-2 transition-all cursor-pointer ${simulatedTheme === 'light' ? 'border-[#FF7F11] scale-110' : 'border-white/10'}`}
                     title="Light theme"
                   />
                   <button 
                     onClick={() => setSimulatedTheme('sand')}
-                    className={`w-6 h-6 rounded-full bg-[#F4F1EA] border-2 transition-all cursor-pointer ${simulatedTheme === 'sand' ? 'border-blue-500 scale-110' : 'border-zinc-200'}`}
+                    className={`w-6 h-6 rounded-full bg-[#F4F1EA] border-2 transition-all cursor-pointer ${simulatedTheme === 'sand' ? 'border-[#FF7F11] scale-110' : 'border-white/10'}`}
                     title="Sand theme"
                   />
                   <button 
                     onClick={() => setSimulatedTheme('dark')}
-                    className={`w-6 h-6 rounded-full bg-zinc-900 border-2 transition-all cursor-pointer ${simulatedTheme === 'dark' ? 'border-blue-500 scale-110' : 'border-zinc-200'}`}
+                    className={`w-6 h-6 rounded-full bg-zinc-900 border-2 transition-all cursor-pointer ${simulatedTheme === 'dark' ? 'border-[#FF7F11] scale-110' : 'border-white/10'}`}
                     title="Dark theme"
                   />
                 </div>
-                <div className="border-t border-zinc-100 pt-2">
-                  <div className="text-[9px] font-bold uppercase text-zinc-400 tracking-wider mb-1">Padding</div>
-                  <div className="bg-zinc-50 p-1 text-[10px] font-semibold text-center border border-zinc-200 rounded text-zinc-650">
+                <div className="border-t border-white/10 pt-2">
+                  <div className="text-[9px] font-bold uppercase text-white/40 tracking-wider mb-1">Padding</div>
+                  <div className="bg-white/5 p-1 text-[10px] font-semibold text-center border border-white/10 rounded text-white/80">
                     Py-24 (Large)
                   </div>
                 </div>
@@ -172,16 +172,16 @@ export default function BuilderFeatures() {
                   minHeight: activeDevice === 'mobile' ? '460px' : '380px'
                 }}
                 transition={{ type: 'spring', damping: 20, stiffness: 120 }}
-                className="w-full bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xl relative transition-all"
+                className="w-full bg-[#0B0B0B] border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative transition-all"
               >
                 
                 {/* Active Inner Viewport */}
                 <div className={`p-8 lg:p-12 h-full flex flex-col justify-between transition-colors duration-500 ${getSimulatedThemeBg()}`}>
                   
                   {/* Top Bar / Header preview */}
-                  <div className="flex justify-between items-center pb-6 border-b border-zinc-200/50">
+                  <div className="flex justify-between items-center pb-6 border-b border-zinc-200/20">
                     <span className="font-extrabold text-sm uppercase tracking-wider">🌿 Greenscape</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 border border-zinc-250 rounded-full">Menu</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 border border-zinc-350 rounded-full">Menu</span>
                   </div>
 
                   {/* Main content body */}
@@ -229,7 +229,7 @@ export default function BuilderFeatures() {
                   </div>
 
                   {/* Footer widgets preview area */}
-                  <div className="pt-6 border-t border-zinc-200/50 grid grid-cols-2 gap-4 text-[10px] font-semibold opacity-70">
+                  <div className="pt-6 border-t border-zinc-200/20 grid grid-cols-2 gap-4 text-[10px] font-semibold opacity-70">
                     <div className="flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5 shrink-0" />
                       Denver, Colorado
@@ -247,7 +247,7 @@ export default function BuilderFeatures() {
             </div>
 
             {/* Mobile helpful text */}
-            <div className="flex items-center gap-2 bg-zinc-100 p-3 rounded-xl border border-zinc-200 text-xs font-semibold text-zinc-500 md:hidden justify-center text-center">
+            <div className="flex items-center gap-2 bg-white/5 p-3 rounded-xl border border-white/10 text-xs font-semibold text-white/50 md:hidden justify-center text-center">
               <span>💡</span> Tap elements inside the workspace preview to edit!
             </div>
             
@@ -265,20 +265,17 @@ export default function BuilderFeatures() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
                   whileHover={{ x: 4, y: -1 }}
-                  className="p-6 bg-white border border-zinc-200 rounded-2xl flex gap-5 items-start transition-all hover:bg-zinc-50 hover:border-zinc-300 hover:shadow-xl scroll-mt-24"
+                  className="p-6 luxury-card rounded-2xl flex gap-5 items-start cursor-pointer"
                 >
-                  <div 
-                    className="p-3 border-2 border-zinc-950 rounded-xl shrink-0 shadow-[2.5px_2.5px_0px_rgba(9,9,11,1)]"
-                    style={{ backgroundColor: item.color }}
-                  >
-                    <IconComponent className="w-5 h-5 text-zinc-950" strokeWidth={2.5} />
+                  <div className="p-3 border border-[#D4AF37]/20 bg-[#D4AF37]/10 rounded-xl shrink-0 text-[#D4AF37]">
+                    <IconComponent className="w-5 h-5" strokeWidth={2.5} />
                   </div>
                   
                   <div className="space-y-1.5">
-                    <h3 className="font-bold text-base text-zinc-950 flex items-center gap-2">
+                    <h3 className="font-bold text-base text-white flex items-center gap-2">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-zinc-650 leading-relaxed font-normal">
+                    <p className="text-xs text-white/60 leading-relaxed font-normal">
                       {item.desc}
                     </p>
                   </div>
@@ -290,26 +287,26 @@ export default function BuilderFeatures() {
         </div>
 
         {/* Bottom CTA bar inside features */}
-        <div className="mt-20 border border-zinc-200 rounded-[32px] p-8 md:p-12 text-center flex flex-col items-center bg-white shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
+        <div className="mt-20 rounded-[32px] p-8 md:p-12 text-center flex flex-col items-center luxury-card relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF7F11]/5 rounded-full blur-2xl pointer-events-none" />
           
-          <h3 className="text-2xl md:text-4xl font-extrabold uppercase tracking-tight mb-4 max-w-2xl leading-none text-zinc-950">
+          <h3 className="text-2xl md:text-4xl font-extrabold uppercase tracking-tight mb-4 max-w-2xl leading-none text-white">
             Ready to build your local authority?
           </h3>
-          <p className="text-sm md:text-base font-normal text-zinc-600 mb-8 max-w-xl">
+          <p className="text-sm md:text-base font-normal text-white/70 mb-8 max-w-xl">
             Choose a starting layout, plug in your brand information, and launch a fast, professional site in under 15 minutes.
           </p>
           
           <div className="flex flex-wrap justify-center gap-4">
             <a 
               href="/dashboard"
-              className="px-6 py-3 bg-[#4353FF] hover:bg-[#3442DD] text-white rounded-full font-semibold text-xs transition-all shadow-md shadow-blue-500/10 cursor-pointer"
+              className="px-6 py-3 bg-gradient-to-r from-[#FF7F11] to-[#D4AF37] hover:opacity-90 text-white rounded-full font-bold text-xs transition-all shadow-md shadow-orange-500/10 cursor-pointer"
             >
               Start Building Free
             </a>
             <a 
               href="/pricing"
-              className="px-6 py-3 border border-zinc-200 text-zinc-600 hover:text-black hover:bg-zinc-50 rounded-full font-semibold text-xs transition-all cursor-pointer"
+              className="px-6 py-3 border border-white/10 text-white hover:bg-white/5 rounded-full font-semibold text-xs transition-all cursor-pointer"
             >
               Compare Plans
             </a>

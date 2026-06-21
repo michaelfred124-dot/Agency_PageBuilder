@@ -22,45 +22,45 @@ const PORTFOLIO_IMAGES = [
 
 export default function LaurenWilsonTemplate() {
   return (
-    <div className="min-h-screen font-sans bg-white text-[#333333] selection:bg-[#1A1A1A] selection:text-white">
+    <div className="min-h-screen font-sans bg-[#F8F6F0] text-[#1A1A1A] selection:bg-[#AF9063] selection:text-white">
       {/* Navbar */}
-      <nav className="bg-[#1A1A1A] text-white py-6 px-6 md:px-12 flex justify-between items-center sticky top-0 z-[60]">
+      <nav className="bg-[#F8F6F0]/90 backdrop-blur-md text-[#1A1A1A] py-6 px-6 md:px-12 flex justify-between items-center sticky top-0 z-[60] border-b border-[#E4E0D5]">
         <div className="flex items-center gap-2">
           <div className="text-xl font-serif italic tracking-widest flex items-center gap-2">
-            <span className="text-2xl font-bold">L</span>
-            <div className="w-px h-6 bg-white/20 mx-1" />
-            <span className="text-2xl font-bold">W</span>
+            <span className="text-2xl font-semibold text-[#AF9063]">L</span>
+            <div className="w-px h-6 bg-[#E4E0D5] mx-1" />
+            <span className="text-2xl font-semibold text-[#1A1A1A]">W</span>
           </div>
           <div className="flex flex-col leading-none ml-2">
-            <span className="text-xs font-bold uppercase tracking-[0.3em]">Lauren Wilson</span>
-            <span className="text-[8px] font-medium uppercase tracking-[0.4em] text-white/50">Photography</span>
+            <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#1A1A1A]">Lauren Wilson</span>
+            <span className="text-[8px] font-medium uppercase tracking-[0.4em] text-[#AF9063]">Fine Art Photography</span>
           </div>
         </div>
         
-        <div className="hidden lg:flex items-center gap-8 text-[10px] font-bold uppercase tracking-widest">
-          <Link href="#" className="hover:text-silver transition-colors">Home</Link>
-          <Link href="#" className="hover:text-silver transition-colors">Portfolio</Link>
-          <Link href="#" className="hover:text-silver transition-colors">About</Link>
-          <Link href="#" className="hover:text-silver transition-colors">Services</Link>
-          <Link href="#" className="hover:text-silver transition-colors">Blog</Link>
-          <Link href="#" className="hover:text-silver transition-colors">Contact</Link>
+        <div className="hidden lg:flex items-center gap-8 text-[10px] font-bold uppercase tracking-widest text-[#1A1A1A]/70">
+          <Link href="#" className="hover:text-[#AF9063] transition-colors">Home</Link>
+          <Link href="#" className="hover:text-[#AF9063] transition-colors">Portfolio</Link>
+          <Link href="#" className="hover:text-[#AF9063] transition-colors">About</Link>
+          <Link href="#" className="hover:text-[#AF9063] transition-colors">Services</Link>
+          <Link href="#" className="hover:text-[#AF9063] transition-colors">Blog</Link>
+          <Link href="#" className="hover:text-[#AF9063] transition-colors">Contact</Link>
         </div>
 
-        <button className="border border-white/30 px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-[#1A1A1A] transition-all">
+        <button className="border border-[#1A1A1A] px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-[#1A1A1A] hover:text-[#F8F6F0] transition-all">
           Book a Session
         </button>
       </nav>
 
       {/* Hero */}
-      <section className="relative min-h-[85vh] py-32 flex items-center overflow-hidden">
+      <section className="relative min-h-[90vh] py-32 flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image 
             src="https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop" 
-            className="w-full h-full object-cover" 
+            className="w-full h-full object-cover grayscale brightness-[0.45]" 
             alt="Photography Hero" 
             referrerPolicy="no-referrer"
           fill />
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F8F6F0] via-transparent to-[#1A1A1A]/40" />
         </div>
         
         <div className="container mx-auto px-6 md:px-12 relative z-10 text-white">
@@ -68,21 +68,21 @@ export default function LaurenWilsonTemplate() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="max-w-2xl"
+            className="max-w-3xl"
           >
-            <div className="flex items-center gap-4 mb-4">
-               <span className="bg-[#E0E0E0] text-black px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full">New Template</span>
-               <span className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full">Built with Next.js + React</span>
+            <div className="flex items-center gap-4 mb-6">
+               <span className="bg-[#AF9063] text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">New Template</span>
+               <span className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">Built with Next.js + React</span>
             </div>
-            <span className="text-xs font-bold uppercase tracking-[0.4em] mb-4 block text-white/70">Capturing Real Moments</span>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif italic leading-[1.1] mb-8">
+            <span className="text-xs font-bold uppercase tracking-[0.4em] mb-4 block text-[#AF9063]">Capturing Real Moments</span>
+            <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-serif italic leading-[1.05] mb-8 text-white">
               Timeless Imagery.<br />Authentic Stories.
             </h1>
             <p className="text-lg md:text-xl font-light mb-10 text-white/80 max-w-lg leading-relaxed">
               Natural light photographer specializing in portraits, couples, weddings, and landscapes based in Colorado.
             </p>
             <div className="flex flex-wrap gap-3 md:gap-4">
-              <button className="bg-white text-black px-6 md:px-10 py-3 md:py-4 font-bold uppercase tracking-widest hover:bg-silver transition-all text-xs md:text-[11px] flex items-center gap-3">
+              <button className="bg-white text-black px-8 py-4 font-bold uppercase tracking-widest hover:bg-[#AF9063] hover:text-white transition-all text-xs md:text-[11px] flex items-center gap-3">
                 View Portfolio <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -91,54 +91,54 @@ export default function LaurenWilsonTemplate() {
       </section>
 
       {/* Portfolio Grid */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#F8F6F0] border-b border-[#E4E0D5]">
         <div className="container mx-auto px-6 md:px-12">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
-              <span className="text-[#1A1A1A]/40 font-bold uppercase tracking-widest text-[10px] block mb-4">Portfolio</span>
-              <h2 className="text-4xl md:text-5xl font-serif italic text-[#1A1A1A]">Selected Work</h2>
+              <span className="text-[#AF9063] font-bold uppercase tracking-widest text-[10px] block mb-4">Portfolio</span>
+              <h2 className="text-4xl md:text-6xl font-serif italic text-[#1A1A1A]">Selected Work</h2>
             </div>
-            <div className="flex flex-wrap gap-6 text-[10px] font-bold uppercase tracking-widest border-b border-black/5 pb-2">
+            <div className="flex flex-wrap gap-6 text-[10px] font-bold uppercase tracking-widest border-b border-[#E4E0D5] pb-2">
               {['All', 'Portraits', 'Weddings', 'Couples', 'Landscapes', 'Brands'].map((filter, i) => (
-                <a key={filter} href="#" className={`${i === 0 ? 'text-[#1A1A1A] border-b-2 border-[#1A1A1A]' : 'text-[#1A1A1A]/40'} hover:text-[#1A1A1A] transition-colors pb-2`}>
+                <a key={filter} href="#" className={`${i === 0 ? 'text-[#AF9063] border-[#AF9063]' : 'text-[#1A1A1A]/40 border-transparent'} hover:text-[#AF9063] border-b-2 transition-colors pb-2`}>
                   {filter}
                 </a>
               ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="col-span-1 space-y-4">
-               <div className="aspect-[4/3] overflow-hidden group relative">
-                 <Image src={(PORTFOLIO_IMAGES[0].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
-                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="col-span-1 space-y-6">
+               <div className="aspect-[4/3] overflow-hidden group relative border border-[#E4E0D5]">
+                 <Image src={(PORTFOLIO_IMAGES[0].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+                 <div className="absolute inset-0 bg-[#1A1A1A]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <span className="text-white text-[10px] font-bold uppercase tracking-widest border border-white/40 px-4 py-2">View Case</span>
                  </div>
                </div>
-               <div className="aspect-[4/5] overflow-hidden group relative">
-                 <Image src={(PORTFOLIO_IMAGES[3].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+               <div className="aspect-[4/5] overflow-hidden group relative border border-[#E4E0D5]">
+                 <Image src={(PORTFOLIO_IMAGES[3].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
                </div>
             </div>
             <div className="col-span-1">
-               <div className="h-full min-h-[500px] overflow-hidden group relative">
-                 <Image src={(PORTFOLIO_IMAGES[1].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
-                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+               <div className="h-full min-h-[500px] overflow-hidden group relative border border-[#E4E0D5]">
+                 <Image src={(PORTFOLIO_IMAGES[1].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+                 <div className="absolute inset-0 bg-[#1A1A1A]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <span className="text-white text-[10px] font-bold uppercase tracking-widest border border-white/40 px-4 py-2">Weddings</span>
                  </div>
                </div>
             </div>
-            <div className="col-span-1 space-y-4">
-               <div className="aspect-[3/4] overflow-hidden group relative">
-                 <Image src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2071&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+            <div className="col-span-1 space-y-6">
+               <div className="aspect-[3/4] overflow-hidden group relative border border-[#E4E0D5]">
+                 <Image src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2071&auto=format&fit=crop" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
                </div>
-               <div className="aspect-[4/3] overflow-hidden group relative">
-                 <Image src={(PORTFOLIO_IMAGES[2].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+               <div className="aspect-[4/3] overflow-hidden group relative border border-[#E4E0D5]">
+                 <Image src={(PORTFOLIO_IMAGES[2].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
                </div>
             </div>
           </div>
           
-          <div className="mt-12 text-center">
-             <Link href="#" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b border-black/20 pb-1 hover:border-[#1A1A1A] transition-colors">
+          <div className="mt-16 text-center">
+             <Link href="#" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest border-b border-[#AF9063] pb-1 hover:border-[#1A1A1A] transition-colors text-[#1A1A1A]">
                View Full Gallery <ArrowRight className="w-4 h-4" />
              </Link>
           </div>
@@ -146,26 +146,26 @@ export default function LaurenWilsonTemplate() {
       </section>
 
       {/* About Section */}
-      <section className="py-24 bg-[#F8F5F2]">
+      <section className="py-24 bg-[#F2EFE7] border-b border-[#E4E0D5]">
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div 
                initial={{ opacity: 0, x: -30 }}
                whileInView={{ opacity: 1, x: 0 }}
                viewport={{ once: true }}
-               className="aspect-[4/5] rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700"
+               className="aspect-[4/5] rounded-none overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 border border-[#E4E0D5]"
             >
                <Image src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop" className="w-full h-full object-cover" alt="Lauren Wilson" referrerPolicy="no-referrer" fill />
             </motion.div>
             
             <div>
-              <span className="text-[#1A1A1A]/40 font-bold uppercase tracking-widest text-[10px] block mb-4">About Me</span>
-              <h2 className="text-5xl md:text-6xl font-serif italic mb-8 text-[#1A1A1A]">Hi, I'm Lauren.<br />Nice to meet you.</h2>
-              <div className="w-12 h-px bg-[#1A1A1A] mb-8" />
-              <p className="text-lg text-[#333333]/70 mb-8 leading-relaxed max-w-xl">
+              <span className="text-[#AF9063] font-bold uppercase tracking-widest text-[10px] block mb-4">About Me</span>
+              <h2 className="text-5xl md:text-7xl font-serif italic mb-8 text-[#1A1A1A] leading-tight">Hi, I'm Lauren.<br />Nice to meet you.</h2>
+              <div className="w-16 h-px bg-[#AF9063] mb-8" />
+              <p className="text-lg text-[#1A1A1A]/70 mb-8 leading-relaxed max-w-xl font-light">
                 I'm a natural light photographer based in Colorado. I believe in capturing real moments and creating images that feel honest, emotive, and timeless. When I'm not behind the camera, you'll find me hiking, traveling, or drinking way too much coffee.
               </p>
-              <button className="bg-[#1A1A1A] text-white px-10 py-4 font-bold uppercase tracking-widest hover:opacity-90 transition-all text-[11px]">
+              <button className="bg-[#1A1A1A] text-white px-10 py-4 font-bold uppercase tracking-widest hover:bg-[#AF9063] hover:text-white transition-all text-[11px]">
                 Read More
               </button>
             </div>
@@ -177,8 +177,8 @@ export default function LaurenWilsonTemplate() {
       <section className="py-24 bg-[#1A1A1A] text-white">
         <div className="container mx-auto px-6 md:px-12">
           <div className="text-center mb-20">
-            <span className="text-white/40 font-bold uppercase tracking-widest text-[10px] block mb-4">What I Offer</span>
-            <h2 className="text-4xl md:text-6xl font-serif italic">Photography for Every Chapter</h2>
+            <span className="text-[#AF9063] font-bold uppercase tracking-widest text-[10px] block mb-4">What I Offer</span>
+            <h2 className="text-4xl md:text-6xl font-serif italic text-white leading-tight">Photography for Every Chapter</h2>
           </div>
 
           <div className="grid md:grid-cols-4 gap-12 text-center">
@@ -196,12 +196,12 @@ export default function LaurenWilsonTemplate() {
                 transition={{ delay: i * 0.1 }}
                 className="flex flex-col items-center group cursor-pointer"
               >
-                <div className="w-12 h-12 flex items-center justify-center mb-6 border border-white/10 group-hover:border-white transition-colors duration-500">
-                  <service.icon className="w-6 h-6 text-white/50 group-hover:text-white transition-colors" strokeWidth={1.5} />
+                <div className="w-12 h-12 flex items-center justify-center mb-6 border border-white/10 group-hover:border-[#AF9063] transition-colors duration-500 rounded-full bg-white/5">
+                  <service.icon className="w-5 h-5 text-white/50 group-hover:text-[#AF9063] transition-colors" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-4">{service.title}</h3>
-                <p className="text-[11px] text-white/40 leading-relaxed max-w-[200px] mx-auto mb-6">{service.desc}</p>
-                <Link href="#" className="text-[9px] font-black uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-all">
+                <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-4 text-white">{service.title}</h3>
+                <p className="text-xs text-white/50 leading-relaxed max-w-[200px] mx-auto mb-6">{service.desc}</p>
+                <Link href="#" className="text-[9px] font-black uppercase tracking-[0.2em] text-[#AF9063] opacity-0 group-hover:opacity-100 transition-all">
                    Learn More →
                 </Link>
               </motion.div>
@@ -211,10 +211,10 @@ export default function LaurenWilsonTemplate() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#F8F6F0] border-b border-[#E4E0D5]">
         <div className="container mx-auto px-6 md:px-12">
           <div className="text-center mb-20">
-            <span className="text-[#1A1A1A]/40 font-bold uppercase tracking-widest text-[10px] block mb-4">Kind Words</span>
+            <span className="text-[#AF9063] font-bold uppercase tracking-widest text-[10px] block mb-4">Kind Words</span>
             <h2 className="text-4xl md:text-5xl font-serif italic text-[#1A1A1A]">Client Love</h2>
           </div>
 
@@ -225,16 +225,12 @@ export default function LaurenWilsonTemplate() {
               { text: "Professional, kind, and insanely talented. We had the best experience and the results speak for themselves.", author: "Michael R." }
             ].map((testimonial, i) => (
               <div key={i} className="flex flex-col items-center text-center px-6">
-                <Quote className="w-8 h-8 text-black/5 mb-6" />
-                <p className="text-lg font-light italic mb-8 leading-relaxed">"{testimonial.text}"</p>
-                <div className="w-8 h-px bg-black/10 mb-4" />
-                <span className="text-[10px] font-bold uppercase tracking-widest">— {testimonial.author}</span>
+                <Quote className="w-8 h-8 text-[#AF9063]/20 mb-6" />
+                <p className="text-lg font-light italic mb-8 leading-relaxed text-[#1A1A1A]">"{testimonial.text}"</p>
+                <div className="w-8 h-px bg-[#AF9063] mb-4" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1A1A1A]">— {testimonial.author}</span>
               </div>
             ))}
-          </div>
-          
-          <div className="flex justify-center gap-2 mt-16">
-            {[0,1,2].map(i => <div key={i} className={`w-1.5 h-1.5 rounded-full ${i === 0 ? 'bg-black' : 'bg-black/10'}`} />)}
           </div>
         </div>
       </section>
@@ -245,9 +241,9 @@ export default function LaurenWilsonTemplate() {
            <Image src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="Background" referrerPolicy="no-referrer" fill />
         </div>
         <div className="container mx-auto px-6 md:px-12 relative z-10 text-center text-white">
-          <span className="text-white/60 font-bold uppercase tracking-widest text-[10px] block mb-6">Let's create something beautiful</span>
-          <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif italic mb-12">Ready to book your session?</h2>
-          <button className="bg-white text-black px-8 md:px-12 py-4 md:py-5 font-bold uppercase tracking-widest hover:bg-silver transition-all text-[10px] md:text-xs rounded-none">
+          <span className="text-[#AF9063] font-bold uppercase tracking-widest text-[10px] block mb-6">Let's create something beautiful</span>
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif italic mb-12 text-white">Ready to book your session?</h2>
+          <button className="bg-white text-black px-10 py-5 font-bold uppercase tracking-widest hover:bg-[#AF9063] hover:text-white transition-all text-xs rounded-none">
             Get In Touch
           </button>
         </div>
@@ -260,9 +256,9 @@ export default function LaurenWilsonTemplate() {
             <div className="col-span-1 md:col-span-1">
               <div className="flex items-center gap-2 mb-8">
                 <div className="text-xl font-serif italic tracking-widest flex items-center">
-                  <span className="text-2xl font-bold">L</span>
+                  <span className="text-2xl font-bold text-[#AF9063]">L</span>
                   <div className="w-px h-6 bg-white/20 mx-1" />
-                  <span className="text-2xl font-bold">W</span>
+                  <span className="text-2xl font-bold text-white">W</span>
                 </div>
                 <div className="flex flex-col leading-none ml-2">
                   <span className="text-xs font-bold uppercase tracking-[0.3em]">Lauren Wilson</span>
@@ -284,22 +280,22 @@ export default function LaurenWilsonTemplate() {
             <div>
               <h4 className="font-bold uppercase tracking-[0.2em] text-[10px] mb-8 text-white/30">Navigation</h4>
               <div className="flex flex-col gap-4 text-[10px] font-bold uppercase tracking-widest">
-                <Link href="#" className="hover:text-silver transition-colors">Home</Link>
-                <Link href="#" className="hover:text-silver transition-colors">Portfolio</Link>
-                <Link href="#" className="hover:text-silver transition-colors">About</Link>
-                <Link href="#" className="hover:text-silver transition-colors">Services</Link>
-                <Link href="#" className="hover:text-silver transition-colors">Contact</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Home</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Portfolio</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">About</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Services</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Contact</Link>
               </div>
             </div>
 
             <div>
               <h4 className="font-bold uppercase tracking-[0.2em] text-[10px] mb-8 text-white/30">Portfolio</h4>
               <div className="flex flex-col gap-4 text-[10px] font-bold uppercase tracking-widest">
-                <Link href="#" className="hover:text-silver transition-colors">Portraits</Link>
-                <Link href="#" className="hover:text-silver transition-colors">Weddings</Link>
-                <Link href="#" className="hover:text-silver transition-colors">Couples</Link>
-                <Link href="#" className="hover:text-silver transition-colors">Landscapes</Link>
-                <Link href="#" className="hover:text-silver transition-colors">Brands</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Portraits</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Weddings</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Couples</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Landscapes</Link>
+                <Link href="#" className="hover:text-[#AF9063] transition-colors">Brands</Link>
               </div>
             </div>
 
@@ -318,7 +314,7 @@ export default function LaurenWilsonTemplate() {
                   <Mail className="w-4 h-4 text-white/30 shrink-0" />
                   <p>hello@laurenwilsonphoto.com</p>
                 </div>
-                <button className="border border-white/20 px-6 py-3 hover:bg-white hover:text-black transition-all">
+                <button className="border border-white/20 px-6 py-3 hover:bg-[#AF9063] hover:border-[#AF9063] hover:text-white transition-all">
                   Book a Session
                 </button>
               </div>

@@ -1,252 +1,99 @@
 import Link from 'next/link';
-import { ArrowRight, Scale, Shield, Users, Building, FileText, Check } from 'lucide-react';
+import { ArrowRight, Scale, Shield, Users, Building, FileText, Check, Award } from 'lucide-react';
 
 const BASE = '/work/sterling-law-group';
-const NAVY = '#1E2D5A';
-const GOLD = '#C49A3C';
-const CREAM = '#FAF8F2';
-const DARK = '#0F1A33';
-const WHITE = '#FFFFFF';
+const BG = '#0A0A0A';
+const GOLD = '#C9A84C';
+const CARD = '#111111';
+const BORDER = 'rgba(201,168,76,0.15)';
+const MUTED = 'rgba(255,255,255,0.4)';
 
 const PRACTICE_AREAS = [
   {
-    icon: Shield,
-    title: 'Personal Injury',
-    tagline: 'No fees unless we win.',
-    desc: 'When negligence causes harm, you deserve aggressive representation. We handle auto accidents, slip and fall, wrongful death, dog bites, and product liability cases across Colorado. Our attorneys have recovered millions for injured clients.',
-    items: [
-      'Auto & motorcycle accidents',
-      'Slip & fall injuries',
-      'Wrongful death claims',
-      'Product liability',
-      'Dog bites & animal attacks',
-      'Premises liability',
-    ],
-    note: 'Contingency fee — you pay nothing unless we recover for you.',
-    stats: [
-      { value: '$47M+', label: 'Recovered for Clients' },
-      { value: '98%', label: 'Success Rate' },
-    ],
-    featured: true,
-  },
-  {
-    icon: Users,
-    title: 'Family Law',
-    tagline: 'Protecting what matters most.',
-    desc: 'Divorce, child custody, and family matters require both legal expertise and human compassion. We guide you through Colorado family law with clarity and care, always prioritizing what is best for your family.',
-    items: [
-      'Divorce & legal separation',
-      'Child custody & parenting plans',
-      'Child & spousal support',
-      'Adoption proceedings',
-      'Domestic violence protection',
-      'Property division',
-    ],
-    note: 'Free initial consultation. Flexible payment plans available.',
-    stats: [
-      { value: '800+', label: 'Family Cases' },
-      { value: '25+', label: 'Years Experience' },
-    ],
-    featured: false,
-  },
-  {
     icon: Scale,
-    title: 'Criminal Defense',
-    tagline: 'Your rights. Your future. Defended.',
-    desc: 'A criminal charge can change your life. Our experienced defense attorneys fight to protect your freedom and your record at every stage of the process — from arraignment through trial and appeal.',
-    items: [
-      'DUI / DWAI defense',
-      'Drug offenses',
-      'Assault & violent crimes',
-      'Theft & property crimes',
-      'Expungements & record sealing',
-      'Federal criminal defense',
-    ],
-    note: 'Available 24/7 for emergency consultations.',
-    stats: [
-      { value: '400+', label: 'Cases Defended' },
-      { value: '24/7', label: 'Emergency Line' },
-    ],
-    featured: false,
+    title: 'Business Litigation',
+    tagline: 'High-stakes commercial disputes.',
+    desc: 'Relentless advocacy in federal and state courts for contract disputes, business torts, partnership breakups, and trade secret challenges.',
+    items: ['Contract disputes & breach of contract', 'Shareholder & partnership litigation', 'Trade secret & IP protection disputes', 'Fiduciary duty violations', 'Class action defense', 'Business tort claims'],
+    note: 'Hourly, structured fixed-fee, or hybrid billing models.',
+  },
+  {
+    icon: Shield,
+    title: 'Corporate Law',
+    tagline: 'Advisory for growth and compliance.',
+    desc: 'Clear legal guidance for private and public companies navigating formation, corporate governance, venture capital, and board operations.',
+    items: ['Venture capital & private equity', 'Corporate governance & bylaws', 'Regulatory compliance audits', 'Securities filings & advice', 'Employee stock option setups', 'Joint venture negotiations'],
+    note: 'Ongoing general counsel retainer plans available.',
   },
   {
     icon: Building,
-    title: 'Business Law',
-    tagline: 'Protecting your business interests.',
-    desc: 'From formation to dispute resolution, we give Colorado businesses the legal foundation they need to operate with confidence and protect their assets. We are trusted counsel for businesses of all sizes.',
-    items: [
-      'Business formation (LLC, Corp)',
-      'Contract drafting & review',
-      'Commercial litigation',
-      'Employment disputes',
-      'Mergers & acquisitions',
-      'Intellectual property',
-    ],
-    note: 'Fixed-fee packages available for small business clients.',
-    stats: [
-      { value: '300+', label: 'Business Clients' },
-      { value: '$0', label: 'Hidden Fees' },
-    ],
-    featured: false,
+    title: 'Mergers & Acquisitions',
+    tagline: 'Transactions executed with precision.',
+    desc: 'Comprehensive buy-side and sell-side transaction advisory for mid-market business acquisitions, restructurings, and divestitures.',
+    items: ['Deal structure & negotiation', 'Bespoke due diligence audits', 'Asset & stock purchase agreements', 'Post-merger integration counsel', 'Venture capital backing', 'Restructurings & spin-offs'],
+    note: 'Success-aligned transaction models available.',
+  },
+  {
+    icon: Award,
+    title: 'Estate Planning & Trusts',
+    tagline: 'Protect wealth for generations.',
+    desc: 'Designing tax-efficient trust and estate structures to preserve private family wealth and manage corporate succession.',
+    items: ['Revocable & irrevocable trusts', 'Estate tax minimization planning', 'Corporate succession blueprints', 'Family office legal structures', 'Asset protection vehicles', 'Probate representation'],
+    note: 'Custom estate plans starting at $2,500.',
   },
   {
     icon: FileText,
-    title: 'Estate Planning',
-    tagline: 'Secure your legacy.',
-    desc: 'Protect your family and assets with a comprehensive estate plan. We draft wills, trusts, and powers of attorney tailored to your specific situation, ensuring your wishes are honored and your family is protected.',
-    items: [
-      'Wills & living trusts',
-      'Powers of attorney',
-      'Healthcare directives',
-      'Estate administration',
-      'Probate proceedings',
-      'Trust litigation',
-    ],
-    note: 'Estate planning packages starting at $750.',
-    stats: [
-      { value: '500+', label: 'Estates Planned' },
-      { value: '$750', label: 'Starting Price' },
-    ],
-    featured: false,
-  },
-  {
-    icon: Shield,
-    title: 'Real Estate Law',
-    tagline: 'Every transaction, protected.',
-    desc: 'Whether buying, selling, or facing a real estate dispute, our attorneys ensure your investment is legally sound and your interests are fully protected. We handle residential and commercial matters alike.',
-    items: [
-      'Purchase & sale agreements',
-      'Title disputes',
-      'Landlord/tenant disputes',
-      'HOA issues',
-      'Construction defect claims',
-      'Commercial real estate',
-    ],
-    note: 'Flat fees for residential closings.',
-    stats: [
-      { value: '600+', label: 'Transactions' },
-      { value: 'Flat', label: 'Fee Structure' },
-    ],
-    featured: false,
+    title: 'Real Estate & Fiduciary Disputes',
+    tagline: 'Safeguarding commercial investments.',
+    desc: 'Resolving complex commercial property conflicts, landlord/tenant disputes, boundary disagreements, and trustee challenges.',
+    items: ['Commercial lease litigation', 'Partition actions & title claims', 'Easement & boundary disputes', 'Trustee & executor defense', 'Property development audits', 'Land use & zoning advocacy'],
+    note: 'Strategic litigation and mediation advisory.',
   },
 ];
 
 export default function SterlingServices() {
   return (
-    <>
-      {/* Hero */}
-      <section style={{ backgroundColor: NAVY }} className="py-24 px-6 md:px-12 text-center">
-        <div
-          className="text-[10px] uppercase tracking-[0.5em] mb-5"
-          style={{ color: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.3em' }}
-        >Practice Areas</div>
-        <h1
-          className="text-5xl md:text-6xl text-white mb-6 leading-tight"
-          style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.05em' }}
-        >How We Can Help</h1>
-        {/* Classical gold rule */}
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <div className="h-px w-20" style={{ backgroundColor: GOLD }} />
-          <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: GOLD }} />
-          <div className="h-px w-20" style={{ backgroundColor: GOLD }} />
-        </div>
-        <p
-          className="text-white/60 max-w-2xl mx-auto leading-relaxed text-lg"
-          style={{ fontFamily: 'var(--font-body)' }}
-        >
-          Twenty-five years of experience across personal injury, family law, criminal defense, and business law. Free consultations. No fees unless we win on injury cases.
+    <div style={{ backgroundColor: BG, color: '#fff' }} className="overflow-x-hidden">
+      
+      {/* Title Banner */}
+      <section className="py-24 px-6 md:px-12 text-center bg-[#0A0A0A] border-b border-white/5 relative overflow-hidden">
+        <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Our Practices</span>
+        <h1 className="text-4xl md:text-6xl font-sans font-black text-white mb-6 leading-none">Bespoke Legal Solutions</h1>
+        <p className="text-gray-400 max-w-xl mx-auto text-sm font-light leading-relaxed">
+          Focused advocacy across high-stakes corporate trials, compliance transactions, and wealth preservation.
         </p>
       </section>
 
-      {/* Practice Areas */}
-      <section style={{ backgroundColor: CREAM }} className="py-20 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto space-y-8">
-          {PRACTICE_AREAS.map(({ icon: Icon, title, tagline, desc, items, note, stats, featured }, i) => (
-            <div
-              key={i}
-              className="p-10 md:p-12 grid md:grid-cols-[1fr_1.4fr] gap-10"
-              style={{
-                backgroundColor: featured ? NAVY : WHITE,
-                outline: featured ? `none` : `1px solid #E8E4DA`,
-              }}
+      {/* Services Grid with unique alternating roundings */}
+      <section className="py-24 px-6 md:px-12 max-w-5xl mx-auto">
+        <div className="space-y-12">
+          {PRACTICE_AREAS.map(({ icon: Icon, title, tagline, desc, items, note }, i) => (
+            <div 
+              key={i} 
+              className={`p-8 md:p-12 border border-[#C9A84C]/15 hover:border-[#C9A84C]/50 transition-all duration-500 grid md:grid-cols-[1.1fr_1fr] gap-12 text-left shadow-lg ${
+                i % 2 === 0 ? 'rounded-tl-[40px] rounded-br-[40px]' : 'rounded-tr-[40px] rounded-bl-[40px]'
+              }`}
+              style={{ backgroundColor: CARD }}
             >
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <Icon className="w-5 h-5" style={{ color: GOLD }} strokeWidth={1.5} />
-                  <h2
-                    className="text-xl"
-                    style={{
-                      color: featured ? WHITE : NAVY,
-                      fontFamily: 'var(--font-display)',
-                      letterSpacing: '0.05em',
-                    }}
-                  >{title}</h2>
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full border border-[#C9A84C]/35 flex items-center justify-center bg-white/5">
+                    <Icon className="w-4.5 h-4.5" style={{ color: GOLD }} strokeWidth={1.5} />
+                  </div>
+                  <h2 className="font-sans font-black text-xl text-white uppercase tracking-wide">{title}</h2>
                 </div>
-                <div
-                  className="text-[10px] uppercase tracking-widest mb-5"
-                  style={{ color: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.2em' }}
-                >{tagline}</div>
-                <p
-                  className="leading-relaxed mb-6"
-                  style={{
-                    color: featured ? 'rgba(255,255,255,0.65)' : '#4B5563',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '1rem',
-                  }}
-                >{desc}</p>
-                <div
-                  className="p-4 border-l-2 text-sm"
-                  style={{
-                    borderColor: GOLD,
-                    backgroundColor: featured ? 'rgba(196,154,60,0.12)' : CREAM,
-                    color: featured ? 'rgba(255,255,255,0.75)' : NAVY,
-                    fontFamily: 'var(--font-body)',
-                    fontStyle: 'italic',
-                  }}
-                >{note}</div>
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 mt-6">
-                  {stats.map(({ value, label }, j) => (
-                    <div key={j}>
-                      <div
-                        className="text-2xl mb-0.5"
-                        style={{ color: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.05em' }}
-                      >{value}</div>
-                      <div
-                        className="text-[10px] uppercase tracking-widest"
-                        style={{
-                          color: featured ? 'rgba(255,255,255,0.45)' : '#9CA3AF',
-                          fontFamily: 'var(--font-display)',
-                        }}
-                      >{label}</div>
-                    </div>
-                  ))}
-                </div>
+                <div className="text-[10px] font-mono font-bold uppercase tracking-widest" style={{ color: GOLD }}>{tagline}</div>
+                <p className="text-white/70 text-xs leading-relaxed font-light">{desc}</p>
+                <div className="text-xs font-mono p-4 border-l-2 text-white/95" style={{ borderColor: GOLD, backgroundColor: BG }}>{note}</div>
               </div>
-              <div>
-                <div
-                  className="text-[10px] uppercase tracking-widest mb-5"
-                  style={{
-                    color: featured ? 'rgba(255,255,255,0.35)' : '#9CA3AF',
-                    fontFamily: 'var(--font-display)',
-                    letterSpacing: '0.2em',
-                  }}
-                >What We Handle</div>
-                <div className="grid grid-cols-1 gap-3">
+              
+              <div className="flex flex-col justify-center">
+                <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-white/30 mb-5 block">Core Matters Managed</span>
+                <div className="grid grid-cols-1 gap-3.5">
                   {items.map((item, j) => (
-                    <div key={j} className="flex items-start gap-3">
-                      <Check
-                        className="w-4 h-4 shrink-0 mt-0.5"
-                        style={{ color: GOLD }}
-                        strokeWidth={2}
-                      />
-                      <span
-                        className="text-sm leading-relaxed"
-                        style={{
-                          color: featured ? 'rgba(255,255,255,0.70)' : '#374151',
-                          fontFamily: 'var(--font-body)',
-                        }}
-                      >{item}</span>
+                    <div key={j} className="flex items-start gap-2.5 text-xs text-white/60 font-light">
+                      <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
+                      <span>{item}</span>
                     </div>
                   ))}
                 </div>
@@ -256,35 +103,18 @@ export default function SterlingServices() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section style={{ backgroundColor: DARK }} className="py-20 px-6 text-center">
-        <div
-          className="text-[10px] uppercase tracking-[0.3em] mb-5"
-          style={{ color: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.3em' }}
-        >Free Consultation</div>
-        <h2
-          className="text-4xl text-white mb-4"
-          style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.05em' }}
-        >Schedule a Consultation Today</h2>
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <div className="h-px w-16" style={{ backgroundColor: GOLD + '60' }} />
-          <div className="w-1 h-1 rotate-45" style={{ backgroundColor: GOLD }} />
-          <div className="h-px w-16" style={{ backgroundColor: GOLD + '60' }} />
+      {/* Footer CTA */}
+      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+        <div className="bg-[#C9A84C] rounded-tl-[64px] rounded-br-[64px] py-16 px-8 text-center shadow-2xl text-slate-900 border border-[#C9A84C]">
+          <h2 className="text-3xl font-sans font-black text-[#0A0A0A] mb-4">Schedule a confidential consultation.</h2>
+          <p className="text-[#0A0A0A]/75 text-xs font-light mb-8 max-w-sm mx-auto">Direct client-to-partner interaction. Candid assessments from day one.</p>
+          <div className="pt-2">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#0A0A0A] hover:bg-[#FAF8F2] hover:text-[#0A0A0A] text-white font-mono font-bold uppercase tracking-widest text-[10px] px-10 py-5 transition-all">
+              Request Free Consultation <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
-        <p
-          className="text-white/50 mb-10 max-w-xl mx-auto leading-relaxed"
-          style={{ fontFamily: 'var(--font-body)' }}
-        >
-          Available evenings and weekends. Direct attorney access from day one. No fees unless we win on personal injury cases.
-        </p>
-        <Link
-          href={`${BASE}/contact`}
-          className="inline-flex items-center gap-3 text-white uppercase tracking-widest text-[11px] px-12 py-5 hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: GOLD, fontFamily: 'var(--font-display)', letterSpacing: '0.15em' }}
-        >
-          Book Free Consultation <ArrowRight className="w-4 h-4" />
-        </Link>
       </section>
-    </>
+    </div>
   );
 }

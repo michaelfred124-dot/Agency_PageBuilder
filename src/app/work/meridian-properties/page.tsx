@@ -1,200 +1,186 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Home, ArrowRight, Check, Star, MapPin, TrendingUp, Key, Phone, Mail, ChevronDown, Users } from 'lucide-react';
+import { ArrowRight, Check, Star, ChevronDown, MapPin, Home, TrendingUp, Users, Building2, Search, Calendar, ShieldCheck } from 'lucide-react';
 
 const BASE = '/work/meridian-properties';
-const FOREST = '#2D6A4F';
-const SLATE = '#2E3A47';
-const CREAM = '#F7F5F0';
-const SAND = '#E8E0D0';
-
-const SVCS = [
-  { icon: Home, title: 'Buyer Representation', tag: 'Most Popular', desc: 'Expert guidance from first showing to closing day. We negotiate on your behalf and protect your interests at every step.', items: ['Pre-approval coordination', 'Neighborhood & market analysis', 'Offer strategy & negotiation', 'Inspection & contingency guidance', 'Closing cost analysis'] },
-  { icon: TrendingUp, title: 'Listing & Selling', tag: 'Top Results', desc: 'Strategic pricing, professional photography, and targeted marketing to sell your home fast and for the most money.', items: ['Comparative market analysis', 'Professional photography & staging consult', 'MLS + digital marketing', 'Open house coordination', 'Offer review & negotiation'] },
-  { icon: Key, title: 'Property Management', tag: 'Passive Income', desc: 'Full-service property management for investors and accidental landlords. We handle everything so you do not have to.', items: ['Tenant screening & placement', 'Rent collection & accounting', 'Maintenance coordination', 'Annual lease renewals', 'Monthly owner reports'] },
-  { icon: Users, title: 'Relocation Services', tag: 'Corporate', desc: 'Relocating to Portland? We specialize in helping remote workers, families, and corporate transfers navigate the move.', items: ['Virtual tours available', 'Neighborhood comparisons', 'School district guidance', 'First-time buyer programs', 'Remote offer process'] },
-];
+const BG = '#FAF8F5';
+const SLATE = '#1F242E';
+const GOLD = '#B8A27A';
+const MUTED = 'rgba(31,36,46,0.6)';
 
 const LISTINGS = [
   {
-    img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop',
-    address: '2847 NW Thurman St',
-    beds: '3', baths: '2', sqft: '1,840',
-    price: '$685,000',
-    status: 'Active',
+    img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1200&auto=format&fit=crop',
+    price: '$1,400,000',
+    address: '4812 Chickering Lane',
+    neighborhood: 'Belle Meade',
+    beds: 4, baths: 4, sqft: '4,820',
+    tag: 'Just Listed',
   },
   {
-    img: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1974&auto=format&fit=crop',
-    address: '5234 SE Hawthorne Blvd',
-    beds: '4', baths: '3', sqft: '2,280',
-    price: '$524,000',
-    status: 'Active',
+    img: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1200&auto=format&fit=crop',
+    price: '$875,000',
+    address: '2219 Greybar Lane',
+    neighborhood: 'Green Hills',
+    beds: 3, baths: 3, sqft: '2,940',
+    tag: 'Active',
   },
   {
-    img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070&auto=format&fit=crop',
-    address: '1902 N Mississippi Ave',
-    beds: '2', baths: '1', sqft: '1,120',
-    price: '$445,000',
-    status: 'Sold',
+    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200&auto=format&fit=crop',
+    price: '$2,100,000',
+    address: '1105 Governors Ridge',
+    neighborhood: 'Brentwood',
+    beds: 5, baths: 5, sqft: '6,100',
+    tag: 'Coming Soon',
   },
+  {
+    img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop',
+    price: '$3,450,000',
+    address: '812 Jackson Boulevard',
+    neighborhood: 'Belle Meade',
+    beds: 6, baths: 7, sqft: '7,800',
+    tag: 'Premium Estate',
+  }
 ];
 
-const STEPS = [
-  { n: '01', title: 'Free Strategy Call', desc: 'We discuss your timeline, goals, and budget — buyers, sellers, and investors all start here.' },
-  { n: '02', title: 'Market Analysis', desc: 'We deliver a detailed report on pricing trends, comparable homes, and your best move in today\'s market.' },
-  { n: '03', title: 'Execute the Plan', desc: 'Whether buying, selling, or both — we handle negotiations, paperwork, and every detail in between.' },
-  { n: '04', title: 'Close With Confidence', desc: 'Clear communication to closing day. No surprises, no last-minute chaos. Just results.' },
-  { n: '05', title: 'Stay Connected', desc: 'Post-close, we remain your resource for referrals, market updates, and future transactions.' },
+const SERVICES = [
+  {
+    icon: Home,
+    title: 'Buyer Representation',
+    desc: 'Bespoke market analysis, off-market sourcing, and expert negotiation to secure your next Nashville estate.',
+    items: ['Pre-market tour planning', 'Comparative valuation analyses', 'Structured offer strategies'],
+  },
+  {
+    icon: TrendingUp,
+    title: 'Seller Marketing',
+    desc: 'Luxury media distribution and targeted multi-channel promotion designed to command absolute peak value.',
+    items: ['Cinematic listing videos', 'Global buyer syndicate access', 'Omnichannel digital targeting'],
+  },
+  {
+    icon: Building2,
+    title: 'Investment Advisory',
+    desc: 'From high-yield acquisitions to portfolio restructures, backed by deep cash flow and tax modeling.',
+    items: ['Cap rate returns forecasting', '1031 exchange blueprints', 'Property management audits'],
+  },
 ];
 
 const AGENTS = [
-  { name: 'Sarah Nguyen', title: 'Senior Buyer\'s Agent', years: '9 years', sales: '320+ transactions', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=988&auto=format&fit=crop' },
-  { name: 'Tom Erikson', title: 'Listing Specialist', years: '11 years', sales: '$140M+ sold', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop' },
-  { name: 'Aisha Patel', title: 'Property Manager', years: '7 years', sales: '85+ managed units', img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=922&auto=format&fit=crop' },
+  { img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=600&auto=format&fit=crop', name: 'Catherine Harlow', title: 'Principal Broker', sales: '$420M+ Sales' },
+  { img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop', name: 'Isabelle Monroe', title: 'Luxury Specialist', sales: '$210M+ Sales' },
+  { img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop', name: 'James Aldridge', title: 'Investment Advisor', sales: '$180M+ Sales' },
 ];
 
-const REVIEWS = [
-  { text: "Sarah guided us through our first home purchase without any pressure. She knew the market and fought hard on our offer. We closed under asking.", author: "Chris & Amy P.", type: "Buyer" },
-  { text: "Sold our home in 6 days at $22,000 over asking. Tom had a strategy from day one — photos, marketing, perfect timing.", author: "Robert L.", type: "Seller" },
-  { text: "Aisha has managed our rental duplex for two years. Zero vacancy, rent on time every month. I never have to worry.", author: "Pat H.", type: "Property Mgmt" },
+const TESTIMONIALS = [
+  { quote: "Catherine Harlow secured $140,000 above our listing valuation with multiple offers in hand. Absolute elite-tier brokerage.", name: 'Robert & Claire S.', note: 'Sold in Green Hills' },
+  { quote: "Meridian Properties sourced an off-market Belle Meade estate that never hit the MLS. Their network is unmatched in Nashville.", name: 'Thomas W.', note: 'Bought in Belle Meade' },
 ];
 
 const FAQS = [
-  { q: "How is Meridian Properties different from other Portland agents?", a: "We are a boutique team, not a big box brokerage. Every client works directly with a senior agent — no hand-offs to assistants. We cap our client load so every transaction gets full attention. Our average list-to-close time is 21 days faster than the Portland metro average." },
-  { q: "What are your agent fees for buyers?", a: "Buyer representation is at no cost to you in most transactions — the seller typically pays both agents' commissions. Oregon's new buyer agreement rules require us to discuss and sign a representation agreement before we can show homes, which we handle in our first call." },
-  { q: "How do you determine the right listing price for my home?", a: "We run a Comparative Market Analysis using recent sales within a half-mile, your property condition, upgrades, and current buyer demand. We do not guess — we price based on data. Overpricing kills listings, and we never do it." },
-  { q: "Do you work with first-time buyers?", a: "Absolutely — first-time buyers are a priority for us. We walk you through every step: pre-approval, offer strategy, inspections, and closing. We also connect clients with Oregon Bond and OHCS down payment assistance programs when eligible." },
-  { q: "Can you help if I need to buy and sell at the same time?", a: "Yes. Coordinating a simultaneous buy/sell is a specialty of ours. We can often negotiate contingencies that protect you from owning two homes at once, and we sequence the process so it runs smoothly." },
-  { q: "Do you work outside of Portland proper?", a: "Yes — we serve the full Portland metro including Beaverton, Hillsboro, Lake Oswego, Tigard, Tualatin, and into Clark County, WA. If you are unsure whether your area is covered, just ask." },
+  { q: "How does Meridian Properties differ from other Nashville brokerages?", a: "We are a boutique firm by design. Every client partners directly with a senior advisor. We cap our client roster so your transaction receives maximum priority." },
+  { q: "What neighborhoods do you specialize in?", a: "We specialize in Belle Meade, Green Hills, Brentwood, Franklin, 12South, East Nashville, and luxury suburban estates in Williamson County." },
+  { q: "How do you calculate property valuations?", a: "We run custom comparative analyses factoring in room-by-room finishes, micro-market absorption rates, and off-market variables. It is a true broker estimate, not an automated system algorithm." },
 ];
 
-const displayFont = { fontFamily: 'var(--font-display)', fontWeight: 800 } as const;
-const bodyFont = { fontFamily: 'var(--font-display)', fontWeight: 400 } as const;
-const semiBold = { fontFamily: 'var(--font-display)', fontWeight: 600 } as const;
-const bold = { fontFamily: 'var(--font-display)', fontWeight: 700 } as const;
-
-export default function MeridianHome() {
+export default function MeridianProperties() {
   return (
-    <>
-      {/* ── HERO: SIDEBAR ANCHORED ── */}
-      <section className="flex flex-col lg:grid lg:grid-cols-[320px_1fr] min-h-screen">
+    <div style={{ backgroundColor: BG, color: SLATE }} className="overflow-x-hidden pb-12">
 
-        {/* LEFT SIDEBAR */}
-        <aside
-          className="flex flex-col px-8 py-10 lg:py-14 lg:sticky lg:top-0 lg:h-screen overflow-y-auto"
-          style={{ backgroundColor: SLATE }}
-        >
-          {/* Wordmark */}
-          <div className="flex items-center gap-2 mb-2">
-            <Home className="w-4 h-4 shrink-0" style={{ color: FOREST }} />
-            <span className="text-white text-lg tracking-widest uppercase leading-tight" style={displayFont}>
-              Meridian<br />Properties
-            </span>
-          </div>
-          <p className="text-[10px] uppercase tracking-[0.35em] text-white/40 mb-1 mt-2" style={semiBold}>Portland Metro Real Estate</p>
-          <div
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[9px] uppercase tracking-widest mb-8 self-start mt-1"
-            style={{ backgroundColor: FOREST + '30', color: '#6EBF9A', ...semiBold }}
-          >
-            Est. 2011
-          </div>
-
-          {/* Contact */}
-          <div className="space-y-2 mb-8">
-            <a href="tel:5035550182" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs" style={bodyFont}>
-              <Phone className="w-3.5 h-3.5 shrink-0" style={{ color: FOREST }} />
-              (503) 555-0182
-            </a>
-            <a href="mailto:hello@meridianproperties.co" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs" style={bodyFont}>
-              <Mail className="w-3.5 h-3.5 shrink-0" style={{ color: FOREST }} />
-              hello@meridianproperties.co
-            </a>
-            <div className="flex items-start gap-2 text-white/60 text-xs" style={bodyFont}>
-              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: FOREST }} />
-              1420 NW Lovejoy St, Ste 210<br />Portland, OR 97209
+      {/* HERO BENTO GRID */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12 relative">
+        <div className="absolute inset-0 opacity-[0.06] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+          
+          {/* Box 1: Hero Text & Call to Action (Spans 2 columns, 2 rows) */}
+          <div className="md:col-span-2 md:row-span-2 p-10 md:p-16 border border-white/70 bg-white/50 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 flex flex-col justify-between min-h-[460px] text-left">
+            <div>
+              <span className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-[#B8A27A] block mb-6">
+                ESTABLISHED 2008 &nbsp;·&nbsp; NASHVILLE, TN
+              </span>
+              <h1 className="text-5xl md:text-7xl font-serif leading-[1.05] tracking-tight text-[#1F242E] mb-6">
+                Discover your<br />extraordinary<br /><span className="text-[#B8A27A] italic font-light">home.</span>
+              </h1>
+              <div className="w-16 h-0.5 mb-6" style={{ backgroundColor: GOLD }} />
+              <p className="text-sm max-w-md text-gray-500 leading-relaxed font-light mb-8">
+                Boutique luxury real estate brokerage. $1.4B in transactions negotiated across Nashville's most coveted communities.
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap gap-4">
+              <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest text-white shadow-sm hover:opacity-90 transition-opacity" style={{ backgroundColor: GOLD }}>
+                Browse Units <ArrowRight className="w-4 h-4 text-white" />
+              </Link>
+              <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest border border-black/10 text-[#1F242E] hover:bg-black/5 transition-colors">
+                Book Valuation <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
 
-          {/* Stats vertical */}
-          <div className="space-y-5 mb-10 border-t border-white/10 pt-8">
-            {[
-              ['$290M+', 'Total Volume Sold'],
-              ['850+', 'Transactions Closed'],
-              ['4.9 ★', '240+ Reviews'],
-            ].map(([v, l]) => (
-              <div key={v}>
-                <div className="text-2xl text-white leading-none mb-0.5" style={displayFont}>{v}</div>
-                <div className="text-[9px] uppercase tracking-widest" style={{ color: '#6EBF9A', ...semiBold }}>{l}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* CTA */}
-          <Link
-            href={`${BASE}/contact`}
-            className="mt-auto inline-flex items-center justify-center gap-2 text-white text-[11px] uppercase tracking-widest py-3.5 px-6 transition-opacity hover:opacity-90"
-            style={{ backgroundColor: FOREST, ...semiBold }}
-          >
-            Schedule a Consultation <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </aside>
-
-        {/* RIGHT: Photo + Headline */}
-        <div className="flex flex-col">
-          {/* Full-bleed photo — 60vh on desktop */}
-          <div className="relative w-full" style={{ height: '60vh', minHeight: 320 }}>
+          {/* Box 2: Hero Visual Feature Image (Spans 1 column, 2 rows) */}
+          <div className="relative overflow-hidden md:row-span-2 rounded-[32px] border border-white/85 shadow-[0_25px_60px_-15px_rgba(31,36,46,0.08)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.1)] transition-all duration-500 min-h-[380px] group">
             <Image
-              src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?q=80&w=2066&auto=format&fit=crop"
-              alt="Portland aerial neighborhood"
+              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop"
+              alt="Luxury Nashville House"
               fill
-              className="object-cover"
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
               referrerPolicy="no-referrer"
               priority
             />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 60%, rgba(247,245,240,0.15) 100%)' }} />
-          </div>
-
-          {/* Headline section */}
-          <div className="flex flex-col justify-center px-10 md:px-16 py-16" style={{ backgroundColor: CREAM }}>
-            <div className="max-w-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-px" style={{ backgroundColor: FOREST }} />
-                <span className="text-[10px] uppercase tracking-[0.5em] text-gray-400" style={semiBold}>13 Years · Portland Metro</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl xl:text-6xl leading-tight mb-6" style={{ ...displayFont, color: SLATE }}>
-                Portland's most trusted<br />real estate partners.
-              </h1>
-              <p className="text-gray-500 text-lg mb-8 max-w-lg leading-relaxed" style={bodyFont}>
-                Buyer's agents, listing specialists, and property managers serving Portland and the surrounding metro since 2011. Boutique service, big results.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href={`${BASE}/contact`}
-                  className="inline-flex items-center gap-2 text-white text-[11px] uppercase tracking-widest px-8 py-4"
-                  style={{ backgroundColor: FOREST, ...semiBold }}
-                >
-                  Free Strategy Call <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href={`${BASE}/services`}
-                  className="inline-flex items-center gap-2 border text-[11px] uppercase tracking-widest px-8 py-4"
-                  style={{ borderColor: SLATE, color: SLATE, ...semiBold }}
-                >
-                  Our Services
-                </Link>
-              </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6 p-5 bg-white/75 backdrop-blur-md border border-white/50 rounded-2xl">
+              <span className="text-[9px] font-mono text-[#B8A27A] uppercase tracking-widest font-black block">Featured Unit</span>
+              <span className="text-sm font-bold text-[#1F242E] mt-1 block">Governors Ridge Estate</span>
+              <span className="text-[10px] text-gray-500 font-mono mt-0.5 block">Brentwood · $2,100,000</span>
             </div>
           </div>
+
+          {/* Box 3: Horizontal Search Filter Bar (Spans 3 columns) */}
+          <div className="md:col-span-3 p-6 border border-[#B8A27A]/25 bg-white/55 backdrop-blur-2xl rounded-[24px] shadow-[0_20px_50px_-12px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/50 hover:shadow-[0_25px_55px_-10px_rgba(31,36,46,0.08)] transition-all duration-500 flex flex-col lg:flex-row gap-6 items-center">
+            <div className="flex-1 w-full text-left">
+              <div className="flex items-center gap-2 text-[#B8A27A] mb-1">
+                <MapPin className="w-3.5 h-3.5" />
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider">Neighborhood</span>
+              </div>
+              <input readOnly defaultValue="Belle Meade, Green Hills, Brentwood..." className="w-full bg-transparent text-xs text-gray-500 border-0 outline-none p-0" />
+            </div>
+            <div className="w-full lg:w-px h-px lg:h-8 bg-black/5" />
+            
+            <div className="flex-1 w-full text-left">
+              <div className="flex items-center gap-2 text-[#B8A27A] mb-1">
+                <Home className="w-3.5 h-3.5" />
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider">Property Type</span>
+              </div>
+              <input readOnly defaultValue="Single Family, Condos, Estates..." className="w-full bg-transparent text-xs text-gray-500 border-0 outline-none p-0" />
+            </div>
+            <div className="w-full lg:w-px h-px lg:h-8 bg-black/5" />
+
+            <div className="flex-1 w-full text-left">
+              <div className="flex items-center gap-2 text-[#B8A27A] mb-1">
+                <Search className="w-3.5 h-3.5" />
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider">Budget Range</span>
+              </div>
+              <input readOnly defaultValue="$800,000 – $4,000,000+" className="w-full bg-transparent text-xs text-gray-500 border-0 outline-none p-0" />
+            </div>
+            
+            <Link href={`${BASE}/contact`} className="w-full lg:w-auto px-8 py-3 text-xs font-mono font-black uppercase tracking-widest text-white shrink-0 shadow-sm hover:opacity-95" style={{ backgroundColor: GOLD }}>
+              Launch Search
+            </Link>
+          </div>
+
         </div>
       </section>
 
-      {/* ── FEATURED LISTINGS with hover price reveal ── */}
-      <section className="py-24 px-6 md:px-12 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <div className="text-[10px] uppercase tracking-[0.5em] mb-3" style={{ color: FOREST, ...semiBold }}>Portfolio</div>
-              <h2 className="text-4xl" style={{ ...displayFont, color: SLATE }}>Featured Listings</h2>
+      {/* STATS BENTO SECTION */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            ['$1.4B', 'Negotiated Sales'],
+            ['820+', 'Units Transacted'],
+            ['18 Years', 'Boutique Service'],
+            ['4.9★', 'Google Review Avg'],
+          ].map(([val, label], i) => (
+            <div key={i} className="p-6 border border-[#B8A27A]/15 bg-gradient-to-br from-white/90 to-[#B8A27A]/5 backdrop-blur-xl rounded-2xl shadow-[0_15px_35px_-10px_rgba(31,36,46,0.04)] hover:border-[#B8A27A]/35 hover:shadow-[0_20px_45px_-5px_rgba(31,36,46,0.06)] transition-all duration-300 text-center">
+              <div className="text-3xl font-serif font-black text-[#1F242E] mb-1">{val}</div>
+              <div className="text-[9px] font-mono uppercase tracking-widest text-gray-400 font-bold">{label}</div>
             </div>
             <Link href={`${BASE}/services`} className="hidden md:inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest border-b pb-0.5" style={{ color: FOREST, borderColor: FOREST, ...semiBold }}>
               View All <ArrowRight className="w-3.5 h-3.5" />
@@ -246,184 +232,174 @@ export default function MeridianHome() {
         </div>
       </section>
 
-      {/* ── SERVICES ── */}
-      <section style={{ backgroundColor: CREAM }} className="py-24 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: FOREST, ...semiBold }}>What We Do</div>
-            <h2 className="text-4xl mb-3" style={{ ...displayFont, color: SLATE }}>Full-Service Real Estate</h2>
-            <p className="text-gray-500 text-sm max-w-md mx-auto" style={bodyFont}>Whether buying, selling, or investing — we have the expertise and local knowledge to deliver exceptional results.</p>
+      {/* HOUSE GALLERY / AVAILABLE UNITS */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600')" }} />
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 text-left relative z-10">
+          <div>
+            <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Portfolio</span>
+            <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Available Units</h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {SVCS.map(({ icon: Icon, title, tag, desc, items }, i) => (
-              <div
-                key={i}
-                className="group bg-white p-6 border-t-2 hover:border-t-4 transition-all duration-200 cursor-pointer"
-                style={{ borderTopColor: FOREST }}
-              >
-                <Icon className="w-5 h-5 mb-4 transition-colors" style={{ color: FOREST }} strokeWidth={1.5} />
-                <div className="text-[9px] uppercase tracking-widest mb-2" style={{ color: FOREST, ...semiBold }}>{tag}</div>
-                <h3 className="text-sm mb-2 leading-snug" style={{ ...bold, color: SLATE }}>{title}</h3>
-                <p className="text-gray-400 text-xs leading-relaxed" style={bodyFont}>{desc}</p>
+          <Link href={`${BASE}/contact`} className="mt-4 md:mt-0 inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest pb-0.5 border-b border-[#B8A27A] text-[#B8A27A] hover:text-black hover:border-black transition-all">
+            View All Properties <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+          {LISTINGS.map((p, i) => (
+            <Link href={`${BASE}/contact?property=${encodeURIComponent(p.address)}`} key={i} className="group block overflow-hidden rounded-[24px] border border-white/70 bg-white/55 backdrop-blur-2xl shadow-[0_10px_30px_-5px_rgba(31,36,46,0.04)] hover:shadow-[0_25px_50px_-12px_rgba(31,36,46,0.1)] hover:border-[#B8A27A]/30 transition-all duration-500">
+              <div className="relative h-56 overflow-hidden">
+                <Image src={p.img} alt={p.address} fill className="object-cover group-hover:scale-103 transition-transform duration-500" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                <span className="absolute top-4 left-4 text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1.5 bg-white/90 backdrop-blur-sm text-[#1F242E] rounded-md shadow-sm">{p.tag}</span>
               </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest px-8 py-3 border" style={{ borderColor: FOREST, color: FOREST, ...semiBold }}>
-              All Services <ArrowRight className="w-4 h-4" />
+              <div className="p-6 text-left">
+                <div className="text-xl font-serif font-black text-[#1F242E] mb-1">{p.price}</div>
+                <div className="text-xs text-gray-800 font-bold mb-1">{p.address}</div>
+                <div className="text-[10px] text-gray-400 font-mono tracking-wide">{p.neighborhood} · {p.beds} Beds · {p.baths} Baths</div>
+              </div>
             </Link>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* ── AGENT TEAM ── */}
-      <section className="py-24 px-6 md:px-12 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: FOREST, ...semiBold }}>Our Team</div>
-            <h2 className="text-4xl" style={{ ...displayFont, color: SLATE }}>Meet Your Agents</h2>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-8">
-            {AGENTS.map((a, i) => (
-              <div key={i} className="text-center">
-                <div className="relative w-28 h-28 mx-auto mb-5 overflow-hidden rounded-full border-4" style={{ borderColor: SAND }}>
-                  <Image src={a.img} alt={a.name} fill className="object-cover" referrerPolicy="no-referrer" />
+      {/* SERVICES - Bento Columns */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1600')" }} />
+        <div className="text-center mb-16 relative z-10">
+          <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Our Services</span>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Luxury Representation</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+          {SERVICES.map(({ icon: Icon, title, desc, items }, i) => (
+            <div key={i} className="p-8 border border-white/70 bg-gradient-to-b from-white/70 to-white/50 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] text-left flex flex-col justify-between min-h-[320px] group hover:border-[#B8A27A]/40 transition-all duration-500">
+              <div>
+                <div className="w-10 h-10 rounded-full bg-[#B8A27A]/10 flex items-center justify-center mb-6">
+                  <Icon className="w-4.5 h-4.5 text-[#B8A27A]" strokeWidth={1.5} />
                 </div>
-                <div className="text-lg mb-1" style={{ ...bold, color: SLATE }}>{a.name}</div>
-                <div className="text-[10px] uppercase tracking-widest mb-3" style={{ color: FOREST, ...semiBold }}>{a.title}</div>
-                <div className="text-xs text-gray-400 space-y-0.5" style={bodyFont}>
-                  <div>{a.years} experience</div>
-                  <div>{a.sales}</div>
-                </div>
+                <h3 className="text-lg font-serif font-black text-[#1F242E] mb-3 uppercase tracking-wide">{title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed mb-6 font-light">{desc}</p>
               </div>
-            ))}
-          </div>
+              <ul className="space-y-2.5 border-t border-black/5 pt-4">
+                {items.map((item, j) => (
+                  <li key={j} className="flex items-center gap-2 text-[10px] text-gray-600 font-mono">
+                    <Check className="w-3.5 h-3.5 text-[#B8A27A] shrink-0" /> <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ── PROCESS — horizontal timeline ── */}
-      <section style={{ backgroundColor: CREAM }} className="py-24 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: FOREST, ...semiBold }}>Our Process</div>
-            <h2 className="text-4xl" style={{ ...displayFont, color: SLATE }}>From First Call to Closing Day</h2>
-          </div>
-          {/* Timeline row */}
-          <div className="relative">
-            {/* Connector line */}
-            <div className="hidden md:block absolute top-5 left-0 right-0 h-px" style={{ backgroundColor: SAND }} />
-            <div className="grid md:grid-cols-5 gap-8 relative">
-              {STEPS.map(({ n, title, desc }, i) => (
-                <div key={i} className="text-center relative">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-5 text-sm relative z-10"
-                    style={{ backgroundColor: FOREST, color: 'white', ...bold }}
-                  >
-                    {n}
+      {/* AGENTS BENTO */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1600')" }} />
+        <div className="text-center mb-16 relative z-10">
+          <span className="text-[#B8A27A] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-3">Our Team</span>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] tracking-tight">Luxury Advisors</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+          {AGENTS.map((agent, i) => (
+            <div key={i} className="p-6 border border-[#B8A27A]/15 bg-gradient-to-br from-white/70 to-[#B8A27A]/5 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 text-center">
+              <div className="relative w-44 h-44 rounded-full overflow-hidden mx-auto mb-6 shadow-md border-2 border-white">
+                <Image src={agent.img} alt={agent.name} fill className="object-cover filter grayscale hover:grayscale-0 transition-all duration-700" referrerPolicy="no-referrer" />
+              </div>
+              <h3 className="text-lg font-serif font-black text-[#1F242E] mb-1">{agent.name}</h3>
+              <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#B8A27A] mb-2">{agent.title}</div>
+              <div className="text-[10px] text-gray-400 font-mono tracking-wider">{agent.sales}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TESTIMONIALS & FAQ - Combined Bento Grid */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16 relative">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1600')" }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left relative z-10">
+          
+          {/* Testimonials (Spans 1 Column, 2 Rows) */}
+          <div className="md:col-span-1 md:row-span-2 p-8 border border-white/70 bg-white/55 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 flex flex-col justify-between min-h-[420px]">
+            <div>
+              <span className="text-[#B8A27A] font-mono font-bold text-[9px] tracking-widest uppercase block mb-6">Client Experience</span>
+              <div className="flex gap-0.5 mb-6">
+                {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current text-[#B8A27A]" />)}
+              </div>
+              <div className="space-y-6">
+                {TESTIMONIALS.map((t, i) => (
+                  <div key={i} className="border-b border-black/5 pb-6 last:border-0 last:pb-0">
+                    <p className="text-xs italic text-gray-600 leading-relaxed font-light">"{t.quote}"</p>
+                    <div className="text-[10px] font-bold text-[#1F242E] mt-3">{t.name}</div>
+                    <div className="text-[9px] text-[#B8A27A] font-mono mt-0.5 uppercase tracking-wide">{t.note}</div>
                   </div>
-                  <h3 className="text-sm mb-2 leading-snug" style={{ ...bold, color: SLATE }}>{title}</h3>
-                  <p className="text-xs text-gray-400 leading-relaxed" style={bodyFont}>{desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="text-center mt-12">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-white text-[11px] uppercase tracking-widest px-10 py-4" style={{ backgroundColor: FOREST, ...semiBold }}>
-              Schedule a Free Call <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── REVIEWS on SLATE ── */}
-      <section style={{ backgroundColor: SLATE }} className="py-24 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-[10px] uppercase tracking-[0.5em] mb-4 text-white/40" style={semiBold}>Client Stories</div>
-            <h2 className="text-4xl text-white" style={displayFont}>What Our Clients Say</h2>
-            <p className="text-white/40 text-sm mt-2" style={bodyFont}>4.9 Stars · 240+ Reviews</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {REVIEWS.map((r, i) => (
-              <div key={i} className="p-8 border-l-4 bg-white/5" style={{ borderLeftColor: FOREST }}>
-                <div className="flex mb-4">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: FOREST }} />)}</div>
-                <p className="text-white/65 italic text-sm leading-relaxed mb-4" style={bodyFont}>"{r.text}"</p>
-                <div className="text-white text-xs" style={bold}>— {r.author} <span className="text-white/35 font-normal" style={bodyFont}>· {r.type}</span></div>
+                ))}
               </div>
-            ))}
+            </div>
+            
+            <Link href={`${BASE}/reviews`} className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-widest text-[#B8A27A] hover:text-black transition-colors pt-4 border-t border-black/5">
+              Read Testimonials <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
-          <div className="text-center mt-8">
-            <Link href={`${BASE}/reviews`} className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest" style={{ color: '#6EBF9A', ...semiBold }}>
-              Read All Reviews <ArrowRight className="w-3.5 h-3.5" />
+
+          {/* FAQs (Spans 2 Columns) */}
+          <div className="md:col-span-2 p-8 border border-white/70 bg-white/55 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] transition-all duration-500 flex flex-col justify-between">
+            <div>
+              <span className="text-[#B8A27A] font-mono font-bold text-[9px] tracking-widest uppercase block mb-6">Common Inquiries</span>
+              <h3 className="text-xl font-serif text-[#1F242E] mb-6 tracking-tight">Frequently Asked Questions</h3>
+              <div className="space-y-2">
+                {FAQS.map(({ q, a }, i) => (
+                  <details key={i} className="group border-b border-black/5 pb-4 last:border-0 last:pb-0">
+                    <summary className="flex items-center justify-between cursor-pointer py-3 list-none">
+                      <span className="font-bold text-xs text-[#1F242E] uppercase tracking-wide">{q}</span>
+                      <ChevronDown className="w-4 h-4 text-[#B8A27A] transition-transform group-open:rotate-180" />
+                    </summary>
+                    <p className="text-xs leading-relaxed text-gray-500 font-light pt-2">
+                      {a}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Trust Factors - Bento card (Spans 2 columns) */}
+          <div className="md:col-span-2 p-8 border border-[#B8A27A]/20 bg-gradient-to-br from-white/70 to-[#B8A27A]/5 backdrop-blur-2xl rounded-[28px] shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] hover:border-[#B8A27A]/35 hover:shadow-[0_25px_55px_-10px_rgba(184,162,122,0.08)] transition-all duration-500 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <div className="text-left md:col-span-2">
+              <div className="text-[#B8A27A] font-mono text-[9px] uppercase tracking-wider mb-2">Accreditation</div>
+              <h4 className="text-md font-serif font-black text-[#1F242E]">Certified Luxury Home Marketing Specialists</h4>
+              <p className="text-[10px] text-gray-500 font-light mt-2 leading-relaxed">
+                Our advisors hold CRS and ABR accreditations, delivering institutional analysis and luxury marketing standards to every deal.
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <div className="w-20 h-20 rounded-2xl bg-[#B8A27A]/10 border border-[#B8A27A]/20 flex items-center justify-center shadow-inner">
+                <ShieldCheck className="w-10 h-10 text-[#B8A27A]" strokeWidth={1} />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* FINAL GLASS CTA BANNER */}
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12">
+        <div className="bg-gradient-to-tr from-[#B8A27A] to-[#E5D5BC] rounded-[48px] py-20 px-8 text-center shadow-lg relative overflow-hidden border border-white/50">
+          <div className="absolute inset-0 opacity-15 pointer-events-none bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=600')" }} />
+          <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] mb-6 tracking-tight relative z-10">Your next chapter starts here.</h2>
+          <p className="text-gray-800 text-xs font-mono font-bold tracking-wider mb-8 max-w-sm mx-auto uppercase relative z-10">Boutique service. Multi-channel marketing strategies.</p>
+          <div className="pt-2 relative z-10 flex flex-wrap justify-center gap-4">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#1F242E] hover:bg-white hover:text-black text-white font-mono font-black uppercase tracking-widest text-[10px] px-10 py-5 transition-all shadow-sm">
+              Schedule Consultation <Calendar className="w-4 h-4" />
+            </Link>
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white/40 backdrop-blur-md hover:bg-white text-[#1F242E] font-mono font-black uppercase tracking-widest text-[10px] px-10 py-5 transition-all shadow-sm border border-white/50">
+              Browse Available Units
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── FAQ ── */}
-      <section className="py-24 px-6 md:px-12 bg-white">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] uppercase tracking-[0.5em] mb-4" style={{ color: FOREST, ...semiBold }}>FAQ</div>
-            <h2 className="text-4xl" style={{ ...displayFont, color: SLATE }}>Common Questions</h2>
-          </div>
-          <div className="divide-y divide-gray-100">
-            {FAQS.map(({ q, a }, i) => (
-              <details key={i} className="group py-5">
-                <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="text-sm leading-snug" style={{ ...bold, color: SLATE }}>{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: FOREST }} />
-                </summary>
-                <p className="mt-4 text-gray-500 text-sm leading-relaxed" style={bodyFont}>{a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CONTACT / MAP ── */}
-      <section style={{ backgroundColor: CREAM }} className="py-16 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10">
-          <div>
-            <div className="text-[10px] uppercase tracking-widest mb-3" style={{ color: FOREST, ...semiBold }}>Our Office</div>
-            <div className="flex items-start gap-2 text-gray-500 text-sm" style={bodyFont}>
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: FOREST }} />
-              <span>1420 NW Lovejoy St, Suite 210<br />Portland, OR 97209</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-[10px] uppercase tracking-widest mb-3" style={{ color: FOREST, ...semiBold }}>Hours</div>
-            <div className="text-gray-500 text-sm space-y-1" style={bodyFont}>
-              <div>Mon – Fri: 8:30am – 6:00pm</div>
-              <div>Sat – Sun: By appointment</div>
-              <div className="text-sm mt-2" style={{ color: FOREST, ...semiBold }}>Evening showings available</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="text-[10px] uppercase tracking-widest mb-1" style={{ color: FOREST, ...semiBold }}>Talk to Us</div>
-            <a href="tel:5035550182" className="inline-flex items-center gap-2 text-gray-800 text-base" style={bold}>
-              <Phone className="w-4 h-4" style={{ color: FOREST }} /> (503) 555-0182
-            </a>
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest px-7 py-3 text-white" style={{ backgroundColor: FOREST, ...semiBold }}>
-              Free Strategy Consultation <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FINAL CTA ── */}
-      <section style={{ backgroundColor: FOREST }} className="py-16 px-6 text-center">
-        <h2 className="text-3xl text-white mb-4" style={displayFont}>Ready to find your next home?</h2>
-        <p className="text-white/65 mb-8 max-w-lg mx-auto" style={bodyFont}>Free market analysis for sellers. Free buyer consultation. No obligation. Let us guide you from first step to closing day.</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white text-[11px] uppercase tracking-widest px-10 py-4" style={{ color: FOREST, ...semiBold }}>
-            Schedule a Consultation <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 border border-white/30 text-white text-[11px] uppercase tracking-widest px-10 py-4" style={semiBold}>
-            View Listings
-          </Link>
-        </div>
-      </section>
-    </>
+    </div>
   );
 }

@@ -1,336 +1,180 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Sun, ArrowRight, Check, Star, Heart, Leaf, Wind, Phone, MapPin, ChevronDown, Clock } from 'lucide-react';
+import { ArrowRight, Star, ChevronDown, Phone, MapPin, Check } from 'lucide-react';
 
 const BASE = '/work/solstice-yoga';
-const DARK = '#2C2018';
-const SAGE = '#7D9B76';
-const ROSE = '#C4869A';
-const CREAM = '#FDF8F3';
-const MIST = '#E8F0E9';
-
-const SCHEDULE = {
-  Mon: [
-    { time: '7:00 AM', name: 'Hatha Flow', instructor: 'Maya', level: 'All Levels', duration: '60 min' },
-    { time: '6:00 PM', name: 'Vinyasa', instructor: 'Chris', level: 'Intermediate', duration: '75 min' },
-  ],
-  Tue: [
-    { time: '9:00 AM', name: 'Yin & Restore', instructor: 'Sarah', level: 'All Levels', duration: '90 min' },
-    { time: '7:00 PM', name: 'Meditation', instructor: 'David', level: 'Beginner', duration: '45 min' },
-  ],
-  Wed: [
-    { time: '7:00 AM', name: 'Hatha Flow', instructor: 'Maya', level: 'All Levels', duration: '60 min' },
-    { time: '12:00 PM', name: 'Vinyasa', instructor: 'Chris', level: 'All Levels', duration: '60 min' },
-    { time: '6:00 PM', name: 'Hatha Flow', instructor: 'Maya', level: 'All Levels', duration: '60 min' },
-  ],
-  Thu: [
-    { time: '9:00 AM', name: 'Yin & Restore', instructor: 'Sarah', level: 'All Levels', duration: '90 min' },
-    { time: '6:30 PM', name: 'Vinyasa', instructor: 'Chris', level: 'Advanced', duration: '75 min' },
-  ],
-  Fri: [
-    { time: '7:00 AM', name: 'Hatha Flow', instructor: 'Maya', level: 'All Levels', duration: '60 min' },
-    { time: '5:30 PM', name: 'Sound & Meditation', instructor: 'David', level: 'All Levels', duration: '60 min' },
-  ],
-};
+const CREAM = '#FBF8F3';
+const DARK = '#2D2A24';
+const SAGE = '#8FAF78';
+const TERRA = '#D4855A';
+const WHITE = '#FFFFFF';
+const MUTED = 'rgba(45,42,36,0.5)';
 
 const CLASSES = [
-  { icon: Sun, title: 'Hatha Yoga', level: 'All Levels', desc: 'Foundational postures linking breath, strength, and stillness. The perfect introduction to yoga practice.' },
-  { icon: Wind, title: 'Vinyasa Flow', level: 'Beginner–Intermediate', desc: 'Dynamic sequences where breath leads movement. Builds heat, strength, and fluidity over time.' },
-  { icon: Leaf, title: 'Yin & Restorative', level: 'All Levels', desc: 'Long-held passive poses that target connective tissue. The nervous system reset your body has been asking for.' },
-  { icon: Heart, title: 'Meditation & Sound', level: 'All Levels', desc: 'Guided meditation, pranayama breathwork, and Himalayan singing bowl sound healing.' },
+  { name: 'Hatha Flow', level: 'All Levels', duration: '75 min', desc: 'A grounded, breath-led practice. Slower pace, longer holds, deep awareness. The ideal starting point and a lifelong practice.' },
+  { name: 'Power Vinyasa', level: 'Intermediate – Advanced', duration: '60 min', desc: 'Strength meets fluidity. Dynamic sequences, strong transitions, a physical challenge balanced with mindful intention.' },
+  { name: 'Yin & Restorative', level: 'All Levels', duration: '90 min', desc: 'Long-held poses, props, silence. A practice for the nervous system — release, soften, and deeply restore.' },
+  { name: 'Meditation & Breathwork', level: 'All Levels', duration: '45 min', desc: 'Pranayama, guided meditation, and stillness. A practice that asks nothing from the body and everything from the mind.' },
 ];
 
-const PRICING = [
-  { name: 'Drop-In Class', price: '$22', per: '/class', desc: 'Try any single class. Mats, props, and water provided.', features: ['Access to any single class', 'All props included', 'No commitment'] },
-  { name: 'Intro Month', price: '$49', per: '/first month', desc: 'Unlimited classes for your first 30 days. New students only.', features: ['Unlimited classes × 30 days', 'Free mat rental', 'New student orientation', 'One private session discount'], highlight: true },
-  { name: 'Monthly Unlimited', price: '$119', per: '/month', desc: 'Unlimited access to all classes and workshops.', features: ['Unlimited all classes', 'Workshop discounts (20%)', 'Guest pass × 1/month', 'Online class library access'] },
+const TEACHERS = [
+  { name: 'Clara Whitfield', role: 'Founder · Hatha & Vinyasa', img: 'photo-1508214751196-bcfd4ca60f91', quote: "The practice does not ask you to be better. It asks you to be present." },
+  { name: 'James Osei', role: 'Power Vinyasa · Breathwork', img: 'photo-1472099645785-5658abf4ff4e', quote: "Strength is not force. It is consistency, surrender, and breath." },
+  { name: 'Mei Lin Park', role: 'Yin & Restorative · Meditation', img: 'photo-1573496359142-b8d87734a5a2', quote: "We do not need more energy. We need to stop depleting the energy we have." },
 ];
 
-const INSTRUCTORS = [
-  { name: 'Maya Chen', specialty: 'Hatha & Vinyasa', years: '8 years teaching', bio: '300-hour certified. Trained in Mysore, India. Maya brings warmth and precision to every class.' },
-  { name: 'Chris Hartwell', specialty: 'Vinyasa & Power Flow', years: '6 years teaching', bio: 'Former athlete turned yogi. Chris builds strength while keeping the practice accessible to all.' },
-  { name: 'Sarah Okonkwo', specialty: 'Yin & Restorative', years: '10 years teaching', bio: 'Somatic therapist and yoga teacher. Sarah specializes in nervous system regulation through movement.' },
-];
-
-const REVIEWS = [
-  { text: "Solstice is my sanctuary. The teachers are exceptional — knowledgeable, warm, and attuned to every student. I leave feeling genuinely transformed.", author: "Sarah L.", class: "Hatha Yoga" },
-  { text: "I came as a complete beginner with a stiff back. Six months later I feel stronger and more at peace than I have in years.", author: "Daniel M.", class: "Fundamentals" },
-  { text: "The community here is what makes it special. Everyone radiates kindness. It feels like home.", author: "Priya R.", class: "Vinyasa Flow" },
+const MEMBERSHIPS = [
+  { name: 'Drop In', price: '$22', note: 'per class', features: ['Any single class', 'All experience levels', 'Mat available to rent'] },
+  { name: 'Monthly Unlimited', price: '$89', note: 'per month', featured: true, features: ['Unlimited classes', 'Priority booking', 'Guest pass monthly', 'Free mat storage'] },
+  { name: 'Annual', price: '$69', note: '/mo · billed annually', features: ['Unlimited classes', 'All monthly benefits', '2 guest passes/mo', 'Retreat discounts 20%'] },
 ];
 
 const FAQS = [
-  { q: "I have never done yoga before. Is this studio right for me?", a: "Absolutely. We run a Foundations for New Yogis series every month specifically for people who have never set foot on a mat. Our regular classes also offer beginner modifications for every posture. Our teachers notice new faces and check in with them personally." },
-  { q: "What should I bring to class?", a: "Just comfortable clothes you can move in. We provide mats, blocks, straps, blankets, and bolsters at no charge. Water bottles are welcome — we have a filtered water station. Yoga socks are optional but popular for heated classes." },
-  { q: "Are your studios heated?", a: "We have two studios. Studio A is heated to 80–85°F for Power Vinyasa and select Hatha classes. Studio B is unheated for Yin, Restorative, Meditation, and Foundations classes. The class listing will always specify which studio is used." },
-  { q: "Do I need to reserve a spot in advance?", a: "Yes. All classes require advance registration via our app or website — this ensures appropriate class sizes and teacher preparation. Drop-ins are accepted when space is available, but popular evening classes sell out by Wednesday. We recommend booking 3–4 days ahead." },
-  { q: "What is the cancellation policy?", a: "Classes can be cancelled up to 2 hours before the start time for a full credit. Cancellations within 2 hours may result in a $10 late cancel fee for unlimited members. Drop-in purchases are non-refundable but transferable." },
-  { q: "Do you offer online classes?", a: "Yes. Monthly Unlimited members get access to our full on-demand library of 200+ classes — Hatha, Vinyasa, Yin, and Meditation. New classes are added weekly. Live-streamed classes are available for select morning slots." },
-  { q: "Do you offer teacher training?", a: "Yes. We run a 200-hour Yoga Teacher Training (YTT) program annually, typically starting in January. We also offer a 300-hour advanced training for certified teachers. Training is accredited by Yoga Alliance. Applications open in September." },
+  { q: "I have never done yoga before. Where do I start?", a: "Start with Hatha Flow or Yin & Restorative. Both are designed for all levels, and our teachers actively offer modifications. Your first class is free — come as you are." },
+  { q: "What should I bring to my first class?", a: "Just yourself. We provide mats (rental: $2), blocks, straps, and blankets. Wear comfortable clothing you can move in. Arrive 10 minutes early to meet your teacher." },
+  { q: "Do you offer private sessions or corporate yoga?", a: "Yes to both. Private sessions are scheduled directly with teachers — rates start at $85/hour. Corporate and group programs are available for teams of any size. Contact us to discuss." },
+  { q: "Is there parking at the studio?", a: "Yes. Free parking is available in the lot behind the studio on 8th Ave South. Street parking is also available. We are a 5-minute walk from the WeGo bus stop on 8th." },
+  { q: "Can I freeze or pause my membership?", a: "Yes. You can pause for up to 3 months per year with no penalty. Manage pauses through your account or email us and we will handle it within one business day." },
+  { q: "Do you offer classes for pregnant students?", a: "Yes. We offer prenatal yoga on Thursday mornings. Students in their second and third trimester are encouraged to speak with their teacher before other classes so we can offer safe modifications." },
+  { q: "What is your cancellation policy for booked classes?", a: "Cancel up to 4 hours before class at no charge. Late cancellations or no-shows for members use one credit. Drop-in fees are non-refundable but can be credited toward a future visit if you contact us." },
 ];
 
-const LEVEL_COLORS: Record<string, string> = {
-  'All Levels': SAGE,
-  'Beginner': '#9BB89A',
-  'Intermediate': ROSE,
-  'Advanced': DARK,
-};
-
-export default function SolsticeYogaHome() {
+export default function SolsticeYoga() {
   return (
     <>
-      {/* HERO — centered spacious split */}
-      <section
-        className="min-h-screen flex flex-col md:grid md:items-center"
-        style={{ backgroundColor: CREAM, gridTemplateColumns: '45% 55%' }}
-      >
-        {/* Left: text panel */}
-        <div className="flex flex-col justify-center px-10 md:px-16 lg:px-20 py-20 md:py-0 order-2 md:order-1">
-          <div className="text-xs font-light tracking-[0.35em] mb-8" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>
-            Denver, CO · Est. 2016
+      {/* NAV — cream, centered wordmark */}
+      <nav className="sticky top-0 z-50 border-b" style={{ backgroundColor: CREAM, borderColor: 'rgba(45,42,36,0.08)' }}>
+        <div className="max-w-7xl mx-auto px-6 h-16 grid grid-cols-3 items-center">
+          <div className="hidden md:flex items-center gap-7">
+            {['Classes', 'Schedule'].map(l => (
+              <Link key={l} href={`${BASE}/services`} className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>{l}</Link>
+            ))}
           </div>
-          <h1
-            className="text-6xl md:text-7xl lg:text-8xl font-bold italic leading-[0.95] mb-8"
-            style={{ fontFamily: 'var(--font-display)', color: DARK }}
-          >
-            Find stillness.<br />Find strength.
-          </h1>
-          <div className="w-10 h-px mb-8" style={{ backgroundColor: SAGE }} />
-          <p className="text-lg font-light leading-relaxed mb-10 max-w-xs" style={{ color: DARK + 'CC', fontFamily: 'var(--font-body)' }}>
-            30+ weekly classes. 10 expert instructors. All levels welcome.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href={`${BASE}/services`}
-              className="inline-flex items-center gap-2 text-white text-sm font-semibold px-7 py-3.5 rounded-full transition-opacity hover:opacity-90"
-              style={{ backgroundColor: SAGE, fontFamily: 'var(--font-body)' }}
-            >
-              View Schedule
-            </Link>
-            <Link
-              href={`${BASE}/contact`}
-              className="inline-flex items-center gap-2 text-sm font-semibold px-7 py-3.5 rounded-full border-2 transition-colors hover:bg-amber-900/5"
-              style={{ borderColor: DARK, color: DARK, fontFamily: 'var(--font-body)' }}
-            >
-              Start Free Week
-            </Link>
+          <Link href={BASE} className="text-center font-serif italic text-xl" style={{ color: DARK }}>Solstice</Link>
+          <div className="flex items-center justify-end gap-4">
+            <Link href={`${BASE}/about`} className="hidden md:block text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>About</Link>
+            <Link href={`${BASE}/contact`} className="text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full text-white" style={{ backgroundColor: SAGE }}>Book a Class</Link>
           </div>
         </div>
+      </nav>
 
-        {/* Right: photo with rounded left corner */}
-        <div className="relative order-1 md:order-2" style={{ minHeight: '45vh', height: '100%' }}>
-          <div className="absolute inset-0 md:rounded-l-3xl overflow-hidden">
-            <Image
-              src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2070&auto=format&fit=crop"
-              alt="Yoga studio at Solstice Yoga Denver"
-              fill
-              className="object-cover"
-              referrerPolicy="no-referrer"
-              priority
-            />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(253,248,243,0.1) 0%, transparent 30%)' }} />
+      {/* HERO — full viewport image, minimal centered text */}
+      <section className="relative" style={{ height: '95vh', minHeight: 600 }}>
+        <Image
+          src="https://images.unsplash.com/photo-1545389336-cf090694435e?q=80&w=2070&auto=format&fit=crop"
+          alt="Yoga practice at golden hour"
+          fill className="object-cover object-center" referrerPolicy="no-referrer" priority
+        />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(45,42,36,0.15) 0%, rgba(45,42,36,0.55) 100%)' }} />
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-24 px-6 text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.5em] mb-6 text-white/60">Nashville Yoga Studio · Est. 2016</p>
+          <h1 className="font-serif italic text-white leading-none mb-6" style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)' }}>
+            Find your stillness.
+          </h1>
+          <p className="text-white/65 max-w-md mb-10 text-lg">24 class styles, 8 expert teachers, one sanctuary in the heart of Nashville.</p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold text-sm px-8 py-4 text-white" style={{ backgroundColor: SAGE }}>
+              Book Free First Class <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 font-bold text-sm px-8 py-4 border border-white/30 text-white">
+              Explore Schedule
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* SIGNATURE ELEMENT — Weekly Schedule Grid */}
-      <section style={{ backgroundColor: MIST }} className="py-24 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>
-              Classes
-            </div>
-            <h2
-              className="text-4xl md:text-5xl font-bold italic mb-3"
-              style={{ fontFamily: 'var(--font-display)', color: DARK }}
-            >
-              This Week's Schedule
-            </h2>
-            <p className="text-sm font-light max-w-sm mx-auto" style={{ color: DARK + '99', fontFamily: 'var(--font-body)' }}>
-              Drop in anytime. All props provided. Reserve your spot online.
-            </p>
+      {/* VALUES — 3-col on cream */}
+      <section style={{ backgroundColor: CREAM }} className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-serif italic text-4xl md:text-5xl" style={{ color: DARK }}>Why Solstice?</h2>
           </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {(Object.entries(SCHEDULE) as [string, typeof SCHEDULE['Mon']][]).map(([day, slots]) => (
-              <div key={day}>
-                <div
-                  className="text-[10px] font-bold uppercase tracking-[0.3em] pb-3 mb-3 border-b"
-                  style={{ color: SAGE, borderColor: SAGE + '40', fontFamily: 'var(--font-body)' }}
-                >
-                  {day}
-                </div>
-                <div className="flex flex-col gap-3">
-                  {slots.map((slot, i) => (
-                    <div
-                      key={i}
-                      className="p-3 rounded-xl"
-                      style={{ backgroundColor: i === 0 ? SAGE + '18' : 'white' }}
-                    >
-                      <div
-                        className="text-base font-bold mb-0.5"
-                        style={{ fontFamily: 'var(--font-display)', color: DARK }}
-                      >
-                        {slot.time}
-                      </div>
-                      <div className="text-xs font-semibold mb-1" style={{ color: DARK, fontFamily: 'var(--font-body)' }}>
-                        {slot.name}
-                      </div>
-                      <div className="text-[10px] font-light mb-1.5" style={{ color: DARK + '80', fontFamily: 'var(--font-body)' }}>
-                        w/ {slot.instructor} · {slot.duration}
-                      </div>
-                      <span
-                        className="inline-block text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white"
-                        style={{ backgroundColor: LEVEL_COLORS[slot.level] || SAGE, fontFamily: 'var(--font-body)' }}
-                      >
-                        {slot.level}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+          <div className="grid md:grid-cols-3 gap-12">
+            {[
+              { n: 'All Experience Levels', desc: 'Every class is taught with modifications for beginners and depth for advanced practitioners. You belong here on day one.' },
+              { n: 'Real Teachers', desc: 'Our teachers average 9 years of practice and study. They know your name, your body, and how to help you grow.' },
+              { n: 'Open 7 Days', desc: 'Early mornings through evening classes. Drop in or build a routine — the studio is here whenever your day allows.' },
+            ].map(({ n, desc }, i) => (
+              <div key={i}>
+                <div className="w-8 h-px mb-6" style={{ backgroundColor: SAGE }} />
+                <h3 className="font-bold text-base mb-3" style={{ color: DARK }}>{n}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{desc}</p>
               </div>
             ))}
           </div>
-
-          <div className="text-center mt-10">
-            <Link
-              href={`${BASE}/services`}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold border-b pb-0.5 transition-opacity hover:opacity-70"
-              style={{ color: SAGE, borderColor: SAGE, fontFamily: 'var(--font-body)' }}
-            >
-              Full Schedule <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* CLASS TYPES */}
-      <section style={{ backgroundColor: CREAM }} className="py-24 px-6 md:px-12">
+      {/* CLASSES — full-width horizontal rows */}
+      <section className="py-24 px-6" style={{ backgroundColor: WHITE }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>
-              What We Offer
-            </div>
-            <h2
-              className="text-4xl md:text-5xl font-bold italic"
-              style={{ fontFamily: 'var(--font-display)', color: DARK }}
-            >
-              Four paths to practice.
-            </h2>
+            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: TERRA }}>Classes</p>
+            <h2 className="font-serif italic text-4xl md:text-5xl" style={{ color: DARK }}>Find your practice.</h2>
           </div>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {CLASSES.map(({ icon: Icon, title, level, desc }, i) => (
-              <div
-                key={i}
-                className="flex gap-6 p-8 rounded-2xl"
-                style={{ backgroundColor: 'white' }}
-              >
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: MIST }}
-                >
-                  <Icon className="w-5 h-5" style={{ color: SAGE }} strokeWidth={1.5} />
-                </div>
+          <div className="divide-y" style={{ borderColor: 'rgba(45,42,36,0.08)' }}>
+            {CLASSES.map(({ name, level, duration, desc }, i) => (
+              <div key={i} className="py-8 grid md:grid-cols-[1fr_1fr_auto] gap-6 items-center group">
                 <div>
-                  <h3
-                    className="font-bold text-base mb-1"
-                    style={{ fontFamily: 'var(--font-display)', color: DARK }}
-                  >
-                    {title}
-                  </h3>
-                  <div
-                    className="text-[10px] font-semibold uppercase tracking-widest mb-3"
-                    style={{ color: SAGE, fontFamily: 'var(--font-body)' }}
-                  >
-                    {level}
-                  </div>
-                  <p className="text-sm font-light leading-relaxed" style={{ color: DARK + '99', fontFamily: 'var(--font-body)' }}>
-                    {desc}
-                  </p>
+                  <div className="font-bold text-lg mb-1" style={{ color: DARK }}>{name}</div>
+                  <div className="text-xs font-bold uppercase tracking-widest" style={{ color: SAGE }}>{level} · {duration}</div>
                 </div>
+                <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{desc}</p>
+                <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest whitespace-nowrap" style={{ color: DARK }}>
+                  Book Class <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* PRICING */}
-      <section className="py-24 px-6 md:px-12 bg-white">
+      {/* TEACHERS — large editorial portraits */}
+      <section style={{ backgroundColor: CREAM }} className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: TERRA }}>Teachers</p>
+            <h2 className="font-serif italic text-4xl md:text-5xl" style={{ color: DARK }}>Meet your guides.</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {TEACHERS.map(({ name, role, img, quote }, i) => (
+              <div key={i}>
+                <div className="relative aspect-[3/4] mb-5 overflow-hidden">
+                  <Image
+                    src={`https://images.unsplash.com/${img}?q=80&w=800&auto=format&fit=crop`}
+                    alt={name} fill className="object-cover object-top" referrerPolicy="no-referrer"
+                  />
+                </div>
+                <h3 className="font-bold text-base mb-0.5" style={{ color: DARK }}>{name}</h3>
+                <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: SAGE }}>{role}</div>
+                <p className="text-sm italic leading-relaxed" style={{ color: MUTED }}>"{quote}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* MEMBERSHIP */}
+      <section className="py-24 px-6" style={{ backgroundColor: WHITE }}>
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>
-              Pricing
-            </div>
-            <h2
-              className="text-4xl md:text-5xl font-bold italic"
-              style={{ fontFamily: 'var(--font-display)', color: DARK }}
-            >
-              Find your plan.
-            </h2>
+            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: TERRA }}>Membership</p>
+            <h2 className="font-serif italic text-4xl" style={{ color: DARK }}>Your practice, your pace.</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {PRICING.map(({ name, price, per, desc, features, highlight }, i) => (
-              <div
-                key={i}
-                className="p-8 text-center rounded-2xl relative"
-                style={{
-                  backgroundColor: highlight ? DARK : CREAM,
-                  outline: highlight ? `2px solid ${SAGE}` : 'none',
-                }}
-              >
-                {highlight && (
-                  <div
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] font-bold uppercase tracking-widest px-4 py-1 rounded-full text-white"
-                    style={{ backgroundColor: SAGE, fontFamily: 'var(--font-body)' }}
-                  >
-                    Best for New Students
-                  </div>
-                )}
-                <div
-                  className="font-bold text-sm mb-3"
-                  style={{ color: highlight ? 'white' : DARK, fontFamily: 'var(--font-display)' }}
-                >
-                  {name}
-                </div>
-                <div
-                  className="text-5xl font-bold italic mb-1"
-                  style={{ fontFamily: 'var(--font-display)', color: SAGE }}
-                >
-                  {price}
-                </div>
-                <div
-                  className="text-xs font-light mb-5"
-                  style={{ color: highlight ? 'rgba(255,255,255,0.6)' : DARK + '80', fontFamily: 'var(--font-body)' }}
-                >
-                  {per}
-                </div>
-                <p
-                  className="text-xs font-light mb-6 leading-relaxed"
-                  style={{ color: highlight ? 'rgba(255,255,255,0.65)' : DARK + '80', fontFamily: 'var(--font-body)' }}
-                >
-                  {desc}
-                </p>
-                <ul className="space-y-2 text-left mb-8">
+          <div className="grid md:grid-cols-3 gap-5">
+            {MEMBERSHIPS.map(({ name, price, note, features, featured }, i) => (
+              <div key={i} className="rounded-2xl p-8" style={{ backgroundColor: featured ? DARK : CREAM, boxShadow: '0 6px 28px rgba(0,0,0,0.10)' }}>
+                <h3 className="font-bold text-sm mb-5 uppercase tracking-widest" style={{ color: featured ? 'rgba(255,255,255,0.5)' : MUTED }}>{name}</h3>
+                <div className="font-serif italic text-5xl mb-1" style={{ color: featured ? WHITE : DARK }}>{price}</div>
+                <div className="text-xs mb-6" style={{ color: featured ? 'rgba(255,255,255,0.4)' : MUTED }}>{note}</div>
+                <ul className="space-y-3 mb-8">
                   {features.map((f, j) => (
-                    <li
-                      key={j}
-                      className="flex items-center gap-2 text-xs font-light"
-                      style={{ color: highlight ? 'rgba(255,255,255,0.8)' : DARK + '99', fontFamily: 'var(--font-body)' }}
-                    >
-                      <Check className="w-3 h-3 shrink-0" style={{ color: SAGE }} />
-                      {f}
+                    <li key={j} className="flex items-center gap-2 text-sm" style={{ color: featured ? 'rgba(255,255,255,0.7)' : DARK }}>
+                      <Check className="w-3.5 h-3.5 shrink-0" style={{ color: SAGE }} /> {f}
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href={`${BASE}/contact`}
-                  className="block text-center text-xs font-semibold uppercase tracking-widest py-3 rounded-full transition-opacity hover:opacity-80"
-                  style={{
-                    backgroundColor: highlight ? SAGE : 'transparent',
-                    color: highlight ? 'white' : DARK,
-                    border: highlight ? 'none' : `1px solid ${DARK}40`,
-                    fontFamily: 'var(--font-body)',
-                  }}
-                >
+                <Link href={`${BASE}/contact`} className="block text-center font-bold text-xs uppercase tracking-widest py-3" style={{ backgroundColor: featured ? SAGE : 'rgba(45,42,36,0.08)', color: featured ? WHITE : DARK }}>
                   Get Started
                 </Link>
               </div>
@@ -339,241 +183,112 @@ export default function SolsticeYogaHome() {
         </div>
       </section>
 
-      {/* INSTRUCTORS */}
-      <section style={{ backgroundColor: MIST }} className="py-24 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>
-              Your Teachers
-            </div>
-            <h2
-              className="text-4xl md:text-5xl font-bold italic"
-              style={{ fontFamily: 'var(--font-display)', color: DARK }}
-            >
-              Expert. Warm. Certified.
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {INSTRUCTORS.map((inst, i) => (
-              <div key={i} className="bg-white rounded-2xl p-8 text-center">
-                <div
-                  className="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center text-xl font-bold italic text-white"
-                  style={{ backgroundColor: i % 2 === 0 ? SAGE : ROSE, fontFamily: 'var(--font-display)' }}
-                >
-                  {inst.name.split(' ').map(n => n[0]).join('')}
-                </div>
-                <h3
-                  className="font-bold text-base mb-1"
-                  style={{ fontFamily: 'var(--font-display)', color: DARK }}
-                >
-                  {inst.name}
-                </h3>
-                <div
-                  className="text-[10px] font-semibold uppercase tracking-widest mb-1"
-                  style={{ color: SAGE, fontFamily: 'var(--font-body)' }}
-                >
-                  {inst.specialty}
-                </div>
-                <div
-                  className="text-[10px] font-light mb-4"
-                  style={{ color: DARK + '60', fontFamily: 'var(--font-body)' }}
-                >
-                  {inst.years}
-                </div>
-                <p className="text-xs font-light leading-relaxed" style={{ color: DARK + '80', fontFamily: 'var(--font-body)' }}>
-                  {inst.bio}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              href={`${BASE}/about`}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold border-b pb-0.5"
-              style={{ color: SAGE, borderColor: SAGE, fontFamily: 'var(--font-body)' }}
-            >
-              Meet All Instructors <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+      {/* QUOTE — full-bleed dark */}
+      <section className="py-28 px-6" style={{ backgroundColor: DARK }}>
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="w-12 h-px mx-auto mb-10" style={{ backgroundColor: SAGE }} />
+          <blockquote className="font-serif italic text-3xl md:text-4xl leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            "The practice is not about touching your toes. It is about what you learn on the way down."
+          </blockquote>
+          <div className="text-xs font-bold uppercase tracking-widest" style={{ color: SAGE }}>— Clara Whitfield, Founder</div>
+          <div className="w-12 h-px mx-auto mt-10" style={{ backgroundColor: SAGE }} />
         </div>
       </section>
 
       {/* REVIEWS */}
-      <section style={{ backgroundColor: DARK }} className="py-24 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: ROSE, fontFamily: 'var(--font-body)' }}>
-              Community
-            </div>
-            <h2
-              className="text-4xl md:text-5xl font-bold italic text-white mb-2"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              What students say.
-            </h2>
-            <p className="text-white/40 text-sm" style={{ fontFamily: 'var(--font-body)' }}>5.0 Stars · 210+ Google Reviews</p>
+      <section style={{ backgroundColor: CREAM }} className="py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: TERRA }}>Reviews</p>
+            <h2 className="font-serif italic text-3xl" style={{ color: DARK }}>What the community says.</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {REVIEWS.map((r, i) => (
-              <div key={i} className="p-8 rounded-2xl" style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}>
-                <div className="flex mb-5">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: ROSE }} />
-                  ))}
-                </div>
-                <p
-                  className="text-white/80 italic text-base leading-relaxed mb-6 font-light"
-                  style={{ fontFamily: 'var(--font-display)' }}
-                >
-                  "{r.text}"
-                </p>
-                <div
-                  className="text-xs font-semibold"
-                  style={{ color: SAGE, fontFamily: 'var(--font-body)' }}
-                >
-                  — {r.author} <span className="text-white/35 font-light">· {r.class}</span>
-                </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              { t: "I walked in as a complete beginner. Within three weeks I understood why people dedicate years to this. The teachers here genuinely care.", a: 'Olivia B.', s: 'Hatha Flow' },
+              { t: "The Yin class on Sunday evenings has become non-negotiable for me. It is the only hour in my week where I am completely offline and present.", a: 'David L.', s: 'Yin & Restorative' },
+              { t: "Best investment in my health. The unlimited monthly membership pays for itself in one week if you actually use it. I go 4-5 times a week.", a: 'Naomi K.', s: 'Monthly Unlimited' },
+            ].map((r, i) => {
+              const PASTELS = [
+                { bg: '#FCE7F3', border: '#F9A8D4', star: '#EC4899' },
+                { bg: '#EDE9FE', border: '#C4B5FD', star: '#7C3AED' },
+                { bg: '#FEF3C7', border: '#FCD34D', star: '#D97706' },
+              ];
+              const pastel = PASTELS[i % 3];
+              return (
+              <div key={i} className="p-7 rounded-2xl" style={{ backgroundColor: pastel.bg, border: `1.5px solid ${pastel.border}`, boxShadow: `0 8px 32px ${pastel.border}55` }}>
+                <div className="flex gap-0.5 mb-4">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: pastel.star }} />)}</div>
+                <p className="text-sm italic leading-relaxed mb-4" style={{ color: MUTED }}>"{r.t}"</p>
+                <div className="font-bold text-xs" style={{ color: DARK }}>— {r.a} <span className="font-normal" style={{ color: pastel.star }}>· {r.s}</span></div>
               </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              href={`${BASE}/reviews`}
-              className="text-xs font-semibold uppercase tracking-widest"
-              style={{ color: SAGE, fontFamily: 'var(--font-body)' }}
-            >
-              Read All Reviews <ArrowRight className="w-3 h-3 inline ml-1" />
-            </Link>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section style={{ backgroundColor: CREAM }} className="py-24 px-6 md:px-12">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE, fontFamily: 'var(--font-body)' }}>
-              FAQ
-            </div>
-            <h2
-              className="text-4xl md:text-5xl font-bold italic"
-              style={{ fontFamily: 'var(--font-display)', color: DARK }}
-            >
-              New to yoga?
-            </h2>
+      <section className="py-24 px-6" style={{ backgroundColor: WHITE }}>
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: TERRA }}>Questions</p>
+            <h2 className="font-serif italic text-4xl" style={{ color: DARK }}>Answers before you arrive.</h2>
           </div>
-          <div className="divide-y" style={{ borderColor: SAGE + '30' }}>
+          <div className="divide-y" style={{ borderColor: 'rgba(45,42,36,0.08)' }}>
             {FAQS.map(({ q, a }, i) => (
               <details key={i} className="group py-5">
-                <summary className="flex items-center justify-between cursor-pointer gap-4 list-none">
-                  <span
-                    className="font-semibold text-sm leading-snug"
-                    style={{ color: DARK, fontFamily: 'var(--font-body)' }}
-                  >
-                    {q}
-                  </span>
-                  <ChevronDown
-                    className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180"
-                    style={{ color: SAGE }}
-                  />
+                <summary className="flex items-center justify-between cursor-pointer gap-4">
+                  <span className="font-bold text-sm" style={{ color: DARK }}>{q}</span>
+                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: SAGE }} />
                 </summary>
-                <p
-                  className="mt-4 text-sm font-light leading-relaxed"
-                  style={{ color: DARK + '80', fontFamily: 'var(--font-body)' }}
-                >
-                  {a}
-                </p>
+                <p className="mt-4 text-sm leading-relaxed" style={{ color: MUTED }}>{a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CONTACT STRIP */}
-      <section style={{ backgroundColor: DARK }} className="py-16 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10">
-          <div>
-            <div
-              className="text-[10px] font-bold uppercase tracking-widest mb-3"
-              style={{ color: SAGE, fontFamily: 'var(--font-body)' }}
-            >
-              Studio Location
-            </div>
-            <div className="flex items-start gap-2 text-white/65 text-sm" style={{ fontFamily: 'var(--font-body)' }}>
-              <MapPin className="w-4 h-4 shrink-0 mt-0.5" style={{ color: SAGE }} />
-              <span>1847 W 38th Ave<br />Denver, CO 80211<br /><span className="text-white/30 text-xs">Near Sunnyside neighborhood</span></span>
-            </div>
-          </div>
-          <div>
-            <div
-              className="text-[10px] font-bold uppercase tracking-widest mb-3"
-              style={{ color: SAGE, fontFamily: 'var(--font-body)' }}
-            >
-              Studio Hours
-            </div>
-            <div className="text-white/65 text-sm space-y-1" style={{ fontFamily: 'var(--font-body)' }}>
-              <div>Mon – Fri: 5:30am – 9:30pm</div>
-              <div>Saturday: 7:00am – 7:00pm</div>
-              <div>Sunday: 8:00am – 6:00pm</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div
-              className="text-[10px] font-bold uppercase tracking-widest mb-1"
-              style={{ color: SAGE, fontFamily: 'var(--font-body)' }}
-            >
-              Contact Us
-            </div>
-            <a
-              href="tel:7205550823"
-              className="inline-flex items-center gap-2 text-white font-bold text-base"
-              style={{ fontFamily: 'var(--font-body)' }}
-            >
-              <Phone className="w-4 h-4" style={{ color: SAGE }} /> (720) 555-0823
-            </a>
-            <Link
-              href={`${BASE}/contact`}
-              className="inline-flex items-center gap-2 text-white text-xs font-semibold uppercase tracking-widest px-7 py-3 rounded-full"
-              style={{ backgroundColor: SAGE, fontFamily: 'var(--font-body)' }}
-            >
-              Reserve Your Mat <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* FINAL CTA */}
       <section style={{ backgroundColor: SAGE }} className="py-20 px-6 text-center">
-        <Sun className="w-8 h-8 mx-auto mb-6 text-white/60" strokeWidth={1.5} />
-        <h2
-          className="text-4xl md:text-5xl font-bold italic text-white mb-5"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
-          First month unlimited — just $49.
-        </h2>
-        <p
-          className="text-white/75 font-light mb-10 max-w-md mx-auto text-base leading-relaxed"
-          style={{ fontFamily: 'var(--font-body)' }}
-        >
-          New students only. Try any class, any time, any instructor. No commitment. Experience every style before choosing a membership.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link
-            href={`${BASE}/contact`}
-            className="inline-flex items-center gap-2 bg-white text-xs font-semibold uppercase tracking-widest px-10 py-4 rounded-full transition-opacity hover:opacity-90"
-            style={{ color: DARK, fontFamily: 'var(--font-body)' }}
-          >
-            Claim Intro Offer <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link
-            href={`${BASE}/services`}
-            className="inline-flex items-center gap-2 border-2 border-white/40 text-white text-xs font-semibold uppercase tracking-widest px-10 py-4 rounded-full"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
-            <Clock className="w-4 h-4" /> View Class Schedule
-          </Link>
-        </div>
+        <h2 className="font-serif italic text-4xl text-white mb-4">Begin your practice.</h2>
+        <p className="text-white/75 mb-8 max-w-md mx-auto">Your first class is free. No commitment, no pressure. Just show up.</p>
+        <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-bold text-sm px-10 py-4" style={{ color: DARK }}>
+          Book Your Free Class <ArrowRight className="w-4 h-4" />
+        </Link>
       </section>
+
+      {/* FOOTER */}
+      <footer style={{ backgroundColor: DARK }} className="py-14 px-6">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10 mb-10">
+          <div>
+            <div className="font-serif italic text-xl text-white mb-3">Solstice</div>
+            <p className="text-sm leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.4)' }}>Nashville yoga studio. Open 7 days. All levels. All bodies.</p>
+            <div className="flex items-start gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
+              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: SAGE }} />
+              <span>314 8th Ave South, Nashville TN 37203</span>
+            </div>
+          </div>
+          <div>
+            <div className="text-xs font-bold uppercase tracking-widest mb-4 text-white">Studio</div>
+            <ul className="space-y-2">
+              {['Class Schedule', 'Teachers', 'Membership', 'Retreats', 'Workshops', 'Private Sessions'].map(s => (
+                <li key={s}><Link href={`${BASE}/services`} className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>{s}</Link></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <div className="text-xs font-bold uppercase tracking-widest mb-4 text-white">Hours</div>
+            <div className="text-sm space-y-1.5" style={{ color: 'rgba(255,255,255,0.4)' }}>
+              <div>Mon – Fri: 6:00am – 9:00pm</div>
+              <div>Saturday: 7:00am – 6:00pm</div>
+              <div>Sunday: 8:00am – 5:00pm</div>
+              <div className="mt-3 font-bold" style={{ color: SAGE }}>(615) 555-0244</div>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-5xl mx-auto border-t pt-6 text-xs" style={{ borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.25)' }}>
+          © 2025 Solstice Yoga Studio · Privacy Policy
+        </div>
+      </footer>
     </>
   );
 }
