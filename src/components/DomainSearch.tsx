@@ -2,8 +2,8 @@
 import { useState, useRef } from 'react';
 import {
   Search, Globe, ShoppingCart, CheckCircle2, XCircle, Loader2,
-  Trash2, ArrowRight, ShieldCheck, Zap, RefreshCw, Star,
-  AlertCircle, ExternalLink, ChevronDown, ChevronUp, Tag,
+  Trash2, ArrowRight, ShieldCheck, Zap, RefreshCw,
+  AlertCircle, ExternalLink, ChevronDown, ChevronUp, Tag, BadgeCheck,
 } from 'lucide-react';
 
 interface DomainResult {
@@ -112,6 +112,17 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
 
   const connectedDomains = mySites.filter((s: any) => s.url && s.url.includes('.'));
 
+  // Build a set of domains the user already owns (url + customDomain fields, lowercased)
+  const ownedDomains = new Set<string>(
+    mySites.flatMap((s: any) => [
+      s.url,
+      s.customDomain,
+    ].filter(Boolean).map((d: string) =>
+      d.trim().toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '')
+    ))
+  );
+  const isOwned = (domain: string) => ownedDomains.has(domain.toLowerCase());
+
   return (
     <div className="max-w-4xl mx-auto space-y-0">
       {/* Tabs */}
@@ -188,118 +199,139 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
           {status === 'done' && results.length > 0 && (
             <div className="space-y-4">
               {/* Featured .com result */}
-              {comResult && (
-                <div>
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">
-                    {comResult.available ? '✓ Top Pick' : '.com Result'}
-                  </p>
-                  <div className={`rounded-2xl border-2 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm ${
-                    comResult.available
-                      ? 'bg-white border-indigo-200'
-                      : 'bg-slate-50 border-slate-200'
-                  }`}>
-                    <div className="flex items-center gap-4 min-w-0">
-                      {comResult.available
-                        ? <CheckCircle2 className="w-7 h-7 text-emerald-500 shrink-0" />
-                        : <XCircle className="w-7 h-7 text-red-400 shrink-0" />
-                      }
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className={`text-xl font-black truncate ${comResult.available ? 'text-slate-900' : 'text-slate-400 line-through'}`}>
-                            {comResult.domain}
-                          </span>
-                          <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200 shrink-0">
-                            Most Popular
-                          </span>
+              {comResult && (() => {
+                const owned = isOwned(comResult.domain);
+                return (
+                  <div>
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+                      {owned ? '★ Your Domain' : comResult.available ? '✓ Top Pick' : '.com Result'}
+                    </p>
+                    <div className={`rounded-2xl border-2 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm ${
+                      owned
+                        ? 'bg-indigo-50 border-indigo-300'
+                        : comResult.available
+                          ? 'bg-white border-indigo-200'
+                          : 'bg-slate-50 border-slate-200'
+                    }`}>
+                      <div className="flex items-center gap-4 min-w-0">
+                        {owned
+                          ? <BadgeCheck className="w-7 h-7 text-indigo-500 shrink-0" />
+                          : comResult.available
+                            ? <CheckCircle2 className="w-7 h-7 text-emerald-500 shrink-0" />
+                            : <XCircle className="w-7 h-7 text-red-400 shrink-0" />
+                        }
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`text-xl font-black truncate ${owned ? 'text-indigo-700' : comResult.available ? 'text-slate-900' : 'text-slate-400 line-through'}`}>
+                              {comResult.domain}
+                            </span>
+                            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200 shrink-0">
+                              Most Popular
+                            </span>
+                          </div>
+                          <p className={`text-sm font-semibold mt-0.5 ${owned ? 'text-indigo-600' : comResult.available ? 'text-emerald-600' : 'text-red-500'}`}>
+                            {owned ? 'Already yours — connected to your site' : comResult.available ? 'Available!' : 'Already taken'}
+                          </p>
                         </div>
-                        <p className={`text-sm font-semibold mt-0.5 ${comResult.available ? 'text-emerald-600' : 'text-red-500'}`}>
-                          {comResult.available ? 'Available!' : 'Already taken'}
-                        </p>
                       </div>
-                    </div>
-                    {comResult.available ? (
-                      <div className="flex items-center gap-4 shrink-0">
-                        <div className="text-right">
-                          <p className="text-lg font-black text-slate-900">{comResult.price}</p>
-                          <p className="text-[10px] text-slate-400">per year</p>
+                      {owned ? (
+                        <div className="shrink-0 flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-xl border border-indigo-200">
+                          <BadgeCheck className="w-4 h-4" />
+                          <span className="text-xs font-bold">Active</span>
                         </div>
-                        {inCart(comResult.domain) ? (
-                          <button
-                            onClick={() => removeFromCart(comResult.domain)}
-                            className="px-5 py-2.5 border-2 border-indigo-300 text-indigo-600 text-sm font-bold rounded-xl flex items-center gap-2"
-                          >
-                            <CheckCircle2 className="w-4 h-4" /> In Cart
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => addToCart(comResult)}
-                            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-colors flex items-center gap-2"
-                          >
-                            <ShoppingCart className="w-4 h-4" /> Add to Cart
-                          </button>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="shrink-0">
-                        <p className="text-xs text-slate-500 font-medium">Try these instead:</p>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {SUGGESTIONS(baseName).slice(0, 3).map(s => (
+                      ) : comResult.available ? (
+                        <div className="flex items-center gap-4 shrink-0">
+                          <div className="text-right">
+                            <p className="text-lg font-black text-slate-900">{comResult.price}</p>
+                            <p className="text-[10px] text-slate-400">per year</p>
+                          </div>
+                          {inCart(comResult.domain) ? (
                             <button
-                              key={s}
-                              onClick={() => { setQuery(s); inputRef.current?.focus(); }}
-                              className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 transition-colors border border-slate-200"
+                              onClick={() => removeFromCart(comResult.domain)}
+                              className="px-5 py-2.5 border-2 border-indigo-300 text-indigo-600 text-sm font-bold rounded-xl flex items-center gap-2"
                             >
-                              {s}
+                              <CheckCircle2 className="w-4 h-4" /> In Cart
                             </button>
-                          ))}
+                          ) : (
+                            <button
+                              onClick={() => addToCart(comResult)}
+                              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-colors flex items-center gap-2"
+                            >
+                              <ShoppingCart className="w-4 h-4" /> Add to Cart
+                            </button>
+                          )}
                         </div>
-                      </div>
-                    )}
+                      ) : (
+                        <div className="shrink-0">
+                          <p className="text-xs text-slate-500 font-medium">Try these instead:</p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {SUGGESTIONS(baseName).slice(0, 3).map(s => (
+                              <button
+                                key={s}
+                                onClick={() => { setQuery(s); inputRef.current?.focus(); }}
+                                className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 transition-colors border border-slate-200"
+                              >
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* Other TLDs */}
               {otherResults.length > 0 && (
                 <div>
                   <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Other Extensions</p>
                   <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden divide-y divide-slate-100">
-                    {visibleOthers.map(r => (
-                      <div key={r.domain} className="flex items-center justify-between px-5 py-3.5 gap-4">
-                        <div className="flex items-center gap-3 min-w-0">
-                          {r.available
-                            ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                            : <XCircle className="w-4 h-4 text-slate-300 shrink-0" />
-                          }
-                          <span className={`text-sm font-bold truncate ${r.available ? 'text-slate-900' : 'text-slate-400 line-through'}`}>
-                            {r.domain}
-                          </span>
-                          {TLD_BADGES[r.extension] && (
-                            <span className={`hidden sm:inline px-2 py-0.5 text-[9px] font-bold rounded-full border ${TLD_BADGES[r.extension].color}`}>
-                              {TLD_BADGES[r.extension].label}
+                    {visibleOthers.map(r => {
+                      const owned = isOwned(r.domain);
+                      return (
+                        <div key={r.domain} className={`flex items-center justify-between px-5 py-3.5 gap-4 ${owned ? 'bg-indigo-50/60' : ''}`}>
+                          <div className="flex items-center gap-3 min-w-0">
+                            {owned
+                              ? <BadgeCheck className="w-4 h-4 text-indigo-500 shrink-0" />
+                              : r.available
+                                ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                                : <XCircle className="w-4 h-4 text-slate-300 shrink-0" />
+                            }
+                            <span className={`text-sm font-bold truncate ${owned ? 'text-indigo-700' : r.available ? 'text-slate-900' : 'text-slate-400 line-through'}`}>
+                              {r.domain}
                             </span>
-                          )}
+                            {TLD_BADGES[r.extension] && !owned && (
+                              <span className={`hidden sm:inline px-2 py-0.5 text-[9px] font-bold rounded-full border ${TLD_BADGES[r.extension].color}`}>
+                                {TLD_BADGES[r.extension].label}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-4 shrink-0">
+                            {owned ? (
+                              <span className="text-xs font-bold text-indigo-600 flex items-center gap-1">
+                                <BadgeCheck className="w-3.5 h-3.5" /> Already Yours
+                              </span>
+                            ) : r.available ? (
+                              <>
+                                <span className="text-sm font-bold text-slate-700 hidden sm:block">{r.price}</span>
+                                {inCart(r.domain) ? (
+                                  <button onClick={() => removeFromCart(r.domain)} className="px-3 py-1.5 border border-indigo-300 text-indigo-600 text-xs font-bold rounded-lg flex items-center gap-1.5">
+                                    <CheckCircle2 className="w-3.5 h-3.5" /> Added
+                                  </button>
+                                ) : (
+                                  <button onClick={() => addToCart(r)} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5">
+                                    <ShoppingCart className="w-3.5 h-3.5" /> Add
+                                  </button>
+                                )}
+                              </>
+                            ) : (
+                              <span className="text-xs text-slate-400 font-semibold">Taken</span>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex items-center gap-4 shrink-0">
-                          {r.available ? (
-                            <>
-                              <span className="text-sm font-bold text-slate-700 hidden sm:block">{r.price}</span>
-                              {inCart(r.domain) ? (
-                                <button onClick={() => removeFromCart(r.domain)} className="px-3 py-1.5 border border-indigo-300 text-indigo-600 text-xs font-bold rounded-lg flex items-center gap-1.5">
-                                  <CheckCircle2 className="w-3.5 h-3.5" /> Added
-                                </button>
-                              ) : (
-                                <button onClick={() => addToCart(r)} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5">
-                                  <ShoppingCart className="w-3.5 h-3.5" /> Add
-                                </button>
-                              )}
-                            </>
-                          ) : (
-                            <span className="text-xs text-slate-400 font-semibold">Taken</span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                     {otherResults.length > 4 && (
                       <button
                         onClick={() => setShowAllResults(v => !v)}

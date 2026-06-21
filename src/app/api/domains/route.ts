@@ -41,13 +41,34 @@ export async function GET(request: NextRequest) {
       const extensions = Object.keys(TLD_DEFAULTS);
       const results = [];
 
+      // Real DNS availability check via Cloudflare DoH (no API key required)
+      const checkDnsAvailability = async (fullDomain: string): Promise<boolean> => {
+        try {
+          const res = await fetch(
+            `https://cloudflare-dns.com/dns-query?name=${fullDomain}&type=NS`,
+            {
+              headers: { Accept: 'application/dns-json' },
+              signal: AbortSignal.timeout(4000),
+            }
+          );
+          if (!res.ok) return true; // assume available if lookup fails
+          const data = await res.json();
+          // Status 3 = NXDOMAIN → domain not in DNS = available to register
+          // Status 0 = NOERROR → domain has records = registered/taken
+          return data.Status === 3;
+        } catch {
+          return true; // assume available if timeout/network error
+        }
+      };
+
       // Fire all checks in parallel
       const checks = extensions.map(async (ext) => {
         const fullDomain = `${baseDomain}${ext}`;
-        let available = true; // optimistic fallback
+        let available = true;
         let price = TLD_DEFAULTS[ext];
 
         if (VERCEL_AUTH_TOKEN) {
+          // Use Vercel Registrar API for availability + pricing
           try {
             const [statusRes, priceRes] = await Promise.all([
               fetch(`https://api.vercel.com/v4/domains/status?name=${fullDomain}${VERCEL_TEAM_ID ? `&teamId=${VERCEL_TEAM_ID}` : ''}`, {
@@ -66,11 +87,12 @@ export async function GET(request: NextRequest) {
               price = d.price || TLD_DEFAULTS[ext];
             }
           } catch {
-            // keep defaults
+            // Fall back to DNS check
+            available = await checkDnsAvailability(fullDomain);
           }
         } else {
-          // Sandbox: simulate .com being "taken" so we can show the full UI
-          if (ext === '.com') available = Math.random() > 0.4;
+          // No Vercel token — use real DNS lookup instead of random simulation
+          available = await checkDnsAvailability(fullDomain);
         }
 
         return { domain: fullDomain, available, price: `$${price.toFixed(2)}/yr`, priceNum: price, extension: ext };
