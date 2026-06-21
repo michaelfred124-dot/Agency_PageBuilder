@@ -41,24 +41,33 @@ export async function GET(request: NextRequest) {
       const extensions = Object.keys(TLD_DEFAULTS);
       const results = [];
 
-      // Real DNS availability check via Cloudflare DoH (no API key required)
+      // Real DNS availability check — tries Cloudflare DoH then Google DoH as fallback
       const checkDnsAvailability = async (fullDomain: string): Promise<boolean> => {
-        try {
-          const res = await fetch(
-            `https://cloudflare-dns.com/dns-query?name=${fullDomain}&type=NS`,
-            {
+        const providers = [
+          `https://cloudflare-dns.com/dns-query?name=${fullDomain}&type=NS`,
+          `https://dns.google/resolve?name=${fullDomain}&type=NS`,
+        ];
+        for (const url of providers) {
+          try {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 5000);
+            const res = await fetch(url, {
               headers: { Accept: 'application/dns-json' },
-              signal: AbortSignal.timeout(4000),
-            }
-          );
-          if (!res.ok) return true; // assume available if lookup fails
-          const data = await res.json();
-          // Status 3 = NXDOMAIN → domain not in DNS = available to register
-          // Status 0 = NOERROR → domain has records = registered/taken
-          return data.Status === 3;
-        } catch {
-          return true; // assume available if timeout/network error
+              signal: controller.signal,
+            });
+            clearTimeout(timer);
+            if (!res.ok) continue;
+            const data = await res.json();
+            // Status 3 = NXDOMAIN → not in DNS = available
+            if (data.Status === 3) return true;
+            // Status 0 = NOERROR → domain exists = taken
+            if (data.Status === 0) return false;
+          } catch {
+            continue; // try next provider
+          }
         }
+        // Both providers failed — default to taken to avoid false "available" display
+        return false;
       };
 
       // Fire all checks in parallel
