@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import dns from 'dns/promises';
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { createClient } from '@/utils/supabase/server';
 
@@ -41,33 +42,20 @@ export async function GET(request: NextRequest) {
       const extensions = Object.keys(TLD_DEFAULTS);
       const results = [];
 
-      // Real DNS availability check — tries Cloudflare DoH then Google DoH as fallback
+      // DNS availability check using Node.js built-in dns module (no HTTP, no external deps)
       const checkDnsAvailability = async (fullDomain: string): Promise<boolean> => {
-        const providers = [
-          `https://cloudflare-dns.com/dns-query?name=${fullDomain}&type=NS`,
-          `https://dns.google/resolve?name=${fullDomain}&type=NS`,
-        ];
-        for (const url of providers) {
-          try {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), 5000);
-            const res = await fetch(url, {
-              headers: { Accept: 'application/dns-json' },
-              signal: controller.signal,
-            });
-            clearTimeout(timer);
-            if (!res.ok) continue;
-            const data = await res.json();
-            // Status 3 = NXDOMAIN → not in DNS = available
-            if (data.Status === 3) return true;
-            // Status 0 = NOERROR → domain exists = taken
-            if (data.Status === 0) return false;
-          } catch {
-            continue; // try next provider
+        try {
+          await dns.resolveNs(fullDomain);
+          // Got NS records → domain is registered → taken
+          return false;
+        } catch (err: any) {
+          if (err.code === 'ENOTFOUND') {
+            // NXDOMAIN → domain does not exist in DNS → available
+            return true;
           }
+          // ENODATA, ECONNREFUSED, ETIMEDOUT, etc. → default to taken (no false positives)
+          return false;
         }
-        // Both providers failed — default to taken to avoid false "available" display
-        return false;
       };
 
       // Fire all checks in parallel
