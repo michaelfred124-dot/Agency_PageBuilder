@@ -53,6 +53,7 @@ export default function PreviewPage() {
       else if (siteId.includes('northwood')) templateKey = 'northwood';
       else if (siteId.includes('brighter')) templateKey = 'brighter_solar';
       else if (siteId.includes('viking')) templateKey = 'voltvikings';
+      else if (siteId.includes('easy')) templateKey = 'easy_does_it';
       
       name = siteId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     }

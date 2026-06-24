@@ -1,163 +1,125 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Star, Quote, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Star, Quote, Building2 } from 'lucide-react';
 
 const BASE = '/work/meridian-properties';
-const BG = '#FAF8F5';
-const SLATE = '#1F242E';
-const GOLD = '#B8A27A';
+const REVIEWS = [{"name":"Robert & Claire S.","rating":5,"source":"Google Review","text":"Catherine Harlow secured $140,000 above our listing valuation with multiple offers in hand. Her contract negotiation and absolute focus on details saved us from a complex contingency dispute. Elite-tier representation.","avatar":"https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop","dog":""},{"name":"Thomas W.","rating":5,"source":"Google Review","text":"Meridian Properties sourced an off-market Belle Meade estate that never hit the MLS. Their network in Middle Tennessee is completely unmatched.","avatar":"https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop","dog":""},{"name":"Marcus & Evelyn K.","rating":5,"source":"Google Review","text":"Isabelle's architectural staging recommendations transformed our property. We received 4 cash offers in the first weekend of listing, closing with zero repair contingencies. Her process is phenomenal.","avatar":"https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop","dog":""},{"name":"Dr. Julian H.","rating":5,"source":"Google Review","text":"James helped us structure a complex 1031 Exchange into three luxury multi-family properties. His cash flow projections and market absorption models were precise down to the dollar.","avatar":"https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop","dog":""},{"name":"Cynthia & David R.","rating":5,"source":"Google Review","text":"Moving from Chicago to Nashville, Isabelle made the remote relocation process effortless. Video walk-throughs, neighborhood analyses, and zoning investigations were all organized in digital reports. Outstanding communication.","avatar":"https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop","dog":""},{"name":"Alden Developments","rating":5,"source":"Google Review","text":"James's investment modeling and underwriting analysis have been pristine. He operates like an institutional partner, not just a broker.","avatar":"https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop","dog":""}];
+const GALLERY = ["https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&auto=format&fit=crop&q=80","https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=800&auto=format&fit=crop&q=80"];
 
-const REVIEWS = [
-  {
-    author: 'Robert & Claire S.',
-    type: 'Seller Representative',
-    agent: 'Catherine Harlow',
-    neighborhood: 'Green Hills',
-    date: 'April 2026',
-    text: "Catherine Harlow secured $140,000 above our listing valuation with multiple offers in hand. Her contract negotiation and absolute focus on details saved us from a complex contingency dispute. Elite-tier representation.",
-    stars: 5,
-    size: 'lg',
-  },
-  {
-    author: 'Thomas W.',
-    type: 'Buyer Representative',
-    agent: 'Catherine Harlow',
-    neighborhood: 'Belle Meade',
-    date: 'February 2026',
-    text: "Meridian Properties sourced an off-market Belle Meade estate that never hit the MLS. Their network in Middle Tennessee is completely unmatched.",
-    stars: 5,
-    size: 'sm',
-  },
-  {
-    author: 'Marcus & Evelyn K.',
-    type: 'Seller Representative',
-    agent: 'Isabelle Monroe',
-    neighborhood: 'Brentwood',
-    date: 'January 2026',
-    text: "Isabelle's architectural staging recommendations transformed our property. We received 4 cash offers in the first weekend of listing, closing with zero repair contingencies. Her process is phenomenal.",
-    stars: 5,
-    size: 'sm',
-  },
-  {
-    author: 'Dr. Julian H.',
-    type: 'Investment Advisory',
-    agent: 'James Aldridge',
-    neighborhood: 'Franklin / The Gulch',
-    date: 'November 2025',
-    text: "James helped us structure a complex 1031 Exchange into three luxury multi-family properties. His cash flow projections and market absorption models were precise down to the dollar.",
-    stars: 5,
-    size: 'lg',
-  },
-  {
-    author: 'Cynthia & David R.',
-    type: 'Relocation Buyer',
-    agent: 'Isabelle Monroe',
-    neighborhood: 'Green Hills',
-    date: 'October 2025',
-    text: "Moving from Chicago to Nashville, Isabelle made the remote relocation process effortless. Video walk-throughs, neighborhood analyses, and zoning investigations were all organized in digital reports. Outstanding communication.",
-    stars: 5,
-    size: 'lg',
-  },
-  {
-    author: 'Alden Developments',
-    type: 'Asset Portfolio Advisory',
-    agent: 'James Aldridge',
-    neighborhood: 'Davidson County Portfolio',
-    date: 'August 2025',
-    text: "James's investment modeling and underwriting analysis have been pristine. He operates like an institutional partner, not just a broker.",
-    stars: 5,
-    size: 'sm',
-  }
-];
-
-export default function MeridianReviews() {
+export default function MeridianPropertiesReviews() {
   return (
-    <div style={{ backgroundColor: BG, color: SLATE }} className="overflow-x-hidden pb-12">
+    <div className="flex flex-col min-h-screen">
       
-      {/* HERO SECTION */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 pt-16 pb-8 text-left">
-        <div className="max-w-3xl flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-[#B8A27A] block mb-4">
-              Client Experiences &nbsp;·&nbsp; Testimonials
-            </span>
-            <h1 className="text-5xl md:text-6xl font-serif leading-[1.1] tracking-tight text-[#1F242E] mb-6">
-              A reputation built on <span className="text-[#B8A27A] italic font-light">results.</span>
-            </h1>
-            <p className="text-sm text-gray-500 leading-relaxed font-light">
-              We measure our success by the satisfaction of our clients and the strength of their investment outcomes. Here is how we represent buyers, sellers, and portfolio builders across Middle Tennessee.
-            </p>
+      {/* Page Header */}
+      <section className="bg-slate-950 text-white py-16 lg:py-24 px-6 md:px-12 relative overflow-hidden border-b border-slate-900 text-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1e293b_0%,transparent_70%)] opacity-30 pointer-events-none" />
+        <div className="max-w-4xl mx-auto space-y-6 relative z-10">
+          <span className="text-xs font-black uppercase tracking-[0.2em] text-amber-400">
+            Verified Client Reviews
+          </span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-sans font-black tracking-tight text-white leading-none">
+            Stories From Our Community
+          </h1>
+          <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium">
+            Read real stories from our highly satisfied customers and see some of our completed work portfolios.
+          </p>
+        </div>
+      </section>
+
+      {/* Gallery Grid */}
+      <section className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+              Completed Portfolio
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              See Our Work
+            </h3>
           </div>
-          
-          <div className="p-6 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-2xl shadow-[0_20px_50px_-15px_rgba(31,36,46,0.05)] min-w-[240px] shrink-0 text-left">
-            <div className="flex gap-1 mb-2">
-              {[...Array(5)].map((_, i) => <Star key={i} className="w-4.5 h-4.5 fill-current text-[#B8A27A]" />)}
-            </div>
-            <div className="text-2xl font-serif font-black text-[#1F242E]">4.9 / 5.0</div>
-            <div className="text-[8px] font-mono uppercase tracking-widest text-gray-400 font-bold">240+ Certified Google Reviews</div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {GALLERY.map((src, i) => (
+              <div 
+                key={i} 
+                className={`relative rounded-3xl overflow-hidden shadow-sm aspect-square border border-slate-100 group` }
+              >
+                <Image 
+                  src={src}
+                  alt={`Meridian Properties Gallery ${i + 1}`}
+                  fill className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-white text-[9px] font-black uppercase tracking-widest bg-slate-950/80 px-4 py-2 rounded-full">
+                    Completed Project
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* REVIEWS BENTO GRID */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-6 relative">
-        <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-cover bg-center mix-blend-overlay rounded-[48px]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1600')" }} />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-          {REVIEWS.map((r, i) => {
-            const isLarge = r.size === 'lg';
-            return (
-              <div
-                key={i}
-                className={`p-8 border border-white/80 bg-white/55 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_60px_-15px_rgba(31,36,46,0.06)] hover:shadow-[0_30px_70px_-10px_rgba(184,162,122,0.12)] hover:border-[#B8A27A]/35 transition-all duration-500 flex flex-col justify-between text-left ${
-                  isLarge ? 'md:col-span-2 min-h-[320px]' : 'md:col-span-1 min-h-[320px]'
-                }`}
+      {/* Reviews Cards List */}
+      <section className="py-24 px-6 md:px-12 bg-slate-50 border-t border-slate-200/80">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+              Verified Feedback
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Client Testimonials
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {REVIEWS.map((r, idx) => (
+              <div 
+                key={idx}
+                className="bg-white border border-slate-200/60 p-8 rounded-3xl flex flex-col justify-between text-left shadow-sm min-h-[300px]"
               >
-                <div>
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="w-8 h-8 rounded-full bg-[#B8A27A]/10 flex items-center justify-center">
-                      <Quote className="w-3.5 h-3.5 text-[#B8A27A]" />
-                    </div>
-                    <div className="flex gap-0.5">
-                      {[...Array(r.stars)].map((_, j) => (
-                        <Star key={j} className="w-3.5 h-3.5 fill-current text-[#B8A27A]" />
-                      ))}
-                    </div>
+                <div className="space-y-4 text-left">
+                  <div className="flex text-amber-400">
+                    {[...Array(r.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
                   </div>
-                  
-                  <p className="text-xs text-gray-600 leading-relaxed font-light italic mb-8">
+                  <Quote className="w-8 h-8 text-slate-200 text-left" />
+                  <p className="text-slate-600 text-sm italic font-medium leading-relaxed">
                     "{r.text}"
                   </p>
                 </div>
-
-                <div className="pt-4 border-t border-black/5 flex justify-between items-end">
-                  <div>
-                    <div className="text-xs font-bold text-[#1F242E] uppercase tracking-wide">{r.author}</div>
-                    <div className="text-[9px] text-[#B8A27A] font-mono uppercase tracking-widest font-black mt-0.5">
-                      {r.neighborhood}
-                    </div>
+                
+                <div className="flex items-center gap-4 pt-6 border-t border-slate-100 mt-6 text-left">
+                  <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-slate-200 relative bg-slate-100">
+                    <img src={r.avatar} alt={r.name} className="w-full h-full object-cover" />
                   </div>
-                  <div className="text-[8px] text-gray-400 font-mono font-bold uppercase tracking-wider text-right">
-                    <div>{r.type}</div>
-                    <div className="text-gray-300 font-light mt-0.5">{r.agent}</div>
+                  <div className="leading-tight">
+                    <div className="font-bold text-sm text-slate-900">{r.name}</div>
+                    <div className="text-[10px] text-amber-400 bg-slate-900 px-2 py-0.5 rounded-full inline-block font-mono tracking-wider mt-1">{r.dog || r.source}</div>
                   </div>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* FINAL GLASS CTA BANNER */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-12">
-        <div className="bg-gradient-to-tr from-[#B8A27A] to-[#E5D5BC] rounded-[48px] py-20 px-8 text-center shadow-lg relative overflow-hidden border border-white/50">
-          <div className="absolute inset-0 opacity-15 pointer-events-none bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=600')" }} />
-          <h2 className="text-4xl md:text-5xl font-serif text-[#1F242E] mb-6 tracking-tight relative z-10">Write your own success story.</h2>
-          <p className="text-gray-800 text-xs font-mono font-bold tracking-wider mb-8 max-w-sm mx-auto uppercase relative z-10">Honest advice. Dedicated focus. Outstanding results.</p>
-          <div className="pt-2 relative z-10">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#1F242E] hover:bg-white hover:text-black text-white font-mono font-black uppercase tracking-widest text-[10px] px-10 py-5 transition-all shadow-sm">
-              Schedule Consultation <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
+      {/* Bottom CTA */}
+      <section className="py-16 px-6 text-center bg-slate-950 text-white">
+        <h2 className="text-2xl md:text-3xl font-sans font-black text-white mb-3">
+          Join our growing community of happy clients.
+        </h2>
+        <p className="text-slate-400 text-sm mb-8 max-w-md mx-auto">
+          Contact us today to schedule your service. 100% satisfaction guaranteed.
+        </p>
+        <Link
+          href={`${BASE}/contact`}
+          className="bg-amber-400 text-slate-950 hover:bg-amber-500 inline-flex items-center gap-2 px-8 py-4 font-sans font-black uppercase text-xs tracking-widest rounded-xl shadow-lg"
+        >
+          Book Your Appointment <ArrowRight className="w-4 h-4" />
+        </Link>
       </section>
 
     </div>

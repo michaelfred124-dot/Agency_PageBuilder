@@ -1,20 +1,17 @@
 "use client";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Wrench, Phone, Calendar, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const BASE = '/work/ridge-line-auto';
-const BG = '#0D0D0D';
-const RED = '#E5242A';
-const MUTED = 'rgba(255,255,255,0.45)';
 
 const LINKS = [
-  { label: 'Home', href: BASE },
+  { label: 'Home',     href: BASE },
   { label: 'Services', href: `${BASE}/services` },
-  { label: 'About', href: `${BASE}/about` },
-  { label: 'Reviews', href: `${BASE}/reviews` },
-  { label: 'Contact', href: `${BASE}/contact` },
+  { label: 'About Us', href: `${BASE}/about` },
+  { label: 'Reviews',  href: `${BASE}/reviews` },
+  { label: 'Contact',  href: `${BASE}/contact` },
 ];
 
 export default function RLNav() {
@@ -22,50 +19,75 @@ export default function RLNav() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <nav className="sticky top-0 z-50 border-b border-[#E5242A]/20" style={{ backgroundColor: BG }}>
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
+      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition-all">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between h-[76px]">
+          {/* Logo */}
           <Link href={BASE} className="flex items-center gap-3">
-            <div className="w-1.5 h-8" style={{ backgroundColor: RED }} />
-            <div className="text-left leading-none">
-              <div className="text-white font-black tracking-widest text-sm uppercase">Ridge Line Auto</div>
-              <div className="text-white/30 text-[8px] uppercase tracking-[0.3em] mt-1 font-mono">Nashville, TN · (615) 555-0174</div>
+            <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-md">
+              <Wrench className="w-5 h-5 text-red-500" />
+            </div>
+            <div className="leading-none text-left">
+              <span className="font-sans font-black text-lg tracking-wider text-slate-900">RIDGE LINE AUTO</span>
+              <div className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-500 mt-1">Professional Car Care</div>
             </div>
           </Link>
-          
-          {/* Desktop Links */}
-          <div className="hidden lg:flex items-center gap-10 text-[10px] font-mono uppercase tracking-[0.2em]">
-            {LINKS.map(({ label, href }) => (
-              <Link key={href} href={href}
-                className={`transition-colors relative py-1.5 ${pathname === href ? 'text-[#E5242A] font-black border-b border-[#E5242A]' : 'text-white/60 hover:text-white'}`}>
-                {label}
-              </Link>
-            ))}
+
+          {/* Desktop links */}
+          <div className="hidden lg:flex items-center gap-8">
+            {LINKS.map(({ label, href }) => {
+              const active = pathname === href || (href !== BASE && pathname?.startsWith(href));
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`text-xs font-bold uppercase tracking-widest pb-1 transition-all hover:text-slate-900 ${active ? 'text-slate-900 border-b-2 border-slate-900 font-black' : 'text-slate-500'}`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
 
+          {/* CTA + mobile toggle */}
           <div className="flex items-center gap-4">
-            <Link href={`${BASE}/contact`}
-              className="hidden sm:block text-[10px] font-mono font-black uppercase tracking-widest px-6 py-3 transition-all border border-[#E5242A]/50 hover:border-[#E5242A] text-white"
-              style={{ backgroundColor: RED }}>
-              Book Service
+            <a href="tel:6155550288" className="hidden sm:flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-slate-900 transition-colors">
+              <Phone className="w-4 h-4 text-slate-900" />
+              <span>Call Us</span>
+            </a>
+            <Link
+              href={`${BASE}/contact`}
+              className="hidden sm:inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider px-6 py-3 bg-slate-900 text-white rounded-xl shadow-lg transition-transform hover:-translate-y-0.5"
+            >
+              <Calendar className="w-4 h-4 text-red-500" />
+              Book Appointment
             </Link>
-            <button className="lg:hidden text-white/60 hover:text-white p-1" onClick={() => setOpen(!open)}>
-              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <button className="lg:hidden p-2 text-slate-500 hover:text-slate-800" onClick={() => setOpen(!open)}>
+              {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
       </nav>
+
+      {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden fixed inset-0 top-20 z-50 flex flex-col p-10 gap-7" style={{ backgroundColor: BG }}>
+        <div className="lg:hidden fixed inset-0 top-[76px] z-50 bg-white flex flex-col px-8 py-10 gap-6 animate-fade-in shadow-xl h-[calc(100vh-76px)]">
           {LINKS.map(({ label, href }) => (
             <Link key={href} href={href} onClick={() => setOpen(false)}
-              className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#E5242A] transition-colors text-left">{label}</Link>
+              className="text-xl font-black uppercase tracking-widest text-slate-900 hover:opacity-60 transition-opacity">
+              {label}
+            </Link>
           ))}
+          <div className="w-full h-px bg-slate-100 my-4" />
+          <a href="tel:6155550288" className="flex items-center gap-3 text-lg font-bold text-slate-900">
+            <Phone className="w-5 h-5 text-slate-900" />
+            <span>(615) 555-0288</span>
+          </a>
           <Link href={`${BASE}/contact`} onClick={() => setOpen(false)}
-            className="mt-6 text-center text-[10px] font-mono font-black uppercase tracking-widest px-6 py-4 text-white"
-            style={{ backgroundColor: RED }}>Book Service</Link>
+            className="text-center text-xs font-black uppercase tracking-wider px-6 py-4 bg-slate-900 text-white rounded-xl shadow-md">
+            Book Appointment
+          </Link>
         </div>
       )}
     </>
   );
 }
-

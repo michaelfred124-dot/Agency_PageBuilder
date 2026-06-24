@@ -1638,6 +1638,7 @@ export default function SiteEditor({
           /* Templates lists matching mockup */
           <div className="flex-1 overflow-y-auto space-y-4 custom-scrollbar pr-1">
             {[
+              { key: 'easy_does_it', name: 'Easy Does It Detailing', desc: 'Premium, dark-themed mobile car detailing and automotive artistry.', img: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=400' },
               { key: 'northwood', name: 'Northwood Coffee Co.', desc: 'Cozy design ideal for cafés, restaurants, and local diners.', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400' },
               { key: 'restaurant', name: 'Osteria Bella Restaurant', desc: 'Bold, elegant layout for full-service restaurants and eateries.', img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=400' },
               { key: 'greenscape', name: 'Greenscape Landscaping', desc: 'Fresh, professional layout for handymen, cleaners, and lawn care.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80' },

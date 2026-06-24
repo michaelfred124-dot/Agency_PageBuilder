@@ -1,294 +1,547 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Star, ChevronDown, Phone, MapPin, Check } from 'lucide-react';
+import { ArrowRight, Star, ChevronDown, Phone, Check, Award, CheckCircle } from 'lucide-react';
 
 const BASE = '/work/solstice-yoga';
-const CREAM = '#FBF8F3';
-const DARK = '#2D2A24';
-const SAGE = '#8FAF78';
-const TERRA = '#D4855A';
-const WHITE = '#FFFFFF';
-const MUTED = 'rgba(45,42,36,0.5)';
 
-const CLASSES = [
-  { name: 'Hatha Flow', level: 'All Levels', duration: '75 min', desc: 'A grounded, breath-led practice. Slower pace, longer holds, deep awareness. The ideal starting point and a lifelong practice.' },
-  { name: 'Power Vinyasa', level: 'Intermediate – Advanced', duration: '60 min', desc: 'Strength meets fluidity. Dynamic sequences, strong transitions, a physical challenge balanced with mindful intention.' },
-  { name: 'Yin & Restorative', level: 'All Levels', duration: '90 min', desc: 'Long-held poses, props, silence. A practice for the nervous system — release, soften, and deeply restore.' },
-  { name: 'Meditation & Breathwork', level: 'All Levels', duration: '45 min', desc: 'Pranayama, guided meditation, and stillness. A practice that asks nothing from the body and everything from the mind.' },
+const PARTNERS = [
+  { name: 'Mindbody', logo: '🧘‍♀️ Mindbody' },
+  { name: 'Lululemon', logo: '🍋 Lululemon' },
+  { name: 'Manduka', logo: '🐸 Manduka' },
+  { name: 'ClassPass', logo: '🎟️ ClassPass' },
+  { name: 'Yoga Alliance', logo: '☀️ Yoga Alliance' },
 ];
 
-const TEACHERS = [
-  { name: 'Clara Whitfield', role: 'Founder · Hatha & Vinyasa', img: 'photo-1508214751196-bcfd4ca60f91', quote: "The practice does not ask you to be better. It asks you to be present." },
-  { name: 'James Osei', role: 'Power Vinyasa · Breathwork', img: 'photo-1472099645785-5658abf4ff4e', quote: "Strength is not force. It is consistency, surrender, and breath." },
-  { name: 'Mei Lin Park', role: 'Yin & Restorative · Meditation', img: 'photo-1573496359142-b8d87734a5a2', quote: "We do not need more energy. We need to stop depleting the energy we have." },
+const MODALITIES = [
+  { 
+    name: 'Hatha Flow', 
+    level: 'All Levels', 
+    desc: 'Classic yoga focusing on alignment, breathing, and deep awareness.',
+    img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
+    action: 'Book Class'
+  },
+  { 
+    name: 'Power Vinyasa', 
+    level: 'Intermediate', 
+    desc: 'Dynamic sequences and strong transitions to build strength and heat.',
+    img: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop',
+    action: 'Book Class'
+  },
+  { 
+    name: 'Yin & Restorative', 
+    level: 'All Levels', 
+    desc: 'Long-held, passive floor poses to release tension and restore the nervous system.',
+    img: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=800&auto=format&fit=crop',
+    action: 'Book Class'
+  },
+  { 
+    name: 'Meditation & Sound', 
+    level: 'All Levels', 
+    desc: 'Mindfulness practices, breathwork, and healing soundscapes.',
+    img: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=800&auto=format&fit=crop',
+    action: 'Book Class'
+  },
 ];
 
-const MEMBERSHIPS = [
-  { name: 'Drop In', price: '$22', note: 'per class', features: ['Any single class', 'All experience levels', 'Mat available to rent'] },
-  { name: 'Monthly Unlimited', price: '$89', note: 'per month', featured: true, features: ['Unlimited classes', 'Priority booking', 'Guest pass monthly', 'Free mat storage'] },
-  { name: 'Annual', price: '$69', note: '/mo · billed annually', features: ['Unlimited classes', 'All monthly benefits', '2 guest passes/mo', 'Retreat discounts 20%'] },
+const REVIEWS = [
+  {
+    name: 'Sarah Jenkins',
+    rating: 5,
+    source: 'Google Review',
+    text: "Solstice completely changed my relationship with movement. I walked in feeling tight and stressed, and after 3 months I feel the best I have in years. The teachers are incredibly certified, safe, and helpful.",
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop',
+  },
+  {
+    name: 'Richard Vance',
+    rating: 5,
+    source: 'Google Review',
+    text: "Precise instruction and a beautiful sanctuary. The Hatha Flow is restorative yet engaging. The studio is clean, has free parking, and booking through the site is instant and seamless. Highly recommend!",
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop',
+  },
+  {
+    name: 'Adriene Skinner',
+    rating: 5,
+    source: 'Google Review',
+    text: "I finished my 200-hour teacher training here. It was rigorous, thorough, and highly professional. Elena and her staff are masters of alignment, anatomy, and sequencing. Cannot thank Solstice enough!",
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop',
+  },
+  {
+    name: 'David Kim',
+    rating: 5,
+    source: 'Google Review',
+    text: "Best yoga studio in Denver by far. The Yin & Restore class on Sunday evenings has become a non-negotiable part of my self-care routine. The teachers make everyone feel welcome.",
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=150&auto=format&fit=crop',
+  },
 ];
 
 const FAQS = [
   { q: "I have never done yoga before. Where do I start?", a: "Start with Hatha Flow or Yin & Restorative. Both are designed for all levels, and our teachers actively offer modifications. Your first class is free — come as you are." },
-  { q: "What should I bring to my first class?", a: "Just yourself. We provide mats (rental: $2), blocks, straps, and blankets. Wear comfortable clothing you can move in. Arrive 10 minutes early to meet your teacher." },
-  { q: "Do you offer private sessions or corporate yoga?", a: "Yes to both. Private sessions are scheduled directly with teachers — rates start at $85/hour. Corporate and group programs are available for teams of any size. Contact us to discuss." },
-  { q: "Is there parking at the studio?", a: "Yes. Free parking is available in the lot behind the studio on 8th Ave South. Street parking is also available. We are a 5-minute walk from the WeGo bus stop on 8th." },
-  { q: "Can I freeze or pause my membership?", a: "Yes. You can pause for up to 3 months per year with no penalty. Manage pauses through your account or email us and we will handle it within one business day." },
-  { q: "Do you offer classes for pregnant students?", a: "Yes. We offer prenatal yoga on Thursday mornings. Students in their second and third trimester are encouraged to speak with their teacher before other classes so we can offer safe modifications." },
-  { q: "What is your cancellation policy for booked classes?", a: "Cancel up to 4 hours before class at no charge. Late cancellations or no-shows for members use one credit. Drop-in fees are non-refundable but can be credited toward a future visit if you contact us." },
+  { q: "What should I bring to my first class?", a: "Just yourself. We provide mats, blocks, straps, and blankets free of charge. Wear comfortable clothing you can move in. Arrive 10 minutes early to meet your teacher." },
+  { q: "Do you offer private sessions or corporate yoga?", a: "Yes. Private sessions are scheduled directly with teachers — rates start at $85/hour. Corporate and group programs are available for teams of any size. Contact us to discuss details." },
+  { q: "Is there parking at the studio?", a: "Yes. We have free parking in the dedicated lot behind the studio on Solstice Lane, and plenty of street parking is available." },
+  { q: "Can I freeze or pause my membership?", a: "Yes. You can pause your membership for up to 3 months per year with no penalty. Simply email us or manage pauses inside your account." },
 ];
 
 export default function SolsticeYoga() {
   return (
-    <>
-      {/* NAV — cream, centered wordmark */}
-      <nav className="sticky top-0 z-50 border-b" style={{ backgroundColor: CREAM, borderColor: 'rgba(45,42,36,0.08)' }}>
-        <div className="max-w-7xl mx-auto px-6 h-16 grid grid-cols-3 items-center">
-          <div className="hidden md:flex items-center gap-7">
-            {['Classes', 'Schedule'].map(l => (
-              <Link key={l} href={`${BASE}/services`} className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>{l}</Link>
-            ))}
-          </div>
-          <Link href={BASE} className="text-center font-serif italic text-xl" style={{ color: DARK }}>Solstice</Link>
-          <div className="flex items-center justify-end gap-4">
-            <Link href={`${BASE}/about`} className="hidden md:block text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>About</Link>
-            <Link href={`${BASE}/contact`} className="text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full text-white" style={{ backgroundColor: SAGE }}>Book a Class</Link>
-          </div>
-        </div>
-      </nav>
+    <div className="flex flex-col min-h-screen">
+      
+      {/* 1. HERO SECTION (Electrician Style: Dark Slate, Typography Left, Image Right, Google Badge) */}
+      <section className="bg-slate-950 text-white py-16 lg:py-24 px-6 md:px-12 relative overflow-hidden border-b border-slate-900">
+        {/* Background Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+          {/* Left Column Content */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-[10px] font-black uppercase tracking-widest text-yellow-400">
+              <CheckCircle className="w-3.5 h-3.5" /> Denver's Top-Rated Wellness Studio
+            </div>
+            
+            <h1 className="font-sans font-black text-4xl sm:text-5xl xl:text-6xl tracking-tight leading-[1.05] text-white">
+              Mindful & Professional <br />
+              <span className="text-yellow-400">Yoga, Breathwork &</span> <br />
+              Sanctuary Services
+            </h1>
+            
+            <p className="text-slate-300 text-base sm:text-lg max-w-xl font-medium leading-relaxed">
+              Denver's certified instructors serving you 7 days a week. Begin your practice with a supportive community and expert alignment guidance.
+            </p>
+            
+            {/* CTA row */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <Link 
+                href={`${BASE}/contact`}
+                className="bg-yellow-400 text-slate-950 hover:bg-yellow-500 font-sans font-black uppercase text-xs tracking-widest px-8 py-4 rounded-xl shadow-lg shadow-yellow-400/10 flex items-center justify-center gap-2 group transition-all"
+              >
+                Book Free First Class
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              
+              <a 
+                href="tel:7205550142"
+                className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/40 hover:bg-slate-900/70 transition-all text-sm font-bold"
+              >
+                <Phone className="w-5 h-5 text-yellow-500 fill-yellow-500/10" />
+                <span>Call (720) 555-0142</span>
+              </a>
+            </div>
 
-      {/* HERO — full viewport image, minimal centered text */}
-      <section className="relative" style={{ height: '95vh', minHeight: 600 }}>
-        <Image
-          src="https://images.unsplash.com/photo-1545389336-cf090694435e?q=80&w=2070&auto=format&fit=crop"
-          alt="Yoga practice at golden hour"
-          fill className="object-cover object-center" referrerPolicy="no-referrer" priority
-        />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(45,42,36,0.15) 0%, rgba(45,42,36,0.55) 100%)' }} />
-        <div className="absolute inset-0 flex flex-col items-center justify-end pb-24 px-6 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.5em] mb-6 text-white/60">Nashville Yoga Studio · Est. 2016</p>
-          <h1 className="font-serif italic text-white leading-none mb-6" style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)' }}>
-            Find your stillness.
-          </h1>
-          <p className="text-white/65 max-w-md mb-10 text-lg">24 class styles, 8 expert teachers, one sanctuary in the heart of Nashville.</p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 font-bold text-sm px-8 py-4 text-white" style={{ backgroundColor: SAGE }}>
-              Book Free First Class <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 font-bold text-sm px-8 py-4 border border-white/30 text-white">
-              Explore Schedule
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* VALUES — 3-col on cream */}
-      <section style={{ backgroundColor: CREAM }} className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-serif italic text-4xl md:text-5xl" style={{ color: DARK }}>Why Solstice?</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-12">
-            {[
-              { n: 'All Experience Levels', desc: 'Every class is taught with modifications for beginners and depth for advanced practitioners. You belong here on day one.' },
-              { n: 'Real Teachers', desc: 'Our teachers average 9 years of practice and study. They know your name, your body, and how to help you grow.' },
-              { n: 'Open 7 Days', desc: 'Early mornings through evening classes. Drop in or build a routine — the studio is here whenever your day allows.' },
-            ].map(({ n, desc }, i) => (
-              <div key={i}>
-                <div className="w-8 h-px mb-6" style={{ backgroundColor: SAGE }} />
-                <h3 className="font-bold text-base mb-3" style={{ color: DARK }}>{n}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{desc}</p>
+            {/* Google Rating Badge */}
+            <div className="flex items-center gap-3 pt-4 border-t border-slate-900">
+              <div className="flex text-yellow-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
               </div>
+              <p className="text-xs font-semibold text-slate-400">
+                ⭐ <span className="text-white font-bold">5.0 Star Rating</span> on Google Reviews | Google Guaranteed Sanctuary
+              </p>
+            </div>
+          </div>
+          
+          {/* Right Column Image */}
+          <div className="lg:col-span-5 relative">
+            <div className="absolute inset-0 bg-yellow-400 rounded-3xl rotate-3 opacity-10 blur-xl pointer-events-none" />
+            <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/5] rounded-[32px] overflow-hidden border border-slate-800 shadow-2xl">
+              <Image 
+                src="https://images.unsplash.com/photo-1545389336-cf090694435e?q=80&w=1200&auto=format&fit=crop"
+                alt="Instructor leading yoga class in modern sunlit studio"
+                fill className="object-cover" referrerPolicy="no-referrer" priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. LOGO BAR SECTION */}
+      <section className="bg-slate-50 py-10 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center space-y-6">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+            Trusted by 5,000+ Denver Students & Partners
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 text-slate-400 font-bold text-sm">
+            {PARTNERS.map((p, i) => (
+              <span key={i} className="hover:text-slate-600 transition-colors uppercase tracking-wider text-xs md:text-sm">
+                {p.logo}
+              </span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CLASSES — full-width horizontal rows */}
-      <section className="py-24 px-6" style={{ backgroundColor: WHITE }}>
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: TERRA }}>Classes</p>
-            <h2 className="font-serif italic text-4xl md:text-5xl" style={{ color: DARK }}>Find your practice.</h2>
+      {/* 3. MODALITIES GRID ("Your Trusted Local Sanctuary") */}
+      <section className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-yellow-600">
+              Denver's Certified Modalities
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Your Trusted Local Sanctuary
+            </h3>
+            <p className="text-slate-500 font-medium text-sm sm:text-base">
+              Explore our core modalities designed for ultimate alignment, strength building, and restoration. Guided by certified instructors.
+            </p>
           </div>
-          <div className="divide-y" style={{ borderColor: 'rgba(45,42,36,0.08)' }}>
-            {CLASSES.map(({ name, level, duration, desc }, i) => (
-              <div key={i} className="py-8 grid md:grid-cols-[1fr_1fr_auto] gap-6 items-center group">
-                <div>
-                  <div className="font-bold text-lg mb-1" style={{ color: DARK }}>{name}</div>
-                  <div className="text-xs font-bold uppercase tracking-widest" style={{ color: SAGE }}>{level} · {duration}</div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {MODALITIES.map((item, idx) => (
+              <div 
+                key={idx} 
+                className="group relative rounded-[28px] overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col h-[400px]"
+              >
+                {/* Photo Background */}
+                <Image 
+                  src={item.img}
+                  alt={item.name}
+                  fill className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  referrerPolicy="no-referrer"
+                />
+                
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/20" />
+                
+                {/* Content */}
+                <div className="relative z-10 mt-auto p-6 space-y-3 flex flex-col justify-end text-white h-full">
+                  <span className="text-[9px] font-black uppercase tracking-widest text-yellow-400 bg-yellow-400/10 border border-yellow-400/25 px-2 py-1 rounded w-fit">
+                    {item.level}
+                  </span>
+                  <h4 className="text-xl font-bold font-sans tracking-tight">{item.name}</h4>
+                  <p className="text-xs text-slate-300 leading-relaxed opacity-0 group-hover:opacity-100 max-h-0 group-hover:max-h-20 transition-all duration-300 overflow-hidden font-medium">
+                    {item.desc}
+                  </p>
+                  <Link 
+                    href={`${BASE}/services`}
+                    className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-white group-hover:text-yellow-400 transition-colors pt-2"
+                  >
+                    {item.action} <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{desc}</p>
-                <Link href={`${BASE}/services`} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest whitespace-nowrap" style={{ color: DARK }}>
-                  Book Class <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* TEACHERS — large editorial portraits */}
-      <section style={{ backgroundColor: CREAM }} className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: TERRA }}>Teachers</p>
-            <h2 className="font-serif italic text-4xl md:text-5xl" style={{ color: DARK }}>Meet your guides.</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {TEACHERS.map(({ name, role, img, quote }, i) => (
-              <div key={i}>
-                <div className="relative aspect-[3/4] mb-5 overflow-hidden">
-                  <Image
-                    src={`https://images.unsplash.com/${img}?q=80&w=800&auto=format&fit=crop`}
-                    alt={name} fill className="object-cover object-top" referrerPolicy="no-referrer"
-                  />
+      {/* 4. BLUE CTA BANNER SECTION */}
+      <section className="px-6 md:px-12 py-6 bg-slate-50">
+        <div className="max-w-7xl mx-auto rounded-[32px] bg-sky-600 text-white p-8 md:p-12 relative overflow-hidden shadow-xl">
+          {/* Background shapes */}
+          <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-sky-500 opacity-20 rounded-l-full pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+            {/* Title and Instructor Avatars */}
+            <div className="space-y-6 text-center lg:text-left">
+              {/* Avatars */}
+              <div className="flex items-center justify-center lg:justify-start -space-x-4">
+                <div className="w-12 h-12 rounded-full border-4 border-sky-600 overflow-hidden relative">
+                  <Image src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=150" alt="Clara" fill className="object-cover" referrerPolicy="no-referrer" />
                 </div>
-                <h3 className="font-bold text-base mb-0.5" style={{ color: DARK }}>{name}</h3>
-                <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: SAGE }}>{role}</div>
-                <p className="text-sm italic leading-relaxed" style={{ color: MUTED }}>"{quote}"</p>
+                <div className="w-12 h-12 rounded-full border-4 border-sky-600 overflow-hidden relative">
+                  <Image src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=150" alt="James" fill className="object-cover" referrerPolicy="no-referrer" />
+                </div>
+                <div className="w-12 h-12 rounded-full border-4 border-sky-600 overflow-hidden relative">
+                  <Image src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=150" alt="Mei" fill className="object-cover" referrerPolicy="no-referrer" />
+                </div>
+                <div className="bg-yellow-400 text-slate-950 font-black text-[9px] px-3 py-1.5 rounded-full uppercase tracking-wider ml-4 shadow-sm border border-yellow-300">
+                  Meet the Guides
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight leading-none">
+                  Begin Your Practice Today.
+                </h3>
+                <p className="text-sky-100 text-sm font-medium max-w-xl leading-relaxed">
+                  Experience professional, certified instruction designed to center your mind and align your physical movement.
+                </p>
+              </div>
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:w-auto shrink-0 justify-center">
+              <Link 
+                href={`${BASE}/contact`}
+                className="bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-sans font-black uppercase text-xs tracking-widest px-8 py-4 rounded-xl shadow-lg transition-all text-center"
+              >
+                Schedule Class Now
+              </Link>
+              <a 
+                href="tel:7205550142"
+                className="border border-white/30 hover:border-white/50 hover:bg-white/10 transition-all font-bold text-sm px-6 py-4 rounded-xl text-center flex items-center justify-center gap-2"
+              >
+                <Phone className="w-4 h-4 fill-current" /> Call (720) 555-0142
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. "WHY CHOOSE US" SECTION */}
+      <section className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column Text/Bullet Points */}
+          <div className="lg:col-span-6 space-y-8">
+            <div className="space-y-4">
+              <h2 className="text-xs font-black uppercase tracking-[0.2em] text-yellow-600">
+                Professional & Mindful Yoga
+              </h2>
+              <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+                Why Choose Solstice?
+              </h3>
+              <p className="text-slate-500 text-sm sm:text-base font-medium">
+                Our classes are structured to deliver real restoration and physical progress. Here is why Denver trust Solstice Yoga & Wellness.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {[
+                { title: "We're Local.", desc: "Centrally located with free parking. We offer a convenient 7-day schedule to fit your busy lifestyle easily." },
+                { title: "We're Certified.", desc: "Our instructors average over 9 years of teaching experience with RYS 200/500 credentials and safety training." },
+                { title: "We're Community-Focused.", desc: "A welcoming, inclusive space. No performance grades. Every class offers depth for advanced practitioners and beginner modifications." }
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-4">
+                  <div className="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 shrink-0 mt-1">
+                    <Check className="w-4 h-4 stroke-[3]" />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-slate-900 text-sm sm:text-base mb-1">{item.title}</h4>
+                    <p className="text-slate-500 text-xs sm:text-sm font-medium leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-2">
+              <Link 
+                href={`${BASE}/services`}
+                className="bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-sans font-black uppercase text-xs tracking-widest px-8 py-4 rounded-xl shadow-lg transition-all inline-flex items-center gap-2"
+              >
+                Request Schedule <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column Image */}
+          <div className="lg:col-span-6">
+            <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden border border-slate-100 shadow-xl">
+              <Image 
+                src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=800&auto=format&fit=crop"
+                alt="Beautiful sunlit yoga studio room with mats and plants"
+                fill className="object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 6. SPLITSCREEN ROW ("No Power No Problem" equivalent) */}
+      <section className="py-24 px-6 md:px-12 bg-slate-50 border-t border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left side Image */}
+          <div className="lg:col-span-6">
+            <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden border border-slate-200 shadow-lg">
+              <Image 
+                src="https://images.unsplash.com/photo-1599447421416-3414500d18a5?q=80&w=800&auto=format&fit=crop"
+                alt="Relaxing meditation bowls, mats, and blocks"
+                fill className="object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+
+          {/* Right side Text */}
+          <div className="lg:col-span-6 space-y-6">
+            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+              For Every Practitioner — Big or Small
+            </span>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Find Your Strength. <br />
+              Feel Your Stillness.
+            </h3>
+            
+            <p className="text-slate-500 font-medium text-sm sm:text-base leading-relaxed">
+              We understand that yoga is personal. Whether you are stepping onto the mat for the very first time, looking to master your handstand, or recovering from an injury, our certified guides are here to design modifications and support your flow.
+            </p>
+            
+            <p className="text-slate-500 font-medium text-sm leading-relaxed">
+              No pressure. No competition. Simply show up, connect with your breath, and let the benefits of authentic wellness integrate into your daily life.
+            </p>
+
+            <div className="pt-2 flex flex-wrap gap-4">
+              <Link 
+                href={`${BASE}/contact`}
+                className="bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-sans font-black uppercase text-xs tracking-widest px-8 py-4 rounded-xl shadow-lg transition-all"
+              >
+                Claim Free First Class
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. "DENVER'S GO-TO SANCTUARY" SECTION */}
+      <section className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column Text */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="flex items-center gap-2 text-yellow-600 font-sans font-black text-xs uppercase tracking-widest">
+              <span>Denver Sanctuary</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+              <span>Mindful</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+              <span>Certified</span>
+            </div>
+            
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Solstice Yoga & Wellness <br />
+              Your Go-To Denver Studio
+            </h3>
+
+            <p className="text-slate-500 text-sm sm:text-base leading-relaxed font-medium">
+              Since 2016, Solstice has been Denver's premier destination for individuals searching for a supportive, knowledgeable, and clean yoga studio. We pride ourselves on creating a neighborhood sanctuary where you can escape the noise, build physical health, and restore your nervous system.
+            </p>
+
+            <p className="text-slate-500 text-sm leading-relaxed font-medium">
+              We offer over 30 weekly classes, certified 200/500-hour instruction, workshops, and teacher training courses. Convenient street and rear lot parking. Contact us at (720) 555-0142.
+            </p>
+          </div>
+
+          {/* Right Column Image */}
+          <div className="lg:col-span-6">
+            <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden border border-slate-100 shadow-xl">
+              <Image 
+                src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=800&auto=format&fit=crop"
+                alt="Instructor doing warrior pose next to large window"
+                fill className="object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 8. TESTIMONIAL CAROUSEL BANNER (Electrician style: Dark Slate Blue, verified reviews, google logos, stars, avatars) */}
+      <section className="bg-slate-950 text-white py-24 px-6 md:px-12 border-t border-slate-900 overflow-hidden relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#0369a122_0%,transparent_50%)] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-yellow-400">
+              Our Community Brightens Our Day!
+            </p>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight leading-none">
+              Thank You Denver Area
+            </h3>
+            <p className="text-slate-400 text-sm sm:text-base font-medium">
+              Hear from our dedicated students about how Solstice has impacted their health, alignment, and wellness.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {REVIEWS.map((rev, idx) => (
+              <div 
+                key={idx} 
+                className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between space-y-6"
+              >
+                {/* Header review details */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-yellow-400">
+                      {[...Array(rev.rating)].map((_, i) => (
+                        <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                      ))}
+                    </div>
+                    {/* Google verified logo */}
+                    <span className="text-[10px] bg-slate-950 border border-slate-800 text-slate-400 px-2 py-0.5 rounded font-black tracking-wider uppercase">
+                      G
+                    </span>
+                  </div>
+
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed italic font-medium">
+                    "{rev.text}"
+                  </p>
+                </div>
+
+                {/* Reviewer signature */}
+                <div className="flex items-center gap-3 pt-4 border-t border-slate-800/60">
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden border border-slate-800 shrink-0">
+                    <Image src={rev.avatar} alt={rev.name} fill className="object-cover" referrerPolicy="no-referrer" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xs text-white leading-none mb-1">{rev.name}</h4>
+                    <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider">{rev.source}</span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* MEMBERSHIP */}
-      <section className="py-24 px-6" style={{ backgroundColor: WHITE }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: TERRA }}>Membership</p>
-            <h2 className="font-serif italic text-4xl" style={{ color: DARK }}>Your practice, your pace.</h2>
+      {/* 9. FAQ ACCORDION SECTION */}
+      <section className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-3xl mx-auto space-y-16">
+          <div className="text-center space-y-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-yellow-600">
+              Got Questions?
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Answers Before You Arrive
+            </h3>
+            <p className="text-slate-500 font-medium text-sm">
+              Everything you need to know about class bookings, memberships, and studio policies.
+            </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {MEMBERSHIPS.map(({ name, price, note, features, featured }, i) => (
-              <div key={i} className="rounded-2xl p-8" style={{ backgroundColor: featured ? DARK : CREAM, boxShadow: '0 6px 28px rgba(0,0,0,0.10)' }}>
-                <h3 className="font-bold text-sm mb-5 uppercase tracking-widest" style={{ color: featured ? 'rgba(255,255,255,0.5)' : MUTED }}>{name}</h3>
-                <div className="font-serif italic text-5xl mb-1" style={{ color: featured ? WHITE : DARK }}>{price}</div>
-                <div className="text-xs mb-6" style={{ color: featured ? 'rgba(255,255,255,0.4)' : MUTED }}>{note}</div>
-                <ul className="space-y-3 mb-8">
-                  {features.map((f, j) => (
-                    <li key={j} className="flex items-center gap-2 text-sm" style={{ color: featured ? 'rgba(255,255,255,0.7)' : DARK }}>
-                      <Check className="w-3.5 h-3.5 shrink-0" style={{ color: SAGE }} /> {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href={`${BASE}/contact`} className="block text-center font-bold text-xs uppercase tracking-widest py-3" style={{ backgroundColor: featured ? SAGE : 'rgba(45,42,36,0.08)', color: featured ? WHITE : DARK }}>
-                  Get Started
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* QUOTE — full-bleed dark */}
-      <section className="py-28 px-6" style={{ backgroundColor: DARK }}>
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="w-12 h-px mx-auto mb-10" style={{ backgroundColor: SAGE }} />
-          <blockquote className="font-serif italic text-3xl md:text-4xl leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.85)' }}>
-            "The practice is not about touching your toes. It is about what you learn on the way down."
-          </blockquote>
-          <div className="text-xs font-bold uppercase tracking-widest" style={{ color: SAGE }}>— Clara Whitfield, Founder</div>
-          <div className="w-12 h-px mx-auto mt-10" style={{ backgroundColor: SAGE }} />
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section style={{ backgroundColor: CREAM }} className="py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: TERRA }}>Reviews</p>
-            <h2 className="font-serif italic text-3xl" style={{ color: DARK }}>What the community says.</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {[
-              { t: "I walked in as a complete beginner. Within three weeks I understood why people dedicate years to this. The teachers here genuinely care.", a: 'Olivia B.', s: 'Hatha Flow' },
-              { t: "The Yin class on Sunday evenings has become non-negotiable for me. It is the only hour in my week where I am completely offline and present.", a: 'David L.', s: 'Yin & Restorative' },
-              { t: "Best investment in my health. The unlimited monthly membership pays for itself in one week if you actually use it. I go 4-5 times a week.", a: 'Naomi K.', s: 'Monthly Unlimited' },
-            ].map((r, i) => {
-              const PASTELS = [
-                { bg: '#FCE7F3', border: '#F9A8D4', star: '#EC4899' },
-                { bg: '#EDE9FE', border: '#C4B5FD', star: '#7C3AED' },
-                { bg: '#FEF3C7', border: '#FCD34D', star: '#D97706' },
-              ];
-              const pastel = PASTELS[i % 3];
-              return (
-              <div key={i} className="p-7 rounded-2xl" style={{ backgroundColor: pastel.bg, border: `1.5px solid ${pastel.border}`, boxShadow: `0 8px 32px ${pastel.border}55` }}>
-                <div className="flex gap-0.5 mb-4">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: pastel.star }} />)}</div>
-                <p className="text-sm italic leading-relaxed mb-4" style={{ color: MUTED }}>"{r.t}"</p>
-                <div className="font-bold text-xs" style={{ color: DARK }}>— {r.a} <span className="font-normal" style={{ color: pastel.star }}>· {r.s}</span></div>
-              </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-24 px-6" style={{ backgroundColor: WHITE }}>
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: TERRA }}>Questions</p>
-            <h2 className="font-serif italic text-4xl" style={{ color: DARK }}>Answers before you arrive.</h2>
-          </div>
-          <div className="divide-y" style={{ borderColor: 'rgba(45,42,36,0.08)' }}>
-            {FAQS.map(({ q, a }, i) => (
-              <details key={i} className="group py-5">
-                <summary className="flex items-center justify-between cursor-pointer gap-4">
-                  <span className="font-bold text-sm" style={{ color: DARK }}>{q}</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180" style={{ color: SAGE }} />
+          <div className="divide-y divide-slate-200 border-t border-b border-slate-200">
+            {FAQS.map((faq, idx) => (
+              <details key={idx} className="group py-6">
+                <summary className="flex items-center justify-between cursor-pointer gap-4 text-slate-900 hover:text-yellow-600 transition-colors list-none select-none">
+                  <span className="font-black text-sm sm:text-base tracking-tight">{faq.q}</span>
+                  <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 group-open:rotate-180 group-open:bg-yellow-400 group-open:border-yellow-400 group-open:text-slate-950 transition-all duration-300">
+                    <ChevronDown className="w-4 h-4 shrink-0 transition-transform" />
+                  </div>
                 </summary>
-                <p className="mt-4 text-sm leading-relaxed" style={{ color: MUTED }}>{a}</p>
+                <p className="mt-4 text-slate-600 text-xs sm:text-sm leading-relaxed font-medium pl-2 border-l-2 border-yellow-400/80">
+                  {faq.a}
+                </p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section style={{ backgroundColor: SAGE }} className="py-20 px-6 text-center">
-        <h2 className="font-serif italic text-4xl text-white mb-4">Begin your practice.</h2>
-        <p className="text-white/75 mb-8 max-w-md mx-auto">Your first class is free. No commitment, no pressure. Just show up.</p>
-        <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-white font-bold text-sm px-10 py-4" style={{ color: DARK }}>
-          Book Your Free Class <ArrowRight className="w-4 h-4" />
-        </Link>
+      {/* 10. FINAL CTA BANNER */}
+      <section className="bg-yellow-400 py-16 px-6 text-center text-slate-950 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#fef08a_0%,transparent_60%)] pointer-events-none" />
+        
+        <div className="max-w-2xl mx-auto space-y-8 relative z-10">
+          <h2 className="text-4xl font-sans font-black tracking-tight leading-none">
+            Begin Your Wellness Journey.
+          </h2>
+          <p className="text-slate-900/80 text-sm font-semibold max-w-md mx-auto leading-relaxed">
+            Your very first class is completely free. No credit card, no commitments, and no pressure. Just show up as you are.
+          </p>
+          <div className="pt-2">
+            <Link 
+              href={`${BASE}/contact`} 
+              className="inline-flex items-center gap-2 bg-slate-950 text-white hover:bg-slate-900 font-sans font-black uppercase text-xs tracking-widest px-10 py-4 rounded-xl shadow-xl transition-all"
+            >
+              Book Your Free Class <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ backgroundColor: DARK }} className="py-14 px-6">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-10 mb-10">
-          <div>
-            <div className="font-serif italic text-xl text-white mb-3">Solstice</div>
-            <p className="text-sm leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.4)' }}>Nashville yoga studio. Open 7 days. All levels. All bodies.</p>
-            <div className="flex items-start gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
-              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: SAGE }} />
-              <span>314 8th Ave South, Nashville TN 37203</span>
-            </div>
-          </div>
-          <div>
-            <div className="text-xs font-bold uppercase tracking-widest mb-4 text-white">Studio</div>
-            <ul className="space-y-2">
-              {['Class Schedule', 'Teachers', 'Membership', 'Retreats', 'Workshops', 'Private Sessions'].map(s => (
-                <li key={s}><Link href={`${BASE}/services`} className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>{s}</Link></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <div className="text-xs font-bold uppercase tracking-widest mb-4 text-white">Hours</div>
-            <div className="text-sm space-y-1.5" style={{ color: 'rgba(255,255,255,0.4)' }}>
-              <div>Mon – Fri: 6:00am – 9:00pm</div>
-              <div>Saturday: 7:00am – 6:00pm</div>
-              <div>Sunday: 8:00am – 5:00pm</div>
-              <div className="mt-3 font-bold" style={{ color: SAGE }}>(615) 555-0244</div>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-5xl mx-auto border-t pt-6 text-xs" style={{ borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.25)' }}>
-          © 2025 Solstice Yoga Studio · Privacy Policy
-        </div>
-      </footer>
-    </>
+    </div>
   );
 }
+

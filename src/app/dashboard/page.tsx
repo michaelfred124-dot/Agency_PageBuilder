@@ -74,12 +74,22 @@ import { getSupabaseBrowserClient } from '@/lib/supabase';
 
 const MY_SITES = [
   {
+    id: 'template-easy-does-it',
+    name: 'Easy Does It Detailing',
+    url: 'easydoesitdetail.com',
+    previewUrl: '/preview/template-easy-does-it',
+    status: 'Template',
+    image: '/screenshots/easy-does-it.jpg',
+    lastUpdate: 'Just now',
+    templateKey: 'easy_does_it'
+  },
+  {
     id: 'template-lauren-wilson',
     name: 'Lauren Wilson Photo',
     url: 'laurenwilsonphoto.com',
     previewUrl: '/preview/template-lauren-wilson',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/lauren-wilson.jpg',
     lastUpdate: 'Just now',
     templateKey: 'lauren'
   },
@@ -89,7 +99,7 @@ const MY_SITES = [
     url: 'greenscapelandscaping.com',
     previewUrl: '/preview/template-greenscape-landscaping',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+    image: '/screenshots/greenscape-landscaping.jpg',
     lastUpdate: 'Just now',
     templateKey: 'greenscape'
   },
@@ -99,7 +109,7 @@ const MY_SITES = [
     url: 'northwoodcoffee.com',
     previewUrl: '/preview/template-northwood-coffee',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/northwood-coffee.jpg',
     lastUpdate: 'Just now',
     templateKey: 'northwood'
   },
@@ -109,7 +119,7 @@ const MY_SITES = [
     url: 'brightersolarcleaning.com',
     previewUrl: '/preview/template-brighter-solar',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=400&q=80',
+    image: '/screenshots/brighter-solar.jpg',
     lastUpdate: 'Just now',
     templateKey: 'brighter_solar'
   },
@@ -129,7 +139,7 @@ const MY_SITES = [
     url: 'sterlinglawgroup.com',
     previewUrl: '/preview/template-sterling-law',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/sterling-law.jpg',
     lastUpdate: 'Just now',
     templateKey: 'law_firm'
   },
@@ -139,7 +149,7 @@ const MY_SITES = [
     url: 'ridgelineauto.com',
     previewUrl: '/preview/template-ridge-line-auto',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/ridge-line-auto.jpg',
     lastUpdate: 'Just now',
     templateKey: 'auto_repair'
   },
@@ -149,7 +159,7 @@ const MY_SITES = [
     url: 'atelierhair.com',
     previewUrl: '/preview/template-atelier-hair',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/atelier-hair.jpg',
     lastUpdate: 'Just now',
     templateKey: 'hair_salon'
   },
@@ -159,7 +169,7 @@ const MY_SITES = [
     url: 'meridianproperties.com',
     previewUrl: '/preview/template-meridian-properties',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/meridian-properties.jpg',
     lastUpdate: 'Just now',
     templateKey: 'real_estate'
   },
@@ -169,7 +179,7 @@ const MY_SITES = [
     url: 'ironedgefitness.com',
     previewUrl: '/preview/template-iron-edge-fitness',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/iron-edge-fitness.jpg',
     lastUpdate: 'Just now',
     templateKey: 'personal_trainer'
   },
@@ -179,7 +189,7 @@ const MY_SITES = [
     url: 'claritydental.com',
     previewUrl: '/preview/template-clarity-dental',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/clarity-dental.jpg',
     lastUpdate: 'Just now',
     templateKey: 'dental'
   },
@@ -189,7 +199,7 @@ const MY_SITES = [
     url: 'pawsandpamper.com',
     previewUrl: '/preview/template-paws-pamper',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/paws-pamper.jpg',
     lastUpdate: 'Just now',
     templateKey: 'dog_grooming'
   },
@@ -199,7 +209,7 @@ const MY_SITES = [
     url: 'goldenthreadevents.com',
     previewUrl: '/preview/template-golden-thread',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/golden-thread.jpg',
     lastUpdate: 'Just now',
     templateKey: 'wedding_planner'
   },
@@ -209,7 +219,7 @@ const MY_SITES = [
     url: 'spotlesshomeco.com',
     previewUrl: '/preview/template-spotless-home',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/spotless-home.jpg',
     lastUpdate: 'Just now',
     templateKey: 'home_cleaning'
   },
@@ -219,7 +229,7 @@ const MY_SITES = [
     url: 'solsticeyoga.com',
     previewUrl: '/preview/template-solstice-yoga',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/solstice-yoga.jpg',
     lastUpdate: 'Just now',
     templateKey: 'yoga_studio'
   },
@@ -229,7 +239,7 @@ const MY_SITES = [
     url: 'valleyprohome.com',
     previewUrl: '/preview/template-valley-prohome',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/valley-prohome.jpg',
     lastUpdate: 'Just now',
     templateKey: 'prohome_services'
   },
@@ -239,7 +249,7 @@ const MY_SITES = [
     url: 'maisonboutique.com',
     previewUrl: '/preview/template-maison-boutique',
     status: 'Template',
-    image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/maison-boutique.jpg',
     lastUpdate: 'Just now',
     templateKey: 'maison_boutique'
   }
@@ -837,6 +847,13 @@ export default function DashboardLayout() {
           if (section.props.text) {
             section.props.text = `© 2026 ${name}. All rights reserved. Powered by Michaelfred Designs.`;
           }
+        }
+
+        // EDI blocks
+        if (section.type.startsWith('EDI')) {
+          if (section.props.businessName !== undefined) section.props.businessName = name;
+          if (section.props.phone !== undefined) section.props.phone = phone;
+          if (section.props.email !== undefined) section.props.email = email;
         }
       }
       return section;

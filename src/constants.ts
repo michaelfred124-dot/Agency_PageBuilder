@@ -176,6 +176,13 @@ export const PROJECTS: Project[] = [
     image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=2070&q=80',
     link: '/work/maison-boutique',
   },
+  {
+    title: 'Stylish Online Store',
+    description: 'A premium, high-converting e-commerce footwear template featuring sleek grids, newsletter coupons, and curated collections.',
+    tags: ['Template', 'E-Commerce', 'Fashion'],
+    image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=2070&auto=format&fit=crop',
+    link: '/work/stylish-store',
+  },
 ];
 
 export const BIO = "We are MichaelFred Designs Official. Your dedicated team for high-end web design and development. Get a world-class website as a service. Unlimited requests, transparent pricing, and lightning-fast delivery. Pause or cancel your subscription at any time.";
