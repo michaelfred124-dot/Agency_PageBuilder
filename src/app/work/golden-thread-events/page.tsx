@@ -103,31 +103,6 @@ export default function GoldenThreadEventsPage() {
   return (
     <div style={{ backgroundColor: BG, color: CREAM }}>
 
-      {/* STICKY NAV */}
-      <nav
-        className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-14 py-4"
-        style={{ backgroundColor: BG, borderBottom: '1px solid rgba(212,175,112,0.2)' }}
-      >
-        <div>
-          <span className="font-serif italic text-lg" style={{ color: GOLD }}>Golden Thread</span>
-          <span className="text-xs tracking-[0.35em] ml-2" style={{ color: CREAM }}>&nbsp;EVENTS</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8 text-sm">
-          {['Weddings', 'Corporate', 'Social', 'Portfolio'].map((item) => (
-            <Link key={item} href={`${BASE}/${item.toLowerCase()}`} className="transition-opacity hover:opacity-80" style={{ color: MUTED }}>
-              {item}
-            </Link>
-          ))}
-        </div>
-        <Link
-          href={`${BASE}/contact`}
-          className="text-xs font-bold px-5 py-2.5 border transition-colors hover:opacity-80"
-          style={{ borderColor: GOLD, color: GOLD, boxShadow: '0 2px 12px rgba(0,0,0,0.25)' }}
-        >
-          Begin Planning
-        </Link>
-      </nav>
-
       {/* HERO — full-bleed editorial */}
       <section className="relative min-h-screen flex items-end overflow-hidden">
         <div className="absolute inset-0">

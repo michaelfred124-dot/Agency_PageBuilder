@@ -42,22 +42,6 @@ const FAQS = [
 export default function SolsticeYoga() {
   return (
     <>
-      {/* NAV — cream, centered wordmark */}
-      <nav className="sticky top-0 z-50 border-b" style={{ backgroundColor: CREAM, borderColor: 'rgba(45,42,36,0.08)' }}>
-        <div className="max-w-7xl mx-auto px-6 h-16 grid grid-cols-3 items-center">
-          <div className="hidden md:flex items-center gap-7">
-            {['Classes', 'Schedule'].map(l => (
-              <Link key={l} href={`${BASE}/services`} className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>{l}</Link>
-            ))}
-          </div>
-          <Link href={BASE} className="text-center font-serif italic text-xl" style={{ color: DARK }}>Solstice</Link>
-          <div className="flex items-center justify-end gap-4">
-            <Link href={`${BASE}/about`} className="hidden md:block text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>About</Link>
-            <Link href={`${BASE}/contact`} className="text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full text-white" style={{ backgroundColor: SAGE }}>Book a Class</Link>
-          </div>
-        </div>
-      </nav>
-
       {/* HERO — full viewport image, minimal centered text */}
       <section className="relative" style={{ height: '95vh', minHeight: 600 }}>
         <Image

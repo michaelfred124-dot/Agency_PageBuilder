@@ -85,19 +85,6 @@ const TASKS: { label: string; tiers: Record<Tier, boolean> }[] = [
 export default function SpotlessHome() {
   return (
     <>
-      {/* NAV */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href={BASE} className="font-black text-lg tracking-tight" style={{ color: BLACK }}>SPOTLESS<span style={{ color: GREEN }}>.</span></Link>
-          <div className="hidden md:flex items-center gap-8">
-            {['Services', 'Pricing', 'Reviews', 'Contact'].map(l => (
-              <Link key={l} href={`${BASE}/services`} className="text-sm font-medium" style={{ color: MUTED }}>{l}</Link>
-            ))}
-          </div>
-          <Link href={`${BASE}/contact`} className="text-xs font-bold uppercase tracking-widest px-5 py-2.5 text-white" style={{ backgroundColor: GREEN }}>Book Now</Link>
-        </div>
-      </nav>
-
       {/* HERO — split: big type left, image + floating cards right */}
       <section className="min-h-screen grid lg:grid-cols-2 overflow-hidden bg-white">
         <div className="flex flex-col justify-center px-8 md:px-16 py-20">

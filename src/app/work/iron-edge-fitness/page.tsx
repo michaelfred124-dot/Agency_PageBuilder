@@ -118,22 +118,6 @@ export default function IronEdgeFitness() {
   return (
     <div style={{ backgroundColor: BG, color: '#fff' }}>
 
-      {/* STICKY NAV */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-16 py-5" style={{ backgroundColor: BG, borderBottom: `1px solid rgba(255,107,0,0.3)` }}>
-        <div>
-          <span className="text-xl font-black uppercase tracking-wider text-white">IRON EDGE</span>
-          <div className="h-0.5 mt-0.5 w-full" style={{ backgroundColor: ORANGE }} />
-        </div>
-        <div className="hidden md:flex items-center gap-8">
-          {['Programs', 'Membership', 'Schedule', 'Contact'].map((item) => (
-            <Link key={item} href={`${BASE}/${item.toLowerCase()}`} className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>{item}</Link>
-          ))}
-        </div>
-        <Link href={`${BASE}/contact`} className="text-xs font-black uppercase tracking-widest px-6 py-3" style={{ backgroundColor: ORANGE, color: '#000' }}>
-          Start Free Week
-        </Link>
-      </nav>
-
       {/* HERO — SPLIT LAYOUT */}
       <section className="min-h-screen flex flex-col md:flex-row">
         {/* Left copy panel */}

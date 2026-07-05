@@ -29,21 +29,6 @@ const FAQS = [
 export default function MaisonBoutique() {
   return (
     <>
-      {/* NAV — ultra-minimal dark, centered wordmark */}
-      <nav className="sticky top-0 z-50" style={{ backgroundColor: BG, borderBottom: '1px solid rgba(197,160,82,0.12)' }}>
-        <div className="max-w-7xl mx-auto px-6 h-16 grid grid-cols-3 items-center">
-          <div className="hidden md:flex items-center gap-8">
-            <Link href={`${BASE}/services`} className="text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color: MUTED }}>New Arrivals</Link>
-            <Link href={`${BASE}/services`} className="text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color: MUTED }}>Collections</Link>
-          </div>
-          <Link href={BASE} className="text-center font-serif italic text-2xl" style={{ color: CREAM }}>Maison</Link>
-          <div className="flex items-center justify-end gap-6">
-            <Link href={`${BASE}/about`} className="hidden md:block text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color: MUTED }}>Styling</Link>
-            <Link href={`${BASE}/contact`} className="text-[10px] font-bold uppercase tracking-[0.25em] border px-4 py-2" style={{ borderColor: GOLD, color: GOLD }}>Book</Link>
-          </div>
-        </div>
-      </nav>
-
       {/* HERO — near-full viewport fashion photo, bottom-left text */}
       <section className="relative flex items-end overflow-hidden" style={{ height: '92vh', minHeight: 600 }}>
         <Image

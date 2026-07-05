@@ -46,30 +46,6 @@ const FAQS = [
 export default function ValleyProHome() {
   return (
     <>
-      {/* EMERGENCY BANNER */}
-      <div style={{ backgroundColor: AMBER }} className="py-2.5 px-6 text-center">
-        <span className="text-xs font-black uppercase tracking-widest text-black">
-          <AlertCircle className="w-3.5 h-3.5 inline mr-2 -mt-0.5" />
-          Emergency services available 24/7 —&nbsp;
-          <a href="tel:6155550301" className="underline">Call (615) 555-0301</a>
-        </span>
-      </div>
-
-      {/* NAV */}
-      <nav className="sticky top-0 z-50" style={{ backgroundColor: BG, borderBottom: '1px solid rgba(212,168,67,0.15)' }}>
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href={BASE} className="font-black text-lg tracking-tight" style={{ color: CREAM }}>VALLEY<span style={{ color: AMBER }}> PROHOME</span></Link>
-          <div className="hidden md:flex items-center gap-8">
-            {['Services', 'Projects', 'Reviews', 'Contact'].map(l => (
-              <Link key={l} href={`${BASE}/services`} className="text-xs font-bold uppercase tracking-widest" style={{ color: MUTED }}>{l}</Link>
-            ))}
-          </div>
-          <Link href={`${BASE}/contact`} className="text-xs font-bold uppercase tracking-widest px-5 py-2.5 text-black" style={{ backgroundColor: AMBER }}>
-            Get Free Quote
-          </Link>
-        </div>
-      </nav>
-
       {/* HERO — full-bleed, text anchored bottom */}
       <section className="relative flex items-end overflow-hidden" style={{ height: '92vh', minHeight: 600 }}>
         <Image
