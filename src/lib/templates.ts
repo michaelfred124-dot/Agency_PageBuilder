@@ -1,6 +1,84 @@
 import type { SectionData } from './blocks';
 
 export const TEMPLATES: Record<string, SectionData[]> = {
+  easy_does_it: [
+    {
+      id: "edi-header-1",
+      type: "EDIHeader",
+      props: {
+        businessName: "Easy Does It",
+        phone: "(209) 304-7288",
+        ctaText: "Get Quote"
+      }
+    },
+    {
+      id: "edi-hero-1",
+      type: "EDIHero",
+      props: {
+        title: "Your Car Is \nIn Great Hands \nWith Us",
+        subtitle: "Experience the ultimate shine. Our professionals bring showroom quality directly to your driveway, using advanced techniques and premium products.",
+        image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070",
+        badgeText: "#1 Rated in County"
+      }
+    },
+    {
+      id: "edi-services-1",
+      type: "EDIServices",
+      props: {
+        heading: "How it Works",
+        description: "Our approach is focused on delivering outstanding results while ensuring a smooth and hassle-free experience for you."
+      }
+    },
+    {
+      id: "edi-pricing-1",
+      type: "EDIPricing",
+      props: {
+        title: "Pick what fits you best",
+        plan1Name: "Basic",
+        plan1Price: "115",
+        plan2Name: "Premium",
+        plan2Price: "200",
+        plan3Name: "Ultimate",
+        plan3Price: "250"
+      }
+    },
+    {
+      id: "edi-faq-1",
+      type: "EDIFaq",
+      props: {
+        title: "Frequently Asked Questions",
+        subtitle: "Have questions? Our FAQ section has you covered with quick answers to common inquiries about our detailing services."
+      }
+    },
+    {
+      id: "edi-gallery-1",
+      type: "EDIGallery",
+      props: {
+        title: "Automotive Artistry",
+        subtitle: "Browse our gallery of recent work. We treat every vehicle like a masterpiece, ensuring perfection down to the microscopic level."
+      }
+    },
+    {
+      id: "edi-contact-1",
+      type: "EDIContact",
+      props: {
+        title: "Ready for a Showroom Shine?",
+        subtitle: "Fill out the form below to request a quote or book an appointment. We'll get back to you within 15 minutes during business hours.",
+        phone: "(209) 304-7288",
+        email: "contact@easydoesit.com",
+        serviceArea: "Amador County, CA"
+      }
+    },
+    {
+      id: "edi-footer-1",
+      type: "EDIFooter",
+      props: {
+        phone: "(209) 304-7288",
+        email: "contact@easydoesit.com",
+        address: "Ione, CA (Amador County)"
+      }
+    }
+  ],
   northwood: [
     {
       id: "nw-hero-1",

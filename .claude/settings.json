@@ -10,7 +10,12 @@
       "PowerShell(cd \"c:\\\\Users\\\\micha\\\\OneDrive\\\\Documents\\\\Github\\\\Michaelfred designs\\\\Michaelfreddesigns_Agency\"; $env:NODE_ENV=\"development\"; npm run dev 2>&1 | Select-Object -First 1)",
       "PowerShell(netstat -ano | Select-String \" :3000 \" | Where-Object { $_ -match \"LISTENING\" })",
       "PowerShell(netstat -ano | Select-String \":3000\" | Where-Object { $_ -match \"LISTEN\" })",
-      "PowerShell(Get-Process -Id 35480 -ErrorAction SilentlyContinue | Select-Object Name, Id, MainWindowTitle, Path; \\(Get-CimInstance Win32_Process -Filter \"ProcessId = 35480\"\\).CommandLine)"
+      "PowerShell(Get-Process -Id 35480 -ErrorAction SilentlyContinue | Select-Object Name, Id, MainWindowTitle, Path; \\(Get-CimInstance Win32_Process -Filter \"ProcessId = 35480\"\\).CommandLine)",
+      "PowerShell(Stop-Process -Id 21740 -Force -Confirm:$false; Start-Sleep -Seconds 3; netstat -ano | Select-String \":3000\" | Where-Object { $_ -match \"LISTEN\" })",
+      "PowerShell(Start-Sleep -Seconds 6; netstat -ano | Select-String \":3000\" | Where-Object { $_ -match \"LISTEN\" })",
+      "Read(//c/Users/micha/Downloads/Insurance-Layout-Packs-Diviflash/Insurance-Layout-Packs-Diviflash/**)",
+      "Bash(npx playwright *)",
+      "Bash(curl -s http://localhost:3000 -o /dev/null -w \"%{http_code}\")"
     ]
   }
 }

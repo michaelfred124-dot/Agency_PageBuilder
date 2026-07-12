@@ -9,6 +9,13 @@ import { getSupabaseBrowserClient } from '@/lib/supabase';
 
 const PRESETS = [
   {
+    id: 'template-easy-does-it',
+    name: 'Easy Does It Detailing',
+    templateKey: 'easy_does_it',
+    image: '/screenshots/easy-does-it.jpg',
+    desc: 'High-end dark theme design for mobile detailing and automotive services.'
+  },
+  {
     id: 'template-restaurant',
     name: 'Osteria Bella Restaurant',
     templateKey: 'restaurant',
@@ -19,28 +26,28 @@ const PRESETS = [
     id: 'template-lauren-wilson',
     name: 'Lauren Wilson Photo',
     templateKey: 'lauren',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/lauren-wilson.jpg',
     desc: 'Perfect for photographer portfolios, creatives, and visual artists.'
   },
   {
     id: 'template-greenscape-landscaping',
     name: 'Greenscape Landscaping',
     templateKey: 'greenscape',
-    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+    image: '/screenshots/greenscape-landscaping.jpg',
     desc: 'Great for landscaping, lawn care, and home renovation services.'
   },
   {
     id: 'template-northwood-coffee',
     name: 'Northwood Coffee Co.',
     templateKey: 'northwood',
-    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/northwood-coffee.jpg',
     desc: 'Designed for coffee shops, cafes, local bakeries, and eateries.'
   },
   {
     id: 'template-brighter-solar',
     name: 'Brighter Solar',
     templateKey: 'brighter_solar',
-    image: 'https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=400&q=80',
+    image: '/screenshots/brighter-solar.jpg',
     desc: 'Perfect for clean energy, solar installation, and tech businesses.'
   },
   {
@@ -54,84 +61,84 @@ const PRESETS = [
     id: 'template-sterling-law',
     name: 'Sterling Law Group',
     templateKey: 'law_firm',
-    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/sterling-law.jpg',
     desc: 'Professional, trust-driving website for law firms and legal professionals.'
   },
   {
     id: 'template-ridge-line-auto',
     name: 'Ridge Line Auto Service',
     templateKey: 'auto_repair',
-    image: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/ridge-line-auto.jpg',
     desc: 'Bold, conversion-focused website for auto repair and mechanic shops.'
   },
   {
     id: 'template-atelier-hair',
     name: 'Atelier Hair Studio',
     templateKey: 'hair_salon',
-    image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/atelier-hair.jpg',
     desc: 'Stylish, intimate website for hair salons, barbers, and beauty studios.'
   },
   {
     id: 'template-meridian-properties',
     name: 'Meridian Properties',
     templateKey: 'real_estate',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/meridian-properties.jpg',
     desc: 'Credibility-first website for real estate agents and brokerages.'
   },
   {
     id: 'template-iron-edge-fitness',
     name: 'Iron Edge Fitness',
     templateKey: 'personal_trainer',
-    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/iron-edge-fitness.jpg',
     desc: 'High-energy site for personal trainers, gyms, and fitness studios.'
   },
   {
     id: 'template-clarity-dental',
     name: 'Clarity Dental Studio',
     templateKey: 'dental',
-    image: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/clarity-dental.jpg',
     desc: 'Clean, welcoming website for dental practices and healthcare providers.'
   },
   {
     id: 'template-paws-pamper',
     name: 'Paws & Pamper Pet Spa',
     templateKey: 'dog_grooming',
-    image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/paws-pamper.jpg',
     desc: 'Friendly, warm website for pet grooming, dog daycare, and veterinary services.'
   },
   {
     id: 'template-golden-thread',
     name: 'The Golden Thread Events',
     templateKey: 'wedding_planner',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/golden-thread.jpg',
     desc: 'Romantic, luxury website for wedding planners and event coordinators.'
   },
   {
     id: 'template-spotless-home',
     name: 'Spotless Home Co.',
     templateKey: 'home_cleaning',
-    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/spotless-home.jpg',
     desc: 'Trustworthy website for home cleaning and residential service businesses.'
   },
   {
     id: 'template-solstice-yoga',
     name: 'Solstice Yoga & Wellness',
     templateKey: 'yoga_studio',
-    image: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/solstice-yoga.jpg',
     desc: 'Calm, community-driven website for yoga studios and wellness centers.'
   },
   {
     id: 'template-valley-prohome',
     name: 'Valley ProHome Services',
     templateKey: 'prohome_services',
-    image: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/valley-prohome.jpg',
     desc: 'Bold contractor layout for plumbers, electricians, and HVAC companies.'
   },
   {
     id: 'template-maison-boutique',
     name: 'Maison Boutique',
     templateKey: 'maison_boutique',
-    image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=400&auto=format&fit=crop',
+    image: '/screenshots/maison-boutique.jpg',
     desc: 'Luxury editorial layout for fashion boutiques and lifestyle brands.'
   }
 ];
@@ -269,6 +276,11 @@ function OnboardingForm() {
           if (section.props.bio2) {
             section.props.bio2 = section.props.bio2.replace(/Osteria Bella/g, name);
           }
+        }
+        if (section.type.startsWith('EDI')) {
+          if (section.props.businessName !== undefined) section.props.businessName = name;
+          if (section.props.phone !== undefined) section.props.phone = phone;
+          if (section.props.email !== undefined) section.props.email = email;
         }
       }
       return section;

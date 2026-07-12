@@ -1,112 +1,164 @@
 import Link from 'next/link';
-import { ArrowRight, Wrench, Shield, Car, Zap, Check, Flame } from 'lucide-react';
+import { Check, ArrowRight, Phone, Calendar, Wrench } from 'lucide-react';
 
 const BASE = '/work/ridge-line-auto';
-const BG = '#0D0D0D';
-const CARD = '#161616';
-const RED = '#E5242A';
+const SERVICES = [];
+const PRICING = [];
+const PACKAGES = [];
 
-const SERVICES = [
-  {
-    icon: Flame,
-    title: 'Engine Tuning & Performance',
-    items: ['Custom dyno mapping & ECU calibration', 'Cold air intake & exhaust upgrades', 'Supercharger & turbo installations', 'Engine building & cylinder head porting', 'Performance camshaft installation'],
-    note: 'Includes baseline dyno run and full safety parameters data logging.',
-  },
-  {
-    icon: Shield,
-    title: 'Brake Systems & Upgrades',
-    items: ['Brake pad replacement (performance & OEM) — from $149/axle', 'High-performance slotted/drilled rotors', 'Big brake kit (BBK) installation & fitting', 'Stainless steel braided brake line upgrades', 'Brake system fluid exchange & bleed'],
-    note: 'All braking services carry written 24-month warranties.',
-  },
-  {
-    icon: Car,
-    title: 'Suspension Tuning & Setup',
-    items: ['Coilover & lowering spring installations', 'Strut & shock replacement & tuning', 'Performance sway bars & strut brace setups', 'Track alignment & corner balancing', 'Lift kit & leveling setups for offroad/trucks'],
-    note: 'Includes a complimentary 4-wheel road track alignment scan.',
-  },
-  {
-    icon: Zap,
-    title: 'Advanced Diagnostics & Logging',
-    items: ['OBD-II computer scans & error resolution', 'Custom wiring harness repair & re-routing', 'Solenoid, battery & alternator updates', 'A/C charging & climate diagnostics', 'Telemetry & gauge custom integration'],
-    note: 'Full digital diagnostic reports sent directly to your phone.',
-  },
-  {
-    icon: Wrench,
-    title: 'Tires & Track Setup',
-    items: ['Tire rotation & high-speed balance — from $59', 'Track tire sales, mounting & balancing', 'TPMS sensor installation & programming', 'Custom wheel offsets & spacers configuration', 'Performance road-force alignment balancing'],
-    note: 'Direct suppliers of Michelin, Toyo, Nitto, and Pirelli.',
-  },
-  {
-    icon: Shield,
-    title: 'Preventive Maintenance',
-    items: ['30/60/90k mile scheduled maintenance plans', 'Synthetic fluid flushes (coolant, power steering)', 'Iridium spark plug & coil pack replacement', 'Multi-point safety inspection & diagnostics', 'Pre-purchase vehicle inspections'],
-    note: 'Required for warranty preservation on modified vehicles.',
-  },
-];
-
-export default function RidgeLineServices() {
+export default function RidgeLineAutoServices() {
   return (
-    <div className="overflow-x-hidden" style={{ backgroundColor: BG, color: '#fff' }}>
+    <div className="flex flex-col min-h-screen">
       
-      {/* Title Banner */}
-      <section className="py-24 px-6 md:px-12 text-center bg-[#0D0D0D] border-b border-white/5 relative overflow-hidden">
-        <span className="text-[#E5242A] font-mono font-black text-xs tracking-[0.25em] uppercase block mb-4">Services & Pricing</span>
-        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-none uppercase">Precision Engineering</h1>
-        <p className="text-white/50 max-w-xl mx-auto text-sm font-light leading-relaxed">
-          ASE-certified mechanics. Dyno-tested upgrades. 24-month/24,000-mile warranty on all diagnostic and general mechanical work.
-        </p>
-      </section>
-
-      {/* Services Grid with unique alternating roundings */}
-      <section className="py-24 px-6 md:px-12 max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-8">
-          {SERVICES.map(({ icon: Icon, title, items, note }, i) => (
-            <div 
-              key={i} 
-              className={`p-8 border border-white/5 hover:border-[#E5242A]/40 transition-all duration-500 flex flex-col justify-between min-h-[380px] shadow-lg ${
-                i % 2 === 0 ? 'rounded-tl-[40px] rounded-br-[40px]' : 'rounded-tr-[40px] rounded-bl-[40px]'
-              }`}
-              style={{ backgroundColor: CARD }}
-            >
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full border border-[#E5242A]/30 flex items-center justify-center bg-white/5">
-                    <Icon className="w-4.5 h-4.5" style={{ color: RED }} strokeWidth={1.5} />
-                  </div>
-                  <h2 className="font-black text-base text-white uppercase tracking-wide">{title}</h2>
-                </div>
-                <div className="space-y-2.5">
-                  {items.map((item, j) => (
-                    <div key={j} className="flex items-start gap-2.5 text-xs text-white/70 font-light leading-relaxed">
-                      <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: RED }} />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="text-[10px] font-mono text-white/40 border-t border-white/5 pt-4 mt-6 uppercase tracking-wider">
-                {note}
-              </div>
-            </div>
-          ))}
+      {/* Page Header */}
+      <section className="bg-slate-950 text-white py-16 lg:py-24 px-6 md:px-12 relative overflow-hidden border-b border-slate-900 text-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1e293b_0%,transparent_70%)] opacity-30 pointer-events-none" />
+        <div className="max-w-4xl mx-auto space-y-6 relative z-10">
+          <span className="text-xs font-black uppercase tracking-[0.2em] text-red-500">
+            Our Professional Offerings
+          </span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-sans font-black tracking-tight text-white leading-none"
+              dangerouslySetInnerHTML={{ __html: `Precision Engineering` }} />
+          <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium">
+            ASE-certified mechanics. Dyno-tested upgrades. 24-month/24,000-mile warranty on all diagnostic and general mechanical work.
+          </p>
         </div>
       </section>
 
-      {/* Footer CTA */}
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
-        <div className="bg-[#E5242A] rounded-tl-[64px] rounded-br-[64px] py-16 px-8 text-center shadow-2xl text-white border border-[#E5242A] relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 pointer-events-none bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=600')" }} />
-          <h2 className="text-3xl font-black text-white mb-4 uppercase">Schedule a professional service slot.</h2>
-          <p className="text-white/85 text-xs font-light mb-8 max-w-sm mx-auto uppercase tracking-wider">ASE Master certified mechanics. Digital health estimates sent directly to you.</p>
-          <div className="pt-2">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#0D0D0D] hover:bg-white hover:text-[#0D0D0D] text-white font-mono font-black uppercase tracking-widest text-[10px] px-10 py-5 transition-all">
-              Request Service Slot <ArrowRight className="w-4 h-4" />
-            </Link>
+      {/* Services Cards Listing */}
+      <section className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+              Complete Menu
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Services We Offer
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {SERVICES.map((item, idx) => (
+              <div 
+                key={idx}
+                className="bg-slate-50 border border-slate-200/50 p-8 rounded-3xl flex flex-col justify-between text-left min-h-[340px]"
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white mb-6 shadow-md">
+                    <Wrench className="w-5 h-5 text-red-500" />
+                  </div>
+                  <h4 className="font-sans font-black text-xl text-slate-900 mb-3 text-left">{item.name}</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed font-medium text-left">{item.desc}</p>
+                </div>
+                <div className="pt-6 border-t border-slate-200/30 flex items-center justify-between mt-auto">
+                  <span className="text-xs font-bold text-slate-400">Starting Price</span>
+                  <span className="text-lg font-black text-slate-900">{item.price || 'Custom Quote'}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Packages Section if exists */}
+      {PACKAGES.length > 0 && (
+        <section className="py-24 px-6 md:px-12 bg-white border-t border-slate-100">
+          <div className="max-w-7xl mx-auto space-y-16">
+            <div className="text-center max-w-2xl mx-auto space-y-4">
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Bundled Value</span>
+              <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">Service Packages</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {PACKAGES.map((pkg: any, idx: number) => (
+                <div key={idx} className="bg-slate-50 border border-slate-200/50 p-8 rounded-3xl text-left flex flex-col justify-between min-h-[400px]">
+                  <div>
+                    {pkg.tag && <span className="inline-block text-[9px] font-black uppercase tracking-widest text-red-500 bg-slate-900 px-3 py-1 rounded-full mb-4">{pkg.tag}</span>}
+                    <h4 className="font-sans font-black text-xl text-slate-900 mb-2">{pkg.name}</h4>
+                    <p className="text-xs text-slate-500 font-medium mb-6">{pkg.desc}</p>
+                    <ul className="space-y-3 mb-8">
+                      {pkg.features && pkg.features.map((feat: string, i: number) => (
+                        <li key={i} className="flex gap-2 items-center text-xs font-semibold text-slate-700">
+                          <Check className="w-3.5 h-3.5 text-red-500 shrink-0 stroke-[3]" />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="pt-6 border-t border-slate-200/30 flex items-baseline gap-1 mt-auto">
+                    <span className="text-2xl font-black text-slate-900">{pkg.price}</span>
+                    {pkg.per && <span className="text-xs font-bold text-slate-400">/{pkg.per}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Pricing Tables */}
+      <section className="py-24 px-6 md:px-12 bg-slate-50 border-t border-slate-200/80">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <div className="text-center space-y-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+              Simple Transparency
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Pricing Details
+            </h3>
+          </div>
+
+          <div className="border border-slate-200/80 bg-white rounded-3xl overflow-hidden shadow-sm">
+            <div className="grid grid-cols-2 text-[10px] font-black uppercase tracking-widest px-6 py-4 bg-slate-900 text-white text-left">
+              <span>Service Name</span>
+              <span className="text-right">Estimated Rate</span>
+            </div>
+            {PRICING.map((item, idx) => (
+              <div 
+                key={idx}
+                className={`grid grid-cols-2 px-6 py-5 text-sm border-t border-slate-100 text-left ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}`}
+              >
+                <span className="font-bold text-slate-800">{item.service}</span>
+                <span className="text-right font-black text-slate-900">{item.price}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-[10px] text-slate-400 font-medium text-center">
+            * Final costs may fluctuate based on exact project complexity, sizes, or assessments. Complete estimates provided prior to booking.
+          </p>
+        </div>
+      </section>
+
+      {/* Accent CTA Banner */}
+      <section className="bg-sky-600 py-16 px-6 md:px-12 relative overflow-hidden text-white">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10 text-left">
+          
+          <div className="space-y-4 max-w-2xl">
+            <h3 className="text-3xl md:text-4xl font-sans font-black tracking-tight leading-tight">
+              Ready to secure your appointment schedule?
+            </h3>
+            <p className="text-sky-100 text-sm font-medium leading-relaxed">
+              Book online in under 60 seconds or contact our team directly for custom solutions.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
+            <Link 
+              href={`${BASE}/contact`}
+              className="bg-red-500 text-white hover:bg-red-600 font-sans font-black uppercase text-xs tracking-widest px-8 py-4 rounded-xl shadow-lg text-center"
+            >
+              Book Session
+            </Link>
+            <a 
+              href="tel:6155550288"
+              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-white/20 hover:bg-white/10 transition-all font-bold text-sm"
+            >
+              <Phone className="w-5 h-5 text-white" />
+              <span>(615) 555-0288</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
-

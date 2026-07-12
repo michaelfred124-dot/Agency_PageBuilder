@@ -1,120 +1,164 @@
 import Link from 'next/link';
-import { ArrowRight, Scale, Shield, Users, Building, FileText, Check, Award } from 'lucide-react';
+import { Check, ArrowRight, Phone, Calendar, Scale } from 'lucide-react';
 
 const BASE = '/work/sterling-law-group';
-const BG = '#0A0A0A';
-const GOLD = '#C9A84C';
-const CARD = '#111111';
-const BORDER = 'rgba(201,168,76,0.15)';
-const MUTED = 'rgba(255,255,255,0.4)';
+const SERVICES = [{"name":"Business Litigation","desc":"Contract disputes, shareholder conflicts & trade secret cases","img":"https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop","icon":"Check","price":""},{"name":"Corporate Law","desc":"Governance, compliance & regulatory advisory","img":"https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop","icon":"Check","price":""},{"name":"Mergers & Acquisitions","desc":"Buy-side & sell-side transaction counsel","img":"https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop","icon":"Check","price":""},{"name":"Estate Planning & Trusts","desc":"Tax-efficient wealth structures for generations","img":"https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop","icon":"Check","price":""}];
+const PRICING = [{"service":"Business Litigation","price":"From $45"},{"service":"Corporate Law","price":"From $45"},{"service":"Mergers & Acquisitions","price":"From $45"},{"service":"Estate Planning & Trusts","price":"From $45"},{"service":"Real Estate & Fiduciary","price":"From $45"}];
+const PACKAGES = [];
 
-const PRACTICE_AREAS = [
-  {
-    icon: Scale,
-    title: 'Business Litigation',
-    tagline: 'High-stakes commercial disputes.',
-    desc: 'Relentless advocacy in federal and state courts for contract disputes, business torts, partnership breakups, and trade secret challenges.',
-    items: ['Contract disputes & breach of contract', 'Shareholder & partnership litigation', 'Trade secret & IP protection disputes', 'Fiduciary duty violations', 'Class action defense', 'Business tort claims'],
-    note: 'Hourly, structured fixed-fee, or hybrid billing models.',
-  },
-  {
-    icon: Shield,
-    title: 'Corporate Law',
-    tagline: 'Advisory for growth and compliance.',
-    desc: 'Clear legal guidance for private and public companies navigating formation, corporate governance, venture capital, and board operations.',
-    items: ['Venture capital & private equity', 'Corporate governance & bylaws', 'Regulatory compliance audits', 'Securities filings & advice', 'Employee stock option setups', 'Joint venture negotiations'],
-    note: 'Ongoing general counsel retainer plans available.',
-  },
-  {
-    icon: Building,
-    title: 'Mergers & Acquisitions',
-    tagline: 'Transactions executed with precision.',
-    desc: 'Comprehensive buy-side and sell-side transaction advisory for mid-market business acquisitions, restructurings, and divestitures.',
-    items: ['Deal structure & negotiation', 'Bespoke due diligence audits', 'Asset & stock purchase agreements', 'Post-merger integration counsel', 'Venture capital backing', 'Restructurings & spin-offs'],
-    note: 'Success-aligned transaction models available.',
-  },
-  {
-    icon: Award,
-    title: 'Estate Planning & Trusts',
-    tagline: 'Protect wealth for generations.',
-    desc: 'Designing tax-efficient trust and estate structures to preserve private family wealth and manage corporate succession.',
-    items: ['Revocable & irrevocable trusts', 'Estate tax minimization planning', 'Corporate succession blueprints', 'Family office legal structures', 'Asset protection vehicles', 'Probate representation'],
-    note: 'Custom estate plans starting at $2,500.',
-  },
-  {
-    icon: FileText,
-    title: 'Real Estate & Fiduciary Disputes',
-    tagline: 'Safeguarding commercial investments.',
-    desc: 'Resolving complex commercial property conflicts, landlord/tenant disputes, boundary disagreements, and trustee challenges.',
-    items: ['Commercial lease litigation', 'Partition actions & title claims', 'Easement & boundary disputes', 'Trustee & executor defense', 'Property development audits', 'Land use & zoning advocacy'],
-    note: 'Strategic litigation and mediation advisory.',
-  },
-];
-
-export default function SterlingServices() {
+export default function SterlingLawGroupServices() {
   return (
-    <div style={{ backgroundColor: BG, color: '#fff' }} className="overflow-x-hidden">
+    <div className="flex flex-col min-h-screen">
       
-      {/* Title Banner */}
-      <section className="py-24 px-6 md:px-12 text-center bg-[#0A0A0A] border-b border-white/5 relative overflow-hidden">
-        <span className="text-[#C9A84C] font-mono font-bold text-xs tracking-[0.25em] uppercase block mb-4">Our Practices</span>
-        <h1 className="text-4xl md:text-6xl font-sans font-black text-white mb-6 leading-none">Bespoke Legal Solutions</h1>
-        <p className="text-gray-400 max-w-xl mx-auto text-sm font-light leading-relaxed">
-          Focused advocacy across high-stakes corporate trials, compliance transactions, and wealth preservation.
-        </p>
-      </section>
-
-      {/* Services Grid with unique alternating roundings */}
-      <section className="py-24 px-6 md:px-12 max-w-5xl mx-auto">
-        <div className="space-y-12">
-          {PRACTICE_AREAS.map(({ icon: Icon, title, tagline, desc, items, note }, i) => (
-            <div 
-              key={i} 
-              className={`p-8 md:p-12 border border-[#C9A84C]/15 hover:border-[#C9A84C]/50 transition-all duration-500 grid md:grid-cols-[1.1fr_1fr] gap-12 text-left shadow-lg ${
-                i % 2 === 0 ? 'rounded-tl-[40px] rounded-br-[40px]' : 'rounded-tr-[40px] rounded-bl-[40px]'
-              }`}
-              style={{ backgroundColor: CARD }}
-            >
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full border border-[#C9A84C]/35 flex items-center justify-center bg-white/5">
-                    <Icon className="w-4.5 h-4.5" style={{ color: GOLD }} strokeWidth={1.5} />
-                  </div>
-                  <h2 className="font-sans font-black text-xl text-white uppercase tracking-wide">{title}</h2>
-                </div>
-                <div className="text-[10px] font-mono font-bold uppercase tracking-widest" style={{ color: GOLD }}>{tagline}</div>
-                <p className="text-white/70 text-xs leading-relaxed font-light">{desc}</p>
-                <div className="text-xs font-mono p-4 border-l-2 text-white/95" style={{ borderColor: GOLD, backgroundColor: BG }}>{note}</div>
-              </div>
-              
-              <div className="flex flex-col justify-center">
-                <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-white/30 mb-5 block">Core Matters Managed</span>
-                <div className="grid grid-cols-1 gap-3.5">
-                  {items.map((item, j) => (
-                    <div key={j} className="flex items-start gap-2.5 text-xs text-white/60 font-light">
-                      <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+      {/* Page Header */}
+      <section className="bg-slate-950 text-white py-16 lg:py-24 px-6 md:px-12 relative overflow-hidden border-b border-slate-900 text-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1e293b_0%,transparent_70%)] opacity-30 pointer-events-none" />
+        <div className="max-w-4xl mx-auto space-y-6 relative z-10">
+          <span className="text-xs font-black uppercase tracking-[0.2em] text-yellow-400">
+            Our Professional Offerings
+          </span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-sans font-black tracking-tight text-white leading-none"
+              dangerouslySetInnerHTML={{ __html: `Bespoke Legal Solutions` }} />
+          <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium">
+            Focused advocacy across high-stakes corporate trials, compliance transactions, and wealth preservation.
+          </p>
         </div>
       </section>
 
-      {/* Footer CTA */}
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
-        <div className="bg-[#C9A84C] rounded-tl-[64px] rounded-br-[64px] py-16 px-8 text-center shadow-2xl text-slate-900 border border-[#C9A84C]">
-          <h2 className="text-3xl font-sans font-black text-[#0A0A0A] mb-4">Schedule a confidential consultation.</h2>
-          <p className="text-[#0A0A0A]/75 text-xs font-light mb-8 max-w-sm mx-auto">Direct client-to-partner interaction. Candid assessments from day one.</p>
-          <div className="pt-2">
-            <Link href={`${BASE}/contact`} className="inline-flex items-center gap-2 bg-[#0A0A0A] hover:bg-[#FAF8F2] hover:text-[#0A0A0A] text-white font-mono font-bold uppercase tracking-widest text-[10px] px-10 py-5 transition-all">
-              Request Free Consultation <ArrowRight className="w-4 h-4" />
-            </Link>
+      {/* Services Cards Listing */}
+      <section className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+              Complete Menu
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Services We Offer
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {SERVICES.map((item, idx) => (
+              <div 
+                key={idx}
+                className="bg-slate-50 border border-slate-200/50 p-8 rounded-3xl flex flex-col justify-between text-left min-h-[340px]"
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white mb-6 shadow-md">
+                    <Scale className="w-5 h-5 text-yellow-400" />
+                  </div>
+                  <h4 className="font-sans font-black text-xl text-slate-900 mb-3 text-left">{item.name}</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed font-medium text-left">{item.desc}</p>
+                </div>
+                <div className="pt-6 border-t border-slate-200/30 flex items-center justify-between mt-auto">
+                  <span className="text-xs font-bold text-slate-400">Starting Price</span>
+                  <span className="text-lg font-black text-slate-900">{item.price || 'Custom Quote'}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Packages Section if exists */}
+      {PACKAGES.length > 0 && (
+        <section className="py-24 px-6 md:px-12 bg-white border-t border-slate-100">
+          <div className="max-w-7xl mx-auto space-y-16">
+            <div className="text-center max-w-2xl mx-auto space-y-4">
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Bundled Value</span>
+              <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">Service Packages</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {PACKAGES.map((pkg: any, idx: number) => (
+                <div key={idx} className="bg-slate-50 border border-slate-200/50 p-8 rounded-3xl text-left flex flex-col justify-between min-h-[400px]">
+                  <div>
+                    {pkg.tag && <span className="inline-block text-[9px] font-black uppercase tracking-widest text-yellow-400 bg-slate-900 px-3 py-1 rounded-full mb-4">{pkg.tag}</span>}
+                    <h4 className="font-sans font-black text-xl text-slate-900 mb-2">{pkg.name}</h4>
+                    <p className="text-xs text-slate-500 font-medium mb-6">{pkg.desc}</p>
+                    <ul className="space-y-3 mb-8">
+                      {pkg.features && pkg.features.map((feat: string, i: number) => (
+                        <li key={i} className="flex gap-2 items-center text-xs font-semibold text-slate-700">
+                          <Check className="w-3.5 h-3.5 text-yellow-400 shrink-0 stroke-[3]" />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="pt-6 border-t border-slate-200/30 flex items-baseline gap-1 mt-auto">
+                    <span className="text-2xl font-black text-slate-900">{pkg.price}</span>
+                    {pkg.per && <span className="text-xs font-bold text-slate-400">/{pkg.per}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Pricing Tables */}
+      <section className="py-24 px-6 md:px-12 bg-slate-50 border-t border-slate-200/80">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <div className="text-center space-y-4">
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+              Simple Transparency
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-sans font-black tracking-tight text-slate-900 leading-none">
+              Pricing Details
+            </h3>
+          </div>
+
+          <div className="border border-slate-200/80 bg-white rounded-3xl overflow-hidden shadow-sm">
+            <div className="grid grid-cols-2 text-[10px] font-black uppercase tracking-widest px-6 py-4 bg-slate-900 text-white text-left">
+              <span>Service Name</span>
+              <span className="text-right">Estimated Rate</span>
+            </div>
+            {PRICING.map((item, idx) => (
+              <div 
+                key={idx}
+                className={`grid grid-cols-2 px-6 py-5 text-sm border-t border-slate-100 text-left ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}`}
+              >
+                <span className="font-bold text-slate-800">{item.service}</span>
+                <span className="text-right font-black text-slate-900">{item.price}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-[10px] text-slate-400 font-medium text-center">
+            * Final costs may fluctuate based on exact project complexity, sizes, or assessments. Complete estimates provided prior to booking.
+          </p>
+        </div>
+      </section>
+
+      {/* Accent CTA Banner */}
+      <section className="bg-sky-600 py-16 px-6 md:px-12 relative overflow-hidden text-white">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10 text-left">
+          
+          <div className="space-y-4 max-w-2xl">
+            <h3 className="text-3xl md:text-4xl font-sans font-black tracking-tight leading-tight">
+              Ready to secure your appointment schedule?
+            </h3>
+            <p className="text-sky-100 text-sm font-medium leading-relaxed">
+              Book online in under 60 seconds or contact our team directly for custom solutions.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
+            <Link 
+              href={`${BASE}/contact`}
+              className="bg-yellow-400 text-slate-950 hover:bg-yellow-500 font-sans font-black uppercase text-xs tracking-widest px-8 py-4 rounded-xl shadow-lg text-center"
+            >
+              Book Session
+            </Link>
+            <a 
+              href="tel:6155550190"
+              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-white/20 hover:bg-white/10 transition-all font-bold text-sm"
+            >
+              <Phone className="w-5 h-5 text-white" />
+              <span>(615) 555-0190</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
