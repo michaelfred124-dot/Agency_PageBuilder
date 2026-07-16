@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getTenantBySubdomain, getTenantByCustomDomain, getPageData } from '@/lib/supabase';
 import { Renderers } from '@/lib/blocks';
+import { BentoPublishedGrid } from '@/components/BentoPublishedGrid';
 
 export const dynamic = 'force-dynamic';
 
@@ -98,18 +99,22 @@ export default async function TenantPage({ params }: TenantPageProps) {
       `}} />
 
       <main style={themeStyle} className="@container min-h-screen">
-        {sections.map((section: any) => {
-          const Renderer = Renderers[section.type];
-          if (!Renderer) {
-            console.warn(`[TenantPage] No renderer found for block type: ${section.type}`);
-            return null;
-          }
-          return (
-            <div key={section.id}>
-              {Renderer({ ...(section.props || {}), tenantId: tenant.id })}
-            </div>
-          );
-        })}
+        {sections.some((s: any) => s.gridX !== undefined || s.type === 'menu' || s.type === 'product') ? (
+          <BentoPublishedGrid widgets={sections} />
+        ) : (
+          sections.map((section: any) => {
+            const Renderer = Renderers[section.type];
+            if (!Renderer) {
+              console.warn(`[TenantPage] No renderer found for block type: ${section.type}`);
+              return null;
+            }
+            return (
+              <div key={section.id}>
+                {Renderer({ ...(section.props || {}), tenantId: tenant.id })}
+              </div>
+            );
+          })
+        )}
 
         {sections.length === 0 && (
           <div className="flex items-center justify-center min-h-screen bg-gray-50">

@@ -109,7 +109,7 @@ export const GS_SCHEMAS = {
         {
           title: "Backyard Retreat",
           loc: "Sunnyvale, CA",
-          img: "https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=800&q=80",
+          img: "https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=800&q=80",
         },
         {
           title: "Modern Front Yard",
@@ -124,7 +124,7 @@ export const GS_SCHEMAS = {
         {
           title: "Drought-Tolerant",
           loc: "Santa Clara, CA",
-          img: "https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80",
+          img: "https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=800&q=80",
         },
       ],
     },
@@ -391,12 +391,12 @@ export const GS_RENDERERS = {
     return (
       <header className="w-full flex flex-col shrink-0">
         {/* Top Bar */}
-        <div className="bg-[#1A1A1A] text-white py-2 px-6 md:px-12 text-[10px] md:text-xs font-medium flex justify-between items-center border-b border-white/10 uppercase tracking-widest">
+        <div className="bg-[#1A1A1A] text-white py-2 px-6 @md:px-12 text-[10px] @md:text-xs font-medium flex justify-between items-center border-b border-white/10 uppercase tracking-widest">
           <div className="flex items-center gap-2">
              <MapPin className="w-3 h-3 text-[#7BA05C]" />
              {address}
           </div>
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden @md:flex items-center gap-6">
              <div className="flex items-center gap-2">
                <Clock className="w-3 h-3 text-[#7BA05C]" />
                {hours}
@@ -409,7 +409,7 @@ export const GS_RENDERERS = {
         </div>
 
         {/* Navbar */}
-        <nav className="bg-white py-5 px-6 md:px-12 flex justify-between items-center relative z-50 border-b border-[#F7F6F2]">
+        <nav className="bg-white py-5 px-6 @md:px-12 flex justify-between items-center relative z-50 border-b border-[#F7F6F2]">
           <div className="flex items-center gap-2">
             <div className="bg-[#4C6B36] p-1.5 rounded-lg">
               <Leaf className="w-6 h-6 text-white" />
@@ -420,7 +420,7 @@ export const GS_RENDERERS = {
             </div>
           </div>
           
-          <div className="hidden lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-[#1A1A1A]">
+          <div className="hidden @lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-[#1A1A1A]">
             <Link href="#" className="hover:text-[#4C6B36] transition-colors border-b-2 border-transparent pb-1">Home</Link>
             <Link href="#" className="hover:text-[#4C6B36] transition-colors border-b-2 border-transparent pb-1">Services</Link>
             <Link href="#" className="hover:text-[#4C6B36] transition-colors border-b-2 border-transparent pb-1">About</Link>
@@ -432,7 +432,7 @@ export const GS_RENDERERS = {
             <button className="bg-[#4C6B36] text-white px-6 py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#3D552B] transition-all flex items-center gap-2 rounded-md">
               {ctaText} <ArrowRight className="w-4 h-4" />
             </button>
-            <button className="lg:hidden text-zinc-900" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <button className="@lg:hidden text-zinc-900" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               <Menu className="w-6 h-6" />
             </button>
           </div>

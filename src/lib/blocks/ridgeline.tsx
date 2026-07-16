@@ -18,7 +18,7 @@ export function RLHeader(props: any) {
   const ctaText = props.ctaText || 'BOOK ONLINE';
   const navLinks: string[] = props.navLinks || ['HOME', 'SERVICES', 'ABOUT', 'REVIEWS', 'LOCATION'];
   return (
-    <header style={{ backgroundColor: RL_DARK }} className="py-4 px-6 md:px-14 flex items-center justify-between sticky top-0 z-50 shadow-2xl">
+    <header style={{ backgroundColor: RL_DARK }} className="py-4 px-6 @md:px-14 flex items-center justify-between sticky top-0 z-50 shadow-2xl">
       <div>
         <div className="flex items-center gap-2">
           <Wrench className="w-5 h-5" style={{ color: RL_RED }} />
@@ -26,12 +26,12 @@ export function RLHeader(props: any) {
         </div>
         <div className="text-[9px] font-bold tracking-[0.22em] uppercase mt-0.5 text-gray-400">{tagline}</div>
       </div>
-      <nav className="hidden lg:flex items-center gap-6">
+      <nav className="hidden @lg:flex items-center gap-6">
         {navLinks.map((link: string, i: number) => (
           <a key={i} href="#" className="text-gray-300 hover:text-white text-xs font-bold tracking-widest transition-colors">{link}</a>
         ))}
       </nav>
-      <div className="hidden lg:flex items-center gap-3">
+      <div className="hidden @lg:flex items-center gap-3">
         <a href={`tel:${phone}`} className="text-gray-300 text-sm font-bold flex items-center gap-1.5">
           <Phone className="w-4 h-4 text-red-400" />{phone}
         </a>
@@ -54,11 +54,11 @@ export function RLHero(props: any) {
         <img src={bgImage} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.2) 100%)' }} />
       </div>
-      <div className="relative z-10 px-6 md:px-14 max-w-3xl">
+      <div className="relative z-10 px-6 @md:px-14 max-w-3xl">
         <div className="inline-flex items-center gap-2 text-xs font-black tracking-widest uppercase mb-5 px-3 py-1.5" style={{ backgroundColor: RL_RED, color: 'white' }}>
           <Star className="w-3 h-3 fill-current" /> {badge}
         </div>
-        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-5">{title}</h1>
+        <h1 className="text-4xl @md:text-6xl font-black text-white leading-tight mb-5">{title}</h1>
         <p className="text-gray-300 text-lg mb-8 leading-relaxed">{subtitle}</p>
         <div className="flex flex-wrap gap-4">
           <a href="#" style={{ backgroundColor: RL_RED }} className="inline-flex items-center gap-2 text-white font-black text-sm px-8 py-4 tracking-widest hover:opacity-90 transition-opacity">{ctaText} <ArrowRight className="w-4 h-4" /></a>
@@ -78,10 +78,10 @@ export function RLStats(props: any) {
   ];
   return (
     <section style={{ backgroundColor: RL_GRAY }} className="py-10">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 @md:grid-cols-4 gap-4">
         {stats.map((s: any, i: number) => (
           <div key={i} className="text-center py-4 border-r border-gray-500 last:border-0">
-            <div className="text-3xl md:text-4xl font-black text-white mb-1">{s.value}</div>
+            <div className="text-3xl @md:text-4xl font-black text-white mb-1">{s.value}</div>
             <div className="text-gray-400 text-xs font-semibold tracking-wide uppercase">{s.label}</div>
           </div>
         ))}
@@ -95,14 +95,14 @@ export function RLServices(props: any) {
   const subtitle = props.subtitle || 'From oil changes to full engine rebuilds — we handle it all.';
   const services = props.services || [];
   return (
-    <section style={{ backgroundColor: RL_LIGHT }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: RL_LIGHT }} className="py-24 px-6 @md:px-14">
       <div className="max-w-6xl mx-auto">
         <div className="mb-14">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: RL_RED }}>What We Fix</div>
           <h2 className="text-4xl font-black text-gray-900 mb-3">{title}</h2>
           <p className="text-gray-500 max-w-xl">{subtitle}</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-4">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.icon] || Wrench;
             return (
@@ -128,13 +128,13 @@ export function RLProcess(props: any) {
   const title = props.title || 'Getting your car fixed has never been easier';
   const steps = props.steps || [];
   return (
-    <section style={{ backgroundColor: RL_DARK }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: RL_DARK }} className="py-24 px-6 @md:px-14">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: RL_RED }}>How It Works</div>
           <h2 className="text-4xl font-black text-white">{title}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-8">
           {steps.map((step: any, i: number) => {
             const Icon = (LucideIcons as any)[step.icon] || CheckCircle;
             return (
@@ -160,13 +160,13 @@ export function RLTestimonials(props: any) {
   const title = props.title || 'What Our Customers Say';
   const reviews = props.reviews || [];
   return (
-    <section style={{ backgroundColor: RL_LIGHT }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: RL_LIGHT }} className="py-24 px-6 @md:px-14">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: RL_RED }}>Reviews</div>
           <h2 className="text-4xl font-black text-gray-900">{title}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-2 gap-6">
           {reviews.map((r: any, i: number) => (
             <div key={i} className="bg-white p-8 shadow-sm border-b-4" style={{ borderBottomColor: RL_RED }}>
               <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: '#F59E0B' }} />)}</div>
@@ -194,7 +194,7 @@ export function RLCTA(props: any) {
     <section style={{ backgroundColor: RL_RED }} className="py-20 px-6 text-center">
       <div className="max-w-2xl mx-auto">
         <Car className="w-10 h-10 text-white/60 mx-auto mb-5" />
-        <h2 className="text-3xl md:text-5xl font-black text-white mb-4">{title}</h2>
+        <h2 className="text-3xl @md:text-5xl font-black text-white mb-4">{title}</h2>
         <p className="text-white/80 text-lg mb-8">{subtitle}</p>
         <a href="#" className="inline-flex items-center gap-2 bg-white font-black text-sm px-10 py-5 hover:bg-gray-100 transition-colors tracking-widest" style={{ color: RL_RED }}>{buttonText} <ArrowRight className="w-4 h-4" /></a>
       </div>
@@ -211,8 +211,8 @@ export function RLFooter(props: any) {
   const address = props.address || '2847 Commerce Blvd, Suite A';
   const licensing = props.licensing || 'ASE Certified Technicians';
   return (
-    <footer style={{ backgroundColor: '#111' }} className="py-14 px-6 md:px-14">
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 border-b border-gray-700 pb-10 mb-8">
+    <footer style={{ backgroundColor: '#111' }} className="py-14 px-6 @md:px-14">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 @md:grid-cols-3 gap-10 border-b border-gray-700 pb-10 mb-8">
         <div>
           <div className="flex items-center gap-2 mb-2"><Wrench className="w-4 h-4" style={{ color: RL_RED }} /><span className="text-white font-black tracking-wider">{businessName}</span></div>
           <p className="text-gray-500 text-xs leading-relaxed mb-3">{description}</p>

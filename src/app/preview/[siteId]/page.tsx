@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { Renderers, SectionData } from '@/lib/blocks';
 import PreviewWrapper from '@/components/PreviewWrapper';
 import { TEMPLATES, TEMPLATE_PAGES } from '@/lib/templates';
+import { BentoPublishedGrid } from '@/components/BentoPublishedGrid';
 
 interface PageItem {
   name: string;
@@ -123,6 +124,8 @@ export default function PreviewPage() {
           <div className="h-64 flex flex-col items-center justify-center text-black/40 bg-white">
              <p className="font-black uppercase tracking-widest text-sm">No sections yet</p>
           </div>
+        ) : sections.some((s: any) => s.gridX !== undefined || s.type === 'menu' || s.type === 'product' || s.type === 'edi-section') ? (
+          <BentoPublishedGrid widgets={sections as any} />
         ) : (
           sections.map((section) => {
             const Renderer = Renderers[section.type];

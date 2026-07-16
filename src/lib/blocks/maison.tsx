@@ -22,11 +22,11 @@ export function MBHero(props: any) {
     <section className="relative h-screen min-h-[600px] flex flex-col justify-end overflow-hidden">
       <Image src={bgImage} alt="Hero" fill className="object-cover" referrerPolicy="no-referrer" />
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(44,26,14,0.88) 0%, rgba(44,26,14,0.3) 45%, rgba(44,26,14,0.05) 100%)' }} />
-      <div className="relative z-10 px-8 md:px-16 pb-16">
+      <div className="relative z-10 px-8 @md:px-16 pb-16">
         <div className="inline-block text-xs font-semibold tracking-[0.28em] uppercase mb-6 px-4 py-2 rounded-full" style={{ backgroundColor: 'rgba(242,234,217,0.15)', color: MB_SAND, border: '1px solid rgba(242,234,217,0.25)' }}>
           {badge}
         </div>
-        <h1 className="text-5xl md:text-8xl font-light text-white leading-[1.0] tracking-tight mb-5 whitespace-pre-line" style={{ fontFamily: 'Georgia, "Playfair Display", serif' }}>{headline}</h1>
+        <h1 className="text-5xl @md:text-8xl font-light text-white leading-[1.0] tracking-tight mb-5 whitespace-pre-line" style={{ fontFamily: 'Georgia, "Playfair Display", serif' }}>{headline}</h1>
         <p className="text-base text-white/65 mb-8 max-w-md font-light leading-relaxed">{sub}</p>
         <div className="flex flex-wrap gap-4 items-center">
           <button style={{ backgroundColor: MB_SAND, color: MB_ESPRESSO }} className="inline-flex items-center gap-2 font-semibold text-sm px-8 py-3.5 rounded-full transition-all hover:opacity-90 tracking-wide">
@@ -49,13 +49,13 @@ export function MBAbout(props: any) {
   const image = props.image || 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=2070&q=80';
   return (
     <section style={{ backgroundColor: MB_SAND }} className="py-0 px-0">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch">
-        <div className="relative aspect-[4/5] md:aspect-auto min-h-[500px] overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 @md:grid-cols-2 gap-0 items-stretch">
+        <div className="relative aspect-[4/5] @md:aspect-auto min-h-[500px] overflow-hidden">
           <Image src={image} alt="About" fill className="object-cover" referrerPolicy="no-referrer" />
         </div>
-        <div className="flex flex-col justify-center px-8 md:px-16 py-16">
+        <div className="flex flex-col justify-center px-8 @md:px-16 py-16">
           <div className="text-xs font-bold tracking-[0.28em] uppercase mb-6" style={{ color: MB_SAGE }}>{eyebrow}</div>
-          <h2 className="text-4xl md:text-5xl font-light leading-[1.15] mb-8 whitespace-pre-line" style={{ color: MB_ESPRESSO, fontFamily: 'Georgia, serif' }}>{headline}</h2>
+          <h2 className="text-4xl @md:text-5xl font-light leading-[1.15] mb-8 whitespace-pre-line" style={{ color: MB_ESPRESSO, fontFamily: 'Georgia, serif' }}>{headline}</h2>
           <p className="text-base leading-relaxed mb-10" style={{ color: MB_TAUPE }}>{body}</p>
           <button className="self-start inline-flex items-center gap-2 text-sm font-semibold tracking-wide pb-1 border-b-2 transition-all hover:gap-3" style={{ color: MB_ESPRESSO, borderColor: MB_ESPRESSO }}>
             {ctaText} <ArrowRight className="w-4 h-4" />
@@ -75,18 +75,18 @@ export function MBCollections(props: any) {
     { label: 'Sale', sub: 'Up to 40% off', image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80' },
   ];
   return (
-    <section className="py-20 px-6 md:px-12 bg-white">
+    <section className="py-20 px-6 @md:px-12 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-12">
           <div>
             <div className="text-xs font-bold tracking-[0.28em] uppercase mb-3" style={{ color: MB_SAGE }}>{eyebrow}</div>
-            <h2 className="text-4xl md:text-5xl font-light" style={{ color: MB_ESPRESSO, fontFamily: 'Georgia, serif' }}>{title}</h2>
+            <h2 className="text-4xl @md:text-5xl font-light" style={{ color: MB_ESPRESSO, fontFamily: 'Georgia, serif' }}>{title}</h2>
           </div>
-          <button className="hidden md:inline-flex items-center gap-2 text-sm font-semibold pb-0.5 border-b" style={{ color: MB_ESPRESSO, borderColor: MB_ESPRESSO }}>
+          <button className="hidden @md:inline-flex items-center gap-2 text-sm font-semibold pb-0.5 border-b" style={{ color: MB_ESPRESSO, borderColor: MB_ESPRESSO }}>
             View All <ArrowRight className="w-4 h-4" />
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-5">
           {collections.map((col: any, i: number) => (
             <div key={i} className="group cursor-pointer">
               <div className="relative aspect-[3/4] overflow-hidden rounded-2xl mb-4">
@@ -112,10 +112,10 @@ export function MBQuote(props: any) {
   const quote = props.quote || 'Style is a way of saying who you are without having to speak.';
   const attribution = props.attribution || '— Rachel Zoe';
   return (
-    <section style={{ backgroundColor: MB_ESPRESSO }} className="py-24 px-8 md:px-16 text-center">
+    <section style={{ backgroundColor: MB_ESPRESSO }} className="py-24 px-8 @md:px-16 text-center">
       <div className="max-w-4xl mx-auto">
-        <div className="text-6xl md:text-8xl font-thin mb-2 leading-none" style={{ color: 'rgba(242,234,217,0.15)', fontFamily: 'Georgia, serif' }}>"</div>
-        <blockquote className="text-2xl md:text-4xl font-light text-white leading-[1.4] mb-8" style={{ fontFamily: 'Georgia, serif' }}>{quote}</blockquote>
+        <div className="text-6xl @md:text-8xl font-thin mb-2 leading-none" style={{ color: 'rgba(242,234,217,0.15)', fontFamily: 'Georgia, serif' }}>"</div>
+        <blockquote className="text-2xl @md:text-4xl font-light text-white leading-[1.4] mb-8" style={{ fontFamily: 'Georgia, serif' }}>{quote}</blockquote>
         <cite className="text-xs font-semibold tracking-[0.25em] uppercase not-italic" style={{ color: MB_TAUPE }}>{attribution}</cite>
       </div>
     </section>
@@ -131,13 +131,13 @@ export function MBTestimonials(props: any) {
     { name: 'Taylor M.', rating: 5, text: 'Ordered online and everything arrived beautifully packaged. Sizing was perfect and the fabric quality is way above the price point.' },
   ];
   return (
-    <section style={{ backgroundColor: MB_SAND }} className="py-20 px-6 md:px-12">
+    <section style={{ backgroundColor: MB_SAND }} className="py-20 px-6 @md:px-12">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-bold tracking-[0.28em] uppercase mb-4" style={{ color: MB_SAGE }}>{eyebrow}</div>
-          <h2 className="text-4xl md:text-5xl font-light" style={{ color: MB_ESPRESSO, fontFamily: 'Georgia, serif' }}>{title}</h2>
+          <h2 className="text-4xl @md:text-5xl font-light" style={{ color: MB_ESPRESSO, fontFamily: 'Georgia, serif' }}>{title}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-6">
           {reviews.map((rev: any, i: number) => (
             <div key={i} className="bg-white rounded-2xl p-8 shadow-sm">
               <div className="flex gap-0.5 mb-5">
@@ -164,9 +164,9 @@ export function MBNewsletter(props: any) {
   return (
     <section style={{ backgroundColor: MB_SAGE }} className="py-20 px-6">
       <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-light text-white mb-4" style={{ fontFamily: 'Georgia, serif' }}>{headline}</h2>
+        <h2 className="text-4xl @md:text-5xl font-light text-white mb-4" style={{ fontFamily: 'Georgia, serif' }}>{headline}</h2>
         <p className="text-white/70 mb-10 text-base font-light">{sub}</p>
-        <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => e.preventDefault()}>
+        <form className="flex flex-col @sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => e.preventDefault()}>
           <input
             type="email"
             placeholder={placeholder}
@@ -191,10 +191,10 @@ export function MBFooter(props: any) {
   const company: string[] = props.company || ['Our Story', 'Sustainability', 'Press', 'Careers'];
   const support: string[] = props.support || ['Sizing Guide', 'Shipping & Returns', 'FAQ', 'Contact Us'];
   return (
-    <footer style={{ backgroundColor: MB_SAND }} className="py-14 px-6 md:px-12">
+    <footer style={{ backgroundColor: MB_SAND }} className="py-14 px-6 @md:px-12">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12 pb-12" style={{ borderBottom: `1px solid ${MB_TAUPE}66` }}>
-          <div className="col-span-2 md:col-span-1">
+        <div className="grid grid-cols-2 @md:grid-cols-4 gap-10 mb-12 pb-12" style={{ borderBottom: `1px solid ${MB_TAUPE}66` }}>
+          <div className="col-span-2 @md:col-span-1">
             <div className="font-light text-2xl mb-2" style={{ color: MB_ESPRESSO, fontFamily: 'Georgia, serif' }}>{businessName}</div>
             <div className="text-xs mb-6" style={{ color: MB_TAUPE }}>{tagline}</div>
             <div className="flex gap-3">

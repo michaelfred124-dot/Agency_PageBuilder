@@ -37,7 +37,7 @@ function SunIcon(props: any) {
 
 export function BrighterSolarHeader(props: any) {
   return (
-    <header className="bg-[#0A1628] text-white py-4 px-6 md:px-12 flex items-center justify-between shadow-md relative z-50">
+    <header className="bg-[#0A1628] text-white py-4 px-6 @md:px-12 flex items-center justify-between shadow-md relative z-50">
       <div className="flex items-center gap-2">
          <SunIcon className="w-8 h-8 text-[#fbbf24]" />
          <div>
@@ -46,19 +46,19 @@ export function BrighterSolarHeader(props: any) {
          </div>
       </div>
       
-      <nav className="hidden lg:flex items-center gap-8 text-sm font-bold tracking-wide">
+      <nav className="hidden @lg:flex items-center gap-8 text-sm font-bold tracking-wide">
          {(props.navLinks || []).map((link: any, i: number) => (
            <Link key={i} href="#" className={`${i === 0 ? 'text-[#fbbf24] border-b-2 border-[#fbbf24] pb-1' : 'hover:text-[#fbbf24] transition-colors'} uppercase`}>{link}</Link>
          ))}
       </nav>
 
-      <div className="hidden lg:block">
+      <div className="hidden @lg:block">
          <button className="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0A1628] font-black py-3 px-6 rounded-full flex items-center gap-2 transition-transform hover:scale-105 text-sm uppercase tracking-wide">
            {props.ctaText || "GET A FREE QUOTE"} <ArrowRight className="w-4 h-4 text-[#0A1628]" strokeWidth={3} />
          </button>
       </div>
 
-      <button className="lg:hidden text-white">
+      <button className="@lg:hidden text-white">
         <Menu className="w-6 h-6" />
       </button>
     </header>
@@ -67,7 +67,7 @@ export function BrighterSolarHeader(props: any) {
 
 export function BrighterSolarHero(props: any) {
   return (
-    <section className="relative pt-20 pb-40 px-6 md:px-12 bg-[#0A1628] overflow-hidden">
+    <section className="relative pt-20 pb-40 px-6 @md:px-12 bg-[#0A1628] overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image 
           src={props.backgroundImage || "https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=2070&q=80"}
@@ -78,19 +78,19 @@ export function BrighterSolarHero(props: any) {
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A1628] via-[#0A1628]/80 to-transparent"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between">
+      <div className="relative z-10 max-w-7xl mx-auto flex flex-col @lg:flex-row items-center justify-between">
          <div className="max-w-3xl">
            <div className="text-[#fbbf24] font-extrabold text-sm tracking-widest uppercase mb-4">
              {props.subheading || "CLEAN PANELS. MAX POWER."}
            </div>
-           <h1 className="text-5xl md:text-7xl font-black text-white leading-[1.05] mb-6 whitespace-pre-wrap">
+           <h1 className="text-5xl @md:text-7xl font-black text-white leading-[1.05] mb-6 whitespace-pre-wrap">
              {props.headline || "MORE SUN.\nMORE POWER.\nMORE SAVINGS."}
            </h1>
-           <p className="text-lg md:text-xl text-white/90 mb-10 max-w-xl font-medium leading-relaxed">
+           <p className="text-lg @md:text-xl text-white/90 mb-10 max-w-xl font-medium leading-relaxed">
              {props.description || "Professional solar panel cleaning that removes dirt, dust & grime so your system performs at its best."}
            </p>
 
-           <div className="flex flex-col sm:flex-row gap-4 mb-16 lg:mb-0">
+           <div className="flex flex-col @sm:flex-row gap-4 mb-16 @lg:mb-0">
              <button className="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0A1628] font-black py-4 px-8 rounded-full flex items-center justify-center gap-2 transition-transform hover:scale-105 uppercase tracking-wide">
                {props.primaryButton || "GET A FREE QUOTE"} <ArrowRight className="w-5 h-5 text-[#0A1628]" strokeWidth={3} />
              </button>
@@ -101,7 +101,7 @@ export function BrighterSolarHero(props: any) {
          </div>
 
          {/* Rating Badge */}
-         <div className="hidden lg:flex flex-col items-center bg-[#0F203C]/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-2xl relative mt-32">
+         <div className="hidden @lg:flex flex-col items-center bg-[#0F203C]/80 backdrop-blur-sm border border-white/10 rounded-2xl p-6 shadow-2xl relative mt-32">
            <div className="flex gap-1 mb-2">
              {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 fill-[#fbbf24] text-[#fbbf24]" />)}
              <span className="text-white font-black ml-2 text-xl">5.0</span>
@@ -111,9 +111,9 @@ export function BrighterSolarHero(props: any) {
       </div>
 
       {/* Feature Bar attached to Hero */}
-      <div className="absolute bottom-0 left-0 right-0 transform translate-y-1/2 px-6 md:px-12 z-20">
-        <div className="max-w-6xl mx-auto bg-[#0F203C] rounded-2xl p-6 md:p-10 flex flex-col md:flex-row gap-8 justify-between shadow-2xl border border-white/5 border-t-blue-400/20 text-white">
-          <div className="flex items-center md:items-start gap-4 flex-1">
+      <div className="absolute bottom-0 left-0 right-0 transform translate-y-1/2 px-6 @md:px-12 z-20">
+        <div className="max-w-6xl mx-auto bg-[#0F203C] rounded-2xl p-6 @md:p-10 flex flex-col @md:flex-row gap-8 justify-between shadow-2xl border border-white/5 border-t-blue-400/20 text-white">
+          <div className="flex items-center @md:items-start gap-4 flex-1">
              <div className="w-12 h-12 rounded-full border-2 border-[#4A90E2]/30 flex items-center justify-center flex-shrink-0">
                <Zap className="w-6 h-6 text-[#4A90E2]" />
              </div>
@@ -123,9 +123,9 @@ export function BrighterSolarHero(props: any) {
              </div>
           </div>
           
-          <div className="hidden md:block w-px bg-white/10 self-stretch"></div>
+          <div className="hidden @md:block w-px bg-white/10 self-stretch"></div>
           
-          <div className="flex items-center md:items-start gap-4 flex-1">
+          <div className="flex items-center @md:items-start gap-4 flex-1">
              <div className="w-12 h-12 rounded-full border-2 border-[#4A90E2]/30 flex items-center justify-center flex-shrink-0">
                <ShieldCheck className="w-6 h-6 text-[#4A90E2]" />
              </div>
@@ -135,9 +135,9 @@ export function BrighterSolarHero(props: any) {
              </div>
           </div>
 
-          <div className="hidden md:block w-px bg-white/10 self-stretch"></div>
+          <div className="hidden @md:block w-px bg-white/10 self-stretch"></div>
 
-          <div className="flex items-center md:items-start gap-4 flex-1">
+          <div className="flex items-center @md:items-start gap-4 flex-1">
              <div className="w-12 h-12 rounded-full border-2 border-[#4A90E2]/30 flex items-center justify-center flex-shrink-0">
                <Droplets className="w-6 h-6 text-[#4A90E2]" />
              </div>
@@ -157,13 +157,13 @@ export function BrighterSolarStats(props: any) {
     Users, Calendar, Shield, Leaf
   };
   return (
-    <section className="pt-48 pb-20 px-6 md:px-12 bg-gray-50 border-b border-gray-200">
-       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+    <section className="pt-48 pb-20 px-6 @md:px-12 bg-gray-50 border-b border-gray-200">
+       <div className="max-w-7xl mx-auto grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-12 @lg:gap-8 divide-y @md:divide-y-0 @md:divide-x divide-gray-200">
          {(props.stats || []).map((stat: any, i: number) => {
            const IconItem = ICON_MAP[stat.icon] || Shield;
            return (
-             <div key={i} className="flex items-center gap-6 pt-6 md:pt-0 md:px-4">
-               <div className="w-16 h-16 text-[#0A1628] hidden lg:block"><IconItem className="w-full h-full stroke-1" /></div>
+             <div key={i} className="flex items-center gap-6 pt-6 @md:pt-0 @md:px-4">
+               <div className="w-16 h-16 text-[#0A1628] hidden @lg:block"><IconItem className="w-full h-full stroke-1" /></div>
                <div>
                  <div className="text-3xl font-black text-[#0A1628] leading-tight">{stat.value}</div>
                  <div className="text-sm font-semibold text-gray-500 mt-1 whitespace-pre-wrap">{stat.label}</div>
@@ -182,12 +182,12 @@ export function BrighterSolarServices(props: any) {
   };
 
   return (
-    <section className="py-24 px-6 md:px-12 bg-[#0b172a]">
+    <section className="py-24 px-6 @md:px-12 bg-[#0b172a]">
        <div className="max-w-7xl mx-auto flex flex-col items-center">
          <div className="text-[#fbbf24] font-black text-sm tracking-widest uppercase mb-4 text-center">{props.subheading || "OUR SERVICES"}</div>
-         <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">{props.heading || "Complete Solar Panel Cleaning Solutions"}</h2>
+         <h2 className="text-4xl @md:text-5xl font-black text-white text-center mb-16">{props.heading || "Complete Solar Panel Cleaning Solutions"}</h2>
 
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+         <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-6 w-full">
            {(props.services || []).map((service: any, i: number) => {
              const IconComponent = ICON_MAP[service.icon] || Home;
              return (
@@ -221,12 +221,12 @@ export function BrighterSolarHowItWorks(props: any) {
   };
 
   return (
-    <section className="py-24 px-6 md:px-12 bg-white">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+    <section className="py-24 px-6 @md:px-12 bg-white">
+      <div className="max-w-7xl mx-auto flex flex-col @lg:flex-row gap-16 items-center">
         
-        <div className="lg:w-1/3 flex flex-col items-center lg:items-start text-center lg:text-left">
+        <div className="@lg:w-1/3 flex flex-col items-center @lg:items-start text-center @lg:text-left">
           <div className="text-[#4A90E2] font-black text-sm tracking-widest uppercase mb-4">{props.subheading || "HOW IT WORKS"}</div>
-          <h2 className="text-4xl md:text-5xl font-black text-[#0A1628] leading-[1.1] mb-8 whitespace-pre-wrap">
+          <h2 className="text-4xl @md:text-5xl font-black text-[#0A1628] leading-[1.1] mb-8 whitespace-pre-wrap">
             {props.heading || "Clean Panels.\nBetter Results."}
           </h2>
           <button className="bg-[#0b172a] hover:bg-[#1a365d] text-white font-bold py-4 px-8 rounded-full flex items-center gap-2 transition-transform hover:scale-105 tracking-wide w-fit cursor-pointer">
@@ -234,12 +234,12 @@ export function BrighterSolarHowItWorks(props: any) {
           </button>
         </div>
 
-        <div className="lg:w-2/3 flex flex-col sm:flex-row justify-between w-full relative">
-          <div className="hidden sm:block absolute top-12 left-1/4 right-1/4 h-[2px] border-t-2 border-dashed border-gray-300 z-0"></div>
+        <div className="@lg:w-2/3 flex flex-col @sm:flex-row justify-between w-full relative">
+          <div className="hidden @sm:block absolute top-12 left-1/4 right-1/4 h-[2px] border-t-2 border-dashed border-gray-300 z-0"></div>
           {(props.steps || []).map((step: any, i: number) => {
             const IconComponent = ICON_MAP[step.icon] || Search;
             return (
-              <div key={i} className="flex flex-col items-center text-center relative z-10 w-full sm:w-1/4 px-2 mb-12 sm:mb-0">
+              <div key={i} className="flex flex-col items-center text-center relative z-10 w-full @sm:w-1/4 px-2 mb-12 @sm:mb-0">
                 <div className="w-24 h-24 rounded-full border-[3px] border-gray-100 bg-white flex items-center justify-center mb-6 shadow-sm">
                   <IconComponent className={`w-10 h-10 ${i % 2 === 0 ? 'text-[#0b172a]' : 'text-[#fbbf24]'}`} strokeWidth={1.5} />
                 </div>
@@ -257,15 +257,15 @@ export function BrighterSolarHowItWorks(props: any) {
 
 export function BrighterSolarTestimonials(props: any) {
   return (
-    <section className="py-24 px-6 md:px-12 relative bg-[#0b172a]">
+    <section className="py-24 px-6 @md:px-12 relative bg-[#0b172a]">
       <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1588602517551-78921e10222f?auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center mix-blend-overlay" />
       <div className="absolute inset-0 bg-[#0b172a]/90" />
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center">
         <div className="text-[#fbbf24] font-black text-sm tracking-widest uppercase mb-4 text-center">{props.subheading || "WHAT OUR CUSTOMERS SAY"}</div>
-        <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">{props.heading || "Real Reviews. Real Results."}</h2>
+        <h2 className="text-4xl @md:text-5xl font-black text-white text-center mb-16">{props.heading || "Real Reviews. Real Results."}</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mb-12">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-8 w-full mb-12">
           {(props.reviews || []).map((review: any, i: number) => (
             <div key={i} className="bg-transparent border border-white/20 rounded-2xl p-8 flex flex-col items-center text-center relative group hover:bg-white/5 transition-colors">
               <div className="absolute top-6 left-6 text-white/5 text-6xl font-serif">"</div>
@@ -296,10 +296,10 @@ export function BrighterSolarPricing(props: any) {
   };
 
   return (
-    <section className="py-24 px-6 md:px-12 bg-[#F8FAFC]">
+    <section className="py-24 px-6 @md:px-12 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         <div className="text-[#007BFF] font-black text-sm tracking-widest uppercase mb-4 text-center">{props.subheading || "PRICING"}</div>
-        <h2 className="text-4xl md:text-5xl font-black text-[#0A1628] text-center mb-12">{props.heading || "Simple Pricing. Powerful Results."}</h2>
+        <h2 className="text-4xl @md:text-5xl font-black text-[#0A1628] text-center mb-12">{props.heading || "Simple Pricing. Powerful Results."}</h2>
 
         <div className="flex items-center gap-4 mb-20 relative">
           <div className="bg-white border-2 border-gray-200 rounded-full p-1.5 flex items-center justify-between w-80 relative shadow-sm">
@@ -312,7 +312,7 @@ export function BrighterSolarPricing(props: any) {
              <div className="absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-[#0A1628] rounded-full transition-transform duration-300 ease-out z-0 translate-x-0"></div>
           </div>
           
-          <div className="absolute -right-20 top-1/2 -translate-y-1/2 hidden md:block opacity-60">
+          <div className="absolute -right-20 top-1/2 -translate-y-1/2 hidden @md:block opacity-60">
              <svg className="w-24 h-12 text-gray-500" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                <path d="M10 25 C 30 10, 60 10, 90 25" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4"/>
              </svg>
@@ -320,12 +320,12 @@ export function BrighterSolarPricing(props: any) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl items-center">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-8 w-full max-w-5xl items-center">
           {(props.plans || []).map((plan: any, i: number) => {
             const IconComponent = ICON_MAP[plan.icon] || Home;
             const isPopular = plan.isPopular;
             return (
-              <div key={i} className={`bg-white rounded-3xl p-8 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow relative ${isPopular ? 'border-4 border-[#0A1628] shadow-2xl transform md:-translate-y-4' : 'border border-gray-200'}`}>
+              <div key={i} className={`bg-white rounded-3xl p-8 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow relative ${isPopular ? 'border-4 border-[#0A1628] shadow-2xl transform @md:-translate-y-4' : 'border border-gray-200'}`}>
                 {isPopular && (
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#fbbf24] text-[#0A1628] font-black text-xs px-4 py-1.5 rounded-full uppercase tracking-widest shadow-md">
                     MOST POPULAR
@@ -369,18 +369,18 @@ export function BrighterSolarPricing(props: any) {
 
 export function BrighterSolarCTA(props: any) {
   return (
-    <section className="px-6 md:px-12 py-12 bg-white">
-       <div className="max-w-6xl mx-auto bg-[#0b172a] rounded-3xl overflow-hidden relative p-10 md:p-16 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-2xl">
+    <section className="px-6 @md:px-12 py-12 bg-white">
+       <div className="max-w-6xl mx-auto bg-[#0b172a] rounded-3xl overflow-hidden relative p-10 @md:p-16 flex flex-col @lg:flex-row items-center justify-between gap-12 shadow-2xl">
           <div className="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=2070&q=80')] mix-blend-screen bg-cover bg-center"></div>
           
-          <div className="relative z-10 max-w-2xl text-center lg:text-left">
-            <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-8">
+          <div className="relative z-10 max-w-2xl text-center @lg:text-left">
+            <h2 className="text-4xl @md:text-5xl font-black text-white leading-tight mb-8">
               {props.heading || "Dirty Panels Cost You Money.\nLet's Change That."}
             </h2>
             
-            <ul className="flex flex-col sm:flex-row gap-6 sm:gap-8 justify-center lg:justify-start text-white/90 font-medium">
+            <ul className="flex flex-col @sm:flex-row gap-6 @sm:gap-8 justify-center @lg:justify-start text-white/90 font-medium">
               {(props.benefits || []).map((benefit: string, i: number) => (
-                <li key={i} className="flex items-center justify-center sm:justify-start gap-2">
+                <li key={i} className="flex items-center justify-center @sm:justify-start gap-2">
                   <CheckCircle2 className="w-5 h-5 text-[#fbbf24]" /> {benefit}
                 </li>
               ))}
@@ -388,7 +388,7 @@ export function BrighterSolarCTA(props: any) {
           </div>
 
           <div className="relative z-10 flex flex-col items-center gap-4 flex-shrink-0">
-             <button className="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0A1628] font-black py-5 px-10 rounded-full flex items-center justify-center gap-3 transition-transform hover:scale-105 uppercase tracking-wide text-lg w-full sm:w-auto">
+             <button className="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0A1628] font-black py-5 px-10 rounded-full flex items-center justify-center gap-3 transition-transform hover:scale-105 uppercase tracking-wide text-lg w-full @sm:w-auto">
                {props.buttonText || "GET A FREE QUOTE"} <ArrowRight className="w-5 h-5 text-[#0A1628]" strokeWidth={3} />
              </button>
              <p className="text-white/60 text-sm font-medium">{props.subtext || "No obligation. Fast response."}</p>
@@ -562,8 +562,8 @@ export const BS_RENDERERS = {
 
 export function BrighterSolarFooter(props: any) {
   return (
-    <footer className="bg-[#0b172a] text-white/70 pt-20 pb-8 px-6 md:px-12 border-t border-white/5">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+    <footer className="bg-[#0b172a] text-white/70 pt-20 pb-8 px-6 @md:px-12 border-t border-white/5">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-12 mb-16">
         
         <div>
           <div className="flex items-center gap-2 mb-6">
@@ -639,7 +639,7 @@ export function BrighterSolarFooter(props: any) {
 
       </div>
 
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10 text-xs font-semibold tracking-wide">
+      <div className="max-w-7xl mx-auto flex flex-col @md:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10 text-xs font-semibold tracking-wide">
         <p>© {new Date().getFullYear()} {props.businessName || "Brighter Solar Cleaning"}. All rights reserved.</p>
         <div className="flex gap-6">
           <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>

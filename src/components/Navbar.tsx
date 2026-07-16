@@ -121,7 +121,7 @@ export default function Navbar() {
       <nav 
         id="navbar"
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-[#0B0B0B]/85 backdrop-blur-md py-3 border-b border-white/10' : 'bg-transparent py-5 lg:py-7'
+          scrolled ? 'bg-white/85 backdrop-blur-md py-3 border-b border-black/5 shadow-sm' : 'bg-transparent py-5 lg:py-7'
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-6 flex justify-between items-center relative">
@@ -136,7 +136,7 @@ export default function Navbar() {
               >
                 M
               </div>
-              <span className="font-extrabold text-white text-base tracking-tight select-none">michaelfred<span className="text-[#D4AF37]">.</span></span>
+              <span className="font-extrabold text-[#1a1a1a] text-base tracking-tight select-none">michaelfred<span className="text-[#D4AF37]">.</span></span>
             </Link>
           </motion.div>
 
@@ -151,7 +151,7 @@ export default function Navbar() {
               >
                 <Link
                   href={link.href}
-                  className="text-[14px] font-medium text-white/70 hover:text-white transition-colors py-2 px-1 relative group"
+                  className="text-[14px] font-medium text-[#1a1a1a]/60 hover:text-[#1a1a1a] transition-colors py-2 px-1 relative group"
                 >
                   {link.name}
                   <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#D4AF37] transition-all duration-300 group-hover:w-full" />
@@ -165,7 +165,7 @@ export default function Navbar() {
             <div className="relative" ref={popoutRef}>
               <button
                 onClick={handleAuthClick}
-                className="text-[14px] font-semibold text-white/70 hover:text-white transition-colors cursor-pointer select-none"
+                className="text-[14px] font-semibold text-[#1a1a1a]/60 hover:text-[#1a1a1a] transition-colors cursor-pointer select-none"
               >
                 {user ? (
                   <span className="flex items-center gap-1.5 max-w-[150px]">
@@ -184,11 +184,11 @@ export default function Navbar() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
-                    className="absolute right-0 mt-4 w-72 bg-[#121212]/95 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-2xl z-50 text-white flex flex-col space-y-4"
+                    className="absolute right-0 mt-4 w-72 bg-white/95 backdrop-blur-md border border-black/10 rounded-2xl p-5 shadow-2xl z-50 text-[#1a1a1a] flex flex-col space-y-4"
                   >
                     {/* User profile section */}
-                    <div className="border-b border-white/10 pb-3 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center font-bold text-white/80 text-sm overflow-hidden shrink-0">
+                    <div className="border-b border-black/10 pb-3 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full border border-black/10 bg-black/5 flex items-center justify-center font-bold text-[#1a1a1a]/80 text-sm overflow-hidden shrink-0">
                         {user.user_metadata?.avatar_url ? (
                           <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                         ) : (
@@ -196,10 +196,10 @@ export default function Navbar() {
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-bold text-sm truncate leading-tight text-white">
+                        <p className="font-bold text-sm truncate leading-tight text-[#1a1a1a]">
                           {user.user_metadata?.full_name || 'Client Account'}
                         </p>
-                        <p className="text-[11px] text-white/50 truncate mt-0.5">
+                        <p className="text-[11px] text-[#1a1a1a]/50 truncate mt-0.5">
                           {user.email}
                         </p>
                       </div>
@@ -210,7 +210,7 @@ export default function Navbar() {
                       <Link 
                         href="/dashboard"
                         onClick={() => setShowPopout(false)}
-                        className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-white/5 transition-colors text-white/80 hover:text-white"
+                        className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-black/5 transition-colors text-[#1a1a1a]/80 hover:text-[#1a1a1a]"
                       >
                         <LayoutDashboard className="w-4 h-4 text-[#FF7F11]" /> Go to Dashboard
                       </Link>
@@ -219,7 +219,7 @@ export default function Navbar() {
                         <Link 
                           href="/admin"
                           onClick={() => setShowPopout(false)}
-                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-white/5 transition-colors text-white/80 hover:text-white"
+                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-black/5 transition-colors text-[#1a1a1a]/80 hover:text-[#1a1a1a]"
                         >
                           <ShieldCheck className="w-4 h-4 text-[#D4AF37]" /> Go to CRM Portal
                         </Link>
@@ -231,22 +231,22 @@ export default function Navbar() {
                           target="_blank" 
                           rel="noopener noreferrer"
                           onClick={() => setShowPopout(false)}
-                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-white/5 transition-colors text-white/80 hover:text-white"
+                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-black/5 transition-colors text-[#1a1a1a]/80 hover:text-[#1a1a1a]"
                         >
-                          <Globe className="w-4 h-4 text-emerald-400" /> Go to Live Site
+                          <Globe className="w-4 h-4 text-emerald-500" /> Go to Live Site
                         </a>
                       ) : (
-                        <span className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold text-white/40 cursor-not-allowed">
-                          <Globe className="w-4 h-4 text-white/10" /> No Live Site Yet
+                        <span className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold text-[#1a1a1a]/30 cursor-not-allowed">
+                          <Globe className="w-4 h-4 text-black/10" /> No Live Site Yet
                         </span>
                       )}
                     </div>
 
                     {/* Popout footer buttons */}
-                    <div className="border-t border-white/10 pt-3">
+                    <div className="border-t border-black/10 pt-3">
                       <button
                         onClick={handleSignOut}
-                        className="w-full flex items-center justify-center gap-2 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-rose-400 rounded-xl transition-all cursor-pointer"
+                        className="w-full flex items-center justify-center gap-2 py-2 bg-black/5 hover:bg-black/10 border border-black/10 text-xs font-semibold text-rose-500 rounded-xl transition-all cursor-pointer"
                       >
                         <LogOut className="w-4 h-4" /> Sign Out
                       </button>
@@ -269,7 +269,7 @@ export default function Navbar() {
           <div className="lg:hidden">
             <button 
               onClick={() => setIsOpen(!isOpen)} 
-              className="p-2.5 bg-[#121212] border border-white/10 text-white rounded-full transition-colors hover:bg-white/5"
+              className="p-2.5 bg-white border border-black/10 text-[#1a1a1a] rounded-full transition-colors hover:bg-black/5"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -284,13 +284,13 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[100] flex flex-col p-8 lg:hidden bg-[#0B0B0B]/98 backdrop-blur-lg overflow-y-auto"
+            className="fixed inset-0 z-[100] flex flex-col p-8 lg:hidden bg-white/98 backdrop-blur-lg overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-10">
-              <span className="text-xl font-bold text-white">MF.</span>
+              <span className="text-xl font-bold text-[#1a1a1a]">MF.</span>
               <button 
                 onClick={() => setIsOpen(false)} 
-                className="p-2.5 border border-white/10 rounded-full text-white bg-[#121212] hover:bg-white/5"
+                className="p-2.5 border border-black/10 rounded-full text-[#1a1a1a] bg-white hover:bg-black/5"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -299,9 +299,9 @@ export default function Navbar() {
             <div className="flex flex-col space-y-6">
               {/* Dynamic Auth Section for Mobile */}
               {user ? (
-                <div className="border-b border-white/10 pb-6 space-y-4">
+                <div className="border-b border-black/10 pb-6 space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center font-bold text-white text-sm overflow-hidden shrink-0">
+                    <div className="w-10 h-10 rounded-full border border-black/10 bg-black/5 flex items-center justify-center font-bold text-[#1a1a1a] text-sm overflow-hidden shrink-0">
                       {user.user_metadata?.avatar_url ? (
                         <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                       ) : (
@@ -309,8 +309,8 @@ export default function Navbar() {
                       )}
                     </div>
                     <div>
-                      <p className="font-bold text-sm text-white">{user.user_metadata?.full_name || 'Client Account'}</p>
-                      <p className="text-xs text-white/50">{user.email}</p>
+                      <p className="font-bold text-sm text-[#1a1a1a]">{user.user_metadata?.full_name || 'Client Account'}</p>
+                      <p className="text-xs text-[#1a1a1a]/50">{user.email}</p>
                     </div>
                   </div>
                   
@@ -318,7 +318,7 @@ export default function Navbar() {
                     <Link
                       href="/dashboard"
                       onClick={() => setIsOpen(false)}
-                      className="text-base font-medium text-white/80 hover:text-white flex items-center gap-2"
+                      className="text-base font-medium text-[#1a1a1a]/80 hover:text-[#1a1a1a] flex items-center gap-2"
                     >
                       <LayoutDashboard className="w-5 h-5 text-[#FF7F11]" /> Dashboard
                     </Link>
@@ -326,7 +326,7 @@ export default function Navbar() {
                       <Link
                         href="/admin"
                         onClick={() => setIsOpen(false)}
-                        className="text-base font-medium text-white/80 hover:text-white flex items-center gap-2"
+                        className="text-base font-medium text-[#1a1a1a]/80 hover:text-[#1a1a1a] flex items-center gap-2"
                       >
                         <ShieldCheck className="w-5 h-5 text-[#D4AF37]" /> CRM Portal
                       </Link>
@@ -337,14 +337,14 @@ export default function Navbar() {
                         target="_blank" 
                         rel="noopener noreferrer"
                         onClick={() => setIsOpen(false)}
-                        className="text-base font-medium text-white/80 hover:text-white flex items-center gap-2"
+                        className="text-base font-medium text-[#1a1a1a]/80 hover:text-[#1a1a1a] flex items-center gap-2"
                       >
-                        <Globe className="w-5 h-5 text-emerald-400" /> Go to Live Site
+                        <Globe className="w-5 h-5 text-emerald-500" /> Go to Live Site
                       </a>
                     )}
                     <button
                       onClick={() => { handleSignOut(); setIsOpen(false); }}
-                      className="text-base font-medium text-rose-400 flex items-center gap-2 text-left"
+                      className="text-base font-medium text-rose-500 flex items-center gap-2 text-left"
                     >
                       <LogOut className="w-5 h-5" /> Sign Out
                     </button>
@@ -354,7 +354,7 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setIsOpen(false)}
-                  className="text-2xl font-bold text-white border-b border-white/10 pb-2 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all inline-block w-fit"
+                  className="text-2xl font-bold text-[#1a1a1a] border-b border-black/10 pb-2 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all inline-block w-fit"
                 >
                   Log In
                 </Link>
@@ -365,7 +365,7 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="text-2xl font-bold text-white/70 hover:text-[#D4AF37] transition-colors"
+                  className="text-2xl font-bold text-[#1a1a1a]/60 hover:text-[#D4AF37] transition-colors"
                 >
                   {link.name}
                 </Link>

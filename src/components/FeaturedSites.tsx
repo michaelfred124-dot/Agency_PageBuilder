@@ -99,11 +99,11 @@ export default function FeaturedSites() {
   }, []);
 
   return (
-    <section className="py-24 lg:py-32 bg-[#0B0B0B] relative overflow-hidden border-b border-white/10">
+    <section className="py-24 lg:py-32 bg-[#FAFAFA] relative overflow-hidden border-b border-black/5">
       
       {/* Huge subtle background text behind carousel */}
       <div className="absolute top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none z-0 text-center w-full hidden md:block">
-        <span className="text-[14vw] font-black text-white/[0.02] tracking-tighter uppercase leading-none block">
+        <span className="text-[14vw] font-black text-black/[0.02] tracking-tighter uppercase leading-none block">
           Featured Work
         </span>
       </div>
@@ -118,7 +118,7 @@ export default function FeaturedSites() {
               <div 
                 key={i} 
                 onClick={() => site.link && router.push(site.link)}
-                className="group relative w-[320px] md:w-[460px] aspect-[16/10] bg-[#121212] border border-white/10 rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer shrink-0"
+                className="group relative w-[320px] md:w-[460px] aspect-[16/10] bg-white border border-black/8 rounded-3xl overflow-hidden shadow-lg transition-all duration-500 hover:-translate-y-2 cursor-pointer shrink-0"
               >
                 <img 
                   src={site.image} 
@@ -126,13 +126,13 @@ export default function FeaturedSites() {
                   className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-[#0B0B0B]/40 group-hover:bg-transparent transition-colors duration-500" />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
                 
                 {/* Overlay Content */}
                 <div className="absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-8 flex justify-between items-end opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
                   <div className="text-left">
                     <span 
-                      className="px-3 py-1 text-[9px] font-bold uppercase rounded-full tracking-wider mb-2 inline-block text-white bg-[#0B0B0B]/80 border border-white/10"
+                      className="px-3 py-1 text-[9px] font-bold uppercase rounded-full tracking-wider mb-2 inline-block text-white bg-black/60 backdrop-blur-sm border border-white/20"
                     >
                       {site.category}
                     </span>
@@ -155,17 +155,17 @@ export default function FeaturedSites() {
       {/* Centered Header Block (below the carousel) */}
       <div className="max-w-[1400px] mx-auto px-6 relative z-10 text-center flex flex-col items-center mt-16 lg:mt-20">
         <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-[#D4AF37]">Portfolio</span>
-        <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-white mt-4 leading-none">
+        <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-[#1a1a1a] mt-4 leading-none">
           Featured Work
         </h2>
-        <p className="max-w-xl text-white/70 text-sm md:text-base font-normal mt-4 leading-relaxed">
+        <p className="max-w-xl text-[#1a1a1a]/60 text-sm md:text-base font-normal mt-4 leading-relaxed">
           Explore some of our recent custom website designs and dynamic application interfaces, built headlessly for speed, design parity, and local search authority.
         </p>
 
         {/* Action Button - Centered Below Title & Text */}
         <div className="mt-12 flex justify-center">
           <Link href="/work">
-            <button className="px-8 py-4 bg-[#121212]/85 backdrop-blur-md text-white border border-white/10 rounded-full font-bold uppercase tracking-widest text-xs transition-all hover:bg-white/5 cursor-pointer shadow-lg">
+            <button className="px-8 py-4 bg-white backdrop-blur-md text-[#1a1a1a] border border-black/10 rounded-full font-bold uppercase tracking-widest text-xs transition-all hover:bg-black/5 cursor-pointer shadow-lg">
               View All Projects
             </button>
           </Link>

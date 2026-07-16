@@ -205,10 +205,10 @@ export const TEMPLATES: Record<string, SectionData[]> = {
       props: {
         title: "Projects we're proud of",
         projects: [
-          { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=800&q=80' },
           { title: 'Modern Front Yard', loc: 'Mountain View, CA', img: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=800&q=80' },
           { title: 'Elegant Pathway', loc: 'Cupertino, CA', img: 'https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=800&q=80' },
-          { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80' }
+          { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=800&q=80' }
         ]
       }
     },
@@ -1557,6 +1557,30 @@ export const TEMPLATES: Record<string, SectionData[]> = {
         support: ["Sizing Guide", "Shipping & Returns", "FAQ", "Contact Us"]
       }
     }
+  ],
+  ember_rye: [
+    { id: "er-hero", type: "ERHero", props: {} },
+    { id: "er-social", type: "ERSocial", props: {} },
+    { id: "er-menu", type: "ERMenu", props: {} },
+    { id: "er-grill", type: "ERGrill", props: {} },
+    { id: "er-testimonials", type: "ERTestimonials", props: {} },
+    { id: "er-cta", type: "ERCta", props: {} }
+  ],
+  solene_boutique: [
+    { id: "se-hero", type: "SEHero", props: {} },
+    { id: "se-social", type: "SESocial", props: {} },
+    { id: "se-rooms", type: "SERooms", props: {} },
+    { id: "se-products", type: "SEProducts", props: {} },
+    { id: "se-makers", type: "SEMakers", props: {} },
+    { id: "se-testimonials", type: "SETestimonials", props: {} },
+    { id: "se-cta", type: "SECta", props: {} }
+  ],
+  stylish_store: [
+    { id: "ss-hero", type: "SSHero", props: {} },
+    { id: "ss-promo", type: "SSPromo", props: {} },
+    { id: "ss-featured", type: "SSFeatured", props: {} },
+    { id: "ss-dual", type: "SSDualBanner", props: {} },
+    { id: "ss-latest", type: "SSLatest", props: {} }
   ]
 };
 
@@ -1578,10 +1602,10 @@ export const TEMPLATE_PAGES: Record<string, { name: string; slug: string; sectio
         ] } },
         { id: "gs-home-about", type: "GSAbout", props: { title: "Rooted in our community. \nCommitted to excellence.", desc: "Greenscape Landscaping is a locally owned and operated business serving Sunnyvale and surrounding areas. We take pride in our work, our reliability, and the relationships we build with our clients.", image: "https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=1200&q=80" } },
         { id: "gs-home-projects", type: "GSProjects", props: { title: "Projects we're proud of", projects: [
-          { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=800&q=80' },
           { title: 'Modern Front Yard', loc: 'Mountain View, CA', img: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=800&q=80' },
           { title: 'Elegant Pathway', loc: 'Cupertino, CA', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80' },
-          { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80' }
+          { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=800&q=80' }
         ] } },
         { id: "gs-home-cta", type: "GSCta", props: { title: "Let's build something \nbeautiful together.", subtitle: "Contact us today for your free quote and start your transition to a more beautiful life outdoors." } },
         { id: "gs-home-footer", type: "GSFooter", props: { text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area." } }
@@ -1623,10 +1647,10 @@ export const TEMPLATE_PAGES: Record<string, { name: string; slug: string; sectio
         { id: "gs-projects-header", type: "GSHeader", props: { businessName: "Greenscape", tagline: "Landscaping", phone: "(408) 123-4567", address: "Proudly serving Sunnyvale and surrounding areas", hours: "Mon - Sat: 7AM - 6PM", ctaText: "Get a Free Quote" } },
         { id: "gs-projects-hero", type: "GSHero", props: { title: "Projects We're\nProud Of", subtitle: "Take a look at some of our recent backyard design and landscaping projects.", bgImage: "https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=2070&q=80" } },
         { id: "gs-projects-block", type: "GSProjects", props: { title: "Projects we're proud of", projects: [
-          { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=800&q=80' },
+          { title: 'Backyard Retreat', loc: 'Sunnyvale, CA', img: 'https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=800&q=80' },
           { title: 'Modern Front Yard', loc: 'Mountain View, CA', img: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=800&q=80' },
           { title: 'Elegant Pathway', loc: 'Cupertino, CA', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80' },
-          { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80' }
+          { title: 'Drought-Tolerant', loc: 'Santa Clara, CA', img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=800&q=80' }
         ] } },
         { id: "gs-projects-cta", type: "GSCta", props: { title: "Let's build something \nbeautiful together.", subtitle: "Contact us today for your free quote and start your transition to a more beautiful life outdoors." } },
         { id: "gs-projects-footer", type: "GSFooter", props: { text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area." } }
@@ -1637,7 +1661,7 @@ export const TEMPLATE_PAGES: Record<string, { name: string; slug: string; sectio
       slug: '/contact',
       sections: [
         { id: "gs-contact-header", type: "GSHeader", props: { businessName: "Greenscape", tagline: "Landscaping", phone: "(408) 123-4567", address: "Proudly serving Sunnyvale and surrounding areas", hours: "Mon - Sat: 7AM - 6PM", ctaText: "Get a Free Quote" } },
-        { id: "gs-contact-hero", type: "GSHero", props: { title: "Start Your Outdoor\nTransformation", subtitle: "Contact us today for a free, no-obligation estimate on your next project.", bgImage: "https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=2070&q=80" } },
+        { id: "gs-contact-hero", type: "GSHero", props: { title: "Start Your Outdoor\nTransformation", subtitle: "Contact us today for a free, no-obligation estimate on your next project.", bgImage: "https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=2070&q=80" } },
         { id: "gs-contact-block", type: "GSContact", props: { title: "Get In Touch", subtitle: "Ready to start your outdoor transformation? Let us know how we can help.", phone: "(408) 123-4567", email: "info@greenscape.com", address: "123 Greenway Dr, Sunnyvale, CA 94086" } },
         { id: "gs-contact-footer", type: "GSFooter", props: { text: "© 2026 Greenscape Landscaping. Licensed & Insured. Serving the Bay Area." } }
       ]
@@ -2125,5 +2149,343 @@ export const TEMPLATE_PAGES: Record<string, { name: string; slug: string; sectio
         }
       ]
     }
+  ],
+  ember_rye: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.ember_rye
+    }
+  ],
+  solene_boutique: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.solene_boutique
+    }
+  ],
+  stylish_store: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.stylish_store
+    }
+  ],
+  easy_does_it: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: [
+        TEMPLATES.easy_does_it[0],
+        TEMPLATES.easy_does_it[1],
+        TEMPLATES.easy_does_it[2],
+        TEMPLATES.easy_does_it[5],
+        TEMPLATES.easy_does_it[6],
+        TEMPLATES.easy_does_it[7]
+      ]
+    },
+    {
+      name: 'Services',
+      slug: '/services',
+      sections: [
+        TEMPLATES.easy_does_it[0],
+        { ...TEMPLATES.easy_does_it[1], id: 'edi-hero-services', props: { ...TEMPLATES.easy_does_it[1].props, title: "Our Detailing Services", subtitle: "We offer professional interior, exterior, and full restoration services." } },
+        TEMPLATES.easy_does_it[2],
+        TEMPLATES.easy_does_it[7]
+      ]
+    },
+    {
+      name: 'Pricing',
+      slug: '/pricing',
+      sections: [
+        TEMPLATES.easy_does_it[0],
+        { ...TEMPLATES.easy_does_it[1], id: 'edi-hero-pricing', props: { ...TEMPLATES.easy_does_it[1].props, title: "Simple, Transparent Pricing", subtitle: "Choose the package that works best for your vehicle and budget." } },
+        TEMPLATES.easy_does_it[3],
+        TEMPLATES.easy_does_it[7]
+      ]
+    },
+    {
+      name: 'FAQ',
+      slug: '/faq',
+      sections: [
+        TEMPLATES.easy_does_it[0],
+        TEMPLATES.easy_does_it[4],
+        TEMPLATES.easy_does_it[7]
+      ]
+    },
+    {
+      name: 'Contact',
+      slug: '/contact',
+      sections: [
+        TEMPLATES.easy_does_it[0],
+        TEMPLATES.easy_does_it[6],
+        TEMPLATES.easy_does_it[7]
+      ]
+    }
+  ],
+  northwood: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.northwood
+    }
+  ],
+  lauren: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: [
+        TEMPLATES.lauren[0],
+        TEMPLATES.lauren[3],
+        TEMPLATES.lauren[4],
+        TEMPLATES.lauren[5],
+        TEMPLATES.lauren[6]
+      ]
+    },
+    {
+      name: 'About',
+      slug: '/about',
+      sections: [
+        { ...TEMPLATES.lauren[0], id: 'lw-hero-about', props: { ...TEMPLATES.lauren[0].props, title: "About Me", subtitle: "Getting to know the person behind the lens." } },
+        TEMPLATES.lauren[1],
+        TEMPLATES.lauren[6]
+      ]
+    },
+    {
+      name: 'Services',
+      slug: '/services',
+      sections: [
+        { ...TEMPLATES.lauren[0], id: 'lw-hero-services', props: { ...TEMPLATES.lauren[0].props, title: "Photography Services", subtitle: "Pricing and information for portraits, weddings, couples, and travel sessions." } },
+        TEMPLATES.lauren[2],
+        TEMPLATES.lauren[5],
+        TEMPLATES.lauren[6]
+      ]
+    },
+    {
+      name: 'Portfolio',
+      slug: '/portfolio',
+      sections: [
+        { ...TEMPLATES.lauren[0], id: 'lw-hero-portfolio', props: { ...TEMPLATES.lauren[0].props, title: "My Portfolio", subtitle: "Browse through a curated gallery of my latest work." } },
+        TEMPLATES.lauren[3],
+        TEMPLATES.lauren[6]
+      ]
+    },
+    {
+      name: 'Contact',
+      slug: '/contact',
+      sections: [
+        { ...TEMPLATES.lauren[0], id: 'lw-hero-contact', props: { ...TEMPLATES.lauren[0].props, title: "Get in Touch", subtitle: "I'd love to chat about your photography ideas and book your next session." } },
+        TEMPLATES.lauren[5],
+        TEMPLATES.lauren[6]
+      ]
+    }
+  ],
+  brighter_solar: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: [
+        TEMPLATES.brighter_solar[0],
+        TEMPLATES.brighter_solar[1],
+        TEMPLATES.brighter_solar[2],
+        TEMPLATES.brighter_solar[3],
+        TEMPLATES.brighter_solar[4],
+        TEMPLATES.brighter_solar[5],
+        TEMPLATES.brighter_solar[7],
+        TEMPLATES.brighter_solar[8]
+      ]
+    },
+    {
+      name: 'Services',
+      slug: '/services',
+      sections: [
+        TEMPLATES.brighter_solar[0],
+        { ...TEMPLATES.brighter_solar[1], id: 'bs-hero-services', props: { ...TEMPLATES.brighter_solar[1].props, headline: "OUR SOLAR CLEANING SERVICES", description: "Learn about residential, commercial, ground mount, and bird proofing solutions." } },
+        TEMPLATES.brighter_solar[3],
+        TEMPLATES.brighter_solar[8]
+      ]
+    },
+    {
+      name: 'Pricing',
+      slug: '/pricing',
+      sections: [
+        TEMPLATES.brighter_solar[0],
+        { ...TEMPLATES.brighter_solar[1], id: 'bs-hero-pricing', props: { ...TEMPLATES.brighter_solar[1].props, headline: "AFFORDABLE SOLAR CARE PLANS", description: "Review our transparent pricing packages. Keep your solar system running clean." } },
+        TEMPLATES.brighter_solar[6],
+        TEMPLATES.brighter_solar[8]
+      ]
+    },
+    {
+      name: 'Contact',
+      slug: '/contact',
+      sections: [
+        TEMPLATES.brighter_solar[0],
+        TEMPLATES.brighter_solar[7],
+        TEMPLATES.brighter_solar[8]
+      ]
+    }
+  ],
+  law_firm: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: [
+        TEMPLATES.law_firm[0],
+        TEMPLATES.law_firm[1],
+        TEMPLATES.law_firm[2],
+        TEMPLATES.law_firm[3],
+        TEMPLATES.law_firm[4],
+        TEMPLATES.law_firm[5],
+        TEMPLATES.law_firm[6],
+        TEMPLATES.law_firm[7]
+      ]
+    },
+    {
+      name: 'Practice Areas',
+      slug: '/services',
+      sections: [
+        TEMPLATES.law_firm[0],
+        { ...TEMPLATES.law_firm[1], id: 'sl-hero-services', props: { ...TEMPLATES.law_firm[1].props, headline: "Legal Practice Areas", description: "Our expert attorneys specialize in corporate, real estate, IP, and civil litigation." } },
+        TEMPLATES.law_firm[3],
+        TEMPLATES.law_firm[7]
+      ]
+    },
+    {
+      name: 'About',
+      slug: '/about',
+      sections: [
+        TEMPLATES.law_firm[0],
+        { ...TEMPLATES.law_firm[1], id: 'sl-hero-about', props: { ...TEMPLATES.law_firm[1].props, headline: "Our Legacy of Trust", description: "Learn about the attorneys, values, and history behind Sterling Law Group." } },
+        TEMPLATES.law_firm[2],
+        TEMPLATES.law_firm[4],
+        TEMPLATES.law_firm[7]
+      ]
+    },
+    {
+      name: 'Contact',
+      slug: '/contact',
+      sections: [
+        TEMPLATES.law_firm[0],
+        TEMPLATES.law_firm[6],
+        TEMPLATES.law_firm[7]
+      ]
+    }
+  ],
+  auto_repair: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: [
+        TEMPLATES.auto_repair[0],
+        TEMPLATES.auto_repair[1],
+        TEMPLATES.auto_repair[2],
+        TEMPLATES.auto_repair[3],
+        TEMPLATES.auto_repair[4],
+        TEMPLATES.auto_repair[5],
+        TEMPLATES.auto_repair[6],
+        TEMPLATES.auto_repair[7]
+      ]
+    },
+    {
+      name: 'Services',
+      slug: '/services',
+      sections: [
+        TEMPLATES.auto_repair[0],
+        { ...TEMPLATES.auto_repair[1], id: 'rl-hero-services', props: { ...TEMPLATES.auto_repair[1].props, headline: "Complete Auto Care Services", description: "Brakes, oil changes, engine tuning, and suspension work from ASE certified mechanics." } },
+        TEMPLATES.auto_repair[3],
+        TEMPLATES.auto_repair[7]
+      ]
+    },
+    {
+      name: 'About',
+      slug: '/about',
+      sections: [
+        TEMPLATES.auto_repair[0],
+        { ...TEMPLATES.auto_repair[1], id: 'rl-hero-about', props: { ...TEMPLATES.auto_repair[1].props, headline: "About Ridge Line Auto", description: "Serving our local drivers for over 15 years with complete honesty, safety, and reliability." } },
+        TEMPLATES.auto_repair[2],
+        TEMPLATES.auto_repair[4],
+        TEMPLATES.auto_repair[7]
+      ]
+    },
+    {
+      name: 'Contact',
+      slug: '/contact',
+      sections: [
+        TEMPLATES.auto_repair[0],
+        TEMPLATES.auto_repair[6],
+        TEMPLATES.auto_repair[7]
+      ]
+    }
+  ],
+  hair_salon: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.hair_salon
+    }
+  ],
+  real_estate: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.real_estate
+    }
+  ],
+  personal_trainer: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.personal_trainer
+    }
+  ],
+  dental: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.dental
+    }
+  ],
+  dog_grooming: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.dog_grooming
+    }
+  ],
+  wedding_planner: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.wedding_planner
+    }
+  ],
+  home_cleaning: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.home_cleaning
+    }
+  ],
+  yoga_studio: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.yoga_studio
+    }
+  ],
+  prohome_services: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.prohome_services
+    }
+  ],
+  maison_boutique: [
+    {
+      name: 'Home',
+      slug: '/',
+      sections: TEMPLATES.maison_boutique
+    }
   ]
 };
+

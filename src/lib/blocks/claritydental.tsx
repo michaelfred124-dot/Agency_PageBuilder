@@ -15,7 +15,7 @@ export function CDHeader(props: any) {
   const businessName = props.businessName || 'CLARITY DENTAL';
   const navLinks: string[] = props.navLinks || ['HOME', 'SERVICES', 'ABOUT US', 'PATIENT INFO', 'BOOK NOW'];
   return (
-    <header className="bg-white py-4 px-6 md:px-14 flex items-center justify-between sticky top-0 z-50 shadow-sm border-b border-sky-100">
+    <header className="bg-white py-4 px-6 @md:px-14 flex items-center justify-between sticky top-0 z-50 shadow-sm border-b border-sky-100">
       <div className="flex items-center gap-3">
         <div style={{ backgroundColor: CD_BLUE }} className="w-9 h-9 rounded-full flex items-center justify-center">
           <Smile className="w-5 h-5 text-white" />
@@ -25,12 +25,12 @@ export function CDHeader(props: any) {
           <div className="text-[9px] font-semibold tracking-[0.2em] uppercase text-sky-400 mt-0.5">Studio</div>
         </div>
       </div>
-      <nav className="hidden lg:flex items-center gap-7">
+      <nav className="hidden @lg:flex items-center gap-7">
         {navLinks.map((link: string, i: number) => (
           <a key={i} href="#" className="text-gray-500 hover:text-sky-600 text-xs font-bold tracking-wider transition-colors">{link}</a>
         ))}
       </nav>
-      <a href="#" style={{ backgroundColor: CD_BLUE }} className="hidden lg:inline-flex items-center gap-2 text-white text-xs font-black px-5 py-2.5 rounded-full hover:opacity-90 transition-opacity">
+      <a href="#" style={{ backgroundColor: CD_BLUE }} className="hidden @lg:inline-flex items-center gap-2 text-white text-xs font-black px-5 py-2.5 rounded-full hover:opacity-90 transition-opacity">
         Book Appointment
       </a>
     </header>
@@ -52,9 +52,9 @@ export function CDHero(props: any) {
         <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full opacity-10" style={{ backgroundColor: CD_BLUE }} />
         <div className="absolute bottom-0 left-1/3 w-64 h-64 rounded-full opacity-5" style={{ backgroundColor: '#BAE6FD' }} />
       </div>
-      <div className="relative z-10 px-8 md:px-20 py-24 max-w-3xl">
+      <div className="relative z-10 px-8 @md:px-20 py-24 max-w-3xl">
         <div className="text-xs font-black tracking-[0.4em] uppercase mb-5 text-sky-300">{subheading}</div>
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-none mb-6 whitespace-pre-line" style={{ letterSpacing: '-0.02em' }}>{headline}</h1>
+        <h1 className="text-5xl @md:text-7xl font-black text-white leading-none mb-6 whitespace-pre-line" style={{ letterSpacing: '-0.02em' }}>{headline}</h1>
         <p className="text-sky-100 text-lg mb-10 max-w-lg leading-relaxed">{description}</p>
         <div className="flex flex-wrap gap-4">
           <a href="#" style={{ backgroundColor: CD_BLUE }} className="inline-flex items-center gap-2 text-white font-black text-sm px-8 py-4 rounded-full hover:opacity-90 transition-opacity">
@@ -78,10 +78,10 @@ export function CDStats(props: any) {
   ];
   return (
     <section style={{ backgroundColor: CD_LIGHT }} className="py-14 px-6">
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="max-w-5xl mx-auto grid grid-cols-2 @md:grid-cols-4 gap-6">
         {stats.map((s: any, i: number) => (
           <div key={i} className="text-center">
-            <div className="text-3xl md:text-5xl font-black mb-2" style={{ color: CD_BLUE }}>{s.value}</div>
+            <div className="text-3xl @md:text-5xl font-black mb-2" style={{ color: CD_BLUE }}>{s.value}</div>
             <div className="text-sky-700 text-xs font-semibold tracking-wide whitespace-pre-line">{s.label}</div>
           </div>
         ))}
@@ -94,13 +94,13 @@ export function CDServices(props: any) {
   const heading = props.heading || 'Comprehensive Dental Services';
   const services = props.services || [];
   return (
-    <section className="bg-white py-24 px-6 md:px-14">
+    <section className="bg-white py-24 px-6 @md:px-14">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: CD_BLUE }}>What We Offer</div>
-          <h2 className="text-4xl md:text-5xl font-black" style={{ color: CD_DARK }}>{heading}</h2>
+          <h2 className="text-4xl @md:text-5xl font-black" style={{ color: CD_DARK }}>{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-5">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.icon] || Smile;
             return (
@@ -124,13 +124,13 @@ export function CDTestimonials(props: any) {
   const heading = props.heading || 'Real Patients. Real Smiles.';
   const reviews = props.reviews || [];
   return (
-    <section style={{ backgroundColor: CD_MINT }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: CD_MINT }} className="py-24 px-6 @md:px-14">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: CD_BLUE }}>Testimonials</div>
           <h2 className="text-4xl font-black" style={{ color: CD_DARK }}>{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-6">
           {reviews.map((r: any, i: number) => (
             <div key={i} className="bg-white p-8 rounded-2xl shadow-sm">
               <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: '#F59E0B' }} />)}</div>
@@ -154,13 +154,13 @@ export function CDPricing(props: any) {
   const heading = props.heading || 'Membership Plans for Uninsured Patients';
   const plans = props.plans || [];
   return (
-    <section className="bg-white py-24 px-6 md:px-14">
+    <section className="bg-white py-24 px-6 @md:px-14">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: CD_BLUE }}>Membership</div>
           <h2 className="text-4xl font-black" style={{ color: CD_DARK }}>{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-5">
           {plans.map((plan: any, i: number) => {
             const Icon = (LucideIcons as any)[plan.icon] || Shield;
             return (
@@ -195,7 +195,7 @@ export function CDCTA(props: any) {
     <section style={{ backgroundColor: CD_BLUE }} className="py-20 px-6 text-center">
       <div className="max-w-2xl mx-auto">
         <Smile className="w-12 h-12 text-white/60 mx-auto mb-5" />
-        <h2 className="text-4xl md:text-5xl font-black text-white mb-8 whitespace-pre-line leading-tight">{heading}</h2>
+        <h2 className="text-4xl @md:text-5xl font-black text-white mb-8 whitespace-pre-line leading-tight">{heading}</h2>
         <a href="#" className="inline-flex items-center gap-2 bg-white font-black text-sm px-10 py-5 rounded-full hover:bg-sky-50 transition-colors" style={{ color: CD_BLUE }}>
           {buttonText} <ArrowRight className="w-4 h-4" />
         </a>

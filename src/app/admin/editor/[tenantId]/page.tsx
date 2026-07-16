@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { getSupabaseServerClient, getPageData } from '@/lib/supabase';
-import SiteEditor from '@/components/SiteEditor';
+import AdminSiteEditorClient from '@/components/AdminSiteEditorClient';
 
 export default async function AdminSiteEditorPage({ params }: { params: Promise<{ tenantId: string }> }) {
   const { tenantId } = await params;
@@ -40,23 +40,15 @@ export default async function AdminSiteEditorPage({ params }: { params: Promise<
     initialTheme = sitesData[0].theme_json;
   }
 
-  // Define client-side wrapper to handle back action
   return (
     <div className="w-full h-full absolute inset-0 z-50 bg-white">
-       <SiteEditor 
-          siteName={tenant.name}
-          siteId={tenant.id}
-          tenantId={tenant.id}
-          initialPages={initialPages}
-          initialTheme={initialTheme}
-          planTier={tenant.plan_tier}
-          onBack={() => {
-             // In a real app we'd pass a router, but here window.location works
-             if (typeof window !== 'undefined') {
-                window.location.href = '/admin';
-             }
-          }}
-       />
+      <AdminSiteEditorClient
+        siteName={tenant.name}
+        tenantId={tenant.id}
+        initialPages={initialPages}
+        initialTheme={initialTheme}
+        planTier={tenant.plan_tier}
+      />
     </div>
   );
 }

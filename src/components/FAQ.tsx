@@ -29,12 +29,12 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-20 lg:py-32 bg-[#0B0B0B] px-4 lg:px-6 relative overflow-hidden">
+    <section className="py-20 lg:py-32 bg-[#FAFAFA] px-4 lg:px-6 relative overflow-hidden">
       <AnimatedSquiggles />
       <div className="max-w-[1000px] mx-auto relative z-10">
         <div className="text-center mb-16 lg:mb-24">
           <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-[#D4AF37]">FAQ</span>
-          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-white mt-4">
+          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-[#1a1a1a] mt-4">
             Common <span className="text-[#FF7F11]">Questions</span>
           </h2>
         </div>
@@ -43,24 +43,24 @@ export default function FAQ() {
           {FAQS.map((faq, index) => (
             <motion.div 
               key={index} 
-              className="border border-white/10 rounded-2xl overflow-hidden bg-white/[0.02] transition-all duration-300 hover:bg-white/[0.04]"
+              className="border border-black/8 rounded-2xl overflow-hidden bg-white transition-all duration-300 hover:bg-black/[0.01] shadow-sm"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full p-6 lg:p-8 flex justify-between items-center text-left cursor-pointer"
               >
-                <h3 className="text-lg lg:text-2xl font-extrabold tracking-tight pr-8 text-white">
+                <h3 className="text-lg lg:text-2xl font-extrabold tracking-tight pr-8 text-[#1a1a1a]">
                   {faq.question}
                 </h3>
                 <div 
-                  className="w-8 h-8 flex-shrink-0 rounded-full border border-white/10 flex items-center justify-center transition-all duration-300"
+                  className="w-8 h-8 flex-shrink-0 rounded-full border border-black/10 flex items-center justify-center transition-all duration-300"
                   style={{ 
                     backgroundColor: openIndex === index ? '#D4AF37' : 'transparent',
                     transform: openIndex === index ? 'rotate(180deg)' : 'rotate(0deg)',
                     boxShadow: openIndex === index ? '0 0 15px rgba(212,175,55,0.3)' : 'none'
                   }}
                 >
-                  {openIndex === index ? <Minus className="w-4 h-4 text-[#0B0B0B]" strokeWidth={2.5} /> : <Plus className="w-4 h-4 text-white" strokeWidth={2.5} />}
+                  {openIndex === index ? <Minus className="w-4 h-4 text-white" strokeWidth={2.5} /> : <Plus className="w-4 h-4 text-[#1a1a1a]" strokeWidth={2.5} />}
                 </div>
               </button>
               
@@ -72,7 +72,7 @@ export default function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="p-6 lg:p-8 pt-0 text-sm lg:text-base font-normal text-white/70 leading-relaxed border-t border-white/10 mt-4">
+                    <div className="p-6 lg:p-8 pt-0 text-sm lg:text-base font-normal text-[#1a1a1a]/60 leading-relaxed border-t border-black/5 mt-4">
                       {faq.answer}
                     </div>
                   </motion.div>

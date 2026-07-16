@@ -183,6 +183,41 @@ export const PROJECTS: Project[] = [
     image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=2070&auto=format&fit=crop',
     link: '/work/stylish-store',
   },
+  {
+    title: 'Easy Does It Auto Detailing',
+    description: 'Premium auto detailing landing page with pricing tiers, gallery, and booking CTA.',
+    tags: ['Template', 'Auto Detailing', 'Local Business'],
+    image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58745?q=80&w=2070&auto=format&fit=crop',
+    link: '/work/easy-does-it',
+  },
+  {
+    title: 'Volt Vikings Electrical',
+    description: 'Bold, conversion-driven electrical contractor website with VoltGuard™ safety audits, service areas, and reviews.',
+    tags: ['Template', 'Electrical', 'Contractor'],
+    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070&auto=format&fit=crop',
+    link: '/work/volt-vikings',
+  },
+  {
+    title: 'Ember & Rye Steakhouse',
+    description: 'Cinematic, luxury steakhouse website with wood-fired menu, testimonials, and reservation CTA.',
+    tags: ['Custom', 'Restaurant', 'Fine Dining'],
+    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=2074&auto=format&fit=crop',
+    link: '/work/ember-and-rye',
+  },
+  {
+    title: 'Solène Home Goods',
+    description: 'Editorial artisan home goods boutique with curated products, maker stories, and e-commerce layout.',
+    tags: ['Custom', 'E-Commerce', 'Artisan'],
+    image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2070&auto=format&fit=crop',
+    link: '/work/solene-boutique',
+  },
+  {
+    title: 'Osteria Bella Restaurant',
+    description: 'Elegant Italian restaurant website with farm-to-table story, handmade pasta menu, and reservation system.',
+    tags: ['Template', 'Restaurant', 'Italian'],
+    image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=2074&auto=format&fit=crop',
+    link: '/work/osteria-bella',
+  },
 ];
 
 export const BIO = "We are MichaelFred Designs Official. Your dedicated team for high-end web design and development. Get a world-class website as a service. Unlimited requests, transparent pricing, and lightning-fast delivery. Pause or cancel your subscription at any time.";

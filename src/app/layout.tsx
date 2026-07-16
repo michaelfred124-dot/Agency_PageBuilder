@@ -33,7 +33,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased selection:bg-black selection:text-white">
+      <body className="font-sans antialiased selection:bg-[#FF7F11] selection:text-white">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

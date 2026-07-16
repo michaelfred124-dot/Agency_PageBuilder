@@ -21,11 +21,11 @@ export function MPHero(props: any) {
         <img src={bgImage} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(30,58,95,0.92) 0%, rgba(30,58,95,0.65) 55%, rgba(30,58,95,0.2) 100%)' }} />
       </div>
-      <div className="relative z-10 px-8 md:px-20 py-24 max-w-2xl">
+      <div className="relative z-10 px-8 @md:px-20 py-24 max-w-2xl">
         <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.3em] uppercase mb-6 px-3 py-1.5 rounded-full" style={{ backgroundColor: MP_BEIGE + '20', color: MP_BEIGE, border: `1px solid ${MP_BEIGE}40` }}>
           <MapPin className="w-3 h-3" /> Local Real Estate Experts
         </div>
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6 whitespace-pre-line" style={{ fontFamily: 'Georgia, serif' }}>{title}</h1>
+        <h1 className="text-5xl @md:text-7xl font-black text-white leading-tight mb-6 whitespace-pre-line" style={{ fontFamily: 'Georgia, serif' }}>{title}</h1>
         <p className="text-white/75 text-lg mb-10 leading-relaxed">{subtitle}</p>
         <div className="flex flex-wrap gap-4">
           <a href="#" style={{ backgroundColor: MP_FOREST }} className="inline-flex items-center gap-2 text-white font-bold text-sm px-8 py-4 hover:opacity-90 transition-opacity rounded-sm">
@@ -48,11 +48,11 @@ export function MPStats(props: any) {
     { value: '5★', label: 'Zillow & Google Rating', icon: 'Star' }
   ];
   return (
-    <section style={{ backgroundColor: MP_SLATE }} className="py-14 px-6 md:px-20">
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+    <section style={{ backgroundColor: MP_SLATE }} className="py-14 px-6 @md:px-20">
+      <div className="max-w-5xl mx-auto grid grid-cols-2 @md:grid-cols-4 gap-8">
         {stats.map((s: any, i: number) => (
           <div key={i} className="text-center">
-            <div className="text-3xl md:text-5xl font-black text-white mb-2">{s.value}</div>
+            <div className="text-3xl @md:text-5xl font-black text-white mb-2">{s.value}</div>
             <div className="text-white/55 text-xs font-semibold tracking-wider whitespace-pre-line">{s.label}</div>
           </div>
         ))}
@@ -64,13 +64,13 @@ export function MPStats(props: any) {
 export function MPServices(props: any) {
   const services = props.services || [];
   return (
-    <section style={{ backgroundColor: MP_CREAM }} className="py-24 px-6 md:px-20">
+    <section style={{ backgroundColor: MP_CREAM }} className="py-24 px-6 @md:px-20">
       <div className="max-w-5xl mx-auto">
         <div className="mb-14">
           <div className="text-xs font-semibold tracking-[0.3em] uppercase mb-3" style={{ color: MP_FOREST }}>How We Help</div>
           <h2 className="text-4xl font-black" style={{ color: MP_SLATE }}>Full-Service Representation</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-6">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.iconName] || Home;
             return (
@@ -93,16 +93,16 @@ export function MPListings(props: any) {
   const title = props.title || 'Featured Listings';
   const projects = props.projects || [];
   return (
-    <section style={{ backgroundColor: MP_BEIGE }} className="py-24 px-6 md:px-20">
+    <section style={{ backgroundColor: MP_BEIGE }} className="py-24 px-6 @md:px-20">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-10">
           <div>
             <div className="text-xs font-semibold tracking-[0.3em] uppercase mb-2" style={{ color: MP_FOREST }}>Portfolio</div>
             <h2 className="text-4xl font-black" style={{ color: MP_SLATE }}>{title}</h2>
           </div>
-          <a href="#" className="text-sm font-bold hidden md:flex items-center gap-1" style={{ color: MP_FOREST }}>View All <ArrowRight className="w-4 h-4" /></a>
+          <a href="#" className="text-sm font-bold hidden @md:flex items-center gap-1" style={{ color: MP_FOREST }}>View All <ArrowRight className="w-4 h-4" /></a>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-4">
           {projects.map((p: any, i: number) => (
             <div key={i} className="group bg-white overflow-hidden rounded-sm shadow-sm hover:shadow-md transition-shadow">
               <div className="h-44 overflow-hidden">
@@ -123,13 +123,13 @@ export function MPListings(props: any) {
 export function MPTestimonials(props: any) {
   const testimonials = props.testimonials || [];
   return (
-    <section style={{ backgroundColor: MP_CREAM }} className="py-24 px-6 md:px-20">
+    <section style={{ backgroundColor: MP_CREAM }} className="py-24 px-6 @md:px-20">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <div className="text-xs font-semibold tracking-[0.3em] uppercase mb-3" style={{ color: MP_FOREST }}>Client Stories</div>
           <h2 className="text-4xl font-black" style={{ color: MP_SLATE }}>What Our Clients Say</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-6">
           {testimonials.map((t: any, i: number) => (
             <div key={i} className="bg-white p-8 rounded-sm shadow-sm border-t-2" style={{ borderTopColor: MP_FOREST }}>
               <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: '#F59E0B' }} />)}</div>
@@ -150,7 +150,7 @@ export function MPCta(props: any) {
     <section style={{ backgroundColor: MP_SLATE }} className="py-24 px-6 text-center">
       <div className="max-w-2xl mx-auto">
         <TrendingUp className="w-10 h-10 mx-auto mb-6" style={{ color: MP_BEIGE }} />
-        <h2 className="text-4xl md:text-5xl font-black text-white mb-5 whitespace-pre-line" style={{ fontFamily: 'Georgia, serif' }}>{title}</h2>
+        <h2 className="text-4xl @md:text-5xl font-black text-white mb-5 whitespace-pre-line" style={{ fontFamily: 'Georgia, serif' }}>{title}</h2>
         <p className="text-white/65 mb-10 text-base">{subtitle}</p>
         <a href="#" style={{ backgroundColor: MP_FOREST }} className="inline-flex items-center gap-2 text-white font-bold px-10 py-5 hover:opacity-90 transition-opacity rounded-sm">
           Book Free Strategy Call <ArrowRight className="w-4 h-4" />

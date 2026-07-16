@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createTenant, getTenantBySubdomain, upsertPageData } from '@/lib/supabase';
 import { createClient } from '@/utils/supabase/server';
+import { normalizePageSlug, validateCanvas } from '@/lib/publishValidation';
 
 /**
  * API Route: POST /api/publish
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { subdomain, siteName, pageSlug = 'index', canvasJson, themeJson } = body;
 
-    if (!subdomain || !siteName || !canvasJson) {
+    if (!subdomain || !siteName || !Array.isArray(canvasJson)) {
       return NextResponse.json(
         { error: 'Missing required fields: subdomain, siteName, canvasJson' },
         { status: 400 }
@@ -46,6 +47,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Invalid subdomain. Use only lowercase letters, numbers, and hyphens.' },
         { status: 400 }
+      );
+    }
+
+    const normalizedPageSlug = normalizePageSlug(pageSlug);
+    if (!normalizedPageSlug) {
+      return NextResponse.json(
+        { error: 'Invalid page URL. Use lowercase letters, numbers, hyphens, and slashes only.' },
+        { status: 400 }
+      );
+    }
+
+    const validationIssues = validateCanvas(canvasJson);
+    const validationErrors = validationIssues.filter((issue) => issue.level === 'error');
+    if (validationErrors.length > 0) {
+      return NextResponse.json(
+        { error: 'Fix the page validation errors before publishing.', issues: validationIssues },
+        { status: 422 }
       );
     }
 
@@ -71,7 +89,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Upsert the page data
-    const pageData = await upsertPageData(tenant.id, pageSlug, canvasJson, themeJson);
+    const pageData = await upsertPageData(tenant.id, normalizedPageSlug, canvasJson, themeJson);
     if (!pageData) {
       return NextResponse.json(
         { error: 'Failed to save page data to Supabase.' },
@@ -96,6 +114,7 @@ export async function POST(request: NextRequest) {
         page_slug: pageData.page_slug,
         updated_at: pageData.updated_at,
       },
+      warnings: validationIssues.filter((issue) => issue.level === 'warning'),
       liveUrl: liveUrl,
       devUrl: `/site/${cleanSubdomain}`,
     });

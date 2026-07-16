@@ -21,12 +21,12 @@ export function PPHero(props: any) {
         <img src={bgImage} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(13,148,136,0.93) 0%, rgba(13,148,136,0.5) 50%, transparent 80%)' }} />
       </div>
-      <div className="relative z-10 px-8 md:px-16 pb-20 w-full">
+      <div className="relative z-10 px-8 @md:px-16 pb-20 w-full">
         <div className="max-w-xl">
           <div className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase mb-5 px-3 py-1.5 rounded-full bg-white/20 text-white">
             <Heart className="w-3 h-3 fill-current text-pink-300" /> Cage-Free · Fear-Free Certified
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-5 whitespace-pre-line">{title}</h1>
+          <h1 className="text-5xl @md:text-7xl font-black text-white leading-tight mb-5 whitespace-pre-line">{title}</h1>
           <p className="text-teal-100 text-lg mb-8 leading-relaxed">{subtitle}</p>
           <a href="#" style={{ backgroundColor: PP_CORAL }} className="inline-flex items-center gap-2 text-white font-black text-sm px-8 py-4 rounded-full hover:opacity-90 transition-opacity">
             Book Your Pup <ArrowRight className="w-4 h-4" />
@@ -45,13 +45,13 @@ export function PPEthos(props: any) {
     { iconName: 'Star', title: 'One Dog at a Time', desc: "No rushed appointments. Your dog gets our full attention for their whole visit." }
   ];
   return (
-    <section style={{ backgroundColor: PP_WARM }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: PP_WARM }} className="py-24 px-6 @md:px-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: PP_TEAL }}>Why We're Different</div>
           <h2 className="text-4xl font-black text-gray-800">The Paws & Pamper Promise</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-6">
           {features.map((f: any, i: number) => {
             const Icon = (LucideIcons as any)[f.iconName] || Heart;
             return (
@@ -75,14 +75,14 @@ export function PPBook(props: any) {
   const subtitle = props.subtitle || 'Online booking is quick and easy. Spots fill up fast — reserve in seconds.';
   const image = props.image || 'https://images.unsplash.com/photo-1534361960057-19f4434a4aeb?q=80&w=2070';
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 min-h-[55vh]">
+    <section className="grid grid-cols-1 @md:grid-cols-2 min-h-[55vh]">
       <div className="relative overflow-hidden" style={{ minHeight: '300px' }}>
         <img src={image} alt="" className="w-full h-full object-cover absolute inset-0" />
       </div>
       <div className="flex items-center justify-center px-10 py-16" style={{ backgroundColor: PP_TEAL }}>
         <div className="max-w-sm text-center">
           <div className="text-teal-200 text-xs font-bold tracking-widest uppercase mb-4">Booking</div>
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-5">{title}</h2>
+          <h2 className="text-3xl @md:text-4xl font-black text-white mb-5">{title}</h2>
           <p className="text-teal-100 text-base mb-8 leading-relaxed">{subtitle}</p>
           <a href="#" style={{ backgroundColor: PP_CORAL }} className="inline-flex items-center gap-2 text-white font-black text-sm px-8 py-4 rounded-full hover:opacity-90 transition-opacity">
             Reserve a Spot <ArrowRight className="w-4 h-4" />
@@ -96,13 +96,13 @@ export function PPBook(props: any) {
 export function PPTestimonials(props: any) {
   const testimonials = props.testimonials || [];
   return (
-    <section style={{ backgroundColor: PP_CREAM }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: PP_CREAM }} className="py-24 px-6 @md:px-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: PP_TEAL }}>Happy Clients</div>
           <h2 className="text-4xl font-black text-gray-800">Tails Are Always Wagging</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-6">
           {testimonials.map((t: any, i: number) => (
             <div key={i} className="bg-white p-7 rounded-2xl shadow-sm">
               <div className="flex mb-3">{[...Array(parseInt(t.rating) || 5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: PP_CORAL }} />)}</div>
@@ -123,8 +123,8 @@ export function PPFindUs(props: any) {
   const email = props.email || 'hello@pawsandpamper.com';
   const image = props.image || 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=2069';
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 min-h-[45vh]">
-      <div className="flex items-center px-10 md:px-16 py-14" style={{ backgroundColor: PP_WARM }}>
+    <section className="grid grid-cols-1 @md:grid-cols-2 min-h-[45vh]">
+      <div className="flex items-center px-10 @md:px-16 py-14" style={{ backgroundColor: PP_WARM }}>
         <div>
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-4" style={{ color: PP_TEAL }}>Find Us</div>
           <h2 className="text-3xl font-black text-gray-800 mb-6">Come Visit the Spa</h2>

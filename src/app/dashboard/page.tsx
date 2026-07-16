@@ -283,6 +283,8 @@ export default function DashboardLayout() {
   const [isPublishWizardOpen, setIsPublishWizardOpen] = useState(false);
   const [pendingPublishData, setPendingPublishData] = useState<{ pages: any, theme: any } | null>(null);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  const [blankSiteModalOpen, setBlankSiteModalOpen] = useState(false);
+  const [newSiteName, setNewSiteName] = useState('');
   const pathname = usePathname();
   const router = useRouter();
 
@@ -582,6 +584,114 @@ export default function DashboardLayout() {
 
     fetchSupabaseSites();
   }, [user]);
+
+  // Handle DIY template generation when loader is triggered (onboardingStep === 3)
+  useEffect(() => {
+    if (onboardingStep === 3 && onboardingTemplateKey) {
+      const templateKey = onboardingTemplateKey;
+      const newId = `site-${Date.now()}`;
+      
+      const name = onboardingAnswers.businessName || 'My Business';
+      const tagline = onboardingAnswers.tagline || 'Premium Quality & Professional Service';
+      const phone = onboardingAnswers.phone || '(555) 123-4567';
+      const email = onboardingAnswers.email || 'contact@mybusiness.com';
+      const logoText = onboardingAnswers.logoText || name.split(' ')[0];
+
+      const customizeSectionsLocal = (sections: any[]) => {
+        const cloned = JSON.parse(JSON.stringify(sections));
+        return cloned.map((section: any) => {
+          if (section.props) {
+            if (section.type === 'RHero' || section.type.includes('Hero')) {
+              if (section.props.title && section.type !== 'RHero') section.props.title = `${name}.\n${tagline}`;
+              if (section.props.description) {
+                section.props.description = section.props.description.replace(/Osteria Bella/g, name);
+              }
+            }
+            if (section.type === 'RFooter' || section.type.includes('Footer')) {
+              if (section.props.businessName) section.props.businessName = name;
+              if (section.props.tagline) section.props.tagline = tagline;
+              if (section.props.phone) section.props.phone = phone;
+              if (section.props.email) section.props.email = email;
+              if (section.props.desc) {
+                section.props.desc = section.props.desc.replace(/Osteria Bella/g, name);
+              }
+              if (section.props.text) {
+                section.props.text = `© 2026 ${name}. All rights reserved. Powered by Michaelfred Designs.`;
+              }
+            }
+            if (section.type === 'RHoursInfo' || section.type.includes('FindUs')) {
+              if (section.props.phone) section.props.phone = phone;
+              if (section.props.email) section.props.email = email;
+            }
+            if (section.type === 'RChef') {
+              if (section.props.bio1) section.props.bio1 = section.props.bio1.replace(/Osteria Bella/g, name);
+              if (section.props.bio2) section.props.bio2 = section.props.bio2.replace(/Osteria Bella/g, name);
+            }
+            if (section.type.startsWith('EDI')) {
+              if (section.props.businessName !== undefined) section.props.businessName = name;
+              if (section.props.phone !== undefined) section.props.phone = phone;
+              if (section.props.email !== undefined) section.props.email = email;
+            }
+          }
+          return section;
+        });
+      };
+
+      let pagesList = [];
+      if (TEMPLATE_PAGES[templateKey]) {
+        pagesList = TEMPLATE_PAGES[templateKey].map(page => ({
+          id: page.slug === '/' ? 'home' : `page-${page.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
+          name: page.name,
+          slug: page.slug,
+          sections: customizeSectionsLocal(page.sections)
+        }));
+      } else {
+        const rawTemplateData = TEMPLATES[templateKey] || [];
+        const customizedSections = customizeSectionsLocal(rawTemplateData);
+        pagesList = [{ id: 'home', name: 'Home', slug: '/', sections: customizedSections }];
+      }
+
+      localStorage.setItem(`site-pages-${newId}`, JSON.stringify(pagesList));
+
+      const newSiteRecord = {
+        id: newId,
+        name: name,
+        url: `${name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'site'}.com`,
+        previewUrl: `/preview/${newId}`,
+        status: 'Draft',
+        image: MY_SITES.find(p => p.templateKey === templateKey)?.image || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+        lastUpdate: 'Just now',
+        templateKey: templateKey,
+        planTier: 'DIY'
+      };
+
+      const savedSites = localStorage.getItem('my-sites');
+      let currentSites = [];
+      if (savedSites) {
+        try {
+          currentSites = JSON.parse(savedSites);
+        } catch(e) {
+          console.error(e);
+        }
+      }
+      const updated = [...currentSites, newSiteRecord];
+      localStorage.setItem('my-sites', JSON.stringify(updated));
+      setMySites(updated);
+      setSelectedSite(newSiteRecord);
+
+      const timer = setTimeout(() => {
+        setOnboardingStep(0);
+        const isPaid = localStorage.getItem('diy_plan_paid') === 'true';
+        if (!isPaid) {
+          setShowTrialGateModal(true);
+        } else {
+          setEditingSite(newSiteRecord);
+        }
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [onboardingStep, onboardingTemplateKey]);
 
   const handleDeleteSite = async (siteId: string | number) => {
     if (!window.confirm("Are you sure you want to delete this site? This action cannot be undone.")) return;
@@ -3884,11 +3994,8 @@ export default function DashboardLayout() {
                   {selectedPlanTier === 'DIY' && (
                     <div 
                       onClick={() => { 
-                        const name = window.prompt("Enter a name for your new site:", "Untitled Site");
-                        if (name === null) return;
-                        const siteName = name.trim() || "Untitled Site";
-                        const newId = `site-${Date.now()}`;
-                        setEditingSite({ id: newId, name: siteName, templateKey: null, isNew: true, planTier: 'DIY' }); 
+                        setNewSiteName("");
+                        setBlankSiteModalOpen(true);
                         setIsTemplateModalOpen(false); 
                       }}
                       className="group cursor-pointer bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-md hover:border-slate-300 transition-all"
@@ -3958,6 +4065,82 @@ export default function DashboardLayout() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Blank Site Name Prompt Modal */}
+        <AnimatePresence>
+          {blankSiteModalOpen && (
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-slate-900/60 z-[110] flex items-center justify-center p-4 backdrop-blur-sm"
+              onClick={() => {
+                setBlankSiteModalOpen(false);
+                setIsTemplateModalOpen(true);
+              }}
+            >
+              <motion.div 
+                initial={{ scale: 0.95, opacity: 0 }} 
+                animate={{ scale: 1, opacity: 1 }} 
+                exit={{ scale: 0.95, opacity: 0 }}
+                className="bg-white border border-slate-200 rounded-2xl p-6 max-w-md w-full shadow-xl relative"
+                onClick={e => e.stopPropagation()}
+              >
+                <button 
+                  onClick={() => {
+                    setBlankSiteModalOpen(false);
+                    setIsTemplateModalOpen(true);
+                  }}
+                  className="absolute top-4 right-4 p-1.5 hover:bg-slate-100 rounded-full text-slate-400"
+                >
+                  <CloseIcon className="w-5 h-5" />
+                </button>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Create Blank Site</h3>
+                <p className="text-slate-500 text-xs mb-4">Give your new blank website a name to get started.</p>
+                
+                <input 
+                  type="text"
+                  value={newSiteName}
+                  onChange={e => setNewSiteName(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-6 text-black"
+                  placeholder="Untitled Site"
+                  autoFocus
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      const siteName = newSiteName.trim() || "Untitled Site";
+                      const newId = `site-${Date.now()}`;
+                      setEditingSite({ id: newId, name: siteName, templateKey: null, isNew: true, planTier: 'DIY' }); 
+                      setBlankSiteModalOpen(false);
+                    }
+                  }}
+                />
+                
+                <div className="flex justify-end gap-3">
+                  <button 
+                    onClick={() => {
+                      setBlankSiteModalOpen(false);
+                      setIsTemplateModalOpen(true);
+                    }}
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-50 border border-slate-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={() => {
+                      const siteName = newSiteName.trim() || "Untitled Site";
+                      const newId = `site-${Date.now()}`;
+                      setEditingSite({ id: newId, name: siteName, templateKey: null, isNew: true, planTier: 'DIY' }); 
+                      setBlankSiteModalOpen(false);
+                    }}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-sm transition-colors"
+                  >
+                    Create Workspace
+                  </button>
                 </div>
               </motion.div>
             </motion.div>

@@ -30,7 +30,7 @@ function VikingShieldIcon(props: any) {
 
 export function VoltVikingsHeader(props: any) {
   return (
-    <header className="bg-[#12002B] text-white py-4 px-6 md:px-12 flex items-center justify-between border-b-[4px] border-[#00A896] relative z-50">
+    <header className="bg-[#12002B] text-white py-4 px-6 @md:px-12 flex items-center justify-between border-b-[4px] border-[#00A896] relative z-50">
       <div className="flex items-center gap-2">
          <Zap className="w-8 h-8 text-[#FF6B00] animate-pulse" />
          <div>
@@ -41,13 +41,13 @@ export function VoltVikingsHeader(props: any) {
          </div>
       </div>
       
-      <nav className="hidden lg:flex items-center gap-8 text-xs font-bold tracking-widest">
+      <nav className="hidden @lg:flex items-center gap-8 text-xs font-bold tracking-widest">
          {(props.navLinks || []).map((link: any, i: number) => (
            <Link key={i} href="#" className={`${i === 0 ? 'text-[#00F2FE] border-b-2 border-[#00F2FE] pb-1' : 'hover:text-[#00F2FE] transition-colors'} uppercase`}>{link}</Link>
          ))}
       </nav>
 
-      <div className="hidden lg:flex items-center gap-6">
+      <div className="hidden @lg:flex items-center gap-6">
          <a href={`tel:${props.phone || '(520) 555-0199'}`} className="flex items-center gap-2 text-sm font-black hover:text-[#00F2FE] transition-colors text-white">
            <Phone className="w-4 h-4 text-[#FF6B00]" /> {props.phone || "(520) 555-0199"}
          </a>
@@ -56,7 +56,7 @@ export function VoltVikingsHeader(props: any) {
          </button>
       </div>
 
-      <button className="lg:hidden text-white">
+      <button className="@lg:hidden text-white">
         <Menu className="w-6 h-6" />
       </button>
     </header>
@@ -76,7 +76,7 @@ export function VoltVikingsHero({
   onPropChange 
 }: any) {
   return (
-    <section className="relative pt-24 pb-44 px-6 md:px-12 bg-[#12002B] overflow-hidden border-b-[4px] border-black">
+    <section className="relative pt-24 pb-44 px-6 @md:px-12 bg-[#12002B] overflow-hidden border-b-[4px] border-black">
       {/* Background Graphic */}
       <div className="absolute inset-0 z-0">
         <img 
@@ -91,7 +91,7 @@ export function VoltVikingsHero({
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[#FF6B00]/10 blur-[100px] pointer-events-none"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
+      <div className="relative z-10 max-w-7xl mx-auto flex flex-col @lg:flex-row items-center justify-between gap-12">
          <div className="max-w-3xl text-left">
            <div className="inline-block bg-[#3C0E70] text-[#00F2FE] border-2 border-[#00A896] font-extrabold text-[10px] tracking-widest uppercase mb-6 px-4.5 py-1.5 rounded-full shadow-[3px_3px_0px_#000]">
              <EditableText 
@@ -102,7 +102,7 @@ export function VoltVikingsHero({
              />
            </div>
            
-           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] mb-6 tracking-tight uppercase break-words w-full">
+           <h1 className="text-4xl @md:text-6xl @lg:text-7xl font-black text-white leading-[1.05] mb-6 tracking-tight uppercase break-words w-full">
              <EditableText 
                value={title} 
                onChange={(val) => onPropChange?.('title', val)} 
@@ -112,7 +112,7 @@ export function VoltVikingsHero({
              />
            </h1>
            
-           <p className="text-base md:text-lg text-white/80 mb-10 max-w-xl font-medium leading-relaxed break-words">
+           <p className="text-base @md:text-lg text-white/80 mb-10 max-w-xl font-medium leading-relaxed break-words">
              <EditableText 
                value={subtitle} 
                onChange={(val) => onPropChange?.('subtitle', val)} 
@@ -122,7 +122,7 @@ export function VoltVikingsHero({
              />
            </p>
 
-           <div className="flex flex-col sm:flex-row gap-4">
+           <div className="flex flex-col @sm:flex-row gap-4">
              {isEditable ? (
                <div className="inline-block">
                  <EditableText 
@@ -193,9 +193,9 @@ export function VoltVikingsStats(props: any) {
   };
 
   return (
-    <section className="bg-black py-16 px-6 md:px-12 relative z-20 -mt-16 border-b-[4px] border-black">
+    <section className="bg-black py-16 px-6 @md:px-12 relative z-20 -mt-16 border-b-[4px] border-black">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-8">
           {(props.stats || []).map((stat: any, i: number) => {
             const IconItem = ICON_MAP[stat.icon] || ShieldCheck;
             return (
@@ -225,10 +225,10 @@ export function VoltVikingsServices({ title, subtitle, services, isEditable, onP
   };
 
   return (
-    <section className="py-24 px-6 md:px-12 bg-[#1E0044] text-white border-b-[4px] border-black">
+    <section className="py-24 px-6 @md:px-12 bg-[#1E0044] text-white border-b-[4px] border-black">
        <div className="max-w-7xl mx-auto flex flex-col items-center">
          <span className="text-[#FF6B00] font-black text-xs tracking-[0.2em] uppercase mb-4 text-center">WHAT WE EXCEL AT</span>
-         <h2 className="text-4xl md:text-5xl font-black text-center mb-4 uppercase tracking-tighter w-full">
+         <h2 className="text-4xl @md:text-5xl font-black text-center mb-4 uppercase tracking-tighter w-full">
            <EditableText 
              value={title} 
              onChange={(val) => onPropChange?.('title', val)} 
@@ -236,7 +236,7 @@ export function VoltVikingsServices({ title, subtitle, services, isEditable, onP
              placeholder="Section Title" 
            />
          </h2>
-         <p className="text-sm md:text-base font-bold text-white/60 text-center mb-16 max-w-xl uppercase tracking-wider">
+         <p className="text-sm @md:text-base font-bold text-white/60 text-center mb-16 max-w-xl uppercase tracking-wider">
            <EditableText 
              value={subtitle} 
              onChange={(val) => onPropChange?.('subtitle', val)} 
@@ -245,7 +245,7 @@ export function VoltVikingsServices({ title, subtitle, services, isEditable, onP
            />
          </p>
 
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+         <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-8 w-full">
            {(services || []).map((service: any, i: number) => {
              const IconComponent = ICON_MAP[service.icon] || Zap;
              return (
@@ -287,12 +287,12 @@ export function VoltVikingsProcess({ title, steps, isEditable, onPropChange }: a
   };
 
   return (
-    <section className="py-24 px-6 md:px-12 bg-black text-white border-b-[4px] border-black">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+    <section className="py-24 px-6 @md:px-12 bg-black text-white border-b-[4px] border-black">
+      <div className="max-w-7xl mx-auto flex flex-col @lg:flex-row gap-16 items-center">
         
-        <div className="lg:w-1/3 flex flex-col items-center lg:items-start text-center lg:text-left shrink-0">
+        <div className="@lg:w-1/3 flex flex-col items-center @lg:items-start text-center @lg:text-left shrink-0">
           <span className="text-[#00F2FE] font-black text-xs tracking-[0.2em] uppercase mb-4">OUR VIKING JOURNEY</span>
-          <h2 className="text-4xl md:text-5xl font-black leading-[1.05] mb-8 uppercase tracking-tighter max-w-sm">
+          <h2 className="text-4xl @md:text-5xl font-black leading-[1.05] mb-8 uppercase tracking-tighter max-w-sm">
             <EditableText 
               value={title} 
               onChange={(val) => onPropChange?.('title', val)} 
@@ -306,13 +306,13 @@ export function VoltVikingsProcess({ title, steps, isEditable, onPropChange }: a
           </button>
         </div>
 
-        <div className="lg:w-2/3 flex flex-col md:flex-row justify-between w-full relative gap-8">
+        <div className="@lg:w-2/3 flex flex-col @md:flex-row justify-between w-full relative gap-8">
           {(steps || []).map((step: any, i: number) => {
             const IconComponent = ICON_MAP[step.icon] || Search;
             return (
               <div 
                 key={i} 
-                className="flex flex-col items-center text-center relative z-10 w-full md:w-1/3 bg-[#12002B] border-2 border-black rounded-2xl p-6 shadow-[4px_4px_0px_#000] hover:border-[#FF6B00] transition-colors"
+                className="flex flex-col items-center text-center relative z-10 w-full @md:w-1/3 bg-[#12002B] border-2 border-black rounded-2xl p-6 shadow-[4px_4px_0px_#000] hover:border-[#FF6B00] transition-colors"
               >
                 <div className="w-16 h-16 rounded-full border-[3px] border-[#00A896] bg-black flex items-center justify-center mb-4.5 shadow-sm">
                   <IconComponent className={`w-7 h-7 ${i % 2 === 0 ? 'text-[#FF6B00]' : 'text-[#00F2FE]'}`} strokeWidth={2} />
@@ -331,10 +331,10 @@ export function VoltVikingsProcess({ title, steps, isEditable, onPropChange }: a
 
 export function VoltVikingsTestimonials({ title, reviews, isEditable, onPropChange }: any) {
   return (
-    <section className="py-24 px-6 md:px-12 relative bg-[#1E0044] text-white border-b-[4px] border-black">
+    <section className="py-24 px-6 @md:px-12 relative bg-[#1E0044] text-white border-b-[4px] border-black">
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center">
         <span className="text-[#00F2FE] font-black text-xs tracking-[0.2em] uppercase mb-4 text-center">LEGENDARY PROOF</span>
-        <h2 className="text-4xl md:text-5xl font-black text-center mb-16 uppercase tracking-tighter w-full">
+        <h2 className="text-4xl @md:text-5xl font-black text-center mb-16 uppercase tracking-tighter w-full">
           <EditableText 
             value={title} 
             onChange={(val) => onPropChange?.('title', val)} 
@@ -343,7 +343,7 @@ export function VoltVikingsTestimonials({ title, reviews, isEditable, onPropChan
           />
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+        <div className="grid grid-cols-1 @md:grid-cols-2 gap-8 w-full">
           {(reviews || []).map((review: any, i: number) => (
             <div 
               key={i} 
@@ -380,12 +380,12 @@ export function VoltVikingsTestimonials({ title, reviews, isEditable, onPropChan
 
 export function VoltVikingsMap({ title, desc, mapIframeUrl, isEditable, onPropChange }: any) {
   return (
-    <section className="py-20 px-6 md:px-12 bg-black text-white border-b-[4px] border-black">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 items-center">
+    <section className="py-20 px-6 @md:px-12 bg-black text-white border-b-[4px] border-black">
+      <div className="max-w-7xl mx-auto flex flex-col @lg:flex-row gap-12 items-center">
         
-        <div className="w-full lg:w-1/2 space-y-6 text-left">
+        <div className="w-full @lg:w-1/2 space-y-6 text-left">
           <span className="text-[#FF6B00] font-black text-xs tracking-[0.2em] uppercase">OUR SERVICE CORRIDOR</span>
-          <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter w-full">
+          <h2 className="text-4xl @md:text-5xl font-black uppercase tracking-tighter w-full">
             <EditableText 
               value={title} 
               onChange={(val) => onPropChange?.('title', val)} 
@@ -412,7 +412,7 @@ export function VoltVikingsMap({ title, desc, mapIframeUrl, isEditable, onPropCh
           </div>
         </div>
 
-        <div className="w-full lg:w-1/2 border-[4px] border-black rounded-2xl overflow-hidden shadow-[8px_8px_0px_#00A896] bg-gray-900 aspect-video">
+        <div className="w-full @lg:w-1/2 border-[4px] border-black rounded-2xl overflow-hidden shadow-[8px_8px_0px_#00A896] bg-gray-900 aspect-video">
           <iframe 
             className="w-full h-full" 
             title="Volt Vikings Service Area Map" 
@@ -428,12 +428,12 @@ export function VoltVikingsMap({ title, desc, mapIframeUrl, isEditable, onPropCh
 
 export function VoltVikingsCTA({ title, subtitle, buttonText, isEditable, onPropChange }: any) {
   return (
-    <section className="px-6 md:px-12 py-16 bg-[#12002B]">
-       <div className="max-w-6xl mx-auto bg-[#3C0E70] rounded-3xl overflow-hidden relative p-10 md:p-16 flex flex-col lg:flex-row items-center justify-between gap-12 border-[4px] border-black shadow-[8px_8px_0px_#000]">
+    <section className="px-6 @md:px-12 py-16 bg-[#12002B]">
+       <div className="max-w-6xl mx-auto bg-[#3C0E70] rounded-3xl overflow-hidden relative p-10 @md:p-16 flex flex-col @lg:flex-row items-center justify-between gap-12 border-[4px] border-black shadow-[8px_8px_0px_#000]">
           <div className="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070')] bg-cover bg-center"></div>
           
-          <div className="relative z-10 max-w-2xl text-center lg:text-left space-y-4">
-            <h2 className="text-4xl md:text-5xl font-black text-white leading-tight uppercase tracking-tighter">
+          <div className="relative z-10 max-w-2xl text-center @lg:text-left space-y-4">
+            <h2 className="text-4xl @md:text-5xl font-black text-white leading-tight uppercase tracking-tighter">
               <EditableText 
                 value={title} 
                 onChange={(val) => onPropChange?.('title', val)} 
@@ -477,8 +477,8 @@ export function VoltVikingsCTA({ title, subtitle, buttonText, isEditable, onProp
 
 export function VoltVikingsFooter(props: any) {
   return (
-    <footer className="bg-black text-white/70 pt-20 pb-8 px-6 md:px-12 border-t-[4px] border-[#00A896]">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+    <footer className="bg-black text-white/70 pt-20 pb-8 px-6 @md:px-12 border-t-[4px] border-[#00A896]">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-12 mb-16">
         
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-2">
@@ -542,7 +542,7 @@ export function VoltVikingsFooter(props: any) {
 
       </div>
 
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10 text-[10px] font-bold uppercase tracking-wider text-white/40">
+      <div className="max-w-7xl mx-auto flex flex-col @md:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10 text-[10px] font-bold uppercase tracking-wider text-white/40">
         <p>© {new Date().getFullYear()} {props.businessName || "Volt Vikings"}. All rights reserved.</p>
         <div className="flex gap-6">
           <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>

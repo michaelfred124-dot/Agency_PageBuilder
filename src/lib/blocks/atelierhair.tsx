@@ -21,11 +21,11 @@ export function AHHero(props: any) {
         <img src={bgImage} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(20,10,14,0.9) 0%, rgba(20,10,14,0.4) 60%, transparent 100%)' }} />
       </div>
-      <div className="relative z-10 px-8 md:px-16 pb-20 w-full">
+      <div className="relative z-10 px-8 @md:px-16 pb-20 w-full">
         <div className="max-w-xl">
           <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-5" style={{ color: AH_ROSE }}>Atelier Hair Studio</div>
-          <h1 className="text-5xl md:text-7xl font-black text-white leading-none mb-6 whitespace-pre-line" style={{ fontFamily: 'Georgia, serif' }}>{title}</h1>
-          <p className="text-white/70 text-base md:text-lg mb-8 max-w-sm leading-relaxed">{subtitle}</p>
+          <h1 className="text-5xl @md:text-7xl font-black text-white leading-none mb-6 whitespace-pre-line" style={{ fontFamily: 'Georgia, serif' }}>{title}</h1>
+          <p className="text-white/70 text-base @md:text-lg mb-8 max-w-sm leading-relaxed">{subtitle}</p>
           <a href="#" style={{ backgroundColor: AH_ROSE }} className="inline-flex items-center gap-2 text-white font-semibold text-sm px-8 py-4 hover:opacity-90 transition-opacity tracking-wider">
             Book Your Session <ArrowRight className="w-4 h-4" />
           </a>
@@ -41,14 +41,14 @@ export function AHAbout(props: any) {
   const image = props.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1974';
   return (
     <section style={{ backgroundColor: AH_WARM }} className="py-0">
-      <div className="grid grid-cols-1 md:grid-cols-2 min-h-[70vh]">
+      <div className="grid grid-cols-1 @md:grid-cols-2 min-h-[70vh]">
         <div className="relative overflow-hidden" style={{ minHeight: '400px' }}>
           <img src={image} alt="Stylist" className="w-full h-full object-cover absolute inset-0" />
         </div>
-        <div className="flex items-center px-10 md:px-16 py-20">
+        <div className="flex items-center px-10 @md:px-16 py-20">
           <div>
             <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-4" style={{ color: AH_ROSE }}>Meet Your Stylist</div>
-            <h2 className="text-4xl md:text-5xl font-black mb-6 whitespace-pre-line leading-tight" style={{ color: AH_DARK, fontFamily: 'Georgia, serif' }}>{title}</h2>
+            <h2 className="text-4xl @md:text-5xl font-black mb-6 whitespace-pre-line leading-tight" style={{ color: AH_DARK, fontFamily: 'Georgia, serif' }}>{title}</h2>
             <p className="text-gray-500 leading-relaxed text-base">{desc}</p>
             <div className="flex items-center gap-4 mt-8">
               <div className="w-10 h-[2px]" style={{ backgroundColor: AH_ROSE }} />
@@ -69,13 +69,13 @@ export function AHServices(props: any) {
     { iconName: 'Heart', title: 'Bridal Packages', desc: 'Full-day bridal prep for you and your wedding party.' }
   ];
   return (
-    <section style={{ backgroundColor: AH_BLUSH }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: AH_BLUSH }} className="py-24 px-6 @md:px-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-3" style={{ color: AH_ROSE }}>Services</div>
           <h2 className="text-4xl font-black" style={{ color: AH_DARK, fontFamily: 'Georgia, serif' }}>What We Offer</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-rose-200">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-px bg-rose-200">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.iconName] || Scissors;
             return (
@@ -100,13 +100,13 @@ export function AHPortfolio(props: any) {
     { url: 'https://images.unsplash.com/photo-1470259078422-826894b933aa?q=80&w=800', title: 'Styling' }
   ];
   return (
-    <section style={{ backgroundColor: AH_WARM }} className="py-20 px-6 md:px-16">
+    <section style={{ backgroundColor: AH_WARM }} className="py-20 px-6 @md:px-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-10">
           <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-2" style={{ color: AH_ROSE }}>Portfolio</div>
           <h2 className="text-3xl font-black" style={{ color: AH_DARK, fontFamily: 'Georgia, serif' }}>Recent Work</h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 @md:grid-cols-4 gap-3">
           {images.map((img: any, i: number) => (
             <div key={i} className="group relative overflow-hidden aspect-[3/4]">
               <img src={img.url} alt={img.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -124,13 +124,13 @@ export function AHPortfolio(props: any) {
 export function AHTestimonials(props: any) {
   const testimonials = props.testimonials || [];
   return (
-    <section style={{ backgroundColor: AH_DARK }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: AH_DARK }} className="py-24 px-6 @md:px-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-3" style={{ color: AH_ROSE }}>Client Love</div>
           <h2 className="text-4xl font-black text-white" style={{ fontFamily: 'Georgia, serif' }}>What Clients Say</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-6">
           {testimonials.map((t: any, i: number) => (
             <div key={i} style={{ backgroundColor: '#2A1A20' }} className="p-8 rounded-sm">
               <div className="flex mb-4">{[...Array(5)].map((_, j) => <Star key={j} className="w-3 h-3 fill-current" style={{ color: AH_ROSE }} />)}</div>
@@ -155,7 +155,7 @@ export function AHCta(props: any) {
       </div>
       <div className="relative z-10">
         <Heart className="w-8 h-8 mx-auto mb-5" style={{ color: AH_ROSE }} />
-        <h2 className="text-3xl md:text-5xl font-black text-white mb-8" style={{ fontFamily: 'Georgia, serif' }}>{title}</h2>
+        <h2 className="text-3xl @md:text-5xl font-black text-white mb-8" style={{ fontFamily: 'Georgia, serif' }}>{title}</h2>
         <a href="#" style={{ backgroundColor: AH_ROSE }} className="inline-flex items-center gap-2 text-white font-semibold text-sm px-10 py-4 hover:opacity-90 transition-opacity tracking-widest">
           Request Appointment <ArrowRight className="w-4 h-4" />
         </a>

@@ -339,10 +339,10 @@ export default function GreenscapeTemplate() {
                 {/* Editorial Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {[
-                    { title: 'The Sand Hill Sanctuary', loc: 'Atherton, CA', img: 'https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=800&q=80' },
+                    { title: 'The Sand Hill Sanctuary', loc: 'Atherton, CA', img: 'https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=800&q=80' },
                     { title: 'Monolithic Front Gardens', loc: 'Los Altos Hills, CA', img: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=800&q=80' },
                     { title: 'Stonework Terrace', loc: 'Woodside, CA', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80' },
-                    { title: 'Ecological Meadow', loc: 'Palo Alto, CA', img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80' }
+                    { title: 'Ecological Meadow', loc: 'Palo Alto, CA', img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=800&q=80' }
                   ].map((p, i) => (
                     <motion.div 
                       key={i}
@@ -460,13 +460,13 @@ export default function GreenscapeTemplate() {
                     { 
                       title: 'Preservation Hydrology', 
                       desc: 'Installation and diagnostic maintenance of high-efficiency drip loops, smart climate-linked controllers, and greywater diversion piping.',
-                      img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=800&q=80',
+                      img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=800&q=80',
                       features: ['Atmospheric Smart Valves', 'Subterranean Drip Loops', 'Soil-Moisture Feedback', 'Hydrology Auditing']
                     },
                     { 
                       title: 'Botanical Pruning', 
                       desc: 'Detailed structural tree shaping, decorative boxwood pruning, arborist diagnostics, and custom support grids for young saplings.',
-                      img: 'https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=800&q=80',
+                      img: 'https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=800&q=80',
                       features: ['Artistic Boxwood Shaping', 'Arborist Health Audits', 'Organic Sapling Protection', 'Espalier Training']
                     },
                     { 
@@ -566,7 +566,7 @@ export default function GreenscapeTemplate() {
 
                   <div className="lg:col-span-6 relative">
                     <div className="aspect-video lg:aspect-square overflow-hidden border border-[#C5A880]/20 shadow-2xl relative">
-                      <Image src="https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=1200&q=80" className="w-full h-full object-cover filter brightness-95" alt="Finished Estate Layout" fill />
+                      <Image src="https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=1200&q=80" className="w-full h-full object-cover filter brightness-95" alt="Finished Estate Layout" fill />
                     </div>
                   </div>
                 </div>
@@ -619,10 +619,10 @@ export default function GreenscapeTemplate() {
               <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="grid md:grid-cols-2 gap-8 mb-16">
                   {[
-                    { title: 'The Atherton Hillside Sanctuary', desc: 'Sculpted from a dry hillside, we integrated flagstone pathways, natural boulder steps, dry meadow plantings, and low-consumption smart hydration systems.', loc: 'Atherton, CA', img: 'https://images.unsplash.com/photo-1592424040945-8bc2718104ee?auto=format&fit=crop&w=1200&q=80', tag: 'Terrace Masonry' },
+                    { title: 'The Atherton Hillside Sanctuary', desc: 'Sculpted from a dry hillside, we integrated flagstone pathways, natural boulder steps, dry meadow plantings, and low-consumption smart hydration systems.', loc: 'Atherton, CA', img: 'https://images.unsplash.com/photo-1598605272254-16f0c0ecdfa5?auto=format&fit=crop&w=1200&q=80', tag: 'Terrace Masonry' },
                     { title: 'Los Altos Hills Monolithic Gardens', desc: 'Drought-tolerant structural softscaping with dark organic mulch contours, massive limestone slab elements, and architectural landscape illumination.', loc: 'Los Altos Hills, CA', img: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&w=1200&q=80', tag: 'Preservation Softscape' },
                     { title: 'Woodside Paved Terrace & Shrub Grids', desc: 'Linear imported stone terrace bordered by structured boxwoods and low-voltage path lighting to emphasize structural depth.', loc: 'Woodside, CA', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80', tag: 'Stonework' },
-                    { title: 'Palo Alto Native Meadowlands', desc: 'Replacing traditional lawn layouts with water-conserving California sages, local sedges, and structured stone boundaries.', loc: 'Palo Alto, CA', img: 'https://images.unsplash.com/photo-1416879598555-2272e5ae672b?auto=format&fit=crop&w=1200&q=80', tag: 'Ecological Restoration' }
+                    { title: 'Palo Alto Native Meadowlands', desc: 'Replacing traditional lawn layouts with water-conserving California sages, local sedges, and structured stone boundaries.', loc: 'Palo Alto, CA', img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=1200&q=80', tag: 'Ecological Restoration' }
                   ].map((p, i) => (
                     <div 
                       key={i}

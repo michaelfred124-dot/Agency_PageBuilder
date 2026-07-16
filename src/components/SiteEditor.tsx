@@ -331,7 +331,8 @@ function SortableSection({
   onMoveUp,
   onMoveDown,
   isNewlyAdded,
-  tenantId
+  tenantId,
+  onContextMenu
 }: any) {
   const {
     attributes,
@@ -444,6 +445,12 @@ function SortableSection({
       data-section-id={section.id}
       className={`relative group cursor-pointer border-[4px] bg-white transition-colors ${isSelected ? 'border-blue-500 z-10 scale-[1.01] shadow-2xl' : 'border-transparent hover:border-black/20'} ${isDragging ? '!opacity-50 scale-95 shadow-2xl z-50 border-black' : ''}`}
       onClick={onClick}
+      onContextMenu={(e) => {
+        if (!isEditable) return;
+        e.preventDefault();
+        e.stopPropagation();
+        onContextMenu?.(e, section.id);
+      }}
     >
       {isEditable && isSelected && (
         <div className="absolute -top-3.5 left-4 bg-blue-600 text-white rounded px-2 py-0.5 text-[9px] font-black uppercase tracking-widest z-20 shadow-md border border-white select-none pointer-events-none">
@@ -840,6 +847,82 @@ export default function SiteEditor({
   const [confirmDeletePageId, setConfirmDeletePageId] = useState<string | null>(null);
   const [showAddSocial, setShowAddSocial] = useState(false);
   const [newSocialName, setNewSocialName] = useState('facebook');
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; sectionId: string } | null>(null);
+
+  // Close context menu on window click
+  useEffect(() => {
+    const closeMenu = () => setContextMenu(null);
+    window.addEventListener('click', closeMenu);
+    return () => window.removeEventListener('click', closeMenu);
+  }, []);
+
+  // --- Global Keyboard Shortcuts ---
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const isTyping = target.tagName === 'INPUT' || 
+                       target.tagName === 'TEXTAREA' || 
+                       target.isContentEditable;
+      
+      if (isTyping) return;
+
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const cmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+
+      // Undo: Cmd/Ctrl + Z
+      if (cmdOrCtrl && e.key.toLowerCase() === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        if (canUndo) {
+          undoPages();
+          addToast('Undo applied');
+        }
+      }
+
+      // Redo: Cmd/Ctrl + Shift + Z or Cmd/Ctrl + Y
+      if ((cmdOrCtrl && e.key.toLowerCase() === 'z' && e.shiftKey) || (cmdOrCtrl && e.key.toLowerCase() === 'y')) {
+        e.preventDefault();
+        if (canRedo) {
+          redoPages();
+          addToast('Redo applied');
+        }
+      }
+
+      // Duplicate: Cmd/Ctrl + D
+      if (cmdOrCtrl && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        if (selectedSectionId && selectedSectionId !== 'all') {
+          handleDuplicateSection(selectedSectionId);
+          addToast('Widget duplicated');
+        }
+      }
+
+      // Delete: Backspace or Delete
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (selectedSectionId) {
+          if (selectedSectionId === 'all') {
+            setSections([]);
+            setSelectedSectionId(null);
+            addToast('All widgets deleted');
+          } else {
+            removeSection(selectedSectionId);
+            addToast('Widget deleted');
+          }
+        }
+      }
+
+      // Select All: Cmd/Ctrl + A
+      if (cmdOrCtrl && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        if (sections.length > 0) {
+          setSelectedSectionId('all');
+          addToast('Selected all widgets (press Delete to delete all)');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedSectionId, sections, canUndo, canRedo]);
 
   useEffect(() => {
     setSelectedElementId(null);
@@ -4521,6 +4604,13 @@ export default function SiteEditor({
                               }
                             }}
                             tenantId={tenantId || siteId}
+                            onContextMenu={(e: any, id: string) => {
+                              setContextMenu({
+                                x: e.clientX,
+                                y: e.clientY,
+                                sectionId: id
+                              });
+                            }}
                           />
                         </React.Fragment>
                       ))}

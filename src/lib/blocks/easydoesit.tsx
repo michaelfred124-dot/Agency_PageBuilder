@@ -60,6 +60,16 @@ export const Reveal: React.FC<RevealProps> = ({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // If in editor or preview editor mode, bypass animation so it is immediately visible
+    if (typeof window !== 'undefined' && (
+      window.location.pathname.includes('/editor') || 
+      window.location.pathname.includes('/dashboard') ||
+      window.location.search.includes('editor=true')
+    )) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -330,12 +340,12 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
         <div className="container mx-auto px-6 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => handleNavClick("home")}>
             <Logo className="w-14 h-14 transition-transform duration-300 group-hover:scale-105" />
-            <span className="hidden lg:block text-2xl font-bold tracking-tight text-white">
+            <span className="hidden @lg:block text-2xl font-bold tracking-tight text-white">
               {businessName}
             </span>
           </div>
 
-          <div className="hidden md:flex items-center gap-10">
+          <div className="hidden @md:flex items-center gap-10">
             {navLinks.map((link) => (
               <button
                 key={link.name}
@@ -352,16 +362,16 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="hidden md:block text-right mr-2">
+            <div className="hidden @md:block text-right mr-2">
               <p className="text-[10px] text-gray-400 uppercase tracking-wider">Call for Booking</p>
               <p className="text-white font-bold text-sm hover:text-orange-500 transition-colors">{phone}</p>
             </div>
-            <Button size="md" className="hidden md:inline-flex" onClick={() => handleNavClick("contact")}>
+            <Button size="md" className="hidden @md:inline-flex" onClick={() => handleNavClick("contact")}>
               {ctaText}
             </Button>
 
             <button
-              className="md:hidden text-white p-2 hover:text-orange-500 transition-colors"
+              className="@md:hidden text-white p-2 hover:text-orange-500 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -369,7 +379,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
           </div>
 
           {isMobileMenuOpen && (
-            <div className="absolute top-full left-0 right-0 bg-[#0a0a0a] border-b border-white/10 p-6 md:hidden flex flex-col gap-4 animate-in slide-in-from-top-5 shadow-2xl">
+            <div className="absolute top-full left-0 right-0 bg-[#0a0a0a] border-b border-white/10 p-6 @md:hidden flex flex-col gap-4 animate-in slide-in-from-top-5 shadow-2xl">
               {navLinks.map((link) => (
                 <button
                   key={link.name}
@@ -390,7 +400,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
   },
   EDIHero: ({ title, subtitle, image, badgeText, onNavigate }: any) => {
     return (
-      <section className="relative min-h-screen pt-32 pb-12 px-4 md:px-8 flex items-center justify-center bg-[#050505] overflow-hidden">
+      <section className="relative min-h-screen pt-32 pb-12 px-4 @md:px-8 flex items-center justify-center bg-[#050505] overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[128px] pointer-events-none" />
         <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-purple-600/15 rounded-full blur-[128px] pointer-events-none" />
         <div
@@ -399,8 +409,8 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
         />
 
         <div className="w-full max-w-[1600px] mx-auto z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
-            <div className="lg:col-span-7 relative bg-[#121212]/80 backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-14 overflow-hidden border border-white/10 flex flex-col justify-center min-h-[600px] shadow-2xl shadow-black/50 group">
+          <div className="grid grid-cols-1 @lg:grid-cols-12 gap-6 h-full">
+            <div className="@lg:col-span-7 relative bg-[#121212]/80 backdrop-blur-2xl rounded-[2.5rem] p-8 @md:p-14 overflow-hidden border border-white/10 flex flex-col justify-center min-h-[600px] shadow-2xl shadow-black/50 group">
               <div
                 className="absolute top-[-50%] right-[-50%] w-full h-full rounded-full blur-3xl pointer-events-none bg-gradient-to-b"
                 style={{
@@ -423,16 +433,22 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
                 </Reveal>
 
                 <Reveal delay={100}>
-                  <h1 className="text-5xl md:text-7xl lg:text-[5rem] font-bold leading-[0.9] text-white tracking-tight uppercase whitespace-pre-line">
-                    Your Car Is <br />
-                    <span
-                      className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-red-500 bg-[length:200%_auto] animate-gradient-xy filter"
-                      style={{ filter: "drop-shadow(0 0 20px rgba(255,107,0,0.3))" }}
-                    >
-                      In Great Hands
-                    </span>{" "}
-                    <br />
-                    <span className="text-white">With Us</span>
+                  <h1 className="text-5xl @md:text-7xl @lg:text-[5rem] font-bold leading-[0.9] text-white tracking-tight uppercase">
+                    {String(title || "Your Car Is \nIn Great Hands \nWith Us").split("\n").map((line: string, idx: number, lines: string[]) => (
+                      <React.Fragment key={idx}>
+                        {idx === Math.min(1, lines.length - 1) ? (
+                          <span
+                            className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-red-500 bg-[length:200%_auto] animate-gradient-xy filter"
+                            style={{ filter: "drop-shadow(0 0 20px rgba(255,107,0,0.3))" }}
+                          >
+                            {line.trim()}
+                          </span>
+                        ) : (
+                          <span className="text-white">{line.trim()}</span>
+                        )}
+                        {idx < lines.length - 1 && <br />}
+                      </React.Fragment>
+                    ))}
                   </h1>
                 </Reveal>
 
@@ -453,7 +469,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
               </div>
             </div>
 
-            <div className="lg:col-span-5 relative h-[400px] lg:h-auto rounded-[2.5rem] overflow-hidden group border border-white/10">
+            <div className="@lg:col-span-5 relative h-[400px] @lg:h-auto rounded-[2.5rem] overflow-hidden group border border-white/10">
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 group-hover:opacity-80 transition-opacity duration-500" />
               <img
                 src={image}
@@ -531,7 +547,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
     return (
       <section className="py-16 bg-[#050505]">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 @md:grid-cols-3 gap-6 mb-6">
             {features.map((feature, idx) => (
               <Reveal key={idx} delay={idx * 100} width="100%" className="h-full hover:z-30 relative text-left">
                 <div className="h-full p-8 rounded-[2rem] bg-[#121212] border border-white/5 relative overflow-hidden group hover:border-white/20 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/50">
@@ -558,7 +574,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
           </div>
 
           <Reveal width="100%">
-            <div className="bg-[#121212] rounded-[2.5rem] p-8 lg:p-16 border border-white/5 relative overflow-hidden group text-left">
+            <div className="bg-[#121212] rounded-[2.5rem] p-8 @lg:p-16 border border-white/5 relative overflow-hidden group text-left">
               <div
                 className="absolute top-0 left-0 w-full h-1 opacity-20"
                 style={{
@@ -572,15 +588,15 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
                 }}
               />
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 relative z-10">
-                <div className="lg:col-span-4 flex flex-col justify-center">
-                  <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight whitespace-pre-line">
+              <div className="grid grid-cols-1 @lg:grid-cols-12 gap-12 @lg:gap-8 relative z-10">
+                <div className="@lg:col-span-4 flex flex-col justify-center">
+                  <h2 className="text-4xl @md:text-5xl font-bold text-white mb-6 leading-tight whitespace-pre-line">
                     {heading} <span className="inline-block animate-bounce" style={{ color: EDI_ORANGE }}>👉</span>
                   </h2>
                   <p className="text-gray-400 text-lg leading-relaxed">{description}</p>
                 </div>
 
-                <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="@lg:col-span-8 grid grid-cols-1 @md:grid-cols-3 gap-8">
                   {steps.map((step, idx) => (
                     <div key={idx} className="relative group/step text-left">
                       <div
@@ -676,7 +692,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
               >
                 Pricing Plans
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-6">{title}</h2>
+              <h2 className="text-4xl @md:text-5xl font-bold text-white mt-4 mb-6">{title}</h2>
 
               <div className="inline-flex bg-[#121212]/80 p-1.5 rounded-full border border-white/10 mt-4 backdrop-blur-md relative overflow-hidden group">
                 <button
@@ -705,7 +721,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          <div className="grid grid-cols-1 @md:grid-cols-3 gap-6 items-start">
             {plans.map((plan, idx) => (
               <Reveal key={idx} delay={idx * 150} width="100%" className="h-full hover:z-30 relative transition-all duration-300 text-left">
                 <div className={`h-full p-[1px] rounded-[2.5rem] relative ${plan.popular ? "overflow-hidden" : "bg-white/10"}`}>
@@ -808,7 +824,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
 
     return (
       <section className="py-24 bg-[#0a0a0a]">
-        <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="container mx-auto px-4 grid grid-cols-1 @lg:grid-cols-2 gap-16">
           <div className="text-left">
             <Reveal>
               <span className="font-semibold tracking-wider text-sm uppercase" style={{ color: EDI_ORANGE }}>
@@ -865,6 +881,9 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
     );
   },
   EDIGallery: ({ title, subtitle }: any) => {
+    const galleryTitleWords = String(title || "Automotive Artistry").split(" ");
+    const galleryTitleAccent = galleryTitleWords.slice(-1).join(" ");
+    const galleryTitleHead = galleryTitleWords.slice(0, -1).join(" ");
     const collections = [
       {
         title: "Exterior Excellence",
@@ -962,7 +981,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
             {collection.items.map((item: any) => (
               <div
                 key={item.id}
-                className="min-w-[300px] md:min-w-[400px] h-[450px] relative group rounded-3xl overflow-hidden snap-center bg-[#121212] border border-white/5"
+                className="min-w-[300px] @md:min-w-[400px] h-[450px] relative group rounded-3xl overflow-hidden snap-center bg-[#121212] border border-white/5"
               >
                 <img
                   src={`${item.image}`}
@@ -1022,8 +1041,8 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
                   Our Portfolio
                 </span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                Automotive <span style={{ color: EDI_ORANGE }}>Artistry</span>
+              <h1 className="text-4xl @md:text-6xl font-bold text-white mb-6">
+                {galleryTitleHead && <>{galleryTitleHead} </>}<span style={{ color: EDI_ORANGE }}>{galleryTitleAccent}</span>
               </h1>
               <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">{subtitle}</p>
             </Reveal>
@@ -1041,6 +1060,9 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
     );
   },
   EDIContact: ({ title, subtitle, phone, email, serviceArea, tenantId, isEditable }: any) => {
+    const contactTitleWords = String(title || "Ready for a Showroom Shine?").split(" ");
+    const contactTitleAccent = contactTitleWords.slice(-2).join(" ");
+    const contactTitleHead = contactTitleWords.slice(0, -2).join(" ");
     const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
     const [errorMessage, setErrorMessage] = useState("");
     const [formData, setFormData] = useState({ fullName: "", phone: "", email: "", vehicle: "", service: "Not Sure", message: "" });
@@ -1094,16 +1116,16 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
                 Book Now
               </span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Ready for a <span style={{ color: EDI_ORANGE }}>Showroom Shine?</span>
+            <h1 className="text-4xl @md:text-6xl font-bold text-white mb-6">
+              {contactTitleHead && <>{contactTitleHead} </>}<span style={{ color: EDI_ORANGE }}>{contactTitleAccent}</span>
             </h1>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">{subtitle}</p>
           </Reveal>
         </div>
 
         <div className="container mx-auto px-4 max-w-7xl text-left">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-5 space-y-8">
+          <div className="grid grid-cols-1 @lg:grid-cols-12 gap-12">
+            <div className="@lg:col-span-5 space-y-8">
               <Reveal width="100%">
                 <div className="bg-[#121212] rounded-[2.5rem] p-8 border border-white/5 relative overflow-hidden">
                   <div
@@ -1190,9 +1212,9 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
               </Reveal>
             </div>
 
-            <div className="lg:col-span-7">
+            <div className="@lg:col-span-7">
               <Reveal width="100%" delay={200}>
-                <form onSubmit={handleSubmit} className="bg-[#121212] rounded-[2.5rem] p-8 md:p-12 border border-white/5 relative group">
+                <form onSubmit={handleSubmit} className="bg-[#121212] rounded-[2.5rem] p-8 @md:p-12 border border-white/5 relative group">
                   <div
                     className="absolute top-0 right-0 w-64 h-64 blur-[80px] rounded-full pointer-events-none transition-colors duration-700"
                     style={{ backgroundColor: `${EDI_BLUE}08` }}
@@ -1200,7 +1222,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
 
                   <h3 className="text-2xl font-bold text-white mb-8">Send a Message</h3>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="grid grid-cols-1 @md:grid-cols-2 gap-6 mb-6">
                     <div className="space-y-2">
                       <label className="text-sm text-gray-400 font-medium ml-1">Full Name</label>
                       <input
@@ -1225,7 +1247,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="grid grid-cols-1 @md:grid-cols-2 gap-6 mb-6">
                     <div className="space-y-2">
                       <label className="text-sm text-gray-400 font-medium ml-1">Email Address</label>
                       <input
@@ -1332,7 +1354,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
     return (
       <footer id="footer" className="bg-[#050505] pt-24 border-t border-white/10 text-left">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="relative rounded-3xl bg-gradient-to-br from-gray-900 via-gray-900 to-black border border-white/10 p-8 md:p-16 text-center overflow-hidden mb-24 group">
+          <div className="relative rounded-3xl bg-gradient-to-br from-gray-900 via-gray-900 to-black border border-white/10 p-8 @md:p-16 text-center overflow-hidden mb-24 group">
             <div
               className="absolute top-0 right-0 w-64 h-64 blur-[80px] rounded-full pointer-events-none group-hover:opacity-40 transition-opacity duration-500"
               style={{ backgroundColor: `${EDI_ORANGE}1a` }}
@@ -1343,12 +1365,12 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
             />
 
             <div className="relative z-10 max-w-3xl mx-auto">
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Your Car Will Look Like New. Guaranteed.</h2>
+              <h2 className="text-3xl @md:text-5xl font-bold text-white mb-6">Your Car Will Look Like New. Guaranteed.</h2>
               <p className="text-gray-400 mb-8 text-lg">
                 Ready to be amazed? Get a free, no-obligation quote and let us tackle your car's biggest challenge.
               </p>
 
-              <div className="flex flex-col md:flex-row gap-4 max-w-lg mx-auto justify-center">
+              <div className="flex flex-col @md:flex-row gap-4 max-w-lg mx-auto justify-center">
                 <Button size="lg" onClick={() => onNavigate && onNavigate("contact")}>
                   Get My Free Quote
                 </Button>
@@ -1356,7 +1378,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16">
+          <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-12 pb-16">
             <div className="space-y-6">
               <div className="flex items-center gap-3 group">
                 <Logo className="w-16 h-16 transition-transform group-hover:scale-105 duration-300" />
@@ -1449,7 +1471,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
             </div>
           </div>
 
-          <div className="border-t border-white/10 py-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 gap-4">
+          <div className="border-t border-white/10 py-8 text-center @md:text-left flex flex-col @md:flex-row justify-between items-center text-sm text-gray-500 gap-4">
             <p>© 2026 Easy Does It Detailing. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-green-500/20 bg-green-500/10">

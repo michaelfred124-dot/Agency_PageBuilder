@@ -22,13 +22,13 @@ export function GTHero(props: any) {
         <img src={bgImage} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(44,31,31,0.88) 0%, rgba(44,31,31,0.5) 55%, rgba(44,31,31,0.2) 100%)' }} />
       </div>
-      <div className="relative z-10 px-10 md:px-20 max-w-2xl">
+      <div className="relative z-10 px-10 @md:px-20 max-w-2xl">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-6 h-[1px]" style={{ backgroundColor: GT_GOLD }} />
           <span className="text-xs font-semibold tracking-[0.4em] uppercase" style={{ color: GT_GOLD }}>The Golden Thread Events</span>
           <div className="w-6 h-[1px]" style={{ backgroundColor: GT_GOLD }} />
         </div>
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6 whitespace-pre-line" style={{ fontFamily: 'Georgia, "Playfair Display", serif' }}>{title}</h1>
+        <h1 className="text-5xl @md:text-7xl font-black text-white leading-tight mb-6 whitespace-pre-line" style={{ fontFamily: 'Georgia, "Playfair Display", serif' }}>{title}</h1>
         <p className="text-white/75 text-lg mb-10 leading-relaxed max-w-md">{subtitle}</p>
         <a href="#" style={{ backgroundColor: GT_SAGE }} className="inline-flex items-center gap-2 text-white font-semibold text-sm px-10 py-4 rounded-sm hover:opacity-90 transition-opacity tracking-wider">
           Begin Your Journey <ArrowRight className="w-4 h-4" />
@@ -44,11 +44,11 @@ export function GTAbout(props: any) {
   const image = props.image || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974';
   return (
     <section style={{ backgroundColor: GT_BLUSH }} className="py-0">
-      <div className="grid grid-cols-1 md:grid-cols-2 min-h-[70vh]">
-        <div className="flex items-center px-10 md:px-16 py-20">
+      <div className="grid grid-cols-1 @md:grid-cols-2 min-h-[70vh]">
+        <div className="flex items-center px-10 @md:px-16 py-20">
           <div>
             <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-5" style={{ color: GT_SAGE }}>Meet Your Planner</div>
-            <h2 className="text-4xl md:text-5xl font-black mb-6 whitespace-pre-line leading-tight" style={{ color: GT_DARK, fontFamily: 'Georgia, "Playfair Display", serif' }}>{title}</h2>
+            <h2 className="text-4xl @md:text-5xl font-black mb-6 whitespace-pre-line leading-tight" style={{ color: GT_DARK, fontFamily: 'Georgia, "Playfair Display", serif' }}>{title}</h2>
             <p className="text-gray-500 leading-relaxed text-base mb-8">{desc}</p>
             <div className="flex items-center gap-3">
               <Heart className="w-4 h-4 fill-current" style={{ color: GT_GOLD }} />
@@ -73,13 +73,13 @@ export function GTServices(props: any) {
     { iconName: 'Heart', title: 'Elopements', desc: 'Intimate, meaningful ceremonies for couples who want something personal and unforgettable.' }
   ];
   return (
-    <section style={{ backgroundColor: GT_CHAMPAGNE }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: GT_CHAMPAGNE }} className="py-24 px-6 @md:px-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-3" style={{ color: GT_SAGE }}>Services</div>
           <h2 className="text-4xl font-black" style={{ color: GT_DARK, fontFamily: 'Georgia, "Playfair Display", serif' }}>How We Help</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-5">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.iconName] || Flower2;
             return (
@@ -106,13 +106,13 @@ export function GTPortfolio(props: any) {
     { url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800', title: 'Reception Details' }
   ];
   return (
-    <section style={{ backgroundColor: GT_BLUSH }} className="py-20 px-6 md:px-16">
+    <section style={{ backgroundColor: GT_BLUSH }} className="py-20 px-6 @md:px-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-10">
           <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-2" style={{ color: GT_SAGE }}>Portfolio</div>
           <h2 className="text-3xl font-black" style={{ color: GT_DARK, fontFamily: 'Georgia, "Playfair Display", serif' }}>Our Work</h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 @md:grid-cols-4 gap-3">
           {images.map((img: any, i: number) => (
             <div key={i} className="group relative overflow-hidden aspect-square">
               <img src={img.url} alt={img.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -130,13 +130,13 @@ export function GTPortfolio(props: any) {
 export function GTTestimonials(props: any) {
   const testimonials = props.testimonials || [];
   return (
-    <section style={{ backgroundColor: GT_CHAMPAGNE }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: GT_CHAMPAGNE }} className="py-24 px-6 @md:px-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-semibold tracking-[0.4em] uppercase mb-3" style={{ color: GT_SAGE }}>Kind Words</div>
           <h2 className="text-4xl font-black" style={{ color: GT_DARK, fontFamily: 'Georgia, "Playfair Display", serif' }}>Our Couples</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-6">
           {testimonials.map((t: any, i: number) => (
             <div key={i} className="bg-white p-8 shadow-sm text-center">
               <div className="text-5xl font-black mb-3" style={{ color: GT_GOLD + '40', fontFamily: 'Georgia, serif' }}>"</div>
@@ -164,7 +164,7 @@ export function GTCta(props: any) {
       </div>
       <div className="relative z-10 max-w-xl px-6">
         <Flower2 className="w-8 h-8 mx-auto mb-5" style={{ color: GT_GOLD }} />
-        <h2 className="text-3xl md:text-5xl font-black text-white mb-8" style={{ fontFamily: 'Georgia, "Playfair Display", serif' }}>{title}</h2>
+        <h2 className="text-3xl @md:text-5xl font-black text-white mb-8" style={{ fontFamily: 'Georgia, "Playfair Display", serif' }}>{title}</h2>
         <a href="#" style={{ backgroundColor: GT_SAGE }} className="inline-flex items-center gap-2 text-white font-semibold text-sm px-10 py-4 hover:opacity-90 transition-opacity tracking-wider">
           Schedule a Consultation <ArrowRight className="w-4 h-4" />
         </a>

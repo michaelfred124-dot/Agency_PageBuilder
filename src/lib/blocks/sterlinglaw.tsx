@@ -15,7 +15,7 @@ export function SLHeader(props: any) {
   const businessName = props.businessName || 'Sterling Law';
   const navLinks: string[] = props.navLinks || ['Practice Areas', 'About Us', 'Results', 'Contact'];
   return (
-    <header style={{ backgroundColor: SL_NAVY }} className="py-4 px-6 md:px-16 flex items-center justify-between sticky top-0 z-50 shadow-xl">
+    <header style={{ backgroundColor: SL_NAVY }} className="py-4 px-6 @md:px-16 flex items-center justify-between sticky top-0 z-50 shadow-xl">
       <div className="flex items-center gap-3">
         <div style={{ backgroundColor: SL_GOLD }} className="w-9 h-9 rounded-sm flex items-center justify-center">
           <Scale className="w-5 h-5 text-white" />
@@ -25,12 +25,12 @@ export function SLHeader(props: any) {
           <div className="text-[9px] font-bold tracking-[0.2em] uppercase mt-0.5" style={{ color: SL_GOLD }}>Attorneys at Law</div>
         </div>
       </div>
-      <nav className="hidden lg:flex items-center gap-8">
+      <nav className="hidden @lg:flex items-center gap-8">
         {navLinks.map((link: string, i: number) => (
           <a key={i} href="#" className="text-white/75 hover:text-white text-sm font-semibold tracking-wide transition-colors">{link}</a>
         ))}
       </nav>
-      <a href="tel:5551234567" style={{ border: `2px solid ${SL_GOLD}`, color: SL_GOLD }} className="hidden lg:inline-flex items-center gap-2 text-sm font-black px-5 py-2 hover:bg-white/10 transition-all">
+      <a href="tel:5551234567" style={{ border: `2px solid ${SL_GOLD}`, color: SL_GOLD }} className="hidden @lg:inline-flex items-center gap-2 text-sm font-black px-5 py-2 hover:bg-white/10 transition-all">
         <Phone className="w-4 h-4" /> Free Consultation
       </a>
     </header>
@@ -48,13 +48,13 @@ export function SLHero(props: any) {
         <img src={backgroundImage} alt="" className="w-full h-full object-cover opacity-20" />
         <div className="absolute inset-0" style={{ background: `linear-gradient(105deg, ${SL_NAVY} 45%, transparent 100%)` }} />
       </div>
-      <div className="relative z-10 px-6 md:px-16 py-24 max-w-3xl">
+      <div className="relative z-10 px-6 @md:px-16 py-24 max-w-3xl">
         <div className="text-xs font-black tracking-[0.3em] uppercase mb-5 flex items-center gap-2" style={{ color: SL_GOLD }}>
           <div className="w-8 h-[2px]" style={{ backgroundColor: SL_GOLD }} />
           {subheading}
         </div>
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-none mb-6 tracking-tight whitespace-pre-line">{headline}</h1>
-        <p className="text-white/70 text-lg md:text-xl max-w-xl mb-10 leading-relaxed">{description}</p>
+        <h1 className="text-5xl @md:text-7xl font-black text-white leading-none mb-6 tracking-tight whitespace-pre-line">{headline}</h1>
+        <p className="text-white/70 text-lg @md:text-xl max-w-xl mb-10 leading-relaxed">{description}</p>
         <div className="flex flex-wrap gap-4">
           <a href="#" style={{ backgroundColor: SL_GOLD }} className="inline-flex items-center gap-2 text-white font-black text-sm px-8 py-4 hover:opacity-90 transition-opacity tracking-wide">
             FREE CONSULTATION <ArrowRight className="w-4 h-4" />
@@ -77,10 +77,10 @@ export function SLStats(props: any) {
   ];
   return (
     <section style={{ backgroundColor: SL_GOLD }} className="py-12">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 @md:grid-cols-4 gap-6">
         {stats.map((s: any, i: number) => (
           <div key={i} className="text-center">
-            <div className="text-4xl md:text-5xl font-black text-white mb-2">{s.value}</div>
+            <div className="text-4xl @md:text-5xl font-black text-white mb-2">{s.value}</div>
             <div className="text-white/80 text-xs font-semibold tracking-wide uppercase whitespace-pre-line">{s.label}</div>
           </div>
         ))}
@@ -93,13 +93,13 @@ export function SLServices(props: any) {
   const heading = props.heading || 'Our Practice Areas';
   const services = props.services || [];
   return (
-    <section style={{ backgroundColor: SL_CREAM }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: SL_CREAM }} className="py-24 px-6 @md:px-16">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: SL_GOLD }}>What We Do</div>
-          <h2 className="text-4xl md:text-5xl font-black" style={{ color: SL_NAVY }}>{heading}</h2>
+          <h2 className="text-4xl @md:text-5xl font-black" style={{ color: SL_NAVY }}>{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-6">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.icon] || Scale;
             return (
@@ -123,13 +123,13 @@ export function SLProcess(props: any) {
   const heading = props.heading || 'How We Work';
   const steps = props.steps || [];
   return (
-    <section style={{ backgroundColor: SL_NAVY }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: SL_NAVY }} className="py-24 px-6 @md:px-16">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: SL_GOLD }}>Our Process</div>
           <h2 className="text-4xl font-black text-white whitespace-pre-line">{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-8">
           {steps.map((step: any, i: number) => {
             const Icon = (LucideIcons as any)[step.icon] || CheckCircle;
             return (
@@ -153,13 +153,13 @@ export function SLTestimonials(props: any) {
   const heading = props.heading || 'Client Success Stories';
   const reviews = props.reviews || [];
   return (
-    <section style={{ backgroundColor: SL_CREAM }} className="py-24 px-6 md:px-16">
+    <section style={{ backgroundColor: SL_CREAM }} className="py-24 px-6 @md:px-16">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: SL_GOLD }}>Testimonials</div>
           <h2 className="text-4xl font-black" style={{ color: SL_NAVY }}>{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-6">
           {reviews.map((r: any, i: number) => (
             <div key={i} className="bg-white p-8 shadow-sm border-l-4" style={{ borderLeftColor: SL_GOLD }}>
               <div className="flex mb-3">
@@ -188,7 +188,7 @@ export function SLCTA(props: any) {
     <section style={{ backgroundColor: SL_NAVY }} className="py-24 px-6 text-center">
       <div className="max-w-3xl mx-auto">
         <Shield className="w-12 h-12 mx-auto mb-6" style={{ color: SL_GOLD }} />
-        <h2 className="text-3xl md:text-5xl font-black text-white mb-8 leading-tight whitespace-pre-line">{heading}</h2>
+        <h2 className="text-3xl @md:text-5xl font-black text-white mb-8 leading-tight whitespace-pre-line">{heading}</h2>
         <a href="#" style={{ backgroundColor: SL_GOLD }} className="inline-flex items-center gap-2 text-white font-black text-sm px-10 py-5 hover:opacity-90 transition-opacity tracking-widest">
           {buttonText} <ArrowRight className="w-4 h-4" />
         </a>

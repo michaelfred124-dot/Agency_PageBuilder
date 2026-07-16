@@ -17,15 +17,15 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="min-h-screen flex flex-col justify-start items-center px-6 relative overflow-hidden bg-[#0B0B0B] pt-36 lg:pt-40 pb-24 border-b border-white/10">
+    <section id="home" className="min-h-screen flex flex-col justify-start items-center px-6 relative overflow-hidden bg-white pt-36 lg:pt-40 pb-24 border-b border-black/5">
       
       {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none z-0" />
       
       {/* Background radial soft glows backing the dashboard mockup - Gold/Orange premium aurora mesh */}
-      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(255,127,17,0.12),rgba(212,175,55,0.05),transparent)] rounded-full blur-[120px] pointer-events-none z-0 animate-pulse duration-[8s]" />
-      <div className="absolute top-[20%] right-[-10%] w-[60%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.12),rgba(255,127,17,0.05),transparent)] rounded-full blur-[120px] pointer-events-none z-0 animate-pulse duration-[10s]" />
-      <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[60%] bg-[radial-gradient(circle_at_center,rgba(255,127,17,0.08),rgba(212,175,55,0.08),transparent)] rounded-full blur-[150px] pointer-events-none z-0" />
+      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(255,127,17,0.08),rgba(212,175,55,0.03),transparent)] rounded-full blur-[120px] pointer-events-none z-0 animate-pulse duration-[8s]" />
+      <div className="absolute top-[20%] right-[-10%] w-[60%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.08),rgba(255,127,17,0.03),transparent)] rounded-full blur-[120px] pointer-events-none z-0 animate-pulse duration-[10s]" />
+      <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[60%] bg-[radial-gradient(circle_at_center,rgba(255,127,17,0.05),rgba(212,175,55,0.05),transparent)] rounded-full blur-[150px] pointer-events-none z-0" />
 
       <div className="max-w-[1200px] mx-auto w-full z-10 flex flex-col items-center text-center">
         
@@ -36,12 +36,12 @@ export default function Hero() {
           transition={{ duration: 0.6 }}
           className="space-y-6 max-w-4xl flex flex-col items-center"
         >
-          <h1 className="text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.08] font-bold text-white tracking-tight">
+          <h1 className="text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.08] font-bold text-[#1a1a1a] tracking-tight">
             Bespoke websites.<br />
             <span className="luxury-gradient-text">Simplified growth.</span>
           </h1>
           
-          <p className="text-base md:text-lg text-white/70 leading-relaxed font-normal max-w-2xl">
+          <p className="text-base md:text-lg text-[#1a1a1a]/60 leading-relaxed font-normal max-w-2xl">
             Launch a custom Next.js site in 10 minutes that transforms how your business operates. Edit inline, manage custom subdomains, and gather customer leads under a single dashboard workspace.
           </p>
         </motion.div>
@@ -54,13 +54,13 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 w-full max-w-xl"
         >
           {/* Email Capture Pill */}
-          <form onSubmit={handleSubmit} className="w-full sm:flex-1 flex bg-white/[0.04] border border-white/10 p-1.5 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.3)] focus-within:border-[#FF7F11]/50 transition-colors">
+          <form onSubmit={handleSubmit} className="w-full sm:flex-1 flex bg-black/[0.03] border border-black/10 p-1.5 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.05)] focus-within:border-[#FF7F11]/50 transition-colors">
             <input 
               type="email" 
               placeholder="Enter your email" 
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
-              className="flex-1 px-4 py-2 text-sm text-white placeholder-white/45 bg-transparent outline-none font-medium"
+              className="flex-1 px-4 py-2 text-sm text-[#1a1a1a] placeholder-black/35 bg-transparent outline-none font-medium"
             />
             <button 
               type="submit"
@@ -72,7 +72,7 @@ export default function Hero() {
 
           {/* Explore Demo button */}
           <Link href="/work" className="w-full sm:w-auto shrink-0">
-            <button className="w-full sm:w-auto px-6 py-3.5 bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] text-white text-xs font-bold rounded-full transition-all cursor-pointer">
+            <button className="w-full sm:w-auto px-6 py-3.5 bg-black/[0.03] border border-black/10 hover:bg-black/[0.06] text-[#1a1a1a] text-xs font-bold rounded-full transition-all cursor-pointer">
               Explore Demo
             </button>
           </Link>
@@ -86,7 +86,7 @@ export default function Hero() {
           className="w-full max-w-[940px] mt-16 relative flex justify-center"
         >
           {/* Simulated Browser Frame Mockup */}
-          <div className="w-full bg-[#121212] border border-white/10 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.5)] overflow-hidden">
+          <div className="w-full bg-[#121212] border border-black/10 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.15)] overflow-hidden">
             
             {/* Mockup Header tab-bar */}
             <div className="bg-[#181818] border-b border-white/10 px-4 py-3 flex items-center justify-between">

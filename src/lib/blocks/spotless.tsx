@@ -21,11 +21,11 @@ export function SCHero(props: any) {
         <img src={bgImage} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(19,78,74,0.92) 0%, rgba(6,148,162,0.7) 60%, rgba(6,148,162,0.3) 100%)' }} />
       </div>
-      <div className="relative z-10 px-8 md:px-20 py-24 max-w-2xl">
+      <div className="relative z-10 px-8 @md:px-20 py-24 max-w-2xl">
         <div className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase mb-6 px-3 py-1.5 rounded-full bg-white/20 text-white">
           <Sparkles className="w-3 h-3" /> Fully Insured · Background Checked
         </div>
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6 whitespace-pre-line">{title}</h1>
+        <h1 className="text-5xl @md:text-7xl font-black text-white leading-tight mb-6 whitespace-pre-line">{title}</h1>
         <p className="text-teal-100 text-lg mb-10 leading-relaxed">{subtitle}</p>
         <div className="flex flex-wrap gap-4">
           <a href="#" className="inline-flex items-center gap-2 text-white font-black text-sm px-8 py-4 rounded-sm hover:opacity-90 transition-opacity" style={{ backgroundColor: SC_TEAL + 'CC', border: '2px solid white' }}>
@@ -49,10 +49,10 @@ export function SCStats(props: any) {
   ];
   return (
     <section style={{ backgroundColor: SC_DARK }} className="py-12">
-      <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 @md:grid-cols-4 gap-6">
         {stats.map((s: any, i: number) => (
           <div key={i} className="text-center">
-            <div className="text-3xl md:text-4xl font-black text-white mb-1">{s.value}</div>
+            <div className="text-3xl @md:text-4xl font-black text-white mb-1">{s.value}</div>
             <div className="text-teal-400 text-xs font-semibold tracking-wide whitespace-pre-line">{s.label}</div>
           </div>
         ))}
@@ -64,13 +64,13 @@ export function SCStats(props: any) {
 export function SCServices(props: any) {
   const services = props.services || [];
   return (
-    <section style={{ backgroundColor: SC_LIGHT }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: SC_LIGHT }} className="py-24 px-6 @md:px-14">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: SC_TEAL }}>Services</div>
           <h2 className="text-4xl font-black" style={{ color: SC_DARK }}>Everything We Clean</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-5">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.iconName] || Sparkles;
             return (
@@ -94,11 +94,11 @@ export function SCAbout(props: any) {
   const desc = props.desc || 'Spotless Home Co. was founded with one goal: to give busy homeowners one less thing to worry about.';
   const image = props.image || 'https://images.unsplash.com/photo-1527515545081-5db817172677?q=80&w=1200';
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 min-h-[55vh]">
+    <section className="grid grid-cols-1 @md:grid-cols-2 min-h-[55vh]">
       <div className="relative overflow-hidden" style={{ minHeight: '300px' }}>
         <img src={image} alt="" className="w-full h-full object-cover absolute inset-0" />
       </div>
-      <div className="flex items-center px-10 md:px-16 py-16" style={{ backgroundColor: SC_WARM }}>
+      <div className="flex items-center px-10 @md:px-16 py-16" style={{ backgroundColor: SC_WARM }}>
         <div>
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-4" style={{ color: SC_TEAL }}>Our Story</div>
           <h2 className="text-4xl font-black mb-5 whitespace-pre-line" style={{ color: SC_DARK }}>{title}</h2>
@@ -119,13 +119,13 @@ export function SCAbout(props: any) {
 export function SCTestimonials(props: any) {
   const testimonials = props.testimonials || [];
   return (
-    <section style={{ backgroundColor: SC_LIGHT }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: SC_LIGHT }} className="py-24 px-6 @md:px-14">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <div className="text-xs font-black tracking-[0.3em] uppercase mb-3" style={{ color: SC_TEAL }}>Reviews</div>
           <h2 className="text-4xl font-black" style={{ color: SC_DARK }}>What Homeowners Say</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-6">
           {testimonials.map((t: any, i: number) => (
             <div key={i} className="bg-white p-8 rounded-xl shadow-sm border-l-4" style={{ borderLeftColor: SC_TEAL }}>
               <div className="flex mb-3">{[...Array(parseInt(t.rating) || 5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" style={{ color: '#F59E0B' }} />)}</div>
@@ -146,7 +146,7 @@ export function SCCta(props: any) {
     <section style={{ backgroundColor: SC_TEAL }} className="py-20 px-6 text-center">
       <div className="max-w-2xl mx-auto">
         <Sparkles className="w-10 h-10 text-white/60 mx-auto mb-5" />
-        <h2 className="text-4xl md:text-5xl font-black text-white mb-5 whitespace-pre-line leading-tight">{title}</h2>
+        <h2 className="text-4xl @md:text-5xl font-black text-white mb-5 whitespace-pre-line leading-tight">{title}</h2>
         <p className="text-teal-100 text-lg mb-10">{subtitle}</p>
         <div className="flex flex-wrap justify-center gap-4">
           <a href="#" className="inline-flex items-center gap-2 bg-white font-black text-sm px-10 py-5 rounded-sm hover:bg-teal-50 transition-colors" style={{ color: SC_DARK }}>

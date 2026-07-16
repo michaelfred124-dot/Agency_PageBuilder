@@ -17,7 +17,7 @@ export function PHHeader(props: any) {
   const phone = props.phone || '(555) 123-4567';
   const navLinks: string[] = props.navLinks || ['Services', 'About', 'Reviews', 'Contact'];
   return (
-    <header style={{ backgroundColor: PH_GREEN }} className="py-3.5 px-6 md:px-14 flex items-center justify-between sticky top-0 z-50 shadow-lg">
+    <header style={{ backgroundColor: PH_GREEN }} className="py-3.5 px-6 @md:px-14 flex items-center justify-between sticky top-0 z-50 shadow-lg">
       <div className="flex items-center gap-3">
         <div style={{ backgroundColor: PH_GOLD }} className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
           <Wrench className="w-4 h-4" style={{ color: PH_GREEN }} />
@@ -27,12 +27,12 @@ export function PHHeader(props: any) {
           <div className="text-[9px] font-bold tracking-[0.18em] uppercase mt-0.5" style={{ color: PH_GOLD }}>Licensed &amp; Insured</div>
         </div>
       </div>
-      <nav className="hidden lg:flex items-center gap-8">
+      <nav className="hidden @lg:flex items-center gap-8">
         {navLinks.map((link: string, i: number) => (
           <a key={i} href="#" className="text-white/80 hover:text-white text-sm font-semibold transition-colors tracking-wide">{link}</a>
         ))}
       </nav>
-      <a href={`tel:${phone}`} style={{ backgroundColor: PH_GOLD, color: PH_GREEN }} className="hidden lg:inline-flex items-center gap-2 text-sm font-black px-5 py-2.5 rounded-lg transition-opacity hover:opacity-90">
+      <a href={`tel:${phone}`} style={{ backgroundColor: PH_GOLD, color: PH_GREEN }} className="hidden @lg:inline-flex items-center gap-2 text-sm font-black px-5 py-2.5 rounded-lg transition-opacity hover:opacity-90">
         <Phone className="w-4 h-4" strokeWidth={3} /> {phone}
       </a>
     </header>
@@ -50,7 +50,7 @@ export function PHHero(props: any) {
     <section className="relative min-h-screen flex items-center overflow-hidden">
       <Image src={bgImage} alt="Hero" fill className="object-cover" referrerPolicy="no-referrer" />
       <div className="absolute inset-0" style={{ background: `linear-gradient(105deg, ${PH_GREEN}F7 0%, ${PH_GREEN}CC 50%, ${PH_GREEN}44 100%)` }} />
-      <div className="relative z-10 px-8 md:px-16 max-w-2xl py-20">
+      <div className="relative z-10 px-8 @md:px-16 max-w-2xl py-20">
         <div className="flex flex-wrap gap-2 mb-8">
           {badges.map((badge: string, i: number) => (
             <span key={i} className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full" style={{ background: 'rgba(212,168,83,0.15)', color: PH_GOLD, border: '1px solid rgba(212,168,83,0.3)' }}>
@@ -58,9 +58,9 @@ export function PHHero(props: any) {
             </span>
           ))}
         </div>
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-[1.0] tracking-tight mb-6 whitespace-pre-line">{headline}</h1>
+        <h1 className="text-5xl @md:text-7xl font-black text-white leading-[1.0] tracking-tight mb-6 whitespace-pre-line">{headline}</h1>
         <p className="text-lg text-white/75 mb-10 leading-relaxed">{sub}</p>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col @sm:flex-row gap-4">
           <a href={`tel:${phone}`} style={{ backgroundColor: PH_GOLD, color: PH_GREEN }} className="inline-flex items-center justify-center gap-3 font-black text-base px-8 py-4 rounded-xl transition-all hover:scale-105">
             <Phone className="w-5 h-5" strokeWidth={3} /> {phone}
           </a>
@@ -82,10 +82,10 @@ export function PHStats(props: any) {
   ];
   return (
     <div style={{ backgroundColor: PH_GOLD }} className="py-8 px-6">
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div className="max-w-5xl mx-auto grid grid-cols-2 @md:grid-cols-4 gap-6 text-center">
         {stats.map((stat: any, i: number) => (
           <div key={i}>
-            <div className="text-3xl md:text-4xl font-black" style={{ color: PH_GREEN }}>{stat.value}</div>
+            <div className="text-3xl @md:text-4xl font-black" style={{ color: PH_GREEN }}>{stat.value}</div>
             <div className="text-sm font-semibold mt-1" style={{ color: 'rgba(27,67,50,0.65)' }}>{stat.label}</div>
           </div>
         ))}
@@ -106,14 +106,14 @@ export function PHServices(props: any) {
     { icon: 'Shield', name: '24/7 Emergency', desc: 'Round-the-clock dispatch for urgent home crises.' },
   ];
   return (
-    <section style={{ backgroundColor: PH_CREAM }} className="py-20 px-6 md:px-12">
+    <section style={{ backgroundColor: PH_CREAM }} className="py-20 px-6 @md:px-12">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-sm font-black uppercase tracking-widest mb-3" style={{ color: PH_GOLD }}>What We Do</div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight" style={{ color: PH_GREEN }}>{title}</h2>
+          <h2 className="text-4xl @md:text-5xl font-black tracking-tight" style={{ color: PH_GREEN }}>{title}</h2>
           <p className="mt-4 text-lg text-gray-600 max-w-xl mx-auto">{subtitle}</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-6">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.icon] || Wrench;
             return (
@@ -143,13 +143,13 @@ export function PHProcess(props: any) {
     { num: '03', heading: 'Job Done Right', body: "We fix it properly, clean up after ourselves, and follow up to make sure you're satisfied." },
   ];
   return (
-    <section className="py-20 px-6 md:px-12 bg-white">
+    <section className="py-20 px-6 @md:px-12 bg-white">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-sm font-black uppercase tracking-widest mb-3" style={{ color: PH_GOLD }}>Simple Process</div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight" style={{ color: PH_GREEN }}>{title}</h2>
+          <h2 className="text-4xl @md:text-5xl font-black tracking-tight" style={{ color: PH_GREEN }}>{title}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-10">
           {steps.map((step: any, i: number) => (
             <div key={i}>
               <div className="text-7xl font-black leading-none mb-4" style={{ color: PH_CREAM }}>{step.num}</div>
@@ -173,13 +173,13 @@ export function PHTestimonials(props: any) {
     { name: 'Tom G.', service: 'Water Heater Install', rating: 5, text: 'Same-day install of a new tankless unit. Fast, clean, and they explained everything. Outstanding.' },
   ];
   return (
-    <section style={{ backgroundColor: PH_CREAM }} className="py-20 px-6 md:px-12">
+    <section style={{ backgroundColor: PH_CREAM }} className="py-20 px-6 @md:px-12">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-sm font-black uppercase tracking-widest mb-3" style={{ color: PH_GOLD }}>Reviews</div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight" style={{ color: PH_GREEN }}>{title}</h2>
+          <h2 className="text-4xl @md:text-5xl font-black tracking-tight" style={{ color: PH_GREEN }}>{title}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 @md:grid-cols-2 gap-6">
           {reviews.map((rev: any, i: number) => (
             <div key={i} className="bg-white rounded-2xl p-7 shadow-sm">
               <div className="flex gap-0.5 mb-4">
@@ -206,12 +206,12 @@ export function PHCTA(props: any) {
   const phone = props.phone || '(555) 123-4567';
   const ctaText = props.ctaText || 'Schedule Online';
   return (
-    <section style={{ backgroundColor: PH_GREEN }} className="py-20 px-6 md:px-12">
+    <section style={{ backgroundColor: PH_GREEN }} className="py-20 px-6 @md:px-12">
       <div className="max-w-4xl mx-auto text-center">
         <div className="text-sm font-black uppercase tracking-widest mb-4" style={{ color: PH_GOLD }}>Available 24/7</div>
-        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight mb-6">{headline}</h2>
+        <h2 className="text-4xl @md:text-6xl font-black text-white tracking-tight mb-6">{headline}</h2>
         <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto leading-relaxed">{sub}</p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col @sm:flex-row gap-4 justify-center items-center">
           <a href={`tel:${phone}`} style={{ backgroundColor: PH_GOLD, color: PH_GREEN }} className="inline-flex items-center gap-3 font-black text-xl px-10 py-5 rounded-2xl transition-transform hover:scale-105">
             <Phone className="w-6 h-6" strokeWidth={3} /> {phone}
           </a>
@@ -230,9 +230,9 @@ export function PHFooter(props: any) {
   const links: string[] = props.links || ['Services', 'About Us', 'Reviews', 'Contact', 'Emergency Service'];
   const copyright = props.copyright || '© 2025 ProHome Services. All rights reserved.';
   return (
-    <footer style={{ backgroundColor: PH_DARK }} className="py-14 px-6 md:px-12 text-white">
+    <footer style={{ backgroundColor: PH_DARK }} className="py-14 px-6 @md:px-12 text-white">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10 pb-10" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-10 mb-10 pb-10" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <div>
             <div className="font-black text-xl mb-1" style={{ color: PH_GOLD }}>{businessName}</div>
             <div className="text-white/40 text-xs uppercase tracking-widest mb-5">Licensed &amp; Insured</div>

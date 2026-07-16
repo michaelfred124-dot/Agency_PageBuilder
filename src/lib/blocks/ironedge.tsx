@@ -15,19 +15,19 @@ export function IEHeader(props: any) {
   const businessName = props.businessName || 'IRON EDGE';
   const navLinks: string[] = props.navLinks || ['HOME', 'PROGRAMS', 'ABOUT', 'RESULTS', 'PRICING'];
   return (
-    <header style={{ backgroundColor: IE_BLACK }} className="py-4 px-6 md:px-14 flex items-center justify-between sticky top-0 z-50 border-b border-gray-800">
+    <header style={{ backgroundColor: IE_BLACK }} className="py-4 px-6 @md:px-14 flex items-center justify-between sticky top-0 z-50 border-b border-gray-800">
       <div className="flex items-center gap-2.5">
         <div style={{ backgroundColor: IE_ORANGE }} className="w-8 h-8 flex items-center justify-center">
           <Dumbbell className="w-4 h-4 text-white" />
         </div>
         <span className="text-white font-black text-lg tracking-[0.15em] uppercase">{businessName}</span>
       </div>
-      <nav className="hidden lg:flex items-center gap-7">
+      <nav className="hidden @lg:flex items-center gap-7">
         {navLinks.map((link: string, i: number) => (
           <a key={i} href="#" className="text-gray-400 hover:text-white text-xs font-black tracking-widest transition-colors">{link}</a>
         ))}
       </nav>
-      <a href="#" style={{ backgroundColor: IE_ORANGE }} className="hidden lg:inline-flex items-center gap-1.5 text-white text-xs font-black px-5 py-2.5 hover:opacity-90 transition-opacity tracking-widest">
+      <a href="#" style={{ backgroundColor: IE_ORANGE }} className="hidden @lg:inline-flex items-center gap-1.5 text-white text-xs font-black px-5 py-2.5 hover:opacity-90 transition-opacity tracking-widest">
         START NOW <ChevronRight className="w-3 h-3" />
       </a>
     </header>
@@ -46,11 +46,11 @@ export function IEHero(props: any) {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(105deg, rgba(10,10,10,0.97) 35%, rgba(10,10,10,0.7) 70%, rgba(10,10,10,0.3) 100%)' }} />
         <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: IE_ORANGE }} />
       </div>
-      <div className="relative z-10 px-8 md:px-20 py-24 max-w-3xl">
+      <div className="relative z-10 px-8 @md:px-20 py-24 max-w-3xl">
         <div className="text-xs font-black tracking-[0.4em] uppercase mb-6 flex items-center gap-3" style={{ color: IE_ORANGE }}>
           <Zap className="w-4 h-4 fill-current" /> {subheading}
         </div>
-        <h1 className="text-6xl md:text-8xl font-black text-white leading-none mb-6 whitespace-pre-line" style={{ letterSpacing: '-0.02em' }}>{headline}</h1>
+        <h1 className="text-6xl @md:text-8xl font-black text-white leading-none mb-6 whitespace-pre-line" style={{ letterSpacing: '-0.02em' }}>{headline}</h1>
         <p className="text-gray-400 text-lg mb-10 max-w-md leading-relaxed">{description}</p>
         <div className="flex flex-wrap gap-4">
           <a href="#" style={{ backgroundColor: IE_ORANGE }} className="inline-flex items-center gap-2 text-white font-black text-sm px-8 py-4 hover:opacity-90 transition-opacity tracking-widest">
@@ -74,10 +74,10 @@ export function IEStats(props: any) {
   ];
   return (
     <section style={{ backgroundColor: IE_GRAY }} className="py-12 border-y border-gray-800">
-      <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 @md:grid-cols-4 gap-6">
         {stats.map((s: any, i: number) => (
           <div key={i} className="text-center">
-            <div className="text-3xl md:text-4xl font-black mb-1" style={{ color: IE_ORANGE }}>{s.value}</div>
+            <div className="text-3xl @md:text-4xl font-black mb-1" style={{ color: IE_ORANGE }}>{s.value}</div>
             <div className="text-gray-500 text-xs font-semibold tracking-wider whitespace-pre-line">{s.label}</div>
           </div>
         ))}
@@ -90,13 +90,13 @@ export function IEServices(props: any) {
   const heading = props.heading || 'Training Programs Built Around You';
   const services = props.services || [];
   return (
-    <section style={{ backgroundColor: IE_DARK }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: IE_DARK }} className="py-24 px-6 @md:px-14">
       <div className="max-w-6xl mx-auto">
         <div className="mb-14">
           <div className="text-xs font-black tracking-[0.4em] uppercase mb-3" style={{ color: IE_ORANGE }}>Programs</div>
-          <h2 className="text-4xl md:text-5xl font-black text-white">{heading}</h2>
+          <h2 className="text-4xl @md:text-5xl font-black text-white">{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 gap-4">
           {services.map((svc: any, i: number) => {
             const Icon = (LucideIcons as any)[svc.icon] || Dumbbell;
             return (
@@ -120,13 +120,13 @@ export function IEProcess(props: any) {
   const heading = props.heading || 'Your Transformation Starts Here.';
   const steps = props.steps || [];
   return (
-    <section style={{ backgroundColor: IE_BLACK }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: IE_BLACK }} className="py-24 px-6 @md:px-14">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <div className="text-xs font-black tracking-[0.4em] uppercase mb-3" style={{ color: IE_ORANGE }}>The Process</div>
           <h2 className="text-4xl font-black text-white">{heading}</h2>
         </div>
-        <div className="relative grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="relative grid grid-cols-1 @md:grid-cols-4 gap-8">
           {steps.map((step: any, i: number) => {
             const Icon = (LucideIcons as any)[step.icon] || CheckCircle;
             return (
@@ -150,13 +150,13 @@ export function IETestimonials(props: any) {
   const heading = props.heading || 'Client Transformations';
   const reviews = props.reviews || [];
   return (
-    <section style={{ backgroundColor: IE_GRAY }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: IE_GRAY }} className="py-24 px-6 @md:px-14">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12">
           <div className="text-xs font-black tracking-[0.4em] uppercase mb-3" style={{ color: IE_ORANGE }}>Results</div>
           <h2 className="text-4xl font-black text-white">{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-5">
           {reviews.map((r: any, i: number) => (
             <div key={i} className="p-8 border border-gray-800 hover:border-orange-800 transition-colors" style={{ backgroundColor: IE_DARK }}>
               <div className="flex mb-3">{[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: IE_ORANGE }} />)}</div>
@@ -180,13 +180,13 @@ export function IEPricing(props: any) {
   const heading = props.heading || 'Simple, Transparent Pricing.';
   const plans = props.plans || [];
   return (
-    <section style={{ backgroundColor: IE_BLACK }} className="py-24 px-6 md:px-14">
+    <section style={{ backgroundColor: IE_BLACK }} className="py-24 px-6 @md:px-14">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-xs font-black tracking-[0.4em] uppercase mb-3" style={{ color: IE_ORANGE }}>Pricing</div>
           <h2 className="text-4xl font-black text-white">{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 @md:grid-cols-3 gap-5">
           {plans.map((plan: any, i: number) => {
             const Icon = (LucideIcons as any)[plan.icon] || Dumbbell;
             return (
@@ -221,7 +221,7 @@ export function IECTA(props: any) {
     <section style={{ backgroundColor: IE_ORANGE }} className="py-20 px-6 text-center">
       <div className="max-w-2xl mx-auto">
         <Dumbbell className="w-10 h-10 text-white/60 mx-auto mb-5" />
-        <h2 className="text-3xl md:text-5xl font-black text-white mb-8 whitespace-pre-line" style={{ letterSpacing: '-0.02em' }}>{heading}</h2>
+        <h2 className="text-3xl @md:text-5xl font-black text-white mb-8 whitespace-pre-line" style={{ letterSpacing: '-0.02em' }}>{heading}</h2>
         <a href="#" className="inline-flex items-center gap-2 bg-black text-white font-black text-sm px-10 py-5 hover:bg-gray-900 transition-colors tracking-widest">
           {buttonText} <ArrowRight className="w-4 h-4" />
         </a>

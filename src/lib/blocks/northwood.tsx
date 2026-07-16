@@ -407,28 +407,28 @@ export const NW_RENDERERS = {
         </div>
 
         <div className="grid @md:grid-cols-4 gap-6">
-          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative">
             <Image               src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?q=80&w=2071&auto=format&fit=crop"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               alt="Cafe culture"
               referrerPolicy="no-referrer"
             fill />
           </div>
-          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group @md:pt-12">
+          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative @md:pt-12">
             <Image               src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=2074&auto=format&fit=crop"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               alt="Latte art"
               referrerPolicy="no-referrer"
             fill />
           </div>
-          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative">
             <Image               src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               alt="Cafe vibe"
               referrerPolicy="no-referrer"
             fill />
           </div>
-          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group @md:pt-12">
+          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative @md:pt-12">
             <Image               src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2070&auto=format&fit=crop"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               alt="Pastry"

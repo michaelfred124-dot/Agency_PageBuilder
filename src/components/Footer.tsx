@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="py-20 bg-[#0B0B0B] text-white px-6 border-t border-white/10">
+    <footer className="py-20 bg-[#FAFAFA] text-[#1a1a1a] px-6 border-t border-black/8">
       <div className="max-w-[1400px] mx-auto">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
           <div className="lg:col-span-2 flex flex-col space-y-6">
@@ -20,12 +20,12 @@ export default function Footer() {
               >
                 M
               </div>
-              <span className="font-extrabold text-white text-sm tracking-tight">michaelfred<span className="text-[#D4AF37]">.</span></span>
+              <span className="font-extrabold text-[#1a1a1a] text-sm tracking-tight">michaelfred<span className="text-[#D4AF37]">.</span></span>
             </div>
-            <h3 className="text-xl font-bold tracking-tight text-white">
+            <h3 className="text-xl font-bold tracking-tight text-[#1a1a1a]">
               michaelfred. agency
             </h3>
-            <p className="text-white/60 font-normal text-sm max-w-sm leading-relaxed">
+            <p className="text-[#1a1a1a]/50 font-normal text-sm max-w-sm leading-relaxed">
               Crafting high-performance Next.js websites and headless digital interfaces that accelerate business growth.
             </p>
           </div>
@@ -34,7 +34,7 @@ export default function Footer() {
             <h4 className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#D4AF37]">Navigation</h4>
             <div className="flex flex-col space-y-3">
               {NAV_LINKS.map(link => (
-                <Link key={link.name} href={link.href} className="text-sm font-medium text-white/60 hover:text-[#D4AF37] transition-colors">
+                <Link key={link.name} href={link.href} className="text-sm font-medium text-[#1a1a1a]/50 hover:text-[#D4AF37] transition-colors">
                   {link.name}
                 </Link>
               ))}
@@ -44,18 +44,18 @@ export default function Footer() {
           <div className="flex flex-col space-y-4">
             <h4 className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#D4AF37]">Socials</h4>
             <div className="flex flex-col space-y-3">
-              <a href="#" className="text-sm font-medium text-white/60 hover:text-[#D4AF37] transition-colors">LinkedIn</a>
-              <a href="#" className="text-sm font-medium text-white/60 hover:text-[#D4AF37] transition-colors">Twitter // X</a>
-              <a href="#" className="text-sm font-medium text-white/60 hover:text-[#D4AF37] transition-colors">GitHub</a>
+              <a href="#" className="text-sm font-medium text-[#1a1a1a]/50 hover:text-[#D4AF37] transition-colors">LinkedIn</a>
+              <a href="#" className="text-sm font-medium text-[#1a1a1a]/50 hover:text-[#D4AF37] transition-colors">Twitter // X</a>
+              <a href="#" className="text-sm font-medium text-[#1a1a1a]/50 hover:text-[#D4AF37] transition-colors">GitHub</a>
             </div>
           </div>
         </div>
 
-        <div className="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-white/40 font-medium text-[11px]">
+        <div className="pt-10 border-t border-black/8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-[#1a1a1a]/35 font-medium text-[11px]">
             © 2026 Michael Frederick Portfolio. All rights reserved.
           </p>
-          <p className="text-white/40 font-medium text-[11px] flex items-center gap-1.5">
+          <p className="text-[#1a1a1a]/35 font-medium text-[11px] flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Built with React, Next.js & Tailwind
           </p>
