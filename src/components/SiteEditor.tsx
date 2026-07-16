@@ -26,7 +26,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 
 import { ComponentType, SectionData, COMPONENT_SCHEMAS, Renderers, getDefaultInlineElementProps } from '@/lib/blocks';
-import { TEMPLATES } from '@/lib/templates';
+import { TEMPLATES, TEMPLATE_PAGES } from '@/lib/templates';
 
 export type PageData = {
   id: string;
@@ -108,18 +108,20 @@ const ELEMENT_TYPE_CONFIGS = [
 
 // --- Undo/Redo History Hook ---
 function useHistory<T>(initial: T) {
-  const [history, setHistory] = useState<T[]>([initial]);
+  const [history, setHistory] = useState<{ state: T; description: string }[]>([
+    { state: initial, description: 'Initial State' }
+  ]);
   const [index, setIndex] = useState(0);
 
-  const state = history[index];
+  const state = history[index].state;
 
-  const push = useCallback((newState: T | ((prev: T) => T)) => {
+  const push = useCallback((newState: T | ((prev: T) => T), description: string = 'Action') => {
     setHistory(prev => {
-      const current = prev[index];
+      const current = prev[index].state;
       const next = typeof newState === 'function' ? (newState as (prev: T) => T)(current) : newState;
       // Drop future states when a new action is committed
       const newHistory = prev.slice(0, index + 1);
-      newHistory.push(next);
+      newHistory.push({ state: next, description });
       // Cap history at 50 entries to save memory
       return newHistory.slice(-50);
     });
@@ -137,7 +139,11 @@ function useHistory<T>(initial: T) {
   const canUndo = index > 0;
   const canRedo = index < history.length - 1;
 
-  return { state, push, undo, redo, canUndo, canRedo, historyLength: history.length, historyIndex: index };
+  const currentAction = history[index]?.description || '';
+  const previousAction = index > 0 ? history[index - 1]?.description : '';
+  const nextAction = index < history.length - 1 ? history[index + 1]?.description : '';
+
+  return { state, push, undo, redo, canUndo, canRedo, historyLength: history.length, historyIndex: index, currentAction, previousAction, nextAction };
 }
 
 // --- Toast Notification System ---
@@ -802,7 +808,7 @@ export default function SiteEditor({
   }));
 
   // --- Undo/Redo history wrapping pages ---
-  const { state: pages, push: pushPages, undo: undoPages, redo: redoPages, canUndo, canRedo } = useHistory<PageData[]>(defaultPages);
+  const { state: pages, push: pushPages, undo: undoPages, redo: redoPages, canUndo, canRedo, previousAction, nextAction } = useHistory<PageData[]>(defaultPages);
   const [activePageId, setActivePageId] = useState<string>(defaultPages[0]?.id || 'home');
   const [isPageDropdownOpen, setIsPageDropdownOpen] = useState(false);
   const [editingPageId, setEditingPageId] = useState<string | null>(null);
@@ -810,18 +816,18 @@ export default function SiteEditor({
   const activePage = pages.find(p => p.id === activePageId) || pages[0];
   const sections = activePage?.sections || [];
 
-  const setPages = (value: PageData[] | ((prev: PageData[]) => PageData[])) => {
-    pushPages(value);
+  const setPages = (value: PageData[] | ((prev: PageData[]) => PageData[]), description: string = 'Modify Pages') => {
+    pushPages(value, description);
   };
 
-  const setSections = (value: SectionData[] | ((prev: SectionData[]) => SectionData[])) => {
+  const setSections = (value: SectionData[] | ((prev: SectionData[]) => SectionData[]), description: string = 'Modify Layout') => {
     pushPages(prevPages => prevPages.map(p => {
       if (p.id === activePageId) {
         const nextSections = typeof value === 'function' ? value(p.sections) : value;
         return { ...p, sections: nextSections };
       }
       return p;
-    }));
+    }), description);
   };
 
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -855,74 +861,6 @@ export default function SiteEditor({
     window.addEventListener('click', closeMenu);
     return () => window.removeEventListener('click', closeMenu);
   }, []);
-
-  // --- Global Keyboard Shortcuts ---
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      const isTyping = target.tagName === 'INPUT' || 
-                       target.tagName === 'TEXTAREA' || 
-                       target.isContentEditable;
-      
-      if (isTyping) return;
-
-      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-      const cmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
-
-      // Undo: Cmd/Ctrl + Z
-      if (cmdOrCtrl && e.key.toLowerCase() === 'z' && !e.shiftKey) {
-        e.preventDefault();
-        if (canUndo) {
-          undoPages();
-          addToast('Undo applied');
-        }
-      }
-
-      // Redo: Cmd/Ctrl + Shift + Z or Cmd/Ctrl + Y
-      if ((cmdOrCtrl && e.key.toLowerCase() === 'z' && e.shiftKey) || (cmdOrCtrl && e.key.toLowerCase() === 'y')) {
-        e.preventDefault();
-        if (canRedo) {
-          redoPages();
-          addToast('Redo applied');
-        }
-      }
-
-      // Duplicate: Cmd/Ctrl + D
-      if (cmdOrCtrl && e.key.toLowerCase() === 'd') {
-        e.preventDefault();
-        if (selectedSectionId && selectedSectionId !== 'all') {
-          handleDuplicateSection(selectedSectionId);
-          addToast('Widget duplicated');
-        }
-      }
-
-      // Delete: Backspace or Delete
-      if (e.key === 'Delete' || e.key === 'Backspace') {
-        if (selectedSectionId) {
-          if (selectedSectionId === 'all') {
-            setSections([]);
-            setSelectedSectionId(null);
-            addToast('All widgets deleted');
-          } else {
-            removeSection(selectedSectionId);
-            addToast('Widget deleted');
-          }
-        }
-      }
-
-      // Select All: Cmd/Ctrl + A
-      if (cmdOrCtrl && e.key.toLowerCase() === 'a') {
-        e.preventDefault();
-        if (sections.length > 0) {
-          setSelectedSectionId('all');
-          addToast('Selected all widgets (press Delete to delete all)');
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedSectionId, sections, canUndo, canRedo]);
 
   useEffect(() => {
     setSelectedElementId(null);
@@ -1019,7 +957,7 @@ export default function SiteEditor({
 
       let targetWidth = 1200;
       if (viewport === 'tablet') targetWidth = 768;
-      if (viewport === 'mobile') targetWidth = 375;
+      if (viewport === 'mobile') targetWidth = 400;
 
       setScale(availableWidth < targetWidth ? availableWidth / targetWidth : 1);
     };
@@ -1431,9 +1369,9 @@ export default function SiteEditor({
         const arr = [...prev];
         arr.splice(insertAtIndex, 0, newSection);
         return arr;
-      });
+      }, `Add ${type} Section`);
     } else {
-      setSections([...sections, newSection]);
+      setSections([...sections, newSection], `Add ${type} Section`);
     }
     setSelectedSectionId(newSection.id);
     setRightSidebarOpen(true);
@@ -1459,7 +1397,8 @@ export default function SiteEditor({
   };
 
   const removeSection = (id: string) => {
-    setSections(s => s.filter(sec => sec.id !== id));
+    const sec = sections.find(s => s.id === id);
+    setSections(s => s.filter(sec => sec.id !== id), `Delete ${sec?.type || 'Section'}`);
     if (selectedSectionId === id) setSelectedSectionId(null);
   };
 
@@ -1475,7 +1414,7 @@ export default function SiteEditor({
       const arr = [...prev];
       arr.splice(idx + 1, 0, clone);
       return arr;
-    });
+    }, `Duplicate ${original.type}`);
     setSelectedSectionId(clone.id);
   };
 
@@ -1513,34 +1452,61 @@ export default function SiteEditor({
       // Ctrl+Z → Undo
       if (e.ctrlKey && !e.shiftKey && e.key === 'z') {
         e.preventDefault();
-        undoPages();
+        if (canUndo) {
+          undoPages();
+          addToast('Undo applied');
+        }
         return;
       }
       // Ctrl+Shift+Z or Ctrl+Y → Redo
       if ((e.ctrlKey && e.shiftKey && e.key === 'z') || (e.ctrlKey && e.key === 'y')) {
         e.preventDefault();
-        redoPages();
+        if (canRedo) {
+          redoPages();
+          addToast('Redo applied');
+        }
         return;
       }
       // Ctrl+S → Save
       if (e.ctrlKey && e.key === 's') {
         e.preventDefault();
         onSave?.(pages, globalTheme);
+        addToast('Draft saved (Ctrl+S)');
         return;
       }
       // Skip non-editing shortcuts when inside input fields
       if (isEditing) return;
 
+      // Ctrl+A → Select All
+      if (e.ctrlKey && e.key === 'a') {
+        e.preventDefault();
+        if (sections.length > 0) {
+          setSelectedSectionId('all');
+          addToast('All widgets selected (press Delete to delete all)');
+        }
+        return;
+      }
+
       // Ctrl+D → Duplicate selected section
       if (e.ctrlKey && e.key === 'd') {
         e.preventDefault();
-        if (selectedSectionId) handleDuplicateSection(selectedSectionId);
+        if (selectedSectionId && selectedSectionId !== 'all') {
+          handleDuplicateSection(selectedSectionId);
+          addToast('Widget duplicated');
+        }
         return;
       }
       // Delete / Backspace → Remove selected section
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedSectionId) {
         e.preventDefault();
-        removeSection(selectedSectionId);
+        if (selectedSectionId === 'all') {
+          setSections([]);
+          setSelectedSectionId(null);
+          addToast('All widgets deleted');
+        } else {
+          removeSection(selectedSectionId);
+          addToast('Widget deleted');
+        }
         return;
       }
       // Escape → Deselect
@@ -1553,22 +1519,24 @@ export default function SiteEditor({
         return;
       }
       // ArrowUp → Move section up
-      if (e.key === 'ArrowUp' && selectedSectionId) {
+      if (e.key === 'ArrowUp' && selectedSectionId && selectedSectionId !== 'all') {
         e.preventDefault();
         handleMoveSectionUp(selectedSectionId);
+        addToast('Widget moved up');
         return;
       }
       // ArrowDown → Move section down
-      if (e.key === 'ArrowDown' && selectedSectionId) {
+      if (e.key === 'ArrowDown' && selectedSectionId && selectedSectionId !== 'all') {
         e.preventDefault();
         handleMoveSectionDown(selectedSectionId);
+        addToast('Widget moved down');
         return;
       }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSectionId, pages, globalTheme, undoPages, redoPages]);
+  }, [selectedSectionId, pages, globalTheme, undoPages, redoPages, sections, canUndo, canRedo]);
 
 
 
@@ -1576,15 +1544,31 @@ export default function SiteEditor({
 
   const confirmApplyTemplate = () => {
     if (!pendingTemplateKey) return;
-    const tSections = TEMPLATES[pendingTemplateKey] || [];
-    const freshSections = tSections.map(s => ({
-      ...s,
-      id: `item-${s.type.toLowerCase()}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`
-    }));
-    setSections(freshSections);
-    setSelectedSectionId(freshSections[0]?.id || null);
+    const freshId = (type: string) => `item-${type.toLowerCase()}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    const pageDefs = TEMPLATE_PAGES[pendingTemplateKey];
+
+    if (pageDefs?.length) {
+      // Multi-page template: replace the whole site with every page pre-built
+      const freshPages = pageDefs.map((p, idx) => ({
+        id: p.slug === '/' ? 'home' : `page-${p.slug.replace(/[^a-z0-9]/gi, '-')}-${idx}`,
+        name: p.name,
+        slug: p.slug,
+        sections: p.sections.map(s => ({ ...s, id: freshId(s.type) })),
+      }));
+      setPages(freshPages);
+      const home = freshPages.find(p => p.slug === '/') || freshPages[0];
+      setActivePageId(home.id);
+      setSelectedSectionId(home.sections[0]?.id || null);
+      addToast(`Template applied — ${freshPages.length} pages loaded!`);
+    } else {
+      // Single-page template: replace only the active page's sections
+      const tSections = TEMPLATES[pendingTemplateKey] || [];
+      const freshSections = tSections.map(s => ({ ...s, id: freshId(s.type) }));
+      setSections(freshSections);
+      setSelectedSectionId(freshSections[0]?.id || null);
+      addToast('Template applied!');
+    }
     setPendingTemplateKey(null);
-    addToast('Template applied!');
   };
 
   // Render the left Sidebar panel for Adding blocks / Templates
@@ -1740,12 +1724,20 @@ export default function SiteEditor({
               { key: 'yoga_studio', name: 'Solstice Yoga & Wellness', desc: 'Calm, community-driven layout for yoga studios and wellness centers.', img: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=400' },
               { key: 'prohome_services', name: 'Valley ProHome Services', desc: 'Bold contractor layout for plumbers, electricians, and HVAC companies.', img: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=400' },
               { key: 'maison_boutique', name: 'Maison Boutique', desc: 'Luxury editorial layout for fashion boutiques and lifestyle brands.', img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=400' },
+              { key: 'ember_rye', name: 'Ember & Rye Steakhouse', desc: 'Dark, cinematic layout for steakhouses and fine dining destinations.', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=400' },
+              { key: 'solene_boutique', name: 'Solene Boutique', desc: 'Warm artisan layout for gift shops, makers, and curated boutiques.', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=400' },
+              { key: 'stylish_store', name: 'Stylish Store', desc: 'Modern e-commerce layout with product grids and promo banners.', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=400' },
             ].map(t => (
               <div key={t.key} className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm hover:border-blue-300 transition-colors flex flex-col">
                 <img src={t.img} className="h-28 w-full object-cover border-b border-gray-100" alt={t.name} />
                 <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
                   <div>
-                    <h4 className="font-bold text-xs text-gray-800">{t.name}</h4>
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="font-bold text-xs text-gray-800">{t.name}</h4>
+                      <span className="text-[9px] font-bold text-gray-400 bg-gray-100 rounded-full px-2 py-0.5 shrink-0">
+                        {TEMPLATE_PAGES[t.key]?.length ? `${TEMPLATE_PAGES[t.key].length} pages` : '1 page'}
+                      </span>
+                    </div>
                     <p className="text-[10px] text-gray-400 font-medium leading-normal mt-0.5">{t.desc}</p>
                   </div>
                   <button 
@@ -4256,13 +4248,13 @@ export default function SiteEditor({
             
             {/* Width indicator */}
             <div className="text-xs font-semibold text-gray-400 select-none">
-              Width: <span className="text-gray-700 font-mono font-bold">{viewport === 'desktop' ? '1440px' : viewport === 'tablet' ? '768px' : '375px'}</span>
+              Width: <span className="text-gray-700 font-mono font-bold">{viewport === 'desktop' ? '1200px (Desktop)' : viewport === 'tablet' ? '768px (Tablet)' : '400px (Mobile)'}</span>
             </div>
 
             {/* Zoom Selector group */}
             <div className="flex items-center gap-2 px-2.5 py-1 bg-gray-50 rounded-full border border-gray-200/80 text-xs font-semibold text-gray-700 select-none">
               <button 
-                onClick={() => setScale(prev => Math.max(0.3, prev - 0.1))} 
+                onClick={() => setScale(prev => Math.max(0.5, prev - 0.1))} 
                 className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-200 font-bold text-gray-500 active:scale-90 transition-transform"
                 title="Zoom Out"
               >
@@ -4276,7 +4268,7 @@ export default function SiteEditor({
                 {Math.round(scale * 100)}%
               </button>
               <button 
-                onClick={() => setScale(prev => Math.min(1.5, prev + 0.1))} 
+                onClick={() => setScale(prev => Math.min(2.0, prev + 0.1))} 
                 className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-200 font-bold text-gray-500 active:scale-90 transition-transform"
                 title="Zoom In"
               >
@@ -4314,7 +4306,7 @@ export default function SiteEditor({
                 onClick={undoPages}
                 disabled={!canUndo}
                 className={`p-1.5 rounded-lg transition-colors ${canUndo ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'text-gray-300 cursor-not-allowed'}`}
-                title="Undo (Ctrl+Z)"
+                title={canUndo ? `Undo (Ctrl+Z): ${previousAction}` : 'Undo (Ctrl+Z)'}
               >
                 <Undo className="w-4 h-4" />
               </button>
@@ -4322,7 +4314,7 @@ export default function SiteEditor({
                 onClick={redoPages}
                 disabled={!canRedo}
                 className={`p-1.5 rounded-lg transition-colors ${canRedo ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'text-gray-300 cursor-not-allowed'}`}
-                title="Redo (Ctrl+Shift+Z)"
+                title={canRedo ? `Redo (Ctrl+Shift+Z): ${nextAction}` : 'Redo (Ctrl+Shift+Z)'}
               >
                 <Redo className="w-4 h-4" />
               </button>
@@ -4512,7 +4504,12 @@ export default function SiteEditor({
           </AnimatePresence>
 
           {/* Canvas Area: Center aligned in remaining space, no overlay */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden p-8 flex items-start justify-center select-none bg-[#F0F2F5] relative custom-scrollbar" ref={canvasContainerRef}>
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-8 flex flex-col items-center justify-start select-none bg-[#F0F2F5] relative custom-scrollbar" ref={canvasContainerRef}>
+            {viewport === 'mobile' && (
+              <div className="mb-4 bg-blue-50 border border-blue-100 text-blue-700 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-sm max-w-[375px] text-center select-none leading-relaxed animate-in fade-in slide-in-from-top-2 duration-200">
+                <span>💡 Mobile-First: Elements stack vertically on mobile for readability. Handles are touch-friendly.</span>
+              </div>
+            )}
             <div 
                ref={wrapperRef}
                className="relative shrink-0 transition-all duration-300 flex justify-center"
@@ -4800,6 +4797,50 @@ export default function SiteEditor({
           )}
         </AnimatePresence>
 
+        {/* ====== RIGHT-CLICK CONTEXT MENU ====== */}
+        {contextMenu && (
+          <div 
+            className="fixed bg-white border border-gray-200 rounded-xl shadow-2xl z-[9999] py-1.5 min-w-[170px] text-gray-700 select-none animate-in fade-in zoom-in-95 duration-100 border border-gray-200/80 ring-1 ring-black/5"
+            style={{ top: contextMenu.y, left: contextMenu.x }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => {
+                handleDuplicateSection(contextMenu.sectionId);
+                setContextMenu(null);
+                addToast('Widget duplicated');
+              }}
+              className="w-full text-left px-3.5 py-2 text-xs font-semibold hover:bg-gray-50 flex items-center gap-2 hover:text-blue-600 transition-colors"
+            >
+              <Copy className="w-3.5 h-3.5 text-gray-400" /> Duplicate
+            </button>
+            <button
+              onClick={() => {
+                removeSection(contextMenu.sectionId);
+                setContextMenu(null);
+                addToast('Widget deleted');
+              }}
+              className="w-full text-left px-3.5 py-2 text-xs font-semibold hover:bg-red-50 text-red-600 flex items-center gap-2 transition-colors"
+            >
+              <Trash2 className="w-3.5 h-3.5" /> Delete
+            </button>
+            <div className="border-t border-gray-100 my-1"></div>
+            <button
+              onClick={() => {
+                const sec = sections.find(s => s.id === contextMenu.sectionId);
+                if (sec) {
+                  navigator.clipboard.writeText(JSON.stringify(sec.props, null, 2));
+                  addToast('Props copied to clipboard');
+                }
+                setContextMenu(null);
+              }}
+              className="w-full text-left px-3.5 py-2 text-xs font-semibold hover:bg-gray-50 flex items-center gap-2 transition-colors"
+            >
+              <Copy className="w-3.5 h-3.5 text-gray-400" /> Copy Props JSON
+            </button>
+          </div>
+        )}
+
         {/* ====== KEYBOARD SHORTCUTS MODAL ====== */}
         <AnimatePresence>
           {showShortcutsModal && (
@@ -4882,7 +4923,7 @@ export default function SiteEditor({
                   </div>
                   <h3 className="font-black text-gray-900 text-lg mb-1">Load Template?</h3>
                   <p className="text-sm text-gray-500 font-medium leading-relaxed">
-                    Loading <span className="font-bold text-gray-800">"{pendingTemplateKey.replace(/_/g, ' ')}"</span> will replace your current page layout. This cannot be undone.
+                    Loading <span className="font-bold text-gray-800">"{pendingTemplateKey.replace(/_/g, ' ')}"</span> will replace {TEMPLATE_PAGES[pendingTemplateKey]?.length ? `your entire site with its ${TEMPLATE_PAGES[pendingTemplateKey].length} pre-built pages` : 'your current page layout'}. You can undo with Ctrl+Z.
                   </p>
                 </div>
                 <div className="flex items-center gap-3 px-6 pb-6">
