@@ -271,7 +271,25 @@ function BlockPreview({ type }: { type: ComponentType | string }) {
 }
 
 // Draggable Sidebar Item for adding blocks
-function DraggableBlockItem({ type, description, onClick, iconName, label, color }: { type: ComponentType | string; description: string; onClick: () => void; iconName?: string; label?: string; color?: string; }) {
+function DraggableBlockItem({ 
+  type, 
+  description, 
+  onClick, 
+  iconName, 
+  label, 
+  color,
+  isFavorite,
+  onToggleFavorite
+}: { 
+  type: ComponentType | string; 
+  description: string; 
+  onClick: () => void; 
+  iconName?: string; 
+  label?: string; 
+  color?: string; 
+  isFavorite?: boolean;
+  onToggleFavorite?: (e: React.MouseEvent) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `new-block-${type}`,
     data: {
@@ -294,8 +312,17 @@ function DraggableBlockItem({ type, description, onClick, iconName, label, color
       {...listeners}
       {...attributes}
       onClick={onClick}
-      className={`w-full text-left bg-white border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-40 border-dashed scale-95' : ''} ${iconName ? 'p-3 rounded-lg items-center justify-center gap-1.5 aspect-square' : 'p-2 rounded-xl gap-2'}`}
+      className={`relative w-full text-left bg-white border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all group flex flex-col cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-40 border-dashed scale-95' : ''} ${iconName ? 'p-3 rounded-lg items-center justify-center gap-1.5 aspect-square' : 'p-2 rounded-xl gap-2'}`}
     >
+      {onToggleFavorite && (
+        <button
+          onClick={onToggleFavorite}
+          className={`absolute top-2 right-2 p-1 rounded-full bg-white/80 hover:bg-white border border-gray-200/50 shadow-sm z-50 transition-colors text-gray-300 hover:text-amber-500 ${isFavorite ? '!text-amber-500' : ''}`}
+          title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+        >
+          <Star className="w-3 h-3 fill-current" />
+        </button>
+      )}
       {iconName ? (
         <>
           <div className={`w-8 h-8 rounded-md flex items-center justify-center transition-transform group-hover:scale-110 ${color || 'bg-slate-100 text-slate-700'}`}>
@@ -854,6 +881,30 @@ export default function SiteEditor({
   const [showAddSocial, setShowAddSocial] = useState(false);
   const [newSocialName, setNewSocialName] = useState('facebook');
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; sectionId: string } | null>(null);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('block-favorites');
+        return saved ? JSON.parse(saved) : [];
+      }
+    } catch {}
+    return [];
+  });
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
+  const toggleFavorite = (type: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    let next: string[];
+    setFavorites(prev => {
+      next = prev.includes(type) ? prev.filter(f => f !== type) : [...prev, type];
+      localStorage.setItem('block-favorites', JSON.stringify(next));
+      return next;
+    });
+    // Add brief timeout to use the updated 'next' array
+    setTimeout(() => {
+      addToast(next.includes(type) ? 'Added to favorites' : 'Removed from favorites');
+    }, 10);
+  };
 
   // Close context menu on window click
   useEffect(() => {
@@ -1634,59 +1685,128 @@ export default function SiteEditor({
               />
             </div>
 
+            {/* Show Advanced Toggle */}
+            <div className="flex items-center justify-between px-1 py-1 select-none shrink-0 border-b border-gray-100 pb-2">
+              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Show Advanced Widgets</span>
+              <button
+                type="button"
+                onClick={() => setShowAdvanced(!showAdvanced)}
+                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${showAdvanced ? 'bg-blue-600' : 'bg-gray-200'}`}
+              >
+                <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${showAdvanced ? 'translate-x-4' : 'translate-x-0'}`} />
+              </button>
+            </div>
+
             <div className="flex-1 overflow-y-auto pr-1 space-y-3 custom-scrollbar">
               {searchQuery === '' ? (
-                CATEGORIES.map(category => {
-                  const isExpanded = expandedCategories[category.id];
-                  return (
-                    <div key={category.id} className="border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
-                      <button
-                        onClick={() => toggleCategory(category.id)}
-                        className="w-full flex items-center justify-between p-3 text-left bg-white border-b border-gray-100 font-semibold text-xs text-gray-700 hover:bg-gray-50 transition-colors"
-                      >
-                        <span>{category.name}</span>
-                        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-                      </button>
-                      {isExpanded && (
-                        <div className="p-3 bg-gray-50 grid grid-cols-2 gap-2">
-                          <div key="drag-instruction" className="col-span-2 text-[9px] font-bold text-gray-400 mb-1 select-none">
-                            Drag onto canvas or click to append
+                (() => {
+                  const CATEGORY_ICONS: Record<string, string> = {
+                    favorites: 'Star',
+                    custom_layout: 'Sparkles',
+                    navigation: 'Compass',
+                    header: 'Heading',
+                    features: 'Briefcase',
+                    about_us: 'Info',
+                    testimonial: 'MessageSquare',
+                    faqs: 'HelpCircle',
+                    contact: 'Mail',
+                    widgets: 'Cpu'
+                  };
+
+                  const displayedCategories = [
+                    ...(favorites.length > 0 ? [{ id: 'favorites', name: 'Favorites', items: favorites }] : []),
+                    ...CATEGORIES
+                  ];
+
+                  return displayedCategories.map(category => {
+                    const isExpanded = expandedCategories[category.id] ?? (category.id === 'favorites');
+                    
+                    const isAdvancedBlock = (type: string) => {
+                      return ['GoogleMap', 'CalendlyEmbed', 'MailchimpForm', 'InstagramFeed', 'ShopifyProduct'].includes(type);
+                    };
+
+                    const visibleItems = category.items.filter(itemType => {
+                      if (!showAdvanced && isAdvancedBlock(itemType)) return false;
+                      return true;
+                    });
+
+                    if (visibleItems.length === 0) return null;
+
+                    return (
+                      <div key={category.id} className="border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
+                        <button
+                          type="button"
+                          onClick={() => toggleCategory(category.id)}
+                          className="w-full flex items-center justify-between p-3 text-left bg-white border-b border-gray-100 font-semibold text-xs text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            {(() => {
+                              const iconName = CATEGORY_ICONS[category.id] || 'Box';
+                              const CatIcon = (LucideIcons as any)[iconName] || LucideIcons.Box;
+                              return <CatIcon className={`w-3.5 h-3.5 ${category.id === 'favorites' ? 'text-amber-500 fill-current' : 'text-gray-400'}`} />;
+                            })()}
+                            <span>{category.name}</span>
                           </div>
-                          <React.Fragment>
-                            {category.items.map(itemType => {
-                              const schema = COMPONENT_SCHEMAS[itemType];
-                              if (!schema) return null;
-                              return (
-                                <DraggableBlockItem
-                                  key={itemType}
-                                  type={itemType as ComponentType}
-                                  description={schema.description}
-                                  onClick={() => addSection(itemType as ComponentType)}
-                                />
-                              );
-                            })}
-                          </React.Fragment>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })
+                          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                        </button>
+                        {isExpanded && (
+                          <div className="p-3 bg-gray-50 grid grid-cols-2 gap-2">
+                            <div key="drag-instruction" className="col-span-2 text-[9px] font-bold text-gray-400 mb-1 select-none">
+                              Drag onto canvas or click to append
+                            </div>
+                            <React.Fragment>
+                              {visibleItems.map(itemType => {
+                                const schema = COMPONENT_SCHEMAS[itemType];
+                                if (!schema) return null;
+                                return (
+                                  <DraggableBlockItem
+                                    key={itemType}
+                                    type={itemType as ComponentType}
+                                    description={schema.description}
+                                    onClick={() => addSection(itemType as ComponentType)}
+                                    isFavorite={favorites.includes(itemType)}
+                                    onToggleFavorite={(e) => toggleFavorite(itemType, e)}
+                                  />
+                                );
+                              })}
+                            </React.Fragment>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  });
+                })()
               ) : (
                 <div className="space-y-2">
                   <React.Fragment>
                     {Object.entries(COMPONENT_SCHEMAS)
-                      .filter(([type, schema]) => type.toLowerCase().includes(searchQuery.toLowerCase()) || (schema.description && schema.description.toLowerCase().includes(searchQuery.toLowerCase())))
+                      .filter(([type, schema]) => {
+                        const isAdvancedBlock = (t: string) => {
+                          return ['GoogleMap', 'CalendlyEmbed', 'MailchimpForm', 'InstagramFeed', 'ShopifyProduct'].includes(t);
+                        };
+                        if (!showAdvanced && isAdvancedBlock(type)) return false;
+                        return type.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                               (schema.description && schema.description.toLowerCase().includes(searchQuery.toLowerCase()));
+                      })
                       .map(([type, schema]) => (
                         <DraggableBlockItem
                           key={type}
                           type={type as ComponentType}
                           description={schema.description}
                           onClick={() => addSection(type as ComponentType)}
+                          isFavorite={favorites.includes(type)}
+                          onToggleFavorite={(e) => toggleFavorite(type, e)}
                         />
                       ))
                     }
                   </React.Fragment>
-                  {Object.keys(COMPONENT_SCHEMAS).filter(type => type.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+                  {Object.keys(COMPONENT_SCHEMAS).filter(type => {
+                    const isAdvancedBlock = (t: string) => {
+                      return ['GoogleMap', 'CalendlyEmbed', 'MailchimpForm', 'InstagramFeed', 'ShopifyProduct'].includes(t);
+                    };
+                    if (!showAdvanced && isAdvancedBlock(type)) return false;
+                    return type.toLowerCase().includes(searchQuery.toLowerCase());
+                  }).length === 0 && (
                     <p className="text-center text-xs font-bold text-black/40 py-8">No matching layout found.</p>
                   )}
                 </div>
@@ -4318,6 +4438,14 @@ export default function SiteEditor({
               >
                 <Redo className="w-4 h-4" />
               </button>
+              <button
+                type="button"
+                onClick={() => setShowShortcutsModal(true)}
+                className="p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors ml-1"
+                title="Keyboard Shortcuts Cheat Sheet"
+              >
+                <Keyboard className="w-4 h-4" />
+              </button>
             </div>
 
           </div>
@@ -4506,7 +4634,7 @@ export default function SiteEditor({
           {/* Canvas Area: Center aligned in remaining space, no overlay */}
           <div className="flex-1 overflow-y-auto overflow-x-hidden p-8 flex flex-col items-center justify-start select-none bg-[#F0F2F5] relative custom-scrollbar" ref={canvasContainerRef}>
             {viewport === 'mobile' && (
-              <div className="mb-4 bg-blue-50 border border-blue-100 text-blue-700 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-sm max-w-[375px] text-center select-none leading-relaxed animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="mb-4 bg-blue-50 border border-blue-100 text-blue-700 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-sm max-w-[400px] text-center select-none leading-relaxed animate-in fade-in slide-in-from-top-2 duration-200">
                 <span>💡 Mobile-First: Elements stack vertically on mobile for readability. Handles are touch-friendly.</span>
               </div>
             )}
@@ -4514,7 +4642,7 @@ export default function SiteEditor({
                ref={wrapperRef}
                className="relative shrink-0 transition-all duration-300 flex justify-center"
                style={{ 
-                 width: (viewport === 'desktop' ? 1200 : viewport === 'tablet' ? 768 : 375) * scale,
+                 width: (viewport === 'desktop' ? 1200 : viewport === 'tablet' ? 768 : 400) * scale,
                }}
             >
               <div 
@@ -4522,7 +4650,7 @@ export default function SiteEditor({
                 id="preview-canvas"
                 className="@container bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-2xl flex flex-col transition-all duration-300 ease-in-out origin-top-left shrink-0 absolute top-0 left-0 overflow-hidden ring-1 ring-gray-900/5"
                 style={{
-                  width: viewport === 'desktop' ? '1200px' : viewport === 'tablet' ? '768px' : '375px',
+                  width: viewport === 'desktop' ? '1200px' : viewport === 'tablet' ? '768px' : '400px',
                   maxWidth: 'none',
                   minHeight: '800px',
                   transform: `scale(${scale})`,
