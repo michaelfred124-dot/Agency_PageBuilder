@@ -65,6 +65,13 @@ export const SERVICES: Skill[] = [
 
 export const PROJECTS: Project[] = [
   {
+    title: 'Reflix Animation Library',
+    description: 'A premium, high-performance database and tool built for game animators and motion designers to browse animations.',
+    tags: ['Scrubbed Site', 'Animation Reference', 'Premium Dark Mode'],
+    image: 'https://assets.reflix.dev/thumbnails/LI34IOZEBKJ4I.webp',
+    link: '/work/reflix',
+  },
+  {
     title: 'Lauren Wilson Photo',
     description: 'A beautiful, minimalist portfolio for a natural light photographer.',
     tags: ['Next.js Template', 'Portfolio', 'Photography'],

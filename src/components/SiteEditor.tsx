@@ -1,9 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowLeft, Save, Plus, Trash2, GripVertical, Settings, LayoutTemplate, X, SlidersHorizontal, Monitor, Tablet, Smartphone, Search, ChevronDown, AlignLeft, AlignCenter, AlignRight, Type, Paintbrush, Globe, ShoppingBag, Database, Image as ImageIcon, Upload, Eye, Key, FolderOpen, ChevronRight, Rocket, Layers, LayoutGrid, Undo, Redo, Cloud, Edit3, AlertCircle, Copy, ChevronUp, Keyboard, MoveUp, MoveDown, Heading, AlignJustify, Square, SeparatorHorizontal, Minus, Video, Star } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, GripVertical, Settings, LayoutTemplate, X, SlidersHorizontal, Monitor, Tablet, Smartphone, Search, ChevronDown, ChevronLeft, AlignLeft, AlignCenter, AlignRight, Type, Paintbrush, Globe, ShoppingBag, Database, Image as ImageIcon, Upload, Eye, Key, FolderOpen, ChevronRight, Rocket, Layers, LayoutGrid, Undo, Redo, Cloud, Edit3, AlertCircle, Copy, ChevronUp, Keyboard, MoveUp, MoveDown, Heading, AlignJustify, Square, SeparatorHorizontal, Minus, Video, Star, Loader2, RefreshCw, CreditCard } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import PreviewWrapper from './PreviewWrapper';
+import StoreManager from './dashboard/StoreManager';
 import {
   DndContext,
   closestCenter,
@@ -43,11 +44,8 @@ interface SiteEditorProps {
   initialSections?: SectionData[]; // Kept for backwards compatibility fallback
   onBack: () => void;
   user?: any;
-  mediaFiles?: any[];
   globalSettings?: any;
   setGlobalSettings?: (s: any) => void;
-  handleUploadMediaClick?: () => void;
-  handleDeleteMedia?: (id: string) => void;
   saveSettings?: () => void;
   onSave?: (pages: PageData[], theme: any) => void;
   onPublish?: (pages: PageData[], theme: any) => void;
@@ -108,33 +106,45 @@ const ELEMENT_TYPE_CONFIGS = [
 
 // --- Undo/Redo History Hook ---
 function useHistory<T>(initial: T) {
-  const [history, setHistory] = useState<{ state: T; description: string }[]>([
-    { state: initial, description: 'Initial State' }
-  ]);
-  const [index, setIndex] = useState(0);
+  const [historyState, setHistoryState] = useState<{
+    history: { state: T; description: string }[];
+    index: number;
+  }>({
+    history: [{ state: initial, description: 'Initial State' }],
+    index: 0
+  });
 
-  const state = history[index].state;
+  const { history, index } = historyState;
+  const state = history[index]?.state ?? initial;
 
   const push = useCallback((newState: T | ((prev: T) => T), description: string = 'Action') => {
-    setHistory(prev => {
-      const current = prev[index].state;
+    setHistoryState(prev => {
+      const current = prev.history[prev.index]?.state ?? initial;
       const next = typeof newState === 'function' ? (newState as (prev: T) => T)(current) : newState;
       // Drop future states when a new action is committed
-      const newHistory = prev.slice(0, index + 1);
+      const newHistory = prev.history.slice(0, prev.index + 1);
       newHistory.push({ state: next, description });
-      // Cap history at 50 entries to save memory
-      return newHistory.slice(-50);
+      const slicedHistory = newHistory.slice(-50);
+      return {
+        history: slicedHistory,
+        index: slicedHistory.length - 1
+      };
     });
-    setIndex(prev => Math.min(prev + 1, 49));
-  }, [index]);
+  }, [initial]);
 
   const undo = useCallback(() => {
-    setIndex(prev => Math.max(0, prev - 1));
+    setHistoryState(prev => ({
+      ...prev,
+      index: Math.max(0, prev.index - 1)
+    }));
   }, []);
 
   const redo = useCallback(() => {
-    setIndex(prev => Math.min(history.length - 1, prev + 1));
-  }, [history.length]);
+    setHistoryState(prev => ({
+      ...prev,
+      index: Math.min(prev.history.length - 1, prev.index + 1)
+    }));
+  }, []);
 
   const canUndo = index > 0;
   const canRedo = index < history.length - 1;
@@ -204,6 +214,11 @@ const CATEGORIES = [
     id: 'custom_layout',
     name: 'My collections',
     items: ['CustomSection', 'ProjectGrid', 'Gallery', 'Banner', 'ShopifyProduct']
+  },
+  {
+    id: 'store',
+    name: 'Store (Native Checkout)',
+    items: ['StoreProducts']
   },
   {
     id: 'navigation',
@@ -365,7 +380,8 @@ function SortableSection({
   onMoveDown,
   isNewlyAdded,
   tenantId,
-  onContextMenu
+  onContextMenu,
+  planTier
 }: any) {
   const {
     attributes,
@@ -717,53 +733,61 @@ function SortableSection({
       {isEditable && (
         <div 
           style={inverseScaleStyle}
-          className={`absolute top-2 left-2 right-2 flex items-center justify-between z-20 transition-all duration-200 pointer-events-none ${isSelected || isDragging ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+          className={`absolute top-2 left-2 right-2 flex items-center justify-between z-20 transition-all duration-200 pointer-events-none ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
         >
-          {/* Section label + drag handle */}
+          {/* Section label + optional drag handle */}
           <div className="flex items-center gap-1 bg-blue-600 text-white rounded-lg px-2 py-1 shadow-lg border border-white/20 pointer-events-auto select-none">
-            <div
-              {...attributes}
-              {...listeners}
-              className="p-0.5 cursor-grab active:cursor-grabbing"
-              title="Drag to reorder"
-            >
-              <GripVertical className="w-3.5 h-3.5 text-white/70" />
-            </div>
+            {planTier === 'DIY' && (
+              <div
+                {...attributes}
+                {...listeners}
+                className="p-0.5 cursor-grab active:cursor-grabbing"
+                title="Drag to reorder"
+              >
+                <GripVertical className="w-3.5 h-3.5 text-white/70" />
+              </div>
+            )}
             <span className="text-[9px] font-black uppercase tracking-widest">{section.type}</span>
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-1 bg-gray-900 rounded-lg p-1 shadow-lg border border-white/10 pointer-events-auto">
-            <button
-              onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }}
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
-              title="Move Section Up (↑)"
-            >
-              <ChevronUp className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); onMoveDown?.(); }}
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
-              title="Move Section Down (↓)"
-            >
-              <ChevronDown className="w-3.5 h-3.5" />
-            </button>
-            <div className="w-px h-4 bg-white/20 mx-0.5" />
-            <button
-              onClick={(e) => { e.stopPropagation(); onDuplicate?.(); }}
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
-              title="Duplicate Section (Ctrl+D)"
-            >
-              <Copy className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); onRemove(); }}
-              className="p-1.5 text-red-400 hover:text-red-300 hover:bg-white/10 rounded transition-colors"
-              title="Delete Section (Del)"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          {/* Action buttons (only for DIY plan) */}
+          {planTier === 'DIY' && (
+            <div className="flex items-center gap-1 bg-gray-900 rounded-lg p-1 shadow-lg border border-white/10 pointer-events-auto">
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }}
+                className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
+                title="Move Section Up (↑)"
+              >
+                <ChevronUp className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onMoveDown?.(); }}
+                className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
+                title="Move Section Down (↓)"
+              >
+                <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+              <div className="w-px h-4 bg-white/20 mx-0.5" />
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onDuplicate?.(); }}
+                className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded transition-colors"
+                title="Duplicate Section (Ctrl+D)"
+              >
+                <Copy className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onRemove(); }}
+                className="p-1.5 text-red-400 hover:text-red-300 hover:bg-white/10 rounded transition-colors"
+                title="Delete Section (Del)"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -813,11 +837,8 @@ export default function SiteEditor({
   initialSections = [],
   onBack,
   user,
-  mediaFiles = [],
   globalSettings = { businessName: '', supportEmail: '', defaultSeoDescription: '' },
   setGlobalSettings = () => {},
-  handleUploadMediaClick = () => {},
-  handleDeleteMedia = () => {},
   saveSettings = () => {},
   onSave,
   onPublish,
@@ -858,7 +879,8 @@ export default function SiteEditor({
   };
 
   const [isPreviewing, setIsPreviewing] = useState(false);
-  const [activeLeftTool, setActiveLeftTool] = useState<'add' | 'theme' | 'media' | 'cms' | 'ecommerce' | null>('add');
+  const [activeLeftTool, setActiveLeftTool] = useState<'add' | 'theme' | 'media' | 'cms' | 'ecommerce' | null>('cms');
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string | null>(null);
   const [editSubTab, setEditSubTab] = useState<'content' | 'style' | 'advanced'>('content');
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(sections[0]?.id || null);
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
@@ -935,13 +957,20 @@ export default function SiteEditor({
   const [isStockLoading, setIsStockLoading] = useState(false);
   const [isStockLive, setIsStockLive] = useState(false);
 
-  // Shopify e-commerce state
+  // Native Store (Stripe Connect) state — mirrors StoreManager's status check
+  const [storeConnect, setStoreConnect] = useState<{ connected: boolean; chargesEnabled: boolean } | null>(null);
+  const [storeProductCount, setStoreProductCount] = useState<number | null>(null);
+  const [storeStatusLoading, setStoreStatusLoading] = useState(false);
+
+  // Legacy Shopify import state — optional, for clients migrating an existing Shopify catalog
   const [shopDomain, setShopDomain] = useState('');
   const [shopToken, setShopToken] = useState('');
   const [shopProducts, setShopProducts] = useState<any[]>([]);
   const [shopLoading, setShopLoading] = useState(false);
   const [shopError, setShopError] = useState('');
   const [shopConnected, setShopConnected] = useState(false);
+  const [showShopifyImport, setShowShopifyImport] = useState(false);
+  const [showStoreManagerModal, setShowStoreManagerModal] = useState(false);
 
   // Auto-fetch stock photos from Unsplash proxy Route Handler
   useEffect(() => {
@@ -983,6 +1012,7 @@ export default function SiteEditor({
   // Global theme settings
   const [globalTheme, setGlobalTheme] = useState({
     fontFamily: 'Space Grotesk',
+    headingFont: '', // empty = same as body font
     buttonRoundedness: 'rounded-xl',
     pageBackground: '#F8F5F2',
     colorPrimary: '#3b82f6',
@@ -1230,6 +1260,17 @@ export default function SiteEditor({
     }));
   };
 
+  const handleMoveArrayItem = (id: string, propName: string, index: number, direction: -1 | 1) => {
+    setSections(s => s.map(sec => {
+      if (sec.id !== id) return sec;
+      const newArray = [...sec.props[propName]];
+      const target = index + direction;
+      if (target < 0 || target >= newArray.length) return sec;
+      [newArray[index], newArray[target]] = [newArray[target], newArray[index]];
+      return { ...sec, props: { ...sec.props, [propName]: newArray } };
+    }));
+  };
+
   const handleUpdateStyleOverride = (id: string, key: string, value: any) => {
     setSections(s => s.map(sec => {
       if (sec.id !== id) return sec;
@@ -1348,6 +1389,115 @@ export default function SiteEditor({
     setMediaSelectorTarget(null);
     setActiveLeftTool(null);
     setRightSidebarOpen(true);
+  };
+
+  // --- Media Library (self-contained: server-side upload via /api/upload) ---
+  const [mediaFiles, setMediaFiles] = useState<any[]>([]);
+  const [mediaLoading, setMediaLoading] = useState(false);
+  const [mediaUploading, setMediaUploading] = useState(false);
+  const [mediaError, setMediaError] = useState<string | null>(null);
+  const mediaFetchedRef = useRef(false);
+
+  const isRealTenant = !!tenantId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(tenantId);
+
+  const refreshMedia = async () => {
+    setMediaLoading(true);
+    setMediaError(null);
+    try {
+      const res = await fetch(`/api/media${isRealTenant ? `?tenantId=${tenantId}` : ''}`);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Failed to load media library.');
+      setMediaFiles(json.media || []);
+    } catch (err: any) {
+      setMediaError(err?.message || 'Failed to load media library.');
+    } finally {
+      setMediaLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeLeftTool === 'media' && !mediaFetchedRef.current) {
+      mediaFetchedRef.current = true;
+      refreshMedia();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeLeftTool]);
+
+  const storeStatusFetchedRef = useRef(false);
+  const refreshStoreStatus = async () => {
+    if (!isRealTenant) { setStoreConnect({ connected: false, chargesEnabled: false }); setStoreProductCount(0); return; }
+    setStoreStatusLoading(true);
+    try {
+      const [connectRes, productsRes] = await Promise.all([
+        fetch(`/api/store/connect?tenantId=${tenantId}`).then(r => r.json()).catch(() => null),
+        fetch(`/api/store/products?tenantId=${tenantId}`).then(r => r.json()).catch(() => null)
+      ]);
+      setStoreConnect(connectRes && !connectRes.error ? connectRes : { connected: false, chargesEnabled: false });
+      setStoreProductCount(Array.isArray(productsRes?.products) ? productsRes.products.length : 0);
+    } finally {
+      setStoreStatusLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeLeftTool === 'ecommerce' && !storeStatusFetchedRef.current) {
+      storeStatusFetchedRef.current = true;
+      refreshStoreStatus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeLeftTool]);
+
+  /** Upload a file to /api/upload, register it in the media library, return its URL. */
+  const uploadImageFile = async (file: File): Promise<string | null> => {
+    setMediaUploading(true);
+    setMediaError(null);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      if (isRealTenant) formData.append('tenantId', tenantId as string);
+      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Upload failed.');
+      setMediaFiles(prev => [{ id: json.id || `local-${Date.now()}`, url: json.url, name: file.name }, ...prev]);
+      return json.url as string;
+    } catch (err: any) {
+      setMediaError(err?.message || 'Upload failed.');
+      alert(err?.message || 'Upload failed.');
+      return null;
+    } finally {
+      setMediaUploading(false);
+    }
+  };
+
+  /** Open a file picker, upload the chosen image, then hand the URL to onDone. */
+  const pickAndUploadImage = (onDone: (url: string) => void) => {
+    if (mediaUploading) return;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/jpeg,image/png,image/webp,image/gif';
+    input.onchange = async (e: any) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const url = await uploadImageFile(file);
+      if (url) onDone(url);
+    };
+    input.click();
+  };
+
+  const handleUploadMediaClick = () => {
+    pickAndUploadImage((url) => {
+      // If picker mode is active, apply the fresh upload straight to the field
+      if (mediaSelectorTarget) handleSelectMedia(url);
+    });
+  };
+
+  const handleDeleteMedia = async (id: string) => {
+    setMediaFiles(prev => prev.filter(m => m.id !== id));
+    try {
+      await fetch(`/api/media?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    } catch {
+      // optimistic removal; a failed server delete just leaves the row for next refresh
+    }
   };
 
   const addSection = (type: ComponentType | string, insertAtIndex?: number) => {
@@ -1624,253 +1774,216 @@ export default function SiteEditor({
 
   // Render the left Sidebar panel for Adding blocks / Templates
   const renderAddPanel = () => {
-    const applyTemplate = (key: string) => {
-      setPendingTemplateKey(key);
-    };
+    const CATEGORIES_MAPPING = [
+      {
+        id: 'headers',
+        name: 'Heros & Headers',
+        icon: 'Heading',
+        color: 'from-[#FF9F43] to-[#FF5252] text-white',
+        items: [
+          { type: 'EDIHero', label: 'Easy Does It Hero', desc: 'Bold, dark automotive hero with floating visual badge.' },
+          { type: 'NWHero', label: 'Northwood Coffee Hero', desc: 'Cozy editorial background image with centered quote text.' },
+          { type: 'GSHero', label: 'Greenscape Split Hero', desc: 'Sustainable landscape layout with offset split columns.' },
+          { type: 'LWHero', label: 'Lauren Wilson Hero', desc: 'Minimal photo portfolio layout with clean sans text.' },
+          { type: 'BSHero', label: 'Brighter Solar Hero', desc: 'Conversion-driven landing layout with strong call-to-actions.' },
+          { type: 'RHero', label: 'Osteria Bella Hero', desc: 'Cinematic Italian cuisine header with dual reservation buttons.' },
+          { type: 'VVHero', label: 'Volt Vikings Hero', desc: 'High-impact construction hero with neon safety badges.' }
+        ]
+      },
+      {
+        id: 'features',
+        name: 'Features & Services',
+        icon: 'Briefcase',
+        color: 'from-[#00D2FC] to-[#0048F9] text-white',
+        items: [
+          { type: 'EDIServices', label: 'Detailing Services List', desc: 'Minimal card deck displaying service categories.' },
+          { type: 'NWEthos', label: 'Coffee Ethos Grid', desc: 'Clean 4-column community values layout.' },
+          { type: 'GSServices', label: 'Landscaping Services Grid', desc: '6-column grid featuring handymen and lawn care.' },
+          { type: 'LWServices', label: 'Photo Session Features', desc: 'Authentic 4-column wedding/portrait layout.' },
+          { type: 'BSServices', label: 'Solar Cleaning Solutions', desc: 'Productive 4-column commercial/residential services.' },
+          { type: 'BSSteps', label: 'Step-by-Step Process Grid', desc: 'Clean chronological process flow timeline.' },
+          { type: 'RFeatures', label: 'Steakhouse Specials List', desc: 'Bold, text-driven features highlighting chef philosophy.' },
+          { type: 'RMenuPreview', label: 'Dual-Column Restaurant Menu', desc: 'Styled split-column menu with pricing and items.' },
+          { type: 'VVServices', label: 'Vikings Electrical Services', desc: 'Premium grid with detailed service cards.' },
+          { type: 'VVProcess', label: 'Getting Started Timeline', desc: '3-step customer onboarding process timeline.' }
+        ]
+      },
+      {
+        id: 'about',
+        name: 'About & Showcases',
+        icon: 'User',
+        color: 'from-[#FF52D9] to-[#9C27B0] text-white',
+        items: [
+          { type: 'GSAbout', label: 'Greenscape Story Showcase', desc: 'Editorial offset image split with custom story details.' },
+          { type: 'LWAbout', label: 'Creative Designer About', desc: 'Portrait highlight block with personalized story quote.' },
+          { type: 'RChef', label: 'Chef Portrait Spotlight', desc: 'Executive Chef biography card with quote overlay.' }
+        ]
+      },
+      {
+        id: 'testimonials',
+        name: 'Testimonials & Reviews',
+        icon: 'MessageSquare',
+        color: 'from-[#E040FB] to-[#651FFF] text-white',
+        items: [
+          { type: 'LWTestimonials', label: 'Minimalist Photo Reviews', desc: 'Clean quotes layout optimized for visual designers.' },
+          { type: 'BSTestimonials', label: 'Solar Project Reviews', desc: 'Testimonials grid featuring customer avatar details.' },
+          { type: 'NWCommunity', label: 'Community Feedback List', desc: 'Cozy community review cards with star ratings.' },
+          { type: 'RReviews', label: 'Osteria Bella Reviews', desc: 'Elegant testimonial block featuring customer sources.' },
+          { type: 'VVTestimonials', label: 'Vikings Client Testimonials', desc: 'High-impact dark background customer review deck.' }
+        ]
+      },
+      {
+        id: 'pricing_tables',
+        name: 'Pricing & FAQs',
+        icon: 'DollarSign',
+        color: 'from-[#10B981] to-[#059669] text-white',
+        items: [
+          { type: 'EDIPricing', label: 'Detailing Pricing Cards', desc: '3-tier simple plans grid.' },
+          { type: 'BSPricing', label: 'Solar Pricing Columns', desc: '3-tier pricing table with popular badge.' },
+          { type: 'EDIFaq', label: 'Frequently Asked Questions', desc: 'Simple text questions list.' },
+          { type: 'NWMenu', label: 'Coffee Menu & Hours', desc: 'Cozy coffee shop menu card.' },
+          { type: 'NWFindUs', label: 'Coffee Shop Location Details', desc: 'Visual card showcasing addresses and phone details.' },
+          { type: 'NWOrderAhead', label: 'Order Ahead Promo', desc: 'Promotional split image layout for online pickup.' },
+          { type: 'LWPortfolio', label: 'Creative Work Portfolio', desc: '4-column masonry image gallery for creators.' },
+          { type: 'GSProjects', label: 'Completed Landscaping Projects', desc: '4-column project showcase with descriptions.' }
+        ]
+      },
+      {
+        id: 'contacts',
+        name: 'Contact & Map Layouts',
+        icon: 'Mail',
+        color: 'from-[#F43F5E] to-[#BE123C] text-white',
+        items: [
+          { type: 'EDIContact', label: 'Detailer Service Form', desc: 'Custom contact details form.' },
+          { type: 'ContactForm', label: 'Agency General Contact', desc: 'General-purpose client inquiries form.' },
+          { type: 'GoogleMap', label: 'Google Maps Location Embed', desc: 'Live map iframe block showcasing store locations.' },
+          { type: 'VVMap', label: 'Vikings Serviced Area Map', desc: 'Snazzy customized dark map block showing coverage.' }
+        ]
+      }
+    ];
 
+    // If a category is selected, render its matching templates feed list
+    if (selectedCategoryFilter) {
+      const activeCat = CATEGORIES_MAPPING.find(c => c.id === selectedCategoryFilter);
+      const visibleItems = activeCat ? activeCat.items.filter(item => {
+        if (searchQuery === '') return true;
+        return item.label.toLowerCase().includes(searchQuery.toLowerCase()) || 
+               item.desc.toLowerCase().includes(searchQuery.toLowerCase());
+      }) : [];
+
+      return (
+        <div className="space-y-4 flex flex-col h-full min-h-0">
+          <div className="flex items-center gap-2 shrink-0 border-b border-gray-100 pb-3 select-none">
+            <button 
+              type="button"
+              onClick={() => { setSelectedCategoryFilter(null); setSearchQuery(''); }}
+              className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-500 hover:text-gray-900 transition-all flex items-center gap-1 text-[10px] font-black uppercase tracking-wider"
+            >
+              <ChevronLeft className="w-4 h-4" /> Back
+            </button>
+            <div className="h-4 w-px bg-gray-200" />
+            <span className="font-bold text-xs text-gray-900 uppercase tracking-wide">
+              {activeCat?.name}
+            </span>
+          </div>
+
+          {/* Sub-search bar */}
+          <div className="relative shrink-0">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder={`Search in ${activeCat?.name}...`}
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-semibold outline-none focus:border-indigo-400 focus:bg-white transition-colors"
+            />
+          </div>
+
+          <div className="flex-1 overflow-y-auto pr-1 space-y-4 custom-scrollbar">
+            {visibleItems.length === 0 ? (
+              <p className="text-center text-xs font-bold text-gray-400 py-8">No matching designs found.</p>
+            ) : (
+              visibleItems.map(item => (
+                <button
+                  key={item.type}
+                  type="button"
+                  onClick={() => addSection(item.type as any)}
+                  className="w-full text-left bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:border-indigo-500 hover:shadow-md transition-all group flex flex-col"
+                >
+                  <div className="relative aspect-video w-full bg-slate-100 border-b border-gray-100 flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-slate-100 opacity-60" />
+                    <div className="relative z-10 flex flex-col items-center gap-1.5 select-none">
+                      <LayoutGrid className="w-6 h-6 text-indigo-500 group-hover:scale-110 transition-transform" />
+                      <span className="text-[9px] font-black text-indigo-900/60 uppercase tracking-widest">TEMPLATE PREVIEW</span>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h4 className="font-bold text-xs text-gray-800 leading-tight group-hover:text-indigo-600 transition-colors">{item.label}</h4>
+                    <p className="text-[10px] text-gray-400 leading-normal mt-1">{item.desc}</p>
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Default Canva UI Grid Landing view
     return (
-      <div className="flex flex-col h-full space-y-4">
-        {/* Mockup Tabs style */}
-        <div className="bg-gray-100 p-1 rounded-xl flex gap-1 w-full max-w-[280px] mx-auto select-none shrink-0 border border-gray-200/40">
-          <button
-            onClick={() => setLeftPanelTab('elements')}
-            className={`flex-1 text-center py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${leftPanelTab === 'elements' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
+      <div className="space-y-4 flex flex-col h-full min-h-0">
+        {/* Canva elements search bar */}
+        <div className="flex gap-2 shrink-0">
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Describe your ideal element"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-full text-xs font-semibold outline-none focus:border-indigo-400 focus:bg-white transition-colors"
+            />
+          </div>
+          <button 
+            type="button"
+            className="bg-[#7F56D9] hover:bg-[#6941C6] text-white text-[11px] font-black uppercase tracking-wider px-5 py-2.5 rounded-full transition-all shadow-sm active:scale-95 shrink-0"
           >
-            Elements
-          </button>
-          <button
-            onClick={() => setLeftPanelTab('blocks')}
-            className={`flex-1 text-center py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${leftPanelTab === 'blocks' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
-          >
-            Blocks
-          </button>
-          <button
-            onClick={() => setLeftPanelTab('templates')}
-            className={`flex-1 text-center py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${leftPanelTab === 'templates' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
-          >
-            Templates
+            Search
           </button>
         </div>
 
-        {leftPanelTab === 'elements' ? (
-          <div className="flex-1 overflow-y-auto pr-1 space-y-3 custom-scrollbar">
-            <div className="grid grid-cols-3 gap-2">
-              <div className="col-span-3 text-[9px] font-bold text-gray-400 mb-1 select-none">
-                Drag basic widgets onto canvas
-              </div>
-              {ELEMENT_TYPE_CONFIGS.map(el => (
-                <DraggableBlockItem 
-                  key={el.type}
-                  type={el.type} 
-                  label={el.label}
-                  description={el.desc} 
-                  onClick={() => addSection(el.type)} 
-                  iconName={el.icon}
-                  color={el.color}
-                />
-              ))}
-            </div>
-          </div>
-        ) : leftPanelTab === 'blocks' ? (
-          <div className="space-y-4 flex-1 flex flex-col min-h-0">
-            {/* Search bar */}
-            <div className="relative shrink-0">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search layout blocks..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium outline-none focus:border-blue-400 focus:bg-white transition-colors"
-              />
-            </div>
+        <div className="pt-2 select-none shrink-0">
+          <h4 className="font-black text-xs text-gray-900 tracking-wide">Browse categories</h4>
+        </div>
 
-            {/* Show Advanced Toggle */}
-            <div className="flex items-center justify-between px-1 py-1 select-none shrink-0 border-b border-gray-100 pb-2">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Show Advanced Widgets</span>
-              <button
-                type="button"
-                onClick={() => setShowAdvanced(!showAdvanced)}
-                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${showAdvanced ? 'bg-blue-600' : 'bg-gray-200'}`}
-              >
-                <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${showAdvanced ? 'translate-x-4' : 'translate-x-0'}`} />
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto pr-1 space-y-3 custom-scrollbar">
-              {searchQuery === '' ? (
-                (() => {
-                  const CATEGORY_ICONS: Record<string, string> = {
-                    favorites: 'Star',
-                    custom_layout: 'Sparkles',
-                    navigation: 'Compass',
-                    header: 'Heading',
-                    features: 'Briefcase',
-                    about_us: 'Info',
-                    testimonial: 'MessageSquare',
-                    faqs: 'HelpCircle',
-                    contact: 'Mail',
-                    widgets: 'Cpu'
-                  };
-
-                  const displayedCategories = [
-                    ...(favorites.length > 0 ? [{ id: 'favorites', name: 'Favorites', items: favorites }] : []),
-                    ...CATEGORIES
-                  ];
-
-                  return displayedCategories.map(category => {
-                    const isExpanded = expandedCategories[category.id] ?? (category.id === 'favorites');
-                    
-                    const isAdvancedBlock = (type: string) => {
-                      return ['GoogleMap', 'CalendlyEmbed', 'MailchimpForm', 'InstagramFeed', 'ShopifyProduct'].includes(type);
-                    };
-
-                    const visibleItems = category.items.filter(itemType => {
-                      if (!showAdvanced && isAdvancedBlock(itemType)) return false;
-                      return true;
-                    });
-
-                    if (visibleItems.length === 0) return null;
-
-                    return (
-                      <div key={category.id} className="border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
-                        <button
-                          type="button"
-                          onClick={() => toggleCategory(category.id)}
-                          className="w-full flex items-center justify-between p-3 text-left bg-white border-b border-gray-100 font-semibold text-xs text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          <div className="flex items-center gap-2">
-                            {(() => {
-                              const iconName = CATEGORY_ICONS[category.id] || 'Box';
-                              const CatIcon = (LucideIcons as any)[iconName] || LucideIcons.Box;
-                              return <CatIcon className={`w-3.5 h-3.5 ${category.id === 'favorites' ? 'text-amber-500 fill-current' : 'text-gray-400'}`} />;
-                            })()}
-                            <span>{category.name}</span>
-                          </div>
-                          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-                        </button>
-                        {isExpanded && (
-                          <div className="p-3 bg-gray-50 grid grid-cols-2 gap-2">
-                            <div key="drag-instruction" className="col-span-2 text-[9px] font-bold text-gray-400 mb-1 select-none">
-                              Drag onto canvas or click to append
-                            </div>
-                            <React.Fragment>
-                              {visibleItems.map(itemType => {
-                                const schema = COMPONENT_SCHEMAS[itemType];
-                                if (!schema) return null;
-                                return (
-                                  <DraggableBlockItem
-                                    key={itemType}
-                                    type={itemType as ComponentType}
-                                    description={schema.description}
-                                    onClick={() => addSection(itemType as ComponentType)}
-                                    isFavorite={favorites.includes(itemType)}
-                                    onToggleFavorite={(e) => toggleFavorite(itemType, e)}
-                                  />
-                                );
-                              })}
-                            </React.Fragment>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  });
-                })()
-              ) : (
-                <div className="space-y-2">
-                  <React.Fragment>
-                    {Object.entries(COMPONENT_SCHEMAS)
-                      .filter(([type, schema]) => {
-                        const isAdvancedBlock = (t: string) => {
-                          return ['GoogleMap', 'CalendlyEmbed', 'MailchimpForm', 'InstagramFeed', 'ShopifyProduct'].includes(t);
-                        };
-                        if (!showAdvanced && isAdvancedBlock(type)) return false;
-                        return type.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                               (schema.description && schema.description.toLowerCase().includes(searchQuery.toLowerCase()));
-                      })
-                      .map(([type, schema]) => (
-                        <DraggableBlockItem
-                          key={type}
-                          type={type as ComponentType}
-                          description={schema.description}
-                          onClick={() => addSection(type as ComponentType)}
-                          isFavorite={favorites.includes(type)}
-                          onToggleFavorite={(e) => toggleFavorite(type, e)}
-                        />
-                      ))
-                    }
-                  </React.Fragment>
-                  {Object.keys(COMPONENT_SCHEMAS).filter(type => {
-                    const isAdvancedBlock = (t: string) => {
-                      return ['GoogleMap', 'CalendlyEmbed', 'MailchimpForm', 'InstagramFeed', 'ShopifyProduct'].includes(t);
-                    };
-                    if (!showAdvanced && isAdvancedBlock(type)) return false;
-                    return type.toLowerCase().includes(searchQuery.toLowerCase());
-                  }).length === 0 && (
-                    <p className="text-center text-xs font-bold text-black/40 py-8">No matching layout found.</p>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Mockup Add to collection button */}
-            <button 
-              onClick={() => addToast('Section saved to your collections', 'info')}
-              className="w-full py-2.5 bg-gray-50 hover:bg-gray-100 border border-dashed border-gray-300 text-gray-500 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shrink-0"
-            >
-              <Plus className="w-3.5 h-3.5" /> Add to collection
-            </button>
-          </div>
-        ) : leftPanelTab === 'templates' ? (
-          /* Templates lists matching mockup */
-          <div className="flex-1 overflow-y-auto space-y-4 custom-scrollbar pr-1">
+        {/* 3-column Category Grid */}
+        <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
+          <div className="grid grid-cols-3 gap-3">
             {[
-              { key: 'easy_does_it', name: 'Easy Does It Detailing', desc: 'Premium, dark-themed mobile car detailing and automotive artistry.', img: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=400' },
-              { key: 'northwood', name: 'Northwood Coffee Co.', desc: 'Cozy design ideal for cafés, restaurants, and local diners.', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400' },
-              { key: 'restaurant', name: 'Osteria Bella Restaurant', desc: 'Bold, elegant layout for full-service restaurants and eateries.', img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=400' },
-              { key: 'greenscape', name: 'Greenscape Landscaping', desc: 'Fresh, professional layout for handymen, cleaners, and lawn care.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80' },
-              { key: 'lauren', name: 'Lauren Wilson Photo', desc: 'Minimalist creative space for photographers, artists, and portfolios.', img: 'https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=400' },
-              { key: 'brighter_solar', name: 'Brighter Solar Energy', desc: 'Sleek conversion-driven layout for eco businesses and clean energy.', img: 'https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=400&q=80' },
-              { key: 'voltvikings', name: 'Volt Vikings Electricians', desc: 'High-impact premium layout for local home service and contracting businesses.', img: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400&auto=format&fit=crop' },
-              { key: 'law_firm', name: 'Sterling Law Group', desc: 'Professional, trust-building layout for law firms and legal services.', img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=400' },
-              { key: 'auto_repair', name: 'Ridge Line Auto Service', desc: 'Bold, high-converting design for auto repair and mechanic shops.', img: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=400' },
-              { key: 'hair_salon', name: 'Atelier Hair Studio', desc: 'Stylish, intimate layout for hair salons, barbers, and beauty studios.', img: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=400' },
-              { key: 'real_estate', name: 'Meridian Properties', desc: 'Clean, credibility-first design for real estate agents and brokerages.', img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=400' },
-              { key: 'personal_trainer', name: 'Iron Edge Fitness', desc: 'High-energy layout for personal trainers, coaches, and fitness studios.', img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400' },
-              { key: 'dental', name: 'Clarity Dental Studio', desc: 'Clean, welcoming design for dental practices and medical offices.', img: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=400' },
-              { key: 'dog_grooming', name: 'Paws & Pamper Pet Spa', desc: 'Friendly, warm layout for pet groomers, vets, and pet care services.', img: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=400' },
-              { key: 'wedding_planner', name: 'The Golden Thread Events', desc: 'Romantic, elegant layout for wedding planners and event designers.', img: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400' },
-              { key: 'home_cleaning', name: 'Spotless Home Co.', desc: 'Fresh, trustworthy design for cleaning services and home care companies.', img: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=400' },
-              { key: 'yoga_studio', name: 'Solstice Yoga & Wellness', desc: 'Calm, community-driven layout for yoga studios and wellness centers.', img: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=400' },
-              { key: 'prohome_services', name: 'Valley ProHome Services', desc: 'Bold contractor layout for plumbers, electricians, and HVAC companies.', img: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=400' },
-              { key: 'maison_boutique', name: 'Maison Boutique', desc: 'Luxury editorial layout for fashion boutiques and lifestyle brands.', img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=400' },
-              { key: 'ember_rye', name: 'Ember & Rye Steakhouse', desc: 'Dark, cinematic layout for steakhouses and fine dining destinations.', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=400' },
-              { key: 'solene_boutique', name: 'Solene Boutique', desc: 'Warm artisan layout for gift shops, makers, and curated boutiques.', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=400' },
-              { key: 'stylish_store', name: 'Stylish Store', desc: 'Modern e-commerce layout with product grids and promo banners.', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=400' },
-            ].map(t => (
-              <div key={t.key} className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm hover:border-blue-300 transition-colors flex flex-col">
-                <img src={t.img} className="h-28 w-full object-cover border-b border-gray-100" alt={t.name} />
-                <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-bold text-xs text-gray-800">{t.name}</h4>
-                      <span className="text-[9px] font-bold text-gray-400 bg-gray-100 rounded-full px-2 py-0.5 shrink-0">
-                        {TEMPLATE_PAGES[t.key]?.length ? `${TEMPLATE_PAGES[t.key].length} pages` : '1 page'}
-                      </span>
-                    </div>
-                    <p className="text-[10px] text-gray-400 font-medium leading-normal mt-0.5">{t.desc}</p>
+              { id: 'headers', name: 'Heros', icon: 'Heading', color: 'from-[#FF9F43] to-[#FF5252] text-[#FF5252]' },
+              { id: 'features', name: 'Services', icon: 'Briefcase', color: 'from-[#00D2FC] to-[#0048F9] text-[#0048F9]' },
+              { id: 'about', name: 'About', icon: 'User', color: 'from-[#FF52D9] to-[#9C27B0] text-[#9C27B0]' },
+              { id: 'testimonials', name: 'Reviews', icon: 'MessageSquare', color: 'from-[#E040FB] to-[#651FFF] text-[#651FFF]' },
+              { id: 'pricing_tables', name: 'Pricing', icon: 'DollarSign', color: 'from-[#10B981] to-[#059669] text-[#059669]' },
+              { id: 'contacts', name: 'Contact', icon: 'Mail', color: 'from-[#F43F5E] to-[#BE123C] text-[#BE123C]' }
+            ].map(cat => {
+              const Icon = (LucideIcons as any)[cat.icon] || LucideIcons.Box;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategoryFilter(cat.id)}
+                  className="flex flex-col items-center gap-2 p-3 bg-white border border-gray-200 rounded-2xl hover:border-indigo-400 hover:shadow-md transition-all group"
+                >
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${cat.color.split(' ')[0]} ${cat.color.split(' ')[1]} flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105`}>
+                    <Icon className="w-5 h-5" />
                   </div>
-                  <button 
-                    onClick={() => applyTemplate(t.key)}
-                    className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors"
-                  >
-                    Import Template
-                  </button>
-                </div>
-              </div>
-            ))}
+                  <span className="text-[10px] font-bold text-gray-700 group-hover:text-indigo-600 transition-colors">{cat.name}</span>
+                </button>
+              );
+            })}
           </div>
-        ) : null}
+        </div>
       </div>
     );
   };
@@ -1908,6 +2021,25 @@ export default function SiteEditor({
         ))}
       </div>
 
+
+      {/* Heading Font (optional, distinct from body) */}
+      <div className="space-y-2">
+        <label className="font-black uppercase tracking-widest text-[9px] text-black/60">Heading Font</label>
+        <select
+          value={globalTheme.headingFont || ''}
+          onChange={(e) => setGlobalTheme({ ...globalTheme, headingFont: e.target.value })}
+          style={globalTheme.headingFont ? { fontFamily: `'${globalTheme.headingFont}', sans-serif` } : undefined}
+          className="w-full bg-white border-2 border-black rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none"
+        >
+          <option value="">Same as body font</option>
+          {GOOGLE_FONTS.map(font => (
+            <option key={font.name} value={font.name} style={{ fontFamily: `'${font.name}', sans-serif` }}>
+              {font.label}
+            </option>
+          ))}
+        </select>
+        <p className="text-[9px] text-black/40 font-medium">Give headlines their own typeface — great for pairing a serif with a clean sans body.</p>
+      </div>
 
       {/* Button Roundedness */}
       <div className="space-y-2">
@@ -2129,9 +2261,10 @@ export default function SiteEditor({
     </div>
   );
 
-  // Render Left Drawer E-Commerce panel
+  // Render Left Drawer E-Commerce panel — native Stripe-Connect store (primary),
+  // with an optional collapsed Shopify catalog import for clients migrating an existing store.
   const renderEcommercePanel = () => {
-    const fetchProducts = async () => {
+    const fetchShopifyProducts = async () => {
       if (!shopDomain || !shopToken) {
         setShopError('Please enter your store domain and storefront access token.');
         return;
@@ -2156,9 +2289,8 @@ export default function SiteEditor({
       }
     };
 
-    const addProductToCanvas = (product: any) => {
+    const addShopifyProductToCanvas = (product: any) => {
       addSection('ShopifyProduct');
-      // After a brief tick, update the new section's props
       setTimeout(() => {
         setSections(prev => {
           const last = prev[prev.length - 1];
@@ -2180,138 +2312,160 @@ export default function SiteEditor({
       }, 50);
     };
 
+    const storeLive = !!storeConnect?.chargesEnabled;
+
     return (
       <div className="space-y-5">
-        {/* Header info */}
-        <div className="bg-gradient-to-br from-[#96bf48]/10 to-[#5e8e3e]/10 border border-[#96bf48]/30 p-4 rounded-xl flex flex-col gap-2">
+        {/* Native Store status card */}
+        <div className={`p-4 rounded-xl border flex flex-col gap-2 ${storeLive ? 'bg-emerald-50 border-emerald-200' : 'bg-indigo-50 border-indigo-200'}`}>
           <div className="flex items-center gap-2">
-            <ShoppingBag className="w-4 h-4 text-[#5e8e3e]" />
-            <span className="font-black text-xs tracking-wide text-gray-800">Shopify Integration</span>
+            <ShoppingBag className={`w-4 h-4 ${storeLive ? 'text-emerald-600' : 'text-indigo-600'}`} />
+            <span className="font-black text-xs tracking-wide text-gray-800">Native Store (Stripe)</span>
+            {storeStatusLoading ? (
+              <span className="ml-auto w-3.5 h-3.5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
+            ) : isRealTenant && storeConnect ? (
+              <span className={`ml-auto text-[9px] font-bold px-2 py-0.5 rounded-full border ${storeLive ? 'text-emerald-700 bg-emerald-100 border-emerald-200' : 'text-amber-700 bg-amber-100 border-amber-200'}`}>
+                {storeLive ? '● Live' : storeConnect.connected ? 'Setup Incomplete' : 'Not Connected'}
+              </span>
+            ) : null}
           </div>
-          <p className="text-[10px] text-gray-500 font-medium leading-relaxed">Connect your Shopify storefront to browse products and add live buy buttons directly to your website canvas.</p>
-        </div>
-
-        {/* Store Credentials */}
-        <div className="space-y-3">
-          <h4 className="font-black uppercase tracking-widest text-[10px] text-gray-500">Store Credentials</h4>
-          <div>
-            <label className="block text-[9px] font-bold uppercase tracking-widest text-gray-500 mb-1">Store Domain</label>
-            <input
-              type="text"
-              placeholder="your-store.myshopify.com"
-              value={shopDomain}
-              onChange={e => { setShopDomain(e.target.value); setShopConnected(false); }}
-              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors"
-            />
-          </div>
-          <div>
-            <label className="block text-[9px] font-bold uppercase tracking-widest text-gray-500 mb-1">Storefront Access Token</label>
-            <input
-              type="password"
-              placeholder="shpat_..."
-              value={shopToken}
-              onChange={e => { setShopToken(e.target.value); setShopConnected(false); }}
-              className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors"
-            />
-            <p className="text-[9px] text-gray-400 mt-1 font-medium">Found in Shopify Admin → Apps → Develop apps → Storefront API</p>
-          </div>
-
-          {shopError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-[10px] font-semibold p-2.5 rounded-lg flex items-start gap-2">
-              <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-              {shopError}
-            </div>
+          <p className="text-[10px] text-gray-500 font-medium leading-relaxed">
+            Sell products directly on this site — checkout, payouts, and receipts run through Stripe on the client's own domain. No third-party store required.
+          </p>
+          {isRealTenant && storeProductCount !== null && (
+            <p className="text-[10px] font-bold text-gray-600">{storeProductCount} product{storeProductCount === 1 ? '' : 's'} in catalog</p>
           )}
-
-          <button
-            onClick={fetchProducts}
-            disabled={shopLoading}
-            className="w-full bg-[#96bf48] hover:bg-[#7da83c] text-white py-2.5 rounded-lg font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {shopLoading ? (
-              <>
-                <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Connecting...
-              </>
-            ) : (
-              <>
-                <Globe className="w-3.5 h-3.5" />
-                {shopConnected ? 'Reload Products' : 'Connect Store'}
-              </>
-            )}
-          </button>
         </div>
 
-        {/* Product List */}
-        {shopConnected && shopProducts.length > 0 && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h4 className="font-black uppercase tracking-widest text-[10px] text-gray-500">Products ({shopProducts.length})</h4>
-              <span className="text-[9px] text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-200">● Connected</span>
-            </div>
-            <div className="space-y-2 max-h-[400px] overflow-y-auto pr-0.5 custom-scrollbar">
-              {shopProducts.map((product) => (
-                <div key={product.id} className="group flex items-center gap-3 p-2.5 bg-white border border-gray-200 rounded-xl hover:border-indigo-300 hover:shadow-sm transition-all cursor-pointer">
-                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 shrink-0 border border-gray-100">
-                    {product.image ? (
-                      <img src={product.image} alt={product.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-300">
-                        <ShoppingBag className="w-4 h-4" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-[11px] text-gray-800 truncate">{product.title}</p>
-                    <p className="text-[10px] text-indigo-600 font-semibold mt-0.5">
-                      {product.price ? `${product.price.currencyCode} ${parseFloat(product.price.amount).toFixed(2)}` : 'No price'}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => addProductToCanvas(product)}
-                    className="opacity-0 group-hover:opacity-100 shrink-0 bg-indigo-600 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg transition-all hover:bg-indigo-700"
-                  >
-                    + Add
-                  </button>
-                </div>
-              ))}
-            </div>
+        {!isRealTenant && (
+          <div className="bg-gray-50 border border-gray-200 text-gray-500 text-[10px] font-semibold p-3 rounded-lg">
+            This draft isn't assigned to a client site yet — Stripe connection and product management activate once it's assigned to a tenant.
           </div>
         )}
 
-        {shopConnected && shopProducts.length === 0 && (
-          <div className="text-center py-8 text-gray-400 text-[11px] font-semibold">
-            No products found in your store.
-          </div>
+        {isRealTenant && (
+          <button
+            onClick={() => setShowStoreManagerModal(true)}
+            className="w-full bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded-lg font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 transition-all shadow-sm"
+          >
+            <CreditCard className="w-3.5 h-3.5" />
+            {storeLive ? 'Manage Products & Orders' : 'Connect Stripe & Add Products'}
+          </button>
         )}
 
-        {/* Quick Setup Guide */}
-        {!shopConnected && (
-          <div className="border-t border-gray-100 pt-4 space-y-2">
-            <h4 className="font-black uppercase tracking-widest text-[10px] text-gray-400">Quick Setup Guide</h4>
-            {[
-              { step: '1', text: 'Go to Shopify Admin → Apps → Develop apps' },
-              { step: '2', text: 'Create a new custom app and enable the Storefront API' },
-              { step: '3', text: 'Copy your Storefront Access Token here' },
-              { step: '4', text: 'Browse products and add buy buttons to your canvas' },
-            ].map(item => (
-              <div key={item.step} className="flex items-start gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">{item.step}</span>
-                <span className="text-[11px] text-gray-500 font-medium leading-snug">{item.text}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Also Add Shopify Widget manually */}
+        {/* Primary canvas action */}
         <div className="border-t border-gray-100 pt-4">
           <button
-            onClick={() => addSection('ShopifyProduct')}
+            onClick={() => addSection('StoreProducts')}
             className="w-full text-left p-3 border border-dashed border-indigo-200 bg-indigo-50/50 text-indigo-700 rounded-xl hover:bg-indigo-50 transition-all group flex items-center justify-between text-[11px] font-bold"
           >
-            <span>Add Empty Shopify Widget to Canvas</span>
+            <span>Add Store Section to Canvas</span>
             <Plus className="w-4 h-4 opacity-60 group-hover:opacity-100" />
           </button>
+          <p className="text-[9px] text-gray-400 mt-1.5 font-medium leading-relaxed">
+            Shows demo products until real inventory is added — style it now, connect products later.
+          </p>
+        </div>
+
+        {/* Optional legacy Shopify catalog import, collapsed by default */}
+        <div className="border-t border-gray-100 pt-4">
+          <button
+            onClick={() => setShowShopifyImport(v => !v)}
+            className="w-full flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <span>Already sell on Shopify? Import products</span>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showShopifyImport ? 'rotate-180' : ''}`} />
+          </button>
+
+          {showShopifyImport && (
+            <div className="space-y-3 mt-3">
+              <p className="text-[9px] text-gray-400 font-medium leading-relaxed">
+                Pull individual products in from an existing Shopify storefront as one-off buy buttons. This is separate from the native store above and uses Shopify's own checkout.
+              </p>
+              <div>
+                <label className="block text-[9px] font-bold uppercase tracking-widest text-gray-500 mb-1">Store Domain</label>
+                <input
+                  type="text"
+                  placeholder="your-store.myshopify.com"
+                  value={shopDomain}
+                  onChange={e => { setShopDomain(e.target.value); setShopConnected(false); }}
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-[9px] font-bold uppercase tracking-widest text-gray-500 mb-1">Storefront Access Token</label>
+                <input
+                  type="password"
+                  placeholder="shpat_..."
+                  value={shopToken}
+                  onChange={e => { setShopToken(e.target.value); setShopConnected(false); }}
+                  className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors"
+                />
+                <p className="text-[9px] text-gray-400 mt-1 font-medium">Found in Shopify Admin → Apps → Develop apps → Storefront API</p>
+              </div>
+
+              {shopError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 text-[10px] font-semibold p-2.5 rounded-lg flex items-start gap-2">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                  {shopError}
+                </div>
+              )}
+
+              <button
+                onClick={fetchShopifyProducts}
+                disabled={shopLoading}
+                className="w-full bg-[#96bf48] hover:bg-[#7da83c] text-white py-2.5 rounded-lg font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {shopLoading ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Connecting...
+                  </>
+                ) : (
+                  <>
+                    <Globe className="w-3.5 h-3.5" />
+                    {shopConnected ? 'Reload Products' : 'Connect Store'}
+                  </>
+                )}
+              </button>
+
+              {shopConnected && shopProducts.length > 0 && (
+                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-0.5 custom-scrollbar">
+                  {shopProducts.map((product) => (
+                    <div key={product.id} className="group flex items-center gap-3 p-2.5 bg-white border border-gray-200 rounded-xl hover:border-indigo-300 hover:shadow-sm transition-all cursor-pointer">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 shrink-0 border border-gray-100">
+                        {product.image ? (
+                          <img src={product.image} alt={product.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-300">
+                            <ShoppingBag className="w-4 h-4" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-[11px] text-gray-800 truncate">{product.title}</p>
+                        <p className="text-[10px] text-indigo-600 font-semibold mt-0.5">
+                          {product.price ? `${product.price.currencyCode} ${parseFloat(product.price.amount).toFixed(2)}` : 'No price'}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => addShopifyProductToCanvas(product)}
+                        className="opacity-0 group-hover:opacity-100 shrink-0 bg-indigo-600 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg transition-all hover:bg-indigo-700"
+                      >
+                        + Add
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {shopConnected && shopProducts.length === 0 && (
+                <div className="text-center py-6 text-gray-400 text-[11px] font-semibold">
+                  No products found in your store.
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -2356,16 +2510,38 @@ export default function SiteEditor({
       {mediaPanelTab === 'my-media' ? (
         <div className="space-y-4 flex-1 flex flex-col min-h-0">
           <div className="flex gap-2 shrink-0">
-            <button 
+            <button
               onClick={handleUploadMediaClick}
-              className="flex-1 bg-black text-white py-2.5 rounded-lg font-black uppercase tracking-widest text-[9px] flex items-center justify-center gap-1.5 hover:bg-black/90 active:scale-95 transition-all shadow-md"
+              disabled={mediaUploading}
+              className="flex-1 bg-black text-white py-2.5 rounded-lg font-black uppercase tracking-widest text-[9px] flex items-center justify-center gap-1.5 hover:bg-black/90 active:scale-95 transition-all shadow-md disabled:opacity-60 disabled:active:scale-100"
             >
-              <Upload className="w-3.5 h-3.5" /> Upload Media
+              {mediaUploading
+                ? (<><Loader2 className="w-3.5 h-3.5 animate-spin" /> Uploading…</>)
+                : (<><Upload className="w-3.5 h-3.5" /> Upload Media</>)}
+            </button>
+            <button
+              onClick={refreshMedia}
+              disabled={mediaLoading}
+              title="Refresh library"
+              className="px-3 bg-white border border-gray-200 rounded-lg text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-all disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${mediaLoading ? 'animate-spin' : ''}`} />
             </button>
           </div>
 
+          {mediaError && (
+            <div className="bg-red-50 border border-red-200 text-red-700 text-[10px] font-semibold p-2.5 rounded-lg shrink-0">
+              {mediaError}
+            </div>
+          )}
+
           <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-2 gap-3 custom-scrollbar">
-            {mediaFiles.length === 0 && (
+            {mediaLoading && mediaFiles.length === 0 && (
+              <div className="col-span-full py-8 flex justify-center">
+                <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
+              </div>
+            )}
+            {!mediaLoading && mediaFiles.length === 0 && (
               <div className="col-span-full py-8 text-center text-black/40 font-bold uppercase tracking-widest text-[10px]">
                 No media files found. Upload some!
               </div>
@@ -3740,7 +3916,7 @@ export default function SiteEditor({
                                 </div>
                               ) : isImageField ? (
                                 <div className="flex flex-col gap-2">
-                                  <div 
+                                  <div
                                     className="w-full h-24 bg-gray-100 rounded-lg border border-gray-200 overflow-hidden relative group cursor-pointer flex items-center justify-center hover:border-blue-400 transition-colors"
                                     onClick={() => {
                                       setMediaSelectorTarget({ id: selectedSection.id, propName: field.name });
@@ -3751,19 +3927,40 @@ export default function SiteEditor({
                                       <>
                                         <img src={selectedSection.props[field.name]} className="w-full h-full object-cover" alt="Preview" />
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                          <span className="text-white text-[10px] font-semibold bg-black/50 px-2 py-1 rounded">Swap Image</span>
+                                          <span className="text-white text-[10px] font-semibold bg-black/50 px-2 py-1 rounded">Browse Library</span>
                                         </div>
                                       </>
                                     ) : (
                                       <div className="text-gray-400 flex flex-col items-center">
                                         <ImageIcon className="w-5 h-5 mb-1 opacity-50" />
-                                        <span className="text-[9px] font-semibold">Click to select</span>
+                                        <span className="text-[9px] font-semibold">Click to browse library</span>
                                       </div>
                                     )}
                                   </div>
-                                  <input 
+                                  <div className="flex gap-1.5">
+                                    <button
+                                      type="button"
+                                      onClick={() => pickAndUploadImage((url) => updateProp(field.name, url))}
+                                      disabled={mediaUploading}
+                                      className="flex-1 flex items-center justify-center gap-1 bg-black text-white py-1.5 rounded-md text-[9px] font-bold uppercase tracking-wider hover:bg-black/85 transition-colors disabled:opacity-60"
+                                    >
+                                      {mediaUploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3" />}
+                                      Upload
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setMediaSelectorTarget({ id: selectedSection.id, propName: field.name });
+                                        setActiveLeftTool('media');
+                                      }}
+                                      className="flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 text-gray-700 py-1.5 rounded-md text-[9px] font-bold uppercase tracking-wider hover:border-gray-400 transition-colors"
+                                    >
+                                      <FolderOpen className="w-3 h-3" /> Library
+                                    </button>
+                                  </div>
+                                  <input
                                     id={`inspector-input-${field.name}`}
-                                    type="text" 
+                                    type="text"
                                     value={selectedSection.props[field.name] || ''}
                                     onChange={(e) => updateProp(field.name, e.target.value)}
                                     className="w-full bg-white border border-gray-200 rounded text-[10px] px-2 py-1.5 focus:border-blue-400 focus:outline-none"
@@ -3795,12 +3992,31 @@ export default function SiteEditor({
                             <div className="space-y-2 mt-1">
                               {(selectedSection.props[field.name] || []).map((item: any, idx: number) => (
                                 <div key={idx} className="p-3 border border-gray-200 rounded-lg bg-gray-50 relative group">
-                                  <button 
-                                    onClick={() => handleRemoveArrayItem(selectedSection.id, field.name, idx)}
-                                    className="absolute top-2 right-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                  >
-                                    <Trash2 className="w-3 h-3" />
-                                  </button>
+                                  <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                      onClick={() => handleMoveArrayItem(selectedSection.id, field.name, idx, -1)}
+                                      disabled={idx === 0}
+                                      title="Move up"
+                                      className="text-gray-400 hover:text-gray-900 disabled:opacity-30"
+                                    >
+                                      <MoveUp className="w-3 h-3" />
+                                    </button>
+                                    <button
+                                      onClick={() => handleMoveArrayItem(selectedSection.id, field.name, idx, 1)}
+                                      disabled={idx === (selectedSection.props[field.name] || []).length - 1}
+                                      title="Move down"
+                                      className="text-gray-400 hover:text-gray-900 disabled:opacity-30"
+                                    >
+                                      <MoveDown className="w-3 h-3" />
+                                    </button>
+                                    <button
+                                      onClick={() => handleRemoveArrayItem(selectedSection.id, field.name, idx)}
+                                      title="Remove item"
+                                      className="text-gray-400 hover:text-red-500"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+                                  </div>
                                   <div className="font-semibold text-[9px] text-gray-400 mb-2">ITEM {idx + 1}</div>
                                   <div className="space-y-2">
                                     {field.arrayFields.map((arrField: any) => {
@@ -3815,22 +4031,39 @@ export default function SiteEditor({
                                                   setMediaSelectorTarget({ id: selectedSection.id, propName: field.name, index: idx, fieldName: arrField.name });
                                                   setActiveLeftTool('media');
                                                 }}
+                                                title="Browse media library"
                                                 className="w-8 h-8 rounded border border-gray-200 bg-white flex items-center justify-center shrink-0 hover:border-blue-400 overflow-hidden"
                                               >
                                                 {item[arrField.name] ? <img src={item[arrField.name]} className="w-full h-full object-cover" alt="" /> : <ImageIcon className="w-3.5 h-3.5 text-gray-400" />}
                                               </button>
-                                              <input 
+                                              <button
+                                                onClick={() => pickAndUploadImage((url) => handleUpdateArrayProp(selectedSection.id, field.name, idx, arrField.name, url))}
+                                                disabled={mediaUploading}
+                                                title="Upload new image"
+                                                className="w-8 h-8 rounded border border-gray-200 bg-black text-white flex items-center justify-center shrink-0 hover:bg-black/85 disabled:opacity-60"
+                                              >
+                                                {mediaUploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+                                              </button>
+                                              <input
                                                 id={`inspector-input-${field.name}-${idx}-${arrField.name}`}
-                                                type="text" 
+                                                type="text"
                                                 value={item[arrField.name] || ''}
                                                 onChange={(e) => handleUpdateArrayProp(selectedSection.id, field.name, idx, arrField.name, e.target.value)}
                                                 className="flex-1 bg-white border border-gray-200 rounded px-2 py-1 text-[10px] focus:outline-none focus:border-blue-400"
                                               />
                                             </div>
-                                          ) : (
-                                            <input 
+                                          ) : arrField.type === 'textarea' ? (
+                                            <textarea
                                               id={`inspector-input-${field.name}-${idx}-${arrField.name}`}
-                                              type="text" 
+                                              value={item[arrField.name] || ''}
+                                              onChange={(e) => handleUpdateArrayProp(selectedSection.id, field.name, idx, arrField.name, e.target.value)}
+                                              rows={3}
+                                              className="w-full bg-white border border-gray-200 rounded px-2 py-1.5 text-[10px] resize-y focus:outline-none focus:border-blue-400"
+                                            />
+                                          ) : (
+                                            <input
+                                              id={`inspector-input-${field.name}-${idx}-${arrField.name}`}
+                                              type="text"
                                               value={item[arrField.name] || ''}
                                               onChange={(e) => handleUpdateArrayProp(selectedSection.id, field.name, idx, arrField.name, e.target.value)}
                                               className="w-full bg-white border border-gray-200 rounded px-2 py-1 text-[10px] focus:outline-none focus:border-blue-400"
@@ -4250,10 +4483,13 @@ export default function SiteEditor({
       <div key={siteName} className="h-screen w-screen overflow-hidden flex flex-col bg-[#F0F2F5] font-sans selection:bg-black selection:text-white">
         
         {/* Dynamic style tag for editor canvas overrides */}
-        {/* Google Font import for selected font */}
-        <style dangerouslySetInnerHTML={{ __html: 
-          `@import url('https://fonts.googleapis.com/css2?family=${encodeURIComponent(globalTheme.fontFamily || 'Space Grotesk').replace(/%20/g,'+')}:wght@400;500;600;700;800&display=swap');` 
-        }} />
+        {/* Google Font import for selected fonts (body + optional heading) */}
+        <style dangerouslySetInnerHTML={{ __html: [
+          `@import url('https://fonts.googleapis.com/css2?family=${encodeURIComponent(globalTheme.fontFamily || 'Space Grotesk').replace(/%20/g,'+')}:wght@400;500;600;700;800&display=swap');`,
+          globalTheme.headingFont
+            ? `@import url('https://fonts.googleapis.com/css2?family=${encodeURIComponent(globalTheme.headingFont).replace(/%20/g,'+')}:wght@400;500;600;700;800;900&display=swap');`
+            : ''
+        ].join('\n') }} />
         <style dangerouslySetInnerHTML={{ __html: `
           #preview-canvas button, #preview-canvas .btn {
             border-radius: ${
@@ -4266,6 +4502,10 @@ export default function SiteEditor({
           #preview-canvas {
             font-family: '${globalTheme.fontFamily || 'Space Grotesk'}', sans-serif !important;
           }
+          ${globalTheme.headingFont ? `
+          #preview-canvas h1, #preview-canvas h2, #preview-canvas h3, #preview-canvas h4, #preview-canvas h5, #preview-canvas h6 {
+            font-family: '${globalTheme.headingFont}', sans-serif !important;
+          }` : ''}
           #preview-canvas [data-custom-bg="true"] > section, 
           #preview-canvas [data-custom-bg="true"] > div {
             background-color: transparent !important;
@@ -4535,13 +4775,16 @@ export default function SiteEditor({
           
           {/* Far Left Vertical Toolbar strip from mockup */}
           <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-6 gap-6 shrink-0 select-none z-40 shadow-sm">
-            <button 
-              onClick={() => { setActiveLeftTool(activeLeftTool === 'add' ? null : 'add'); setMediaSelectorTarget(null); }}
-              className={`p-2.5 rounded-xl transition-all ${activeLeftTool === 'add' ? 'bg-[#E5E7FD] text-[#5A60F6] shadow-sm' : 'text-gray-400 hover:text-gray-800 hover:bg-gray-50'}`}
-              title="Add Block Layouts"
-            >
-              <LayoutGrid className="w-5 h-5" />
-            </button>
+            {planTier === 'DIY' && (
+              <button 
+                type="button"
+                onClick={() => { setActiveLeftTool(activeLeftTool === 'add' ? null : 'add'); setMediaSelectorTarget(null); }}
+                className={`p-2.5 rounded-xl transition-all ${activeLeftTool === 'add' ? 'bg-[#E5E7FD] text-[#5A60F6] shadow-sm' : 'text-gray-400 hover:text-gray-800 hover:bg-gray-50'}`}
+                title="Add Block Layouts"
+              >
+                <LayoutGrid className="w-5 h-5" />
+              </button>
+            )}
 
             <button 
               onClick={() => { setActiveLeftTool(activeLeftTool === 'cms' ? null : 'cms'); setMediaSelectorTarget(null); }}
@@ -4671,23 +4914,26 @@ export default function SiteEditor({
                       {sections.map((section, sectionIndex) => (
                         <React.Fragment key={section.id}>
                           {/* Between-section insert button */}
-                          <div 
-                            className="group/insert relative flex items-center justify-center h-0 overflow-visible z-20"
-                            onMouseEnter={() => {}}
-                          >
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setBetweenInsertIndex(sectionIndex);
-                                setBetweenInsertSearch('');
-                              }}
-                              className="opacity-0 group-hover/insert:opacity-100 focus:opacity-100 absolute -translate-y-1/2 flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg transition-all duration-200 border-2 border-white z-30"
-                              style={{ top: '50%' }}
-                              title="Insert section here"
+                          {planTier === 'DIY' && (
+                            <div 
+                              className="group/insert relative flex items-center justify-center h-0 overflow-visible z-20"
+                              onMouseEnter={() => {}}
                             >
-                              <Plus className="w-3 h-3" /> Add
-                            </button>
-                          </div>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setBetweenInsertIndex(sectionIndex);
+                                  setBetweenInsertSearch('');
+                                }}
+                                className="opacity-0 group-hover/insert:opacity-100 focus:opacity-100 absolute -translate-y-1/2 flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg transition-all duration-200 border-2 border-white z-30"
+                                style={{ top: '50%' }}
+                                title="Insert section here"
+                              >
+                                <Plus className="w-3 h-3" /> Add
+                              </button>
+                            </div>
+                          )}
 
                           <SortableSection 
                             section={section} 
@@ -4729,7 +4975,9 @@ export default function SiteEditor({
                               }
                             }}
                             tenantId={tenantId || siteId}
+                            planTier={planTier}
                             onContextMenu={(e: any, id: string) => {
+                              if (planTier !== 'DIY') return;
                               setContextMenu({
                                 x: e.clientX,
                                 y: e.clientY,
@@ -4740,19 +4988,22 @@ export default function SiteEditor({
                         </React.Fragment>
                       ))}
                       {/* After-last section insert button */}
-                      <div className="group/insert relative flex items-center justify-center h-8">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setBetweenInsertIndex(sections.length);
-                            setBetweenInsertSearch('');
-                          }}
-                          className="opacity-0 group-hover/insert:opacity-100 flex items-center gap-1 bg-gray-800 hover:bg-gray-900 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg transition-all duration-200 border-2 border-white"
-                          title="Add section at bottom"
-                        >
-                          <Plus className="w-3 h-3" /> Add Section
-                        </button>
-                      </div>
+                      {planTier === 'DIY' && (
+                        <div className="group/insert relative flex items-center justify-center h-8">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setBetweenInsertIndex(sections.length);
+                              setBetweenInsertSearch('');
+                            }}
+                            className="opacity-0 group-hover/insert:opacity-100 flex items-center gap-1 bg-gray-800 hover:bg-gray-900 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg transition-all duration-200 border-2 border-white"
+                            title="Add section at bottom"
+                          >
+                            <Plus className="w-3 h-3" /> Add Section
+                          </button>
+                        </div>
+                      )}
                     </SortableContext>
                   )}
                 </div>
@@ -5018,6 +5269,41 @@ export default function SiteEditor({
                       </div>
                     </div>
                   ))}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ====== STORE MANAGER MODAL (native Stripe Connect store) ====== */}
+        <AnimatePresence>
+          {showStoreManagerModal && isRealTenant && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/40 z-[100] flex items-center justify-center backdrop-blur-sm p-6"
+              onClick={() => { setShowStoreManagerModal(false); refreshStoreStatus(); }}
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                transition={{ type: 'spring', duration: 0.35 }}
+                className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-3xl max-h-[85vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
+                  <h3 className="font-black text-gray-900 text-base">Store Manager</h3>
+                  <button
+                    onClick={() => { setShowStoreManagerModal(false); refreshStoreStatus(); }}
+                    className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="p-6">
+                  <StoreManager tenantId={tenantId as string} tenantName={siteName} />
                 </div>
               </motion.div>
             </motion.div>

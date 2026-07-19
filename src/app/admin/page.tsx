@@ -22,19 +22,21 @@ export default async function AdminDashboardPage() {
 
   // Fetch all necessary tables in parallel bypassing RLS via service role client
   const [
-    usersRes, 
-    tenantsRes, 
-    templatesRes, 
-    portfolioRes, 
+    usersRes,
+    tenantsRes,
+    templatesRes,
+    portfolioRes,
     servicesRes,
-    leadsRes
+    leadsRes,
+    agencySettingsRes
   ] = await Promise.all([
     supabase.auth.admin.listUsers(),
     supabase.from('tenants').select('*').neq('status', 'Template'),
     supabase.from('site_templates').select('id', { count: 'exact' }),
     supabase.from('portfolio_items').select('id', { count: 'exact' }),
     supabase.from('services').select('id', { count: 'exact' }),
-    supabase.from('contact_submissions').select('id', { count: 'exact' })
+    supabase.from('contact_submissions').select('id', { count: 'exact' }),
+    supabase.from('agency_settings').select('diy_monthly_price_cents, dfy_monthly_price_cents').limit(1).single()
   ]);
 
   const users = usersRes.data?.users || [];
@@ -54,7 +56,9 @@ export default async function AdminDashboardPage() {
   const dfySites = tenants.filter(t => t.plan_tier === 'DFY').length;
 
   // Fetch Real MRR from Stripe
-  let totalMRR: number | string = (diySites * 20) + (dfySites * 150);
+  const diyPrice = (agencySettingsRes.data?.diy_monthly_price_cents ?? 2000) / 100;
+  const dfyPrice = (agencySettingsRes.data?.dfy_monthly_price_cents ?? 15000) / 100;
+  let totalMRR: number | string = (diySites * diyPrice) + (dfySites * dfyPrice);
   let isStripeConnected = false;
 
   if (process.env.STRIPE_SECRET_KEY) {

@@ -129,6 +129,25 @@ export default function DomainManager({ mySites }: DomainManagerProps) {
   const [connectInstructions, setConnectInstructions] = useState<ConnectInstructions | null>(null);
   const [verifyStatus, setVerifyStatus] = useState<'idle' | 'loading' | 'verified' | 'pending'>('idle');
 
+  // Post-checkout banner (redirected back from Stripe)
+  const [checkoutBanner, setCheckoutBanner] = useState<{ type: 'success' | 'cancel'; domain?: string } | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('domain_success') === 'true') {
+      setCheckoutBanner({ type: 'success', domain: params.get('domain') || undefined });
+    } else if (params.get('domain_cancel') === 'true') {
+      setCheckoutBanner({ type: 'cancel' });
+    } else {
+      return;
+    }
+    params.delete('domain_success');
+    params.delete('domain_cancel');
+    params.delete('domain');
+    const cleanUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+    window.history.replaceState({}, '', cleanUrl);
+  }, []);
+
   const ownedDomains = new Set<string>(
     mySites.flatMap((s: any) =>
       [s.url, s.customDomain].filter(Boolean).map((d: string) =>
@@ -800,6 +819,28 @@ export default function DomainManager({ mySites }: DomainManagerProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-0">
+      {checkoutBanner && (
+        <div className={`mb-6 flex items-start gap-3 p-4 rounded-2xl border ${
+          checkoutBanner.type === 'success' ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'
+        }`}>
+          {checkoutBanner.type === 'success'
+            ? <CheckCircle2 className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
+            : <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />}
+          <div className="flex-1">
+            <p className={`text-sm font-bold ${checkoutBanner.type === 'success' ? 'text-emerald-900' : 'text-amber-900'}`}>
+              {checkoutBanner.type === 'success'
+                ? `Domain purchased${checkoutBanner.domain ? `: ${checkoutBanner.domain}` : ''}!`
+                : 'Checkout canceled — no charge was made.'}
+            </p>
+            {checkoutBanner.type === 'success' && (
+              <p className="text-xs text-emerald-700 mt-1">It's being connected to your site now — this can take a few minutes. Check the Portfolio tab for status.</p>
+            )}
+          </div>
+          <button onClick={() => setCheckoutBanner(null)} className="text-slate-400 hover:text-slate-700">
+            <XCircle className="w-4 h-4" />
+          </button>
+        </div>
+      )}
       <div className="flex gap-1 border-b border-slate-200 mb-8 overflow-x-auto">
         {TABS.map(t => (
           <button key={t.key} onClick={() => setActiveTab(t.key)}

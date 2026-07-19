@@ -69,6 +69,7 @@ export interface Tenant {
   notes?: string;
   created_at: string;
   domain_info?: any;
+  favicon_url?: string | null;
 }
 
 export interface SitePageData {
@@ -78,6 +79,12 @@ export interface SitePageData {
   canvas_json: any;      // The section data array from the builder
   theme_json: any | null; // Optional theme overrides
   updated_at: string;
+  nav_label?: string | null;
+  sort_order?: number;
+  show_in_nav?: boolean;
+  seo_title?: string | null;
+  seo_description?: string | null;
+  og_image?: string | null;
 }
 
 // ---------------------------------------------------------------------------

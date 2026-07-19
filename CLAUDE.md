@@ -1,7 +1,17 @@
 # Michaelfred Designs Agency — Code Guide
 
 ## Overview
-This is a Next.js portfolio & website builder showcasing custom client sites. The site builder uses a **traditional flowing layout** — sections stack full-width from top to bottom, touching edge-to-edge, just like a standard website builder. Each site in `/src/app/work/[site-name]/` is built as a complete, multi-page Next.js app with its own layout, nav, and styling.
+This is a Next.js web-design agency platform. **The designer hand-codes each client site in code; clients get a simple on-canvas editor for text and images only** (Payload-CMS-like, Elementor-style inline editing). There is no client-facing drag-drop page builder anymore. Each showcase site in `/src/app/work/[site-name]/` is a complete, multi-page Next.js app with its own layout, nav, and styling, using a **traditional flowing layout** — sections stack full-width top to bottom, edge-to-edge.
+
+## Code-First Client Site Workflow (THE core architecture)
+
+1. **Design in code**: build the site as a block family in `src/lib/blocks/<family>.tsx` following the `voltvikings.tsx` pattern — exported section components that accept `isEditable` / `onPropChange` props (wire `EditableText` for inline text), plus `*_SCHEMAS` (field metadata: `name`/`label`/`type: 'text'|'textarea'|'image'|...` + `defaultProps`) and `*_RENDERERS` exports, registered in `src/lib/blocks.tsx` (`ComponentType` union, `COMPONENT_SCHEMAS`, `Renderers`).
+2. **Register the template**: add a `TEMPLATES.<key>` section array and (for multi-page) `TEMPLATE_PAGES.<key>` entry in `src/lib/templates.ts`; add catalog metadata (name/screenshot) in `src/lib/templateCatalog.ts`. The showcase page under `/work/` should be a one-liner: `<TemplatePageRenderer templateKey="<key>" />`.
+3. **Assign to a client**: Admin CRM (`/admin/clients` → user drawer → Sites tab → "Assign New Site") calls `POST /api/admin/client` (`action: 'create'` with `owner_id` + `template_key`), which deep-clones the template's pages into `sites_data` rows for a new tenant.
+4. **Client edits**: `/dashboard` opens `src/components/dashboard/ClientSiteEditor.tsx` for tenant-backed sites — click text to edit inline, click images to swap (upload via `POST /api/upload` → Supabase Storage `site-images` bucket, or stock search). Saves go through `PATCH /api/site/[tenantId]`, which **enforces text/image-only server-side** (merges only string props; structure is immutable from the client side).
+5. **Live rendering**: unchanged — `tenants` + `sites_data` rendered by `/tenants/[domain]/[[...slug]]` via middleware subdomain/custom-domain rewrites.
+
+**Deprecated (do not invest in):** the drag-drop `SiteEditor.tsx` (still used for local-only drafts, pending removal), `draftService.ts`/`drafts` table, `undoRedoStore.ts`, the Bento chain (except the `BentoPublishedGrid` legacy fallback in the tenant route).
 
 ## Layout & Styling Standards
 

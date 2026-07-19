@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['lucide-react'],
   images: {
     remotePatterns: [
       {
@@ -18,6 +19,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'www.transparenttextures.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'jpmrykrojoisajmfnjlv.supabase.co',
       }
     ],
   },

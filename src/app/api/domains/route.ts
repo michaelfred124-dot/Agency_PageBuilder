@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dns from 'dns/promises';
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { createClient } from '@/utils/supabase/server';
+import { TLD_DEFAULTS, getDomainPricing } from '@/lib/domainPricing';
 
 // Vercel API credentials
 const VERCEL_AUTH_TOKEN = process.env.VERCEL_AUTH_TOKEN;
@@ -34,64 +34,14 @@ export async function GET(request: NextRequest) {
       const hasExtension = /\.[a-z]{2,}$/i.test(searchQuery.trim());
       const baseDomain = hasExtension ? searchQuery.trim().split('.')[0].toLowerCase() : query;
 
-      // Default prices per TLD when Vercel API is not available
-      const TLD_DEFAULTS: Record<string, number> = {
-        '.com': 14.99, '.co': 29.99, '.net': 13.99, '.org': 11.99,
-        '.io': 49.99, '.biz': 12.99, '.info': 9.99, '.us': 8.99,
-      };
       const extensions = Object.keys(TLD_DEFAULTS);
       const results = [];
 
-      // DNS availability check using Node.js built-in dns module (no HTTP, no external deps)
-      const checkDnsAvailability = async (fullDomain: string): Promise<boolean> => {
-        try {
-          await dns.resolveNs(fullDomain);
-          // Got NS records → domain is registered → taken
-          return false;
-        } catch (err: any) {
-          if (err.code === 'ENOTFOUND') {
-            // NXDOMAIN → domain does not exist in DNS → available
-            return true;
-          }
-          // ENODATA, ECONNREFUSED, ETIMEDOUT, etc. → default to taken (no false positives)
-          return false;
-        }
-      };
-
-      // Fire all checks in parallel
+      // Fire all checks in parallel — shared with /api/checkout/domain so the
+      // price quoted here is exactly what's charged at checkout.
       const checks = extensions.map(async (ext) => {
         const fullDomain = `${baseDomain}${ext}`;
-        let available = true;
-        let price = TLD_DEFAULTS[ext];
-
-        if (VERCEL_AUTH_TOKEN) {
-          // Use Vercel Registrar API for availability + pricing
-          try {
-            const [statusRes, priceRes] = await Promise.all([
-              fetch(`https://api.vercel.com/v4/domains/status?name=${fullDomain}${VERCEL_TEAM_ID ? `&teamId=${VERCEL_TEAM_ID}` : ''}`, {
-                headers: { Authorization: `Bearer ${VERCEL_AUTH_TOKEN}` }
-              }),
-              fetch(`https://api.vercel.com/v4/domains/price?name=${fullDomain}${VERCEL_TEAM_ID ? `&teamId=${VERCEL_TEAM_ID}` : ''}`, {
-                headers: { Authorization: `Bearer ${VERCEL_AUTH_TOKEN}` }
-              }),
-            ]);
-            if (statusRes.ok) {
-              const d = await statusRes.json();
-              available = d.available ?? true;
-            }
-            if (priceRes.ok) {
-              const d = await priceRes.json();
-              price = d.price || TLD_DEFAULTS[ext];
-            }
-          } catch {
-            // Fall back to DNS check
-            available = await checkDnsAvailability(fullDomain);
-          }
-        } else {
-          // No Vercel token — use real DNS lookup instead of random simulation
-          available = await checkDnsAvailability(fullDomain);
-        }
-
+        const { available, price } = await getDomainPricing(fullDomain);
         return { domain: fullDomain, available, price: `$${price.toFixed(2)}/yr`, priceNum: price, extension: ext };
       });
 
@@ -427,7 +377,7 @@ export async function DELETE(request: NextRequest) {
     const supabase = getSupabaseServerClient();
     const { data: tenant, error: tenantError } = await supabase
       .from('tenants')
-      .select('owner_id')
+      .select('owner_id, domain_info')
       .eq('id', tenantId)
       .single();
 
@@ -438,6 +388,21 @@ export async function DELETE(request: NextRequest) {
     // Sanitize domain: strip http://, https://, www., and trailing slashes
     let cleanDomain = domain.trim().toLowerCase();
     cleanDomain = cleanDomain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
+
+    // If this domain was purchased through us, stop the recurring annual
+    // charge — otherwise the client keeps being billed with no domain
+    // connected. Cancel at period end so the current paid-for year isn't cut
+    // short.
+    const stripeSubId = tenant.domain_info?.stripe_subscription_id;
+    if (stripeSubId && process.env.STRIPE_SECRET_KEY) {
+      try {
+        const Stripe = (await import('stripe')).default;
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2026-05-27.dahlia' as any });
+        await stripe.subscriptions.update(stripeSubId, { cancel_at_period_end: true });
+      } catch (err) {
+        console.error('[API /domains DELETE] Stripe subscription cancel error:', err);
+      }
+    }
 
     // Try Vercel removal
     if (VERCEL_AUTH_TOKEN && VERCEL_PROJECT_ID) {

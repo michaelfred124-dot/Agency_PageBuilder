@@ -10,3 +10,10 @@ coverage/
 *.tsbuildinfo
 .claude/
 .vercel
+_conflict-backup/
+
+# Session test artifacts
+test-*.mjs
+test-quick*
+/*.png
+!/public/**/*.png

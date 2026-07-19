@@ -139,10 +139,21 @@ export default async function SiteFallbackPage({ params }: SiteFallbackPageProps
 export async function generateMetadata({ params }: SiteFallbackPageProps) {
   const resolvedParams = await params;
   const { subdomain } = resolvedParams;
+  const slugParts = resolvedParams.slug || [];
+  const pageSlug = slugParts.length > 0 ? slugParts.join('/') : 'index';
+
   const tenant = await getTenantBySubdomain(subdomain);
+  if (!tenant) {
+    return { title: 'Site Not Found', description: '' };
+  }
+
+  const pageData = await getPageData(tenant.id, pageSlug);
+  const title = pageData?.seo_title || `${tenant.name} — Local Preview`;
+  const description = pageData?.seo_description || `Local development preview for ${tenant.name}`;
 
   return {
-    title: tenant ? `${tenant.name} — Local Preview` : 'Site Not Found',
-    description: tenant ? `Local development preview for ${tenant.name}` : '',
+    title,
+    description,
+    ...(tenant.favicon_url ? { icons: { icon: tenant.favicon_url } } : {}),
   };
 }

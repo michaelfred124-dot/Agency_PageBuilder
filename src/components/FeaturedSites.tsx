@@ -8,64 +8,12 @@ import { getSupabaseBrowserClient } from '@/lib/supabase';
 
 const FALLBACK_SITES = [
   {
-    title: 'Northwood Coffee',
-    category: 'Featured Template',
-    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2070&auto=format&fit=crop',
-    tags: ['React', 'Next.js', 'Premium'],
-    color: COLORS.orange,
-    link: '/work/northwood-coffee'
-  },
-  {
-    title: 'Greenscape Landscaping',
-    category: 'Featured Template',
-    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=2070&q=80',
-    tags: ['React', 'SEO', 'Mobile First'],
-    color: COLORS.green,
-    link: '/work/greenscape-landscaping'
-  },
-  {
-    title: 'Lauren Wilson Photo',
-    category: 'Featured Template',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop',
-    tags: ['Minimalist', 'Next.js', 'Creative'],
-    color: COLORS.purple,
-    link: '/work/lauren-wilson-photo'
-  },
-  {
-    title: 'Brighter Solar Cleaning',
-    category: 'Featured Template',
-    image: 'https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=2070&q=80',
-    tags: ['Services', 'Next.js', 'Local Business'],
+    title: 'Precise Building Services',
+    category: 'Electrician Template',
+    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070&auto=format&fit=crop',
+    tags: ['Next.js', 'Service Business', '90deg Corners'],
     color: COLORS.blue,
-    link: '/work/brighter-solar'
-  },
-  {
-    title: 'Nexus Fintech',
-    category: 'Web App',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop',
-    tags: ['React', 'Dashboard', 'UI/UX'],
-    color: COLORS.green
-  },
-  {
-    title: 'Lumina Studio',
-    category: 'Agency Portfolio',
-    image: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=2070&auto=format&fit=crop',
-    tags: ['Next.js', 'Framer Motion', 'Branding'],
-    color: COLORS.purple
-  },
-  {
-    title: 'Aura Commerce',
-    category: 'E-Commerce',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop',
-    tags: ['Shopify', 'Tailwind', 'Conversion'],
-    color: COLORS.blue
-  },
-  {
-    title: 'Zenith Health',
-    category: 'Marketing Site',
-    image: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop',
-    tags: ['Webflow', 'SEO', 'Design'],
-    color: COLORS.pink
+    link: '/work/precise-building-services'
   }
 ];
 

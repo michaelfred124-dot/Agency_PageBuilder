@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase';
+import { notifyNewLeadEmail } from '@/lib/email';
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -64,6 +65,23 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Best-effort notification to the site owner — never block the
+    // submission response on this.
+    (async () => {
+      const { data: tenant } = await supabase.from('tenants').select('name, owner_id').eq('id', tenantId).single();
+      if (!tenant?.owner_id) return;
+      const { data: ownerData } = await supabase.auth.admin.getUserById(tenant.owner_id);
+      const ownerEmail = ownerData?.user?.email;
+      if (!ownerEmail) return;
+      await notifyNewLeadEmail({
+        to: ownerEmail,
+        tenantName: tenant.name || 'your site',
+        leadName: name.trim(),
+        leadEmail: email.trim().toLowerCase(),
+        message: message.trim(),
+      });
+    })().catch((err) => console.error('[API /contact] Notification error:', err));
 
     return NextResponse.json({
       success: true,

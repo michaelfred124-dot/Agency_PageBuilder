@@ -9,137 +9,11 @@ import { getSupabaseBrowserClient } from '@/lib/supabase';
 
 const PRESETS = [
   {
-    id: 'template-easy-does-it',
-    name: 'Easy Does It Detailing',
-    templateKey: 'easy_does_it',
-    image: '/screenshots/easy-does-it.jpg',
-    desc: 'High-end dark theme design for mobile detailing and automotive services.'
-  },
-  {
-    id: 'template-restaurant',
-    name: 'Osteria Bella Restaurant',
-    templateKey: 'restaurant',
-    image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=400&auto=format&fit=crop',
-    desc: 'Premium 5-page website design for fine dining and modern restaurants.'
-  },
-  {
-    id: 'template-lauren-wilson',
-    name: 'Lauren Wilson Photo',
-    templateKey: 'lauren',
-    image: '/screenshots/lauren-wilson.jpg',
-    desc: 'Perfect for photographer portfolios, creatives, and visual artists.'
-  },
-  {
-    id: 'template-greenscape-landscaping',
-    name: 'Greenscape Landscaping',
-    templateKey: 'greenscape',
-    image: '/screenshots/greenscape-landscaping.jpg',
-    desc: 'Great for landscaping, lawn care, and home renovation services.'
-  },
-  {
-    id: 'template-northwood-coffee',
-    name: 'Northwood Coffee Co.',
-    templateKey: 'northwood',
-    image: '/screenshots/northwood-coffee.jpg',
-    desc: 'Designed for coffee shops, cafes, local bakeries, and eateries.'
-  },
-  {
-    id: 'template-brighter-solar',
-    name: 'Brighter Solar',
-    templateKey: 'brighter_solar',
-    image: '/screenshots/brighter-solar.jpg',
-    desc: 'Perfect for clean energy, solar installation, and tech businesses.'
-  },
-  {
-    id: 'template-volt-vikings',
-    name: 'Volt Vikings',
-    templateKey: 'voltvikings',
+    id: 'template-precise-building-services',
+    name: 'Precise Building Services',
+    templateKey: 'precise_building_services',
     image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400&auto=format&fit=crop',
-    desc: 'High-impact premium layout for local home service, electrician and contracting businesses.'
-  },
-  {
-    id: 'template-sterling-law',
-    name: 'Sterling Law Group',
-    templateKey: 'law_firm',
-    image: '/screenshots/sterling-law.jpg',
-    desc: 'Professional, trust-driving website for law firms and legal professionals.'
-  },
-  {
-    id: 'template-ridge-line-auto',
-    name: 'Ridge Line Auto Service',
-    templateKey: 'auto_repair',
-    image: '/screenshots/ridge-line-auto.jpg',
-    desc: 'Bold, conversion-focused website for auto repair and mechanic shops.'
-  },
-  {
-    id: 'template-atelier-hair',
-    name: 'Atelier Hair Studio',
-    templateKey: 'hair_salon',
-    image: '/screenshots/atelier-hair.jpg',
-    desc: 'Stylish, intimate website for hair salons, barbers, and beauty studios.'
-  },
-  {
-    id: 'template-meridian-properties',
-    name: 'Meridian Properties',
-    templateKey: 'real_estate',
-    image: '/screenshots/meridian-properties.jpg',
-    desc: 'Credibility-first website for real estate agents and brokerages.'
-  },
-  {
-    id: 'template-iron-edge-fitness',
-    name: 'Iron Edge Fitness',
-    templateKey: 'personal_trainer',
-    image: '/screenshots/iron-edge-fitness.jpg',
-    desc: 'High-energy site for personal trainers, gyms, and fitness studios.'
-  },
-  {
-    id: 'template-clarity-dental',
-    name: 'Clarity Dental Studio',
-    templateKey: 'dental',
-    image: '/screenshots/clarity-dental.jpg',
-    desc: 'Clean, welcoming website for dental practices and healthcare providers.'
-  },
-  {
-    id: 'template-paws-pamper',
-    name: 'Paws & Pamper Pet Spa',
-    templateKey: 'dog_grooming',
-    image: '/screenshots/paws-pamper.jpg',
-    desc: 'Friendly, warm website for pet grooming, dog daycare, and veterinary services.'
-  },
-  {
-    id: 'template-golden-thread',
-    name: 'The Golden Thread Events',
-    templateKey: 'wedding_planner',
-    image: '/screenshots/golden-thread.jpg',
-    desc: 'Romantic, luxury website for wedding planners and event coordinators.'
-  },
-  {
-    id: 'template-spotless-home',
-    name: 'Spotless Home Co.',
-    templateKey: 'home_cleaning',
-    image: '/screenshots/spotless-home.jpg',
-    desc: 'Trustworthy website for home cleaning and residential service businesses.'
-  },
-  {
-    id: 'template-solstice-yoga',
-    name: 'Solstice Yoga & Wellness',
-    templateKey: 'yoga_studio',
-    image: '/screenshots/solstice-yoga.jpg',
-    desc: 'Calm, community-driven website for yoga studios and wellness centers.'
-  },
-  {
-    id: 'template-valley-prohome',
-    name: 'Valley ProHome Services',
-    templateKey: 'prohome_services',
-    image: '/screenshots/valley-prohome.jpg',
-    desc: 'Bold contractor layout for plumbers, electricians, and HVAC companies.'
-  },
-  {
-    id: 'template-maison-boutique',
-    name: 'Maison Boutique',
-    templateKey: 'maison_boutique',
-    image: '/screenshots/maison-boutique.jpg',
-    desc: 'Luxury editorial layout for fashion boutiques and lifestyle brands.'
+    desc: 'High-impact premium layout for local home service, electrician, and contracting businesses.'
   }
 ];
 
@@ -361,6 +235,15 @@ function OnboardingForm() {
  
       // Save pointer to trigger editor
       sessionStorage.setItem('instant_edit_site_id', newId);
+
+      // Persist the brief to the CRM so it doesn't only live in this browser's
+      // localStorage — best-effort, never blocks the onboarding flow itself.
+      fetch('/api/onboarding/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planTier: 'DIY', answers: formData }),
+      }).catch(() => {});
+
       // Advance to success page step
       setStep(4);
     } catch (err) {
@@ -376,6 +259,16 @@ function OnboardingForm() {
       return;
     }
     setDfyStep(7); // Loading submission
+
+    // Persist the full brief to the CRM so the agency owner actually sees it —
+    // previously this only ever went to localStorage. Best-effort: doesn't
+    // block or alter the existing timed loading-screen flow below.
+    fetch('/api/onboarding/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planTier: 'DFY', answers: dfyAnswers }),
+    }).catch(() => {});
+
     setTimeout(() => {
       // Create new Custom DFY Site Record
       const newId = `site-dfy-${Date.now()}`;

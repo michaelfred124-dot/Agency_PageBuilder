@@ -30,14 +30,19 @@ export async function POST(req: NextRequest) {
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
-      
+
       if (session.metadata?.type === 'domain_purchase') {
         const tenantId = session.metadata.tenantId;
         const domain = session.metadata.domain;
-        
+        const subscriptionId = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id;
+
         console.log(`Processing domain purchase for tenant ${tenantId}, domain: ${domain}`);
-        
-        await fulfillDomainPurchase(tenantId, domain);
+
+        await fulfillDomainPurchase(tenantId, domain, subscriptionId);
+      }
+
+      if (session.metadata?.type === 'store_order') {
+        await fulfillStoreOrder(session);
       }
     }
 
@@ -48,7 +53,48 @@ export async function POST(req: NextRequest) {
   }
 }
 
-async function fulfillDomainPurchase(tenantId: string, domain: string) {
+/** Mark a native store order paid and decrement tracked inventory. */
+async function fulfillStoreOrder(session: Stripe.Checkout.Session) {
+  const supabase = getSupabaseServerClient();
+
+  const { data: order } = await supabase
+    .from('store_orders')
+    .update({
+      status: 'paid',
+      stripe_payment_intent: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || null,
+      customer_email: session.customer_details?.email || null,
+      customer_name: session.customer_details?.name || null,
+      amount_total_cents: session.amount_total ?? undefined,
+      shipping: (session as any).shipping_details || session.customer_details?.address || null
+    })
+    .eq('stripe_session_id', session.id)
+    .select('id, tenant_id, line_items')
+    .single();
+
+  if (!order) {
+    console.error(`[Store Webhook] No pending order found for session ${session.id}`);
+    return;
+  }
+
+  // Decrement inventory for tracked products (best-effort)
+  const lineItems: any[] = Array.isArray(order.line_items) ? order.line_items : [];
+  for (const item of lineItems) {
+    if (!item?.product_id) continue;
+    const { data: product } = await supabase
+      .from('store_products')
+      .select('id, inventory')
+      .eq('id', item.product_id)
+      .single();
+    if (product && product.inventory !== null) {
+      const next = Math.max(0, product.inventory - (item.qty || 1));
+      await supabase.from('store_products').update({ inventory: next }).eq('id', product.id);
+    }
+  }
+
+  console.log(`[Store Webhook] Order ${order.id} marked paid for tenant ${order.tenant_id}`);
+}
+
+async function fulfillDomainPurchase(tenantId: string, domain: string, stripeSubscriptionId?: string) {
   const VERCEL_AUTH_TOKEN = process.env.VERCEL_AUTH_TOKEN;
   const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID;
   const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
@@ -121,7 +167,10 @@ async function fulfillDomainPurchase(tenantId: string, domain: string) {
     auto_renew: true,
     registered_at: registeredAt,
     expires_at: expiresAt.toISOString(),
-    dns_records: defaultDnsRecords
+    dns_records: defaultDnsRecords,
+    // Needed to cancel the recurring annual charge if the client later
+    // disconnects this domain (see DELETE /api/domains).
+    stripe_subscription_id: stripeSubscriptionId || null
   };
 
   const { error: dbError } = await supabase

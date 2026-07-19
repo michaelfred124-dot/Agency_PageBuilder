@@ -65,6 +65,8 @@ import {
   Tooltip
 } from 'recharts';
 import SiteEditor from '@/components/SiteEditor';
+import ClientSiteEditor from '@/components/dashboard/ClientSiteEditor';
+import StoreManager from '@/components/dashboard/StoreManager';
 import { TEMPLATES, TEMPLATE_PAGES } from '@/lib/templates';
 import DomainManagerModal from '@/components/DomainManagerModal';
 import DomainManager from '@/components/DomainManager';
@@ -289,12 +291,13 @@ export default function DashboardLayout() {
   const router = useRouter();
 
   const [user, setUser] = useState<any | null>(null);
-  const [mediaFiles, setMediaFiles] = useState<any[]>([]);
   const [globalSettings, setGlobalSettings] = useState<any>({
     businessName: 'My Business',
     supportEmail: 'support@mybusiness.com',
     defaultSeoDescription: 'Welcome to our professional brand website.'
   });
+  const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
+  const [faviconUploading, setFaviconUploading] = useState(false);
 
   const [mySites, setMySites] = useState<any[]>([]);
 
@@ -800,6 +803,18 @@ export default function DashboardLayout() {
     fetchSubmissions();
   }, [activeSection, selectedSite]);
 
+  // Load the site's current favicon when viewing Settings
+  useEffect(() => {
+    if (activeSection !== 'Settings' || !selectedSite?.tenantId) {
+      setFaviconUrl(null);
+      return;
+    }
+    fetch(`/api/site/${selectedSite.tenantId}`)
+      .then(res => res.json())
+      .then(json => setFaviconUrl(json?.tenant?.favicon_url || null))
+      .catch(() => setFaviconUrl(null));
+  }, [activeSection, selectedSite]);
+
   // Domain search + purchase handlers
   const handleDomainSearch = async () => {
     const q = domainQuery.trim();
@@ -898,11 +913,6 @@ export default function DashboardLayout() {
     
     const supabase = getSupabaseBrowserClient();
     
-    const fetchMedia = async () => {
-      const { data } = await supabase.from('site_media').select('*').eq('tenant_id', selectedSite.id);
-      if (data) setMediaFiles(data);
-    };
-
     const fetchSettings = async () => {
       const { data } = await supabase.from('global_settings').select('*').eq('tenant_id', selectedSite.id).single();
       if (data) {
@@ -914,7 +924,6 @@ export default function DashboardLayout() {
       }
     };
 
-    fetchMedia();
     fetchSettings();
   }, [user, selectedSite]);
 
@@ -973,6 +982,18 @@ export default function DashboardLayout() {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   if (editingSite) {
+    // Sites backed by a real tenant (designed by the agency, assigned to this
+    // client) open the simple on-canvas editor: text + image edits only.
+    // Structure and layout stay locked to the designer's work.
+    if (editingSite.tenantId) {
+      return (
+        <ClientSiteEditor
+          tenantId={editingSite.tenantId}
+          onBack={() => setEditingSite(null)}
+        />
+      );
+    }
+
     let initialSections = TEMPLATES.blank;
     let initialPages = undefined;
     let initialTheme = null;
@@ -1150,11 +1171,8 @@ export default function DashboardLayout() {
           await handlePublishSite(pages, theme);
         }}
         user={user}
-        mediaFiles={mediaFiles}
         globalSettings={globalSettings}
         setGlobalSettings={setGlobalSettings}
-        handleUploadMediaClick={handleUploadMediaClick}
-        handleDeleteMedia={handleDeleteMedia}
         saveSettings={saveSettings}
       />
       {managingDomainFor && (
@@ -1200,55 +1218,6 @@ export default function DashboardLayout() {
     );
   }
 
-  function handleUploadMediaClick() {
-    if (!user) return alert('Please login first');
-    if (!selectedSite) return alert('Please select a site first');
-    
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = async (e: any) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-
-      try {
-        const supabase = getSupabaseBrowserClient();
-        const filePath = `${selectedSite.id}/${Date.now()}_${file.name}`;
-        
-        const { error: uploadError } = await supabase.storage.from('media').upload(filePath, file);
-        if (uploadError) throw uploadError;
-
-        const { data: urlData } = supabase.storage.from('media').getPublicUrl(filePath);
-        
-        const { data: mediaRecord, error: dbError } = await supabase.from('site_media').insert({
-          tenant_id: selectedSite.id,
-          owner_id: user.id,
-          url: urlData.publicUrl,
-          name: file.name,
-          type: 'image'
-        }).select().single();
-        
-        if (dbError) throw dbError;
-
-        setMediaFiles(prev => [...prev, mediaRecord]);
-      } catch (error: any) {
-        console.error('[Upload Error]', error);
-        alert(`Upload failed: ${error.message}`);
-      }
-    };
-    input.click();
-  }
-
-  async function handleDeleteMedia(id: string) {
-    try {
-      const supabase = getSupabaseBrowserClient();
-      await supabase.from('site_media').delete().eq('id', id);
-      setMediaFiles(prev => prev.filter(m => m.id !== id));
-    } catch(err) {
-      console.error('[Delete Media Error]', err);
-    }
-  }
-
   async function saveSettings() {
     if (!user) return alert('Please login first');
     if (!selectedSite) return alert('Please select a site first');
@@ -1267,6 +1236,42 @@ export default function DashboardLayout() {
       alert(`Save failed: ${error.message}`);
     }
   }
+
+  const handleUploadFavicon = () => {
+    const tenantId = selectedSite?.tenantId;
+    if (!tenantId) return alert('Publish your site first to set a favicon.');
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/png,image/x-icon,image/svg+xml,image/jpeg,image/webp';
+    input.onchange = async (e: any) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      setFaviconUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('tenantId', tenantId);
+        const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+        const uploadJson = await uploadRes.json();
+        if (!uploadRes.ok) throw new Error(uploadJson.error || 'Upload failed.');
+
+        const saveRes = await fetch(`/api/site/${tenantId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ faviconUrl: uploadJson.url }),
+        });
+        const saveJson = await saveRes.json();
+        if (!saveRes.ok) throw new Error(saveJson.error || 'Failed to save favicon.');
+
+        setFaviconUrl(uploadJson.url);
+      } catch (err: any) {
+        alert(err?.message || 'Favicon upload failed.');
+      } finally {
+        setFaviconUploading(false);
+      }
+    };
+    input.click();
+  };
 
   const renderLockedFeatureGate = () => {
     return (
@@ -2983,65 +2988,25 @@ export default function DashboardLayout() {
           </div>
         );
 
-      case 'E-Commerce':
+      case 'E-Commerce': {
+        const storeTenantId = selectedSite?.tenantId;
         return (
           <div className="max-w-4xl mx-auto space-y-8">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Store Settings</h1>
-              <p className="text-slate-500 text-xs mt-0.5">Configure storefront products and stripe checkouts.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="md:col-span-2 bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-slate-800 text-base flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-indigo-600" /> Stripe Integration
-                    </h3>
-                    <p className="text-slate-400 text-xs mt-0.5">Collect client checkouts on products.</p>
-                  </div>
-                  <span className="bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-0.5 text-[9px] font-bold uppercase rounded-full">Action Needed</span>
-                </div>
-                
-                <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl text-center space-y-4">
-                  <ShoppingBag className="w-10 h-10 text-slate-300 mx-auto" />
-                  <div className="space-y-1">
-                    <h4 className="font-bold text-slate-800 text-xs">Connect merchant checkout</h4>
-                    <p className="text-slate-500 text-[11px] max-w-md mx-auto">
-                      Stripe authorization is pending. Hook up your account to process sales.
-                    </p>
-                  </div>
-                  <button className="bg-[#635BFF] hover:bg-[#5851E5] text-white px-5 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors mx-auto flex items-center gap-2">
-                    Connect with Stripe
-                  </button>
-                </div>
+            {storeTenantId ? (
+              <StoreManager tenantId={storeTenantId} tenantName={selectedSite?.name} />
+            ) : (
+              <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm">
+                <ShoppingBag className="w-10 h-10 text-slate-300 mx-auto mb-4" />
+                <h2 className="text-lg font-bold text-slate-900">Publish your site to open a store</h2>
+                <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">
+                  Your store lives on your published website. Once your site is live, you can add products
+                  here, connect Stripe, and start taking orders right on your own domain.
+                </p>
               </div>
-
-              <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
-                <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
-                  <Package className="w-4 h-4 text-slate-400" /> Products Info
-                </h3>
-                
-                <div className="space-y-2">
-                  <button className="w-full text-left p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-between group">
-                    <div>
-                      <p className="font-semibold text-slate-700 text-xs">Add Product item</p>
-                      <p className="text-[10px] text-slate-400">Digital / Physical</p>
-                    </div>
-                    <Plus className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
-                  </button>
-                  <button className="w-full text-left p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-between group">
-                    <div>
-                      <p className="font-semibold text-slate-700 text-xs">Inventory levels</p>
-                      <p className="text-[10px] text-slate-400">0 Products configured</p>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
-                  </button>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         );
+      }
 
       case 'Marketing':
         return (
@@ -3610,17 +3575,44 @@ export default function DashboardLayout() {
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Brand SEO Description</label>
-                    <textarea 
-                      value={globalSettings.defaultSeoDescription} 
+                    <textarea
+                      value={globalSettings.defaultSeoDescription}
                       onChange={(e) => setGlobalSettings(p => ({ ...p, defaultSeoDescription: e.target.value }))}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:border-indigo-400 focus:outline-none min-h-[70px]"
                     />
                   </div>
-                  <button 
+                  <button
                     onClick={saveSettings}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-xs font-bold shadow-sm transition-colors"
                   >
                     Save SEO Settings
+                  </button>
+                </div>
+              </div>
+
+              <div className="border-t border-slate-100 pt-6 space-y-3">
+                <h3 className="text-slate-800 font-bold text-sm border-b border-slate-100 pb-2">Favicon</h3>
+                <p className="text-[11px] text-slate-500">The small icon shown in browser tabs for your live site.</p>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handleUploadFavicon}
+                    disabled={faviconUploading}
+                    className="w-14 h-14 rounded-xl border-2 border-dashed border-slate-300 hover:border-indigo-400 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 transition-colors disabled:opacity-60"
+                  >
+                    {faviconUploading ? (
+                      <Loader2 className="w-4 h-4 text-indigo-600 animate-spin" />
+                    ) : faviconUrl ? (
+                      <img src={faviconUrl} alt="Favicon" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    ) : (
+                      <Globe className="w-4 h-4 text-slate-300" />
+                    )}
+                  </button>
+                  <button
+                    onClick={handleUploadFavicon}
+                    disabled={faviconUploading}
+                    className="text-xs font-bold text-indigo-600 hover:text-indigo-700 disabled:opacity-60"
+                  >
+                    {faviconUrl ? 'Change favicon' : 'Upload favicon'}
                   </button>
                 </div>
               </div>

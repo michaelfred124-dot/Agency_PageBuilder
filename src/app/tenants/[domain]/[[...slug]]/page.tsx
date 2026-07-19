@@ -65,12 +65,19 @@ export default async function TenantPage({ params }: TenantPageProps) {
 
   return (
     <>
-      {/* Inject Google Font if specified */}
+      {/* Inject Google Font(s) if specified */}
       {theme.fontFamily && theme.fontFamily !== 'System Default' && (
         // eslint-disable-next-line @next/next/no-page-custom-font
         <link
           rel="stylesheet"
           href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme.fontFamily)}:wght@300;400;500;600;700;800;900&display=swap`}
+        />
+      )}
+      {theme.headingFont && theme.headingFont !== theme.fontFamily && (
+        // eslint-disable-next-line @next/next/no-page-custom-font
+        <link
+          rel="stylesheet"
+          href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(theme.headingFont)}:wght@300;400;500;600;700;800;900&display=swap`}
         />
       )}
 
@@ -96,6 +103,10 @@ export default async function TenantPage({ params }: TenantPageProps) {
             'inherit'
           };
         }
+        ${theme?.headingFont ? `
+        main h1, main h2, main h3, main h4, main h5, main h6 {
+          font-family: "${theme.headingFont}", sans-serif !important;
+        }` : ''}
       `}} />
 
       <main style={themeStyle} className="@container min-h-screen">
@@ -132,19 +143,46 @@ export default async function TenantPage({ params }: TenantPageProps) {
 }
 
 /**
- * Generate dynamic metadata for SEO based on the tenant's name.
+ * Generate dynamic metadata for SEO — per-page title/description/OG image
+ * where the page has set them, falling back to the tenant's name/a generic
+ * description otherwise. Previously this only ever read the tenant, so every
+ * page of a site shared one identical <title>.
  */
 export async function generateMetadata({ params }: TenantPageProps) {
   const resolvedParams = await params;
   const { domain } = resolvedParams;
+  const slugParts = resolvedParams.slug || [];
+  const pageSlug = slugParts.length > 0 ? slugParts.join('/') : 'index';
 
   let tenant = await getTenantBySubdomain(domain);
   if (!tenant) {
     tenant = await getTenantByCustomDomain(domain);
   }
 
+  if (!tenant) {
+    return { title: 'Site Not Found', description: 'This site could not be found.' };
+  }
+
+  const pageData = await getPageData(tenant.id, pageSlug);
+
+  const title = pageData?.seo_title || tenant.name;
+  const description = pageData?.seo_description || `Welcome to ${tenant.name}`;
+  const ogImage = pageData?.og_image;
+
   return {
-    title: tenant ? tenant.name : 'Site Not Found',
-    description: tenant ? `Welcome to ${tenant.name}` : 'This site could not be found.',
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+    ...(tenant.favicon_url ? { icons: { icon: tenant.favicon_url } } : {}),
   };
 }
