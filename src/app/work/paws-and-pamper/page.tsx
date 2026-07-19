@@ -82,28 +82,6 @@ export default function PawsAndPamperPage() {
   return (
     <div style={{ backgroundColor: BG, color: CREAM }}>
 
-      {/* STICKY NAV */}
-      <nav
-        className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-14 py-4"
-        style={{ backgroundColor: BG, borderBottom: '1px solid rgba(126,168,122,0.2)' }}
-      >
-        <span className="font-serif italic text-lg" style={{ color: CREAM }}>Paws & Pamper</span>
-        <div className="hidden md:flex items-center gap-8 text-sm">
-          {['Services', 'Booking', 'About', 'Contact'].map((item) => (
-            <Link key={item} href={`${BASE}/${item.toLowerCase()}`} className="transition-colors hover:opacity-100" style={{ color: MUTED }}>
-              {item}
-            </Link>
-          ))}
-        </div>
-        <Link
-          href={`${BASE}/contact`}
-          className="text-xs font-bold px-5 py-2.5 rounded-full transition-opacity hover:opacity-90"
-          style={{ backgroundColor: SAGE, color: '#0A0A0A' }}
-        >
-          Book Grooming
-        </Link>
-      </nav>
-
       {/* HERO — split layout */}
       <section className="flex flex-col lg:flex-row min-h-screen">
         {/* Left panel */}

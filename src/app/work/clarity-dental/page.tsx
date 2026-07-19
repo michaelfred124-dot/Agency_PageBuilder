@@ -75,22 +75,6 @@ export default function ClarityDental() {
   return (
     <div style={{ backgroundColor: BG, color: NAVY }}>
 
-      {/* STICKY NAV */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-16 py-5 bg-white" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <div className="flex items-center gap-1">
-          <span className="text-lg font-bold tracking-[0.15em]" style={{ color: NAVY }}>CLARITY</span>
-          <span className="text-lg font-bold tracking-[0.15em]" style={{ color: BLUE }}>DENTAL</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8">
-          {['Services', 'About', 'New Patients', 'Contact'].map((item) => (
-            <Link key={item} href={`${BASE}/${item.toLowerCase().replace(/ /g, '-')}`} className="text-xs font-semibold uppercase tracking-widest" style={{ color: NAVY }}>{item}</Link>
-          ))}
-        </div>
-        <Link href={`${BASE}/contact`} className="text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full text-white" style={{ backgroundColor: NAVY }}>
-          Book Appointment
-        </Link>
-      </nav>
-
       {/* HERO — TWO COLUMN LIGHT */}
       <section className="min-h-screen grid md:grid-cols-[55fr_45fr]">
         {/* Left copy */}
