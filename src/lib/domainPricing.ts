@@ -45,6 +45,53 @@ async function checkDnsAvailability(fullDomain: string): Promise<boolean> {
   }
 }
 
+/** Price-only lookup for one fully-qualified domain. Returns the yearly price. */
+export async function getDomainPrice(fullDomain: string): Promise<number> {
+  const ext = '.' + fullDomain.split('.').slice(1).join('.');
+  const fallbackPrice = TLD_DEFAULTS[ext] ?? 19.99;
+  if (!VERCEL_AUTH_TOKEN) return fallbackPrice;
+  try {
+    const res = await fetch(
+      `https://api.vercel.com/v1/registrar/domains/${encodeURIComponent(fullDomain)}/price${teamQS}`,
+      { headers: registrarHeaders() },
+    );
+    if (res.ok) {
+      const p = await res.json();
+      return coercePrice(p.purchasePrice) ?? coercePrice(p.renewalPrice) ?? fallbackPrice;
+    }
+  } catch {
+    // fall through
+  }
+  return fallbackPrice;
+}
+
+/**
+ * Bulk availability for many domains in a SINGLE request (max 50).
+ * Powers fast search — one round trip for every TLD instead of one per TLD.
+ * Returns a map keyed by lowercased domain -> available. Domains the registrar
+ * doesn't answer for are omitted (caller decides how to treat unknowns).
+ */
+export async function checkBulkAvailability(domains: string[]): Promise<Map<string, boolean>> {
+  const out = new Map<string, boolean>();
+  if (!VERCEL_AUTH_TOKEN || domains.length === 0) return out;
+  try {
+    const res = await fetch(`https://api.vercel.com/v1/registrar/domains/availability${teamQS}`, {
+      method: 'POST',
+      headers: { ...registrarHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ domains: domains.slice(0, 50) }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      for (const r of data.results || []) {
+        if (r?.domain) out.set(r.domain.toLowerCase(), !!r.available);
+      }
+    }
+  } catch {
+    // caller falls back
+  }
+  return out;
+}
+
 /** Authoritative availability + price for one fully-qualified domain (e.g. "acme.com"). */
 export async function getDomainPricing(fullDomain: string): Promise<{ available: boolean; price: number }> {
   const ext = '.' + fullDomain.split('.').slice(1).join('.');

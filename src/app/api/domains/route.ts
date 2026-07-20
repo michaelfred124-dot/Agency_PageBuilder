@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { createClient } from '@/utils/supabase/server';
-import { TLD_DEFAULTS, getDomainPricing } from '@/lib/domainPricing';
+import { TLD_DEFAULTS, getDomainPrice, checkBulkAvailability } from '@/lib/domainPricing';
 
 // Vercel API credentials
 const VERCEL_AUTH_TOKEN = process.env.VERCEL_AUTH_TOKEN;
@@ -35,26 +35,36 @@ export async function GET(request: NextRequest) {
       const baseDomain = hasExtension ? searchQuery.trim().split('.')[0].toLowerCase() : query;
 
       const extensions = Object.keys(TLD_DEFAULTS);
-      const results = [];
+      const fullDomains = extensions.map(ext => `${baseDomain}${ext}`);
 
-      // Fire all checks in parallel — shared with /api/checkout/domain so the
-      // price quoted here is exactly what's charged at checkout.
-      const checks = extensions.map(async (ext) => {
+      // 1. One bulk availability request for every TLD (vs one call per TLD).
+      const availMap = await checkBulkAvailability(fullDomains);
+
+      // 2. Fetch real per-domain price ONLY for available domains (parallel).
+      //    Taken domains are struck through in the UI and don't need a price.
+      //    Same price source as /api/checkout/domain so the quote matches the charge.
+      const priceMap = new Map<string, number>();
+      await Promise.all(
+        fullDomains
+          .filter(d => availMap.get(d.toLowerCase()))
+          .map(async d => { priceMap.set(d, await getDomainPrice(d)); })
+      );
+
+      const settled = extensions.map(ext => {
         const fullDomain = `${baseDomain}${ext}`;
-        const { available, price } = await getDomainPricing(fullDomain);
+        const available = availMap.get(fullDomain.toLowerCase()) ?? false;
+        const price = priceMap.get(fullDomain) ?? (TLD_DEFAULTS[ext] ?? 19.99);
         return { domain: fullDomain, available, price: `$${price.toFixed(2)}/yr`, priceNum: price, extension: ext };
       });
 
-      const settled = await Promise.all(checks);
       // Sort: available first, then .com/.co/.net/.org before the rest
-      const priority = ['.com', '.co', '.net', '.org', '.io', '.biz', '.info', '.us'];
+      const priority = ['.com', '.co', '.net', '.org', '.io', '.ai', '.app', '.dev', '.biz', '.info', '.us', '.xyz'];
       settled.sort((a, b) => {
         if (a.available !== b.available) return a.available ? -1 : 1;
         return priority.indexOf(a.extension) - priority.indexOf(b.extension);
       });
-      results.push(...settled);
 
-      return NextResponse.json({ success: true, results });
+      return NextResponse.json({ success: true, results: settled });
     }
 
     // 2. Handle EPP Auth Code Retrieval for Transfer Out
