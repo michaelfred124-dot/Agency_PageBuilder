@@ -21,8 +21,32 @@ import { authorizeTenantOwner as authorizeTenantAccess } from '@/lib/storeApi';
  * existing call-site name.
  */
 
-// Merge only string values (text + image URLs) from the client's edited
-// sections into the stored sections. Everything structural is kept.
+// Sanitize one incoming list item against the designer's item shape (template).
+// Only string leaves are taken from the client; every non-string field (icons,
+// numeric flags, layout switches) is kept from the template so a client can't
+// change a section's structure — only its words and images.
+function sanitizeArrayItem(template: any, incItem: any): any {
+  if (typeof template === 'string') {
+    return typeof incItem === 'string' ? incItem : template;
+  }
+  if (template && typeof template === 'object' && !Array.isArray(template)) {
+    const merged: any = { ...template };
+    if (incItem && typeof incItem === 'object' && !Array.isArray(incItem)) {
+      for (const sub of Object.keys(template)) {
+        if (typeof template[sub] === 'string' && typeof incItem[sub] === 'string') {
+          merged[sub] = incItem[sub];
+        }
+      }
+    }
+    return merged;
+  }
+  // Primitive/other template — keep the designer value.
+  return template;
+}
+
+// Merge client edits (text, image URLs, links, and list add/remove/reorder)
+// from the edited sections into the stored sections. Section order, types, ids,
+// and every non-string leaf stay designer-controlled.
 function mergeStringProps(stored: any, incoming: any): any {
   if (!incoming || typeof incoming !== 'object') return stored;
   const out: any = { ...stored };
@@ -33,23 +57,17 @@ function mergeStringProps(stored: any, incoming: any): any {
 
     if (typeof incVal === 'string' && (curVal === undefined || typeof curVal === 'string')) {
       out[key] = incVal;
-    } else if (Array.isArray(incVal) && Array.isArray(curVal) && incVal.length === curVal.length) {
-      out[key] = curVal.map((item: any, i: number) => {
-        const incItem = incVal[i];
-        if (typeof item === 'string' && typeof incItem === 'string') return incItem;
-        if (item && typeof item === 'object' && incItem && typeof incItem === 'object' && !Array.isArray(item)) {
-          const merged: any = { ...item };
-          for (const sub of Object.keys(incItem)) {
-            if (typeof incItem[sub] === 'string' && (merged[sub] === undefined || typeof merged[sub] === 'string')) {
-              merged[sub] = incItem[sub];
-            }
-          }
-          return merged;
-        }
-        return item;
-      });
+    } else if (Array.isArray(incVal) && Array.isArray(curVal)) {
+      // The item shape the designer defined — used as the template for every
+      // (including newly added) item so structure can't be injected.
+      const template =
+        curVal.find((it: any) => it && typeof it === 'object') ??
+        curVal[0] ??
+        incVal.find((it: any) => it && typeof it === 'object') ??
+        (incVal.length ? incVal[0] : '');
+      out[key] = incVal.map((incItem: any) => sanitizeArrayItem(template, incItem));
     }
-    // objects / numbers / booleans / shape changes: ignored (designer-only)
+    // objects / numbers / booleans / new props: ignored (designer-only)
   }
   return out;
 }

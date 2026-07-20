@@ -3,10 +3,11 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft, Save, Loader2, ExternalLink, Monitor, Tablet, Smartphone,
-  Check, MousePointerClick, Image as ImageIcon, AlertCircle, Globe
+  Check, MousePointerClick, Image as ImageIcon, AlertCircle, Globe, SlidersHorizontal
 } from 'lucide-react';
-import { Renderers } from '@/lib/blocks';
+import { Renderers, COMPONENT_SCHEMAS } from '@/lib/blocks';
 import ImagePickerModal from './ImagePickerModal';
+import SectionInspector from './SectionInspector';
 
 /**
  * ClientSiteEditor — the simple, Payload-style client editing experience.
@@ -154,12 +155,16 @@ function EditableSection({
   section,
   tenantId,
   onPropChange,
-  onSelectImage
+  onSelectImage,
+  onOpenSettings,
+  isSelected
 }: {
   section: any;
   tenantId: string;
   onPropChange: (path: string, value: any) => void;
   onSelectImage: (path: string) => void;
+  onOpenSettings: () => void;
+  isSelected: boolean;
 }) {
   const Renderer = Renderers[section.type];
   if (!Renderer) return null;
@@ -167,7 +172,7 @@ function EditableSection({
   return (
     <div
       data-section-id={section.id}
-      className="relative"
+      className={`relative group/section ${isSelected ? 'ring-2 ring-indigo-500 ring-inset' : ''}`}
       onMouseOver={(e) => {
         const target = e.target as HTMLElement;
         const img = target.closest('img') as HTMLImageElement | null;
@@ -278,6 +283,20 @@ function EditableSection({
         activeEl.addEventListener('keydown', handleKey);
       }}
     >
+      {/* Floating "edit section settings" button — opens the inspector for
+          props you can't click on the canvas (button links, list items, etc.) */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onOpenSettings(); }}
+        className={`absolute top-3 right-3 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg transition-all
+          ${isSelected
+            ? 'bg-indigo-600 text-white'
+            : 'bg-white/95 text-slate-700 border border-slate-200 opacity-0 group-hover/section:opacity-100 hover:bg-indigo-600 hover:text-white'}`}
+        title="Edit this section's content & links"
+      >
+        <SlidersHorizontal className="w-3.5 h-3.5" />
+        Edit
+      </button>
+
       <Renderer
         {...section.props}
         isEditable={true}
@@ -320,6 +339,7 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
 
   const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [imageTarget, setImageTarget] = useState<{ sectionId: string; path: string } | null>(null);
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
 
   const pagesRef = useRef(pages);
   pagesRef.current = pages;
@@ -358,6 +378,7 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
 
   const activePage = pages.find(p => p.page_slug === activeSlug);
   const sections = activePage?.canvas_json || [];
+  const selectedSection = sections.find((s: any) => s.id === selectedSectionId) || null;
 
   const updateSectionProp = useCallback((sectionId: string, path: string, value: any) => {
     setPages(prev => prev.map(page => {
@@ -553,7 +574,7 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
           {pages.map(page => (
             <button
               key={page.page_slug}
-              onClick={() => setActiveSlug(page.page_slug)}
+              onClick={() => { setActiveSlug(page.page_slug); setSelectedSectionId(null); }}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
                 activeSlug === page.page_slug ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-900'
               }`}
@@ -637,10 +658,13 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
       {/* Hint banner */}
       <div className="bg-indigo-600 text-white px-4 py-2 flex items-center justify-center gap-2 text-xs font-semibold shrink-0">
         <MousePointerClick className="w-3.5 h-3.5" />
-        Click any text to edit it directly
+        Click any text to edit it
         <span className="opacity-40 mx-1">·</span>
         <ImageIcon className="w-3.5 h-3.5" />
         Click any photo to swap it
+        <span className="opacity-40 mx-1">·</span>
+        <SlidersHorizontal className="w-3.5 h-3.5" />
+        Hover a section &amp; hit <span className="font-black">Edit</span> for buttons, links &amp; lists
       </div>
 
       {saveError && (
@@ -649,34 +673,49 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
         </div>
       )}
 
-      {/* Canvas */}
-      <main className="flex-1 overflow-auto py-8 px-4 flex justify-center">
-        <motion.div
-          key={`${activeSlug}-${viewport}`}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}
-          className="client-editor-canvas @container bg-white shadow-[0_20px_60px_rgba(0,0,0,0.12)] rounded-xl ring-1 ring-slate-900/5 overflow-hidden h-fit transition-all duration-300"
-          style={{ width: canvasWidth, maxWidth: '1400px', ...canvasThemeStyle }}
-        >
-          {sections.length === 0 ? (
-            <div className="py-32 text-center">
-              <h2 className="text-xl font-bold text-slate-800 mb-2">This page is empty</h2>
-              <p className="text-sm text-slate-400">Your designer hasn't added content to this page yet.</p>
-            </div>
-          ) : (
-            sections.map((section: any) => (
-              <EditableSection
-                key={section.id}
-                section={section}
-                tenantId={tenantId}
-                onPropChange={(path, value) => updateSectionProp(section.id, path, value)}
-                onSelectImage={(path) => setImageTarget({ sectionId: section.id, path })}
-              />
-            ))
-          )}
-        </motion.div>
-      </main>
+      {/* Canvas + Inspector row */}
+      <div className="flex-1 flex min-h-0">
+        <main className="flex-1 overflow-auto py-8 px-4 flex justify-center">
+          <motion.div
+            key={`${activeSlug}-${viewport}`}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="client-editor-canvas @container bg-white shadow-[0_20px_60px_rgba(0,0,0,0.12)] rounded-xl ring-1 ring-slate-900/5 overflow-hidden h-fit transition-all duration-300"
+            style={{ width: canvasWidth, maxWidth: '1400px', ...canvasThemeStyle }}
+          >
+            {sections.length === 0 ? (
+              <div className="py-32 text-center">
+                <h2 className="text-xl font-bold text-slate-800 mb-2">This page is empty</h2>
+                <p className="text-sm text-slate-400">Your designer hasn't added content to this page yet.</p>
+              </div>
+            ) : (
+              sections.map((section: any) => (
+                <EditableSection
+                  key={section.id}
+                  section={section}
+                  tenantId={tenantId}
+                  isSelected={selectedSectionId === section.id}
+                  onPropChange={(path, value) => updateSectionProp(section.id, path, value)}
+                  onSelectImage={(path) => setImageTarget({ sectionId: section.id, path })}
+                  onOpenSettings={() => setSelectedSectionId(section.id)}
+                />
+              ))
+            )}
+          </motion.div>
+        </main>
+
+        {/* Inspector panel — edit every prop of the selected section (links, lists, images) */}
+        {selectedSection && (
+          <SectionInspector
+            section={selectedSection}
+            schema={COMPONENT_SCHEMAS[selectedSection.type]}
+            onChange={(path, value) => updateSectionProp(selectedSection.id, path, value)}
+            onPickImage={(path) => setImageTarget({ sectionId: selectedSection.id, path })}
+            onClose={() => setSelectedSectionId(null)}
+          />
+        )}
+      </div>
 
       {/* Image picker */}
       <ImagePickerModal

@@ -561,9 +561,6 @@ export const VV_SCHEMAS = {
       { name: 'tagline', label: 'Tagline', type: 'text' },
       { name: 'phone', label: 'Phone Number', type: 'text' },
       { name: 'ctaText', label: 'CTA Text', type: 'text' },
-      { name: 'navLinks', label: 'Nav Links', type: 'array', arrayFields: [
-        { name: 'text', label: 'Text', type: 'text' }
-      ]}
     ],
     defaultProps: {
       businessName: "VOLT VIKINGS",
@@ -580,15 +577,19 @@ export const VV_SCHEMAS = {
       { name: 'title', label: 'Title text', type: 'textarea' },
       { name: 'subtitle', label: 'Subtitle text', type: 'textarea' },
       { name: 'ctaText', label: 'Primary Button Text', type: 'text' },
+      { name: 'ctaLink', label: 'Primary Button Link', type: 'text' },
       { name: 'secondaryCtaText', label: 'Secondary Button Text', type: 'text' },
-      { name: 'bgImage', label: 'Background Image URL', type: 'text' }
+      { name: 'secondaryCtaLink', label: 'Secondary Button Link', type: 'text' },
+      { name: 'bgImage', label: 'Background Image', type: 'image' }
     ],
     defaultProps: {
       badge: "Tucson's Rated #1 Electrician",
       title: "Legendary Electrical Services for Tucson & Phoenix",
       subtitle: "Licensed, bonded, and insured team of expert electricians delivering VoltGuard™ safety audits and maximum power reliability.",
       ctaText: "GET A FAST QUOTE",
+      ctaLink: "#contact",
       secondaryCtaText: "VOLTGUARD™ AUDIT",
+      secondaryCtaLink: "#services",
       bgImage: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070&auto=format&fit=crop"
     }
   },
@@ -618,7 +619,7 @@ export const VV_SCHEMAS = {
       { name: 'services', label: 'Services', type: 'array', arrayFields: [
         { name: 'title', label: 'Service Title', type: 'text' },
         { name: 'desc', label: 'Description', type: 'textarea' },
-        { name: 'img', label: 'Image URL', type: 'text' },
+        { name: 'img', label: 'Service Image', type: 'image' },
         { name: 'icon', label: 'Icon (Home, Building2, Zap, ShieldCheck)', type: 'text' }
       ]}
     ],
@@ -660,7 +661,7 @@ export const VV_SCHEMAS = {
         { name: 'name', label: 'Name', type: 'text' },
         { name: 'role', label: 'Role', type: 'text' },
         { name: 'quote', label: 'Quote', type: 'textarea' },
-        { name: 'img', label: 'Avatar URL', type: 'text' }
+        { name: 'img', label: 'Avatar Image', type: 'image' }
       ]}
     ],
     defaultProps: {
