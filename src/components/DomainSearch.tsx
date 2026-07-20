@@ -47,6 +47,9 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
   const [error, setError] = useState('');
   const [showAllResults, setShowAllResults] = useState(false);
   const [registeredDomains, setRegisteredDomains] = useState<Set<string>>(new Set());
+  const [externalDomain, setExternalDomain] = useState('');
+  const [connectingDomain, setConnectingDomain] = useState(false);
+  const [showConnectForm, setShowConnectForm] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -129,6 +132,46 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
   };
 
   const connectedDomains = mySites.filter((s: any) => s.url && s.url.includes('.'));
+
+  const handleConnectExternalDomain = async () => {
+    if (!externalDomain.trim()) {
+      setError('Please enter a domain');
+      return;
+    }
+
+    const siteWithTenant = mySites.find((s: any) => s.tenantId);
+    if (!siteWithTenant) {
+      setError('To connect a domain, go to My Sites and publish your site first.');
+      return;
+    }
+
+    setConnectingDomain(true);
+    setError('');
+    try {
+      const res = await fetch('/api/domains/connect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          domain: externalDomain,
+          tenantId: siteWithTenant.tenantId,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setExternalDomain('');
+        setShowConnectForm(false);
+        // Reload to show the new domain
+        window.location.reload();
+      } else {
+        setError(data.error || 'Failed to connect domain');
+      }
+    } catch {
+      setError('Network error. Please try again.');
+    } finally {
+      setConnectingDomain(false);
+    }
+  };
 
   // Build a set of domains the user already owns (url + customDomain fields, lowercased)
   const ownedDomains = new Set<string>(
@@ -397,17 +440,59 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
 
       {tab === 'mydomains' && (
         <div className="space-y-4">
+          {showConnectForm && (
+            <div className="bg-white border border-slate-200 rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-slate-900">Connect Your Domain</h3>
+                <button
+                  onClick={() => setShowConnectForm(false)}
+                  className="text-slate-400 hover:text-slate-600"
+                >
+                  <XCircle className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-sm text-slate-600 mb-4">
+                If you already own a domain elsewhere (GoDaddy, Namecheap, etc.), connect it here.
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="e.g., yourdomain.com"
+                  value={externalDomain}
+                  onChange={(e) => setExternalDomain(e.target.value)}
+                  className="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  onKeyDown={(e) => e.key === 'Enter' && handleConnectExternalDomain()}
+                />
+                <button
+                  onClick={handleConnectExternalDomain}
+                  disabled={connectingDomain}
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white text-sm font-bold rounded-lg transition-colors"
+                >
+                  {connectingDomain ? 'Connecting...' : 'Connect'}
+                </button>
+              </div>
+            </div>
+          )}
+
           {connectedDomains.length === 0 ? (
             <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center">
               <Globe className="w-12 h-12 text-slate-200 mx-auto mb-4" strokeWidth={1} />
               <p className="font-bold text-slate-700 mb-1">No domains yet</p>
               <p className="text-slate-400 text-sm mb-5">Search for an available domain and add it to your site.</p>
-              <button
-                onClick={() => setTab('search')}
-                className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-colors"
-              >
-                Search Domains
-              </button>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => setTab('search')}
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-colors"
+                >
+                  Search Domains
+                </button>
+                <button
+                  onClick={() => setShowConnectForm(true)}
+                  className="px-5 py-2.5 border border-slate-300 hover:border-slate-400 text-slate-700 text-sm font-bold rounded-xl transition-colors"
+                >
+                  Connect Existing
+                </button>
+              </div>
             </div>
           ) : (
             <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
@@ -416,6 +501,12 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
                   <p className="text-sm font-bold text-slate-900">Your Domains</p>
                   <p className="text-xs text-slate-400 mt-0.5">{connectedDomains.length} domain{connectedDomains.length !== 1 ? 's' : ''} connected</p>
                 </div>
+                <button
+                  onClick={() => setShowConnectForm(!showConnectForm)}
+                  className="px-3 py-1.5 text-xs font-bold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                >
+                  + Connect Existing
+                </button>
               </div>
               <div className="divide-y divide-slate-100">
                 {connectedDomains.map((s: any) => (
