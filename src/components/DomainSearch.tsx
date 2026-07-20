@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Search, Globe, ShoppingCart, CheckCircle2, XCircle, Loader2,
   Trash2, ArrowRight, ShieldCheck, Zap, RefreshCw,
@@ -46,7 +46,25 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
   const [buyingSlug, setBuyingSlug] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [showAllResults, setShowAllResults] = useState(false);
+  const [registeredDomains, setRegisteredDomains] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const fetchRegisteredDomains = async () => {
+      try {
+        const res = await fetch('/api/domains/registered');
+        if (res.ok) {
+          const data = await res.json();
+          setRegisteredDomains(new Set(
+            (data.registeredDomains || []).map((d: string) => d.toLowerCase())
+          ));
+        }
+      } catch (err) {
+        console.error('Failed to fetch registered domains:', err);
+      }
+    };
+    fetchRegisteredDomains();
+  }, []);
 
   const baseName = results[0]?.domain.split('.')[0] ?? '';
   const comResult = results.find(r => r.extension === '.com');
@@ -121,7 +139,11 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
       d.trim().toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '')
     ))
   );
-  const isOwned = (domain: string) => ownedDomains.has(domain.toLowerCase());
+
+  const isOwned = (domain: string) => {
+    const normalized = domain.toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
+    return ownedDomains.has(normalized) || registeredDomains.has(normalized);
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-0">
