@@ -7,6 +7,13 @@ import {
 import Link from 'next/link';
 import EditableText from '@/components/EditableText';
 
+/** Normalize a nav/footer link that may be a legacy string or a {label, href} object.
+ *  Keeps old client data (string arrays) rendering while new data supports editable links. */
+function navItem(l: any): { label: string; href: string } {
+  if (l && typeof l === 'object') return { label: l.label ?? '', href: l.href ?? '#' };
+  return { label: typeof l === 'string' ? l : '', href: '#' };
+}
+
 function VikingShieldIcon(props: any) {
   return (
     <svg 
@@ -42,18 +49,21 @@ export function VoltVikingsHeader(props: any) {
       </div>
       
       <nav className="hidden @lg:flex items-center gap-8 text-xs font-bold tracking-widest">
-         {(props.navLinks || []).map((link: any, i: number) => (
-           <Link key={i} href="#" className={`${i === 0 ? 'text-[#00F2FE] border-b-2 border-[#00F2FE] pb-1' : 'hover:text-[#00F2FE] transition-colors'} uppercase`}>{link}</Link>
-         ))}
+         {(props.navLinks || []).map((link: any, i: number) => {
+           const it = navItem(link);
+           return (
+             <Link key={i} href={it.href} className={`${i === 0 ? 'text-[#00F2FE] border-b-2 border-[#00F2FE] pb-1' : 'hover:text-[#00F2FE] transition-colors'} uppercase`}>{it.label}</Link>
+           );
+         })}
       </nav>
 
       <div className="hidden @lg:flex items-center gap-6">
          <a href={`tel:${props.phone || '(520) 555-0199'}`} className="flex items-center gap-2 text-sm font-black hover:text-[#00F2FE] transition-colors text-white">
            <Phone className="w-4 h-4 text-[#FF6B00]" /> {props.phone || "(520) 555-0199"}
          </a>
-         <button className="bg-[#FF6B00] hover:bg-[#ff8533] text-white font-black py-2.5 px-5 rounded-xl border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-y-0.5 active:translate-y-0 transition-all text-xs uppercase tracking-wider">
+         <a href={props.ctaLink || '#'} className="inline-block bg-[#FF6B00] hover:bg-[#ff8533] text-white font-black py-2.5 px-5 rounded-xl border-2 border-black shadow-[4px_4px_0px_#000] hover:-translate-y-0.5 active:translate-y-0 transition-all text-xs uppercase tracking-wider">
            {props.ctaText || "BOOK ONLINE"}
-         </button>
+         </a>
       </div>
 
       <button className="@lg:hidden text-white">
@@ -268,8 +278,8 @@ export function VoltVikingsServices({ title, subtitle, services, isEditable, onP
                    </div>
                    <h3 className="text-lg font-black text-white mb-2 uppercase tracking-tight">{service.title}</h3>
                    <p className="text-white/60 font-semibold mb-6 flex-1 leading-relaxed text-xs">{service.desc}</p>
-                   <Link href="#" className="flex items-center gap-1.5 text-[#00F2FE] hover:text-white font-extrabold text-xs tracking-wider uppercase group/link w-fit transition-colors">
-                     LEARN MORE <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-1" strokeWidth={3} />
+                   <Link href={service.link || "#"} className="flex items-center gap-1.5 text-[#00F2FE] hover:text-white font-extrabold text-xs tracking-wider uppercase group/link w-fit transition-colors">
+                     {service.linkText || "LEARN MORE"} <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-1" strokeWidth={3} />
                    </Link>
                  </div>
                </div>
@@ -497,29 +507,36 @@ export function VoltVikingsFooter(props: any) {
         </div>
 
         <div>
-          <h4 className="text-[#00F2FE] font-black mb-6 tracking-wider uppercase text-xs">QUICK NAV</h4>
+          <h4 className="text-[#00F2FE] font-black mb-6 tracking-wider uppercase text-xs">{props.navHeading || "QUICK NAV"}</h4>
           <ul className="flex flex-col gap-4 text-xs font-bold uppercase tracking-wider">
-            <li><Link href="#" className="hover:text-[#FF6B00] transition-colors">Home</Link></li>
-            <li><Link href="#" className="hover:text-[#FF6B00] transition-colors">Services</Link></li>
-            <li><Link href="#" className="hover:text-[#FF6B00] transition-colors">Viking Journey</Link></li>
-            <li><Link href="#" className="hover:text-[#FF6B00] transition-colors">Testimonials</Link></li>
-            <li><Link href="#" className="hover:text-[#FF6B00] transition-colors">Map Corridor</Link></li>
+            {(props.footerNav || [
+              { label: "Home", href: "#" },
+              { label: "Services", href: "#" },
+              { label: "Viking Journey", href: "#" },
+              { label: "Testimonials", href: "#" },
+              { label: "Map Corridor", href: "#" },
+            ]).map((l: any, i: number) => {
+              const it = navItem(l);
+              return <li key={i}><Link href={it.href} className="hover:text-[#FF6B00] transition-colors">{it.label}</Link></li>;
+            })}
           </ul>
         </div>
 
         <div>
-          <h4 className="text-[#00F2FE] font-black mb-6 tracking-wider uppercase text-xs">SERVICES</h4>
+          <h4 className="text-[#00F2FE] font-black mb-6 tracking-wider uppercase text-xs">{props.servicesHeading || "SERVICES"}</h4>
           <ul className="flex flex-col gap-4 text-xs font-bold uppercase tracking-wider text-white/50">
-            <li>Residential Electrician</li>
-            <li>Commercial Contracting</li>
-            <li>Panel Upgrades (200A)</li>
-            <li>EV Level-2 Fast Chargers</li>
-            <li>VoltGuard™ Home Safety Audits</li>
+            {(props.footerServices || [
+              "Residential Electrician",
+              "Commercial Contracting",
+              "Panel Upgrades (200A)",
+              "EV Level-2 Fast Chargers",
+              "VoltGuard™ Home Safety Audits",
+            ]).map((s: any, i: number) => <li key={i}>{typeof s === 'string' ? s : s?.label}</li>)}
           </ul>
         </div>
 
         <div>
-          <h4 className="text-[#00F2FE] font-black mb-6 tracking-wider uppercase text-xs">CORRIDOR CONTACT</h4>
+          <h4 className="text-[#00F2FE] font-black mb-6 tracking-wider uppercase text-xs">{props.contactHeading || "CORRIDOR CONTACT"}</h4>
           <ul className="flex flex-col gap-4 text-xs font-semibold">
             <li className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-[#FF6B00] shrink-0" />
@@ -545,8 +562,13 @@ export function VoltVikingsFooter(props: any) {
       <div className="max-w-7xl mx-auto flex flex-col @md:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10 text-[10px] font-bold uppercase tracking-wider text-white/40">
         <p>© {new Date().getFullYear()} {props.businessName || "Volt Vikings"}. All rights reserved.</p>
         <div className="flex gap-6">
-          <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-          <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+          {(props.legalLinks || [
+            { label: "Privacy Policy", href: "#" },
+            { label: "Terms of Service", href: "#" },
+          ]).map((l: any, i: number) => {
+            const it = navItem(l);
+            return <Link key={i} href={it.href} className="hover:text-white transition-colors">{it.label}</Link>;
+          })}
         </div>
       </div>
     </footer>
@@ -560,14 +582,26 @@ export const VV_SCHEMAS = {
       { name: 'businessName', label: 'Business Name', type: 'text' },
       { name: 'tagline', label: 'Tagline', type: 'text' },
       { name: 'phone', label: 'Phone Number', type: 'text' },
-      { name: 'ctaText', label: 'CTA Text', type: 'text' },
+      { name: 'ctaText', label: 'CTA Button Text', type: 'text' },
+      { name: 'ctaLink', label: 'CTA Button Link', type: 'text' },
+      { name: 'navLinks', label: 'Nav Menu', type: 'array', arrayFields: [
+        { name: 'label', label: 'Label', type: 'text' },
+        { name: 'href', label: 'Link', type: 'text' },
+      ]},
     ],
     defaultProps: {
       businessName: "VOLT VIKINGS",
       tagline: "LEGENDARY ELECTRICAL CONTRACTORS",
       phone: "(520) 555-0199",
       ctaText: "BOOK ONLINE",
-      navLinks: ["HOME", "SERVICES", "JOURNEY", "REVIEWS", "CORRIDOR"]
+      ctaLink: "#contact",
+      navLinks: [
+        { label: "HOME", href: "#" },
+        { label: "SERVICES", href: "#services" },
+        { label: "JOURNEY", href: "#process" },
+        { label: "REVIEWS", href: "#reviews" },
+        { label: "CORRIDOR", href: "#map" },
+      ]
     }
   },
   VVHero: {
@@ -620,7 +654,9 @@ export const VV_SCHEMAS = {
         { name: 'title', label: 'Service Title', type: 'text' },
         { name: 'desc', label: 'Description', type: 'textarea' },
         { name: 'img', label: 'Service Image', type: 'image' },
-        { name: 'icon', label: 'Icon (Home, Building2, Zap, ShieldCheck)', type: 'text' }
+        { name: 'icon', label: 'Icon (Home, Building2, Zap, ShieldCheck)', type: 'text' },
+        { name: 'linkText', label: 'Link Text', type: 'text' },
+        { name: 'link', label: 'Link URL', type: 'text' }
       ]}
     ],
     defaultProps: {
@@ -707,7 +743,22 @@ export const VV_SCHEMAS = {
       { name: 'licensing', label: 'Licensing Text', type: 'text' },
       { name: 'phone', label: 'Phone', type: 'text' },
       { name: 'email', label: 'Email', type: 'text' },
-      { name: 'address', label: 'Address', type: 'text' }
+      { name: 'address', label: 'Address', type: 'text' },
+      { name: 'hours', label: 'Hours', type: 'textarea' },
+      { name: 'navHeading', label: 'Nav Column Heading', type: 'text' },
+      { name: 'footerNav', label: 'Footer Nav Links', type: 'array', arrayFields: [
+        { name: 'label', label: 'Label', type: 'text' },
+        { name: 'href', label: 'Link', type: 'text' },
+      ]},
+      { name: 'servicesHeading', label: 'Services Column Heading', type: 'text' },
+      { name: 'footerServices', label: 'Services List', type: 'array', arrayFields: [
+        { name: 'label', label: 'Service', type: 'text' },
+      ]},
+      { name: 'contactHeading', label: 'Contact Column Heading', type: 'text' },
+      { name: 'legalLinks', label: 'Legal Links', type: 'array', arrayFields: [
+        { name: 'label', label: 'Label', type: 'text' },
+        { name: 'href', label: 'Link', type: 'text' },
+      ]},
     ],
     defaultProps: {
       businessName: "VOLT VIKINGS",
@@ -716,7 +767,29 @@ export const VV_SCHEMAS = {
       licensing: "AZ ROC #341258 | Licensed, Bonded & Insured",
       phone: "(520) 555-0199",
       email: "dispatch@voltvikings.com",
-      address: "Tucson - Phoenix Area, AZ"
+      address: "Tucson - Phoenix Area, AZ",
+      hours: "Mon - Sat: 7AM - 7PM\nSun: Emergency Only",
+      navHeading: "QUICK NAV",
+      footerNav: [
+        { label: "Home", href: "#" },
+        { label: "Services", href: "#services" },
+        { label: "Viking Journey", href: "#process" },
+        { label: "Testimonials", href: "#reviews" },
+        { label: "Map Corridor", href: "#map" },
+      ],
+      servicesHeading: "SERVICES",
+      footerServices: [
+        { label: "Residential Electrician" },
+        { label: "Commercial Contracting" },
+        { label: "Panel Upgrades (200A)" },
+        { label: "EV Level-2 Fast Chargers" },
+        { label: "VoltGuard™ Home Safety Audits" },
+      ],
+      contactHeading: "CORRIDOR CONTACT",
+      legalLinks: [
+        { label: "Privacy Policy", href: "#" },
+        { label: "Terms of Service", href: "#" },
+      ],
     }
   }
 };
