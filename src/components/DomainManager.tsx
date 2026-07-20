@@ -377,37 +377,6 @@ export default function DomainManager({ mySites }: DomainManagerProps) {
 
   // ─── Render helpers ───────────────────────────────────────────────────────
 
-  function renderDomainRow(r: DomainResult) {
-    const owned = isOwned(r.domain);
-    return (
-      <div key={r.domain} className={`flex items-center justify-between px-5 py-3.5 gap-4 ${owned ? 'bg-indigo-50/50' : ''}`}>
-        <div className="flex items-center gap-3 min-w-0">
-          {owned
-            ? <BadgeCheck className="w-4 h-4 text-indigo-500 shrink-0" />
-            : r.available
-              ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-              : <XCircle className="w-4 h-4 text-slate-300 shrink-0" />}
-          <span className={`text-sm font-bold truncate ${owned ? 'text-indigo-700' : r.available ? 'text-slate-900' : 'text-slate-400 line-through'}`}>
-            {r.domain}
-          </span>
-        </div>
-        <div className="flex items-center gap-3 shrink-0">
-          {owned ? (
-            <span className="text-xs font-bold text-indigo-600 flex items-center gap-1"><BadgeCheck className="w-3.5 h-3.5" /> Already Yours</span>
-          ) : r.available ? (
-            <>
-              <span className="text-sm font-bold text-slate-700 hidden sm:block">{r.price}</span>
-              {inCart(r.domain)
-                ? <button onClick={() => removeFromCart(r.domain)} className="px-3 py-1.5 border border-indigo-300 text-indigo-600 text-xs font-bold rounded-lg flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" /> Added</button>
-                : <button onClick={() => addToCart(r)} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5"><ShoppingCart className="w-3.5 h-3.5" /> Add</button>}
-            </>
-          ) : (
-            <span className="text-xs text-slate-400 font-semibold">Taken</span>
-          )}
-        </div>
-      </div>
-    );
-  }
 
   function renderSkeletonRows(n: number) {
     return Array.from({ length: n }).map((_, i) => (
@@ -529,7 +498,37 @@ export default function DomainManager({ mySites }: DomainManagerProps) {
               <div>
                 <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Other Extensions</p>
                 <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden divide-y divide-slate-100">
-                  {visibleOthers.map(renderDomainRow)}
+                  {visibleOthers.map((r) => {
+                    const owned = isOwned(r.domain);
+                    return (
+                      <div key={r.domain} className={`flex items-center justify-between px-5 py-3.5 gap-4 ${owned ? 'bg-indigo-50/50' : ''}`}>
+                        <div className="flex items-center gap-3 min-w-0">
+                          {owned
+                            ? <BadgeCheck className="w-4 h-4 text-indigo-500 shrink-0" />
+                            : r.available
+                              ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                              : <XCircle className="w-4 h-4 text-slate-300 shrink-0" />}
+                          <span className={`text-sm font-bold truncate ${owned ? 'text-indigo-700' : r.available ? 'text-slate-900' : 'text-slate-400 line-through'}`}>
+                            {r.domain}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          {owned ? (
+                            <span className="text-xs font-bold text-indigo-600 flex items-center gap-1"><BadgeCheck className="w-3.5 h-3.5" /> Already Yours</span>
+                          ) : r.available ? (
+                            <>
+                              <span className="text-sm font-bold text-slate-700 hidden sm:block">{r.price}</span>
+                              {inCart(r.domain)
+                                ? <button onClick={() => removeFromCart(r.domain)} className="px-3 py-1.5 border border-indigo-300 text-indigo-600 text-xs font-bold rounded-lg flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" /> Added</button>
+                                : <button onClick={() => addToCart(r)} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5"><ShoppingCart className="w-3.5 h-3.5" /> Add</button>}
+                            </>
+                          ) : (
+                            <span className="text-xs text-slate-400 font-semibold">Taken</span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                   {otherResults.length > 4 && (
                     <button onClick={() => setShowAllResults(v => !v)}
                       className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors">
