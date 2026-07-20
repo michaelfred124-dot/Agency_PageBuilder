@@ -44,9 +44,14 @@ export async function POST(request: NextRequest) {
     const protocol = host.includes('localhost') ? 'http' : 'https';
     const baseUrl = `${protocol}://${host}`;
 
-    // Create Stripe Checkout Session
+    // Create Stripe Checkout Session.
+    // Domain registration (WHOIS) requires registrant contact info, so we
+    // collect the buyer's billing address + phone at checkout and hand them to
+    // the Vercel Registrar in the webhook.
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      billing_address_collection: 'required',
+      phone_number_collection: { enabled: true },
       line_items: [
         {
           price_data: {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getSupabaseServerClient } from '@/lib/supabase';
+import { buyDomainViaRegistrar, RegistrarContact } from '@/lib/domainPricing';
 
 export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
 
         console.log(`Processing domain purchase for tenant ${tenantId}, domain: ${domain}`);
 
-        await fulfillDomainPurchase(tenantId, domain, subscriptionId);
+        await fulfillDomainPurchase(tenantId, domain, session, subscriptionId);
       }
 
       if (session.metadata?.type === 'store_order') {
@@ -94,40 +95,57 @@ async function fulfillStoreOrder(session: Stripe.Checkout.Session) {
   console.log(`[Store Webhook] Order ${order.id} marked paid for tenant ${order.tenant_id}`);
 }
 
-async function fulfillDomainPurchase(tenantId: string, domain: string, stripeSubscriptionId?: string) {
+/** Build the registrar contact record the Vercel buy API requires from the Stripe checkout session. */
+function contactFromSession(session: Stripe.Checkout.Session): RegistrarContact | null {
+  const details = session.customer_details;
+  const addr = details?.address;
+  const fullName = (details?.name || '').trim();
+  if (!details?.email || !details?.phone || !addr?.line1 || !addr?.city || !addr?.postal_code || !addr?.country) {
+    return null;
+  }
+  const [firstName, ...rest] = fullName.split(/\s+/);
+  const lastName = rest.join(' ') || firstName || 'Owner';
+  return {
+    firstName: firstName || 'Domain',
+    lastName,
+    email: details.email,
+    phone: details.phone,
+    address1: addr.line1,
+    address2: addr.line2 || undefined,
+    city: addr.city,
+    state: addr.state || addr.city,
+    zip: addr.postal_code,
+    country: addr.country,
+  };
+}
+
+async function fulfillDomainPurchase(
+  tenantId: string,
+  domain: string,
+  session: Stripe.Checkout.Session,
+  stripeSubscriptionId?: string,
+) {
   const VERCEL_AUTH_TOKEN = process.env.VERCEL_AUTH_TOKEN;
   const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID;
   const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
-  
+
   let cleanDomain = domain.trim().toLowerCase();
   cleanDomain = cleanDomain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
 
   const supabase = getSupabaseServerClient();
 
-  // 1. Purchase via Vercel Registrar
-  if (VERCEL_AUTH_TOKEN) {
-    try {
-      const buyUrl = `https://api.vercel.com/v4/domains/buy${VERCEL_TEAM_ID ? `?teamId=${VERCEL_TEAM_ID}` : ''}`;
-      const buyRes = await fetch(buyUrl, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${VERCEL_AUTH_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: cleanDomain,
-          renew: true
-        })
-      });
-
-      if (!buyRes.ok) {
-        const errData = await buyRes.json();
-        console.error('Vercel registrar rejected the purchase:', errData);
-        // We log the error but still proceed to link the domain in case they already own it, 
-        // or we need to manually retry later. The customer paid, so we must deliver or refund.
-      }
-    } catch (err: any) {
-      console.error(`Vercel registrar connection failed: ${err.message}`);
+  // 1. Purchase via Vercel Registrar (new /v1/registrar buy endpoint).
+  const contact = contactFromSession(session);
+  if (!contact) {
+    console.error(`[Domain Webhook] Missing registrant contact info for ${cleanDomain}; cannot complete registrar purchase. Customer paid — manual follow-up required.`);
+  } else {
+    const result = await buyDomainViaRegistrar(cleanDomain, contact, 1);
+    if (!result.ok) {
+      // The customer paid, so we must deliver or refund. Log loudly and still
+      // link the domain below in case they already own it / we retry manually.
+      console.error(`[Domain Webhook] Registrar purchase failed for ${cleanDomain}: ${result.error} (${result.code || 'n/a'})`);
+    } else {
+      console.log(`[Domain Webhook] Registrar order ${result.orderId} placed for ${cleanDomain}`);
     }
   }
 

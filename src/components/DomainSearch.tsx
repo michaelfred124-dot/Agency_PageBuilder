@@ -50,6 +50,8 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
   const [externalDomain, setExternalDomain] = useState('');
   const [connectingDomain, setConnectingDomain] = useState(false);
   const [showConnectForm, setShowConnectForm] = useState(false);
+  const [sortBy, setSortBy] = useState<'recommended' | 'price-asc' | 'price-desc' | 'az'>('recommended');
+  const [availableOnly, setAvailableOnly] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -71,8 +73,28 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
 
   const baseName = results[0]?.domain.split('.')[0] ?? '';
   const comResult = results.find(r => r.extension === '.com');
-  const otherResults = results.filter(r => r.extension !== '.com');
+
+  // Filter + sort the non-.com results (.com is always featured on top).
+  const priorityOrder = ['.com', '.co', '.net', '.org', '.io', '.ai', '.app', '.dev', '.biz', '.info', '.us', '.xyz'];
+  const otherResults = results
+    .filter(r => r.extension !== '.com')
+    .filter(r => !availableOnly || r.available || isOwned(r.domain))
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'price-asc': return a.priceNum - b.priceNum;
+        case 'price-desc': return b.priceNum - a.priceNum;
+        case 'az': return a.domain.localeCompare(b.domain);
+        default: {
+          // Recommended: available first, then by TLD popularity
+          if (a.available !== b.available) return a.available ? -1 : 1;
+          const ai = priorityOrder.indexOf(a.extension);
+          const bi = priorityOrder.indexOf(b.extension);
+          return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+        }
+      }
+    });
   const visibleOthers = showAllResults ? otherResults : otherResults.slice(0, 4);
+  const availableCount = results.filter(r => r.available).length;
 
   const inCart = (domain: string) => cart.some(c => c.domain === domain);
   const cartTotal = cart.reduce((sum, c) => sum + c.priceNum, 0);
@@ -263,6 +285,40 @@ export default function DomainSearch({ mySites, onBuy }: DomainSearchProps) {
           {/* Results */}
           {status === 'done' && results.length > 0 && (
             <div className="space-y-4">
+              {/* Results toolbar: count + availability filter + sort */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+                <p className="text-sm text-slate-600">
+                  <span className="font-bold text-emerald-600">{availableCount}</span> of {results.length} available
+                  <span className="text-slate-400"> for &ldquo;{baseName}&rdquo;</span>
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setAvailableOnly(v => !v)}
+                    className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors flex items-center gap-1.5 ${
+                      availableOnly
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Available only
+                  </button>
+                  <div className="relative">
+                    <select
+                      value={sortBy}
+                      onChange={e => setSortBy(e.target.value as typeof sortBy)}
+                      className="appearance-none pl-3 pr-8 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-slate-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                      <option value="recommended">Recommended</option>
+                      <option value="price-asc">Price: Low to High</option>
+                      <option value="price-desc">Price: High to Low</option>
+                      <option value="az">Name: A to Z</option>
+                    </select>
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
               {/* Featured .com result */}
               {comResult && (() => {
                 const owned = isOwned(comResult.domain);
