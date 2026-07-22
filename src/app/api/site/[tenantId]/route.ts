@@ -161,6 +161,48 @@ export async function PATCH(
     return NextResponse.json({ success: true });
   }
 
+  // Site-wide brand theme (colors/fonts) — applied to every page so the whole
+  // site stays visually consistent.
+  if (body?.themeJson !== undefined && typeof body.themeJson === 'object' && body.themeJson) {
+    const { error: themeError } = await auth.serviceClient
+      .from('sites_data')
+      .update({ theme_json: body.themeJson })
+      .eq('tenant_id', tenantId);
+    if (themeError) {
+      return NextResponse.json({ error: themeError.message }, { status: 500 });
+    }
+    return NextResponse.json({ success: true });
+  }
+
+  // Per-page SEO + navigation settings (title, meta description, social image,
+  // menu label, show/hide in nav). The live tenant route already reads these.
+  if (body?.pageSettings && body?.pageSlug !== undefined) {
+    const settingsSlug = normalizePageSlug(body.pageSlug);
+    if (!settingsSlug) {
+      return NextResponse.json({ error: 'Invalid pageSlug.' }, { status: 400 });
+    }
+    const s = body.pageSettings || {};
+    const update: Record<string, any> = {};
+    if (typeof s.seoTitle === 'string') update.seo_title = s.seoTitle.slice(0, 200);
+    if (typeof s.seoDescription === 'string') update.seo_description = s.seoDescription.slice(0, 400);
+    if (typeof s.ogImage === 'string') update.og_image = s.ogImage;
+    if (typeof s.navLabel === 'string') update.nav_label = s.navLabel.slice(0, 60);
+    if (typeof s.showInNav === 'boolean') update.show_in_nav = s.showInNav;
+
+    if (Object.keys(update).length === 0) {
+      return NextResponse.json({ success: true });
+    }
+    const { error: settingsError } = await auth.serviceClient
+      .from('sites_data')
+      .update(update)
+      .eq('tenant_id', tenantId)
+      .eq('page_slug', settingsSlug);
+    if (settingsError) {
+      return NextResponse.json({ error: settingsError.message }, { status: 500 });
+    }
+    return NextResponse.json({ success: true });
+  }
+
   const pageSlug = normalizePageSlug(body?.pageSlug);
   if (!pageSlug) {
     return NextResponse.json({ error: 'Invalid pageSlug.' }, { status: 400 });

@@ -3,11 +3,12 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft, Save, Loader2, ExternalLink, Monitor, Tablet, Smartphone,
-  Check, MousePointerClick, Image as ImageIcon, AlertCircle, Globe, SlidersHorizontal
+  Check, MousePointerClick, Image as ImageIcon, AlertCircle, Globe, SlidersHorizontal, Settings
 } from 'lucide-react';
 import { Renderers, COMPONENT_SCHEMAS } from '@/lib/blocks';
 import ImagePickerModal from './ImagePickerModal';
 import SectionInspector from './SectionInspector';
+import PageSettingsPanel from './PageSettingsPanel';
 
 /**
  * ClientSiteEditor — the simple, Payload-style client editing experience.
@@ -338,8 +339,11 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [imageTarget, setImageTarget] = useState<{ sectionId: string; path: string } | null>(null);
+  // Image picker is callback-based so it can target a section prop OR the page's
+  // social-share image, etc.
+  const [imagePicker, setImagePicker] = useState<{ onSelect: (url: string) => void } | null>(null);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const pagesRef = useRef(pages);
   pagesRef.current = pages;
@@ -393,6 +397,46 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
     setDirtySlugs(prev => new Set(prev).add(activeSlug));
     setSaveError(null);
   }, [activeSlug]);
+
+  const openImagePicker = useCallback((onSelect: (url: string) => void) => {
+    setImagePicker({ onSelect });
+  }, []);
+
+  // Save per-page SEO/nav settings + site-wide brand theme. These persist
+  // immediately (separate from the canvas content save flow).
+  const saveSettings = useCallback(async (payload: { pageSettings: any; theme: any }) => {
+    // Page SEO + nav
+    const res1 = await fetch(`/api/site/${tenantId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pageSlug: activeSlug, pageSettings: payload.pageSettings }),
+    });
+    if (!res1.ok) throw new Error((await res1.json()).error || 'Failed to save page settings.');
+
+    // Site-wide theme
+    const res2 = await fetch(`/api/site/${tenantId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ themeJson: payload.theme }),
+    });
+    if (!res2.ok) throw new Error((await res2.json()).error || 'Failed to save brand theme.');
+
+    // Reflect changes locally so the preview + tabs update without a reload.
+    const s = payload.pageSettings;
+    setPages(prev => prev.map(page => {
+      if (page.page_slug === activeSlug) {
+        page = {
+          ...page,
+          seo_title: s.seoTitle,
+          seo_description: s.seoDescription,
+          og_image: s.ogImage,
+          nav_label: s.navLabel,
+          show_in_nav: s.showInNav,
+        };
+      }
+      return { ...page, theme_json: payload.theme };
+    }));
+  }, [tenantId, activeSlug]);
 
   const handleSave = useCallback(async () => {
     const slugsToSave = Array.from(dirtyRef.current);
@@ -619,6 +663,18 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
             )}
           </div>
 
+          <button
+            onClick={() => { setSelectedSectionId(null); setSettingsOpen(v => !v); }}
+            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border transition-colors ${
+              settingsOpen
+                ? 'bg-indigo-600 text-white border-indigo-600'
+                : 'text-slate-600 hover:text-slate-900 border-slate-200 hover:border-slate-300'
+            }`}
+            title="Page SEO, navigation & brand settings"
+          >
+            <Settings className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Settings</span>
+          </button>
+
           <a
             href={liveUrl}
             target="_blank"
@@ -697,8 +753,8 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
                   tenantId={tenantId}
                   isSelected={selectedSectionId === section.id}
                   onPropChange={(path, value) => updateSectionProp(section.id, path, value)}
-                  onSelectImage={(path) => setImageTarget({ sectionId: section.id, path })}
-                  onOpenSettings={() => setSelectedSectionId(section.id)}
+                  onSelectImage={(path) => openImagePicker((url) => updateSectionProp(section.id, path, url))}
+                  onOpenSettings={() => { setSettingsOpen(false); setSelectedSectionId(section.id); }}
                 />
               ))
             )}
@@ -706,25 +762,34 @@ export default function ClientSiteEditor({ tenantId, onBack }: ClientSiteEditorP
         </main>
 
         {/* Inspector panel — edit every prop of the selected section (links, lists, images) */}
-        {selectedSection && (
+        {selectedSection && !settingsOpen && (
           <SectionInspector
             section={selectedSection}
             schema={COMPONENT_SCHEMAS[selectedSection.type]}
             onChange={(path, value) => updateSectionProp(selectedSection.id, path, value)}
-            onPickImage={(path) => setImageTarget({ sectionId: selectedSection.id, path })}
+            onPickImage={(path) => openImagePicker((url) => updateSectionProp(selectedSection.id, path, url))}
             onClose={() => setSelectedSectionId(null)}
+          />
+        )}
+
+        {/* Page settings panel — SEO, nav label/visibility, site-wide brand */}
+        {settingsOpen && activePage && (
+          <PageSettingsPanel
+            page={activePage}
+            theme={activePage.theme_json || {}}
+            openImagePicker={openImagePicker}
+            onSave={saveSettings}
+            onClose={() => setSettingsOpen(false)}
           />
         )}
       </div>
 
       {/* Image picker */}
       <ImagePickerModal
-        isOpen={imageTarget !== null}
+        isOpen={imagePicker !== null}
         tenantId={tenantId}
-        onClose={() => setImageTarget(null)}
-        onSelect={(url) => {
-          if (imageTarget) updateSectionProp(imageTarget.sectionId, imageTarget.path, url);
-        }}
+        onClose={() => setImagePicker(null)}
+        onSelect={(url) => { imagePicker?.onSelect(url); }}
       />
     </div>
   );
