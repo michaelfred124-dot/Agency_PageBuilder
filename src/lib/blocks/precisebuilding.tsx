@@ -379,7 +379,7 @@ export const PBBlueBanner = ({ onNavigate }: any) => {
 };
 
 // 6. PBWhyChooseUs Component
-export const PBWhyChooseUs = ({ onNavigate }: any) => {
+export const PBWhyChooseUs = ({ onNavigate, image }: any) => {
   const points = [
     {
       title: "We're local.",
@@ -437,8 +437,8 @@ export const PBWhyChooseUs = ({ onNavigate }: any) => {
         <div className="lg:col-span-6">
           <div className="border-3 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-none overflow-hidden bg-slate-100 aspect-[4/3] w-full">
             <img 
-              src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-              alt="Custom kitchen with designer pendant lighting" 
+              src={image || "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+              alt="Custom kitchen with designer pendant lighting"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
@@ -451,7 +451,7 @@ export const PBWhyChooseUs = ({ onNavigate }: any) => {
 };
 
 // 7. PBNoPower Component
-export const PBNoPower = ({ onNavigate }: any) => {
+export const PBNoPower = ({ onNavigate, image }: any) => {
   return (
     <section className="w-full py-20 px-6 bg-white text-left rounded-none border-b border-slate-200/50">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -460,8 +460,8 @@ export const PBNoPower = ({ onNavigate }: any) => {
         <div className="lg:col-span-6 order-2 lg:order-1">
           <div className="border-3 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-none overflow-hidden bg-slate-100 aspect-[4/3] w-full">
             <img 
-              src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-              alt="Electrician working on electrical circuit box panel" 
+              src={image || "https://images.unsplash.com/photo-1581092160607-ee22621dd758?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+              alt="Electrician working on electrical circuit box panel"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
@@ -496,7 +496,7 @@ export const PBNoPower = ({ onNavigate }: any) => {
 };
 
 // 8. PBGoToElectrician Component
-export const PBGoToElectrician = ({ onNavigate }: any) => {
+export const PBGoToElectrician = ({ onNavigate, image }: any) => {
   return (
     <section className="w-full py-20 px-6 bg-slate-50 text-left rounded-none">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -532,8 +532,8 @@ export const PBGoToElectrician = ({ onNavigate }: any) => {
         <div className="lg:col-span-6">
           <div className="border-3 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-none overflow-hidden bg-slate-100 aspect-[4/3] w-full">
             <img 
-              src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-              alt="Modern home exterior illuminated at night" 
+              src={image || "https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+              alt="Modern home exterior illuminated at night"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
@@ -774,18 +774,18 @@ export const PB_SCHEMAS: Record<string, any> = {
   },
   PBWhyChooseUs: {
     description: "Split feature list detailing local benefits.",
-    fields: [],
-    defaultProps: {}
+    fields: [{ name: 'image', label: 'Photo', type: 'image' }],
+    defaultProps: { image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" }
   },
   PBNoPower: {
     description: "Split copy and image detailing emergency support.",
-    fields: [],
-    defaultProps: {}
+    fields: [{ name: 'image', label: 'Photo', type: 'image' }],
+    defaultProps: { image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" }
   },
   PBGoToElectrician: {
     description: "Hometown builder copy split with lit house exterior.",
-    fields: [],
-    defaultProps: {}
+    fields: [{ name: 'image', label: 'Photo', type: 'image' }],
+    defaultProps: { image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" }
   },
   PBReviews: {
     description: "Google rating reviews carousel block.",

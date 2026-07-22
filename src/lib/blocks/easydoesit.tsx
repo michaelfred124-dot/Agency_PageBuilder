@@ -234,6 +234,7 @@ export const EDI_SCHEMAS = {
       { name: "plan2Price", label: "Plan 2 Price", type: "text" },
       { name: "plan3Name", label: "Plan 3 Name", type: "text" },
       { name: "plan3Price", label: "Plan 3 Price", type: "text" },
+      { name: "bgImage", label: "Background Photo", type: "image" },
     ],
     defaultProps: {
       title: "Pick what fits you best",
@@ -243,6 +244,7 @@ export const EDI_SCHEMAS = {
       plan2Price: "200",
       plan3Name: "Ultimate",
       plan3Price: "250",
+      bgImage: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070",
     },
   },
   EDIFaq: {
@@ -622,7 +624,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
       </section>
     );
   },
-  EDIPricing: ({ title, plan1Name, plan1Price, plan2Name, plan2Price, plan3Name, plan3Price, onNavigate }: any) => {
+  EDIPricing: ({ title, plan1Name, plan1Price, plan2Name, plan2Price, plan3Name, plan3Price, onNavigate, bgImage }: any) => {
     const [isMonthly, setIsMonthly] = useState(false);
 
     const plans = [
@@ -677,7 +679,7 @@ export const EDI_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
           <div className="absolute inset-0 bg-black/60 z-10" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] z-10" />
           <img
-            src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070"
+            src={bgImage || "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070"}
             alt="Detailing Background"
             className="w-full h-full object-cover blur-sm opacity-40"
           />

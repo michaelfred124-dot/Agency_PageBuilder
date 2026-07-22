@@ -122,7 +122,7 @@ export const NW_SCHEMAS = {
       { name: "cityState", label: "City State Zip", type: "text" },
       { name: "phone", label: "Phone", type: "text" },
       { name: "email", label: "Email", type: "text" },
-      { name: "image", label: "Image URL", type: "text" },
+      { name: "image", label: "Location Photo", type: "image" },
     ],
     defaultProps: {
       address: "123 Main Street",
@@ -138,7 +138,7 @@ export const NW_SCHEMAS = {
     fields: [
       { name: "title", label: "Title", type: "text" },
       { name: "subtitle", label: "Subtitle", type: "textarea" },
-      { name: "image", label: "Image URL", type: "text" },
+      { name: "image", label: "Featured Image", type: "image" },
     ],
     defaultProps: {
       title: "Order Ahead",
@@ -151,6 +151,18 @@ export const NW_SCHEMAS = {
   NWCommunity: {
     description: "Northwood Community & Testimonials",
     fields: [
+      { name: "tagline", label: "Tagline", type: "text" },
+      { name: "heading", label: "Heading", type: "text" },
+      { name: "subtitle", label: "Subtitle", type: "textarea" },
+      {
+        name: "communityImages",
+        label: "Community Photos",
+        type: "array",
+        arrayFields: [
+          { name: "url", label: "Photo", type: "image" },
+          { name: "alt", label: "Alt text", type: "text" },
+        ],
+      },
       {
         name: "testimonials",
         label: "Testimonials",
@@ -163,6 +175,15 @@ export const NW_SCHEMAS = {
       },
     ],
     defaultProps: {
+      tagline: "Stronger together",
+      heading: "Our Community",
+      subtitle: "We're more than just coffee. We're a gathering place, a creative space, and a proud supporter of local artists and makers.",
+      communityImages: [
+        { url: "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?q=80&w=2071&auto=format&fit=crop", alt: "Cafe culture" },
+        { url: "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=2074&auto=format&fit=crop", alt: "Latte art" },
+        { url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop", alt: "Cafe vibe" },
+        { url: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2070&auto=format&fit=crop", alt: "Pastry" },
+      ],
       testimonials: [
         {
           text: "Best coffee in town! The staff is amazing and the vibes are unmatched.",
@@ -184,9 +205,25 @@ export const NW_SCHEMAS = {
   },
   NWFooter: {
     description: "Northwood Footer",
-    fields: [{ name: "text", label: "Footer Text", type: "textarea" }],
+    fields: [
+      { name: "businessName", label: "Business Name", type: "text" },
+      { name: "address", label: "Address", type: "text" },
+      { name: "phone", label: "Phone", type: "text" },
+      { name: "email", label: "Email", type: "text" },
+      { name: "text", label: "Footer Copyright Text", type: "textarea" },
+      { name: "instagram", label: "Instagram URL", type: "text" },
+      { name: "facebook", label: "Facebook URL", type: "text" },
+      { name: "twitter", label: "Twitter/X URL", type: "text" },
+    ],
     defaultProps: {
+      businessName: "Northwood Coffee Co.",
+      address: "123 Main Street, Yourtown ST 12345",
+      phone: "(555) 123-4567",
+      email: "hello@northwoodcoffee.co",
       text: "© 2026 Northwood Coffee Co. All rights reserved. Locally roasted in the Pacific Northwest.",
+      instagram: "#",
+      facebook: "#",
+      twitter: "#",
     },
   },
 };
@@ -390,51 +427,38 @@ export const NW_RENDERERS = {
       </div>
     </section>
   ),
-  NWCommunity: ({ testimonials }: any) => (
+  NWCommunity: ({ testimonials, tagline, heading, subtitle, communityImages }: any) => (
     <section className="py-12 @md:py-20 px-6 @md:px-12 bg-white">
       <div className="w-full max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <span className="italic text-[#8B5E3C] text-xl block mb-2">
-            Stronger together
+            {tagline || "Stronger together"}
           </span>
           <h2 className="text-3xl @sm:text-4xl @md:text-5xl font-black uppercase tracking-tighter mb-4">
-            Our Community
+            {heading || "Our Community"}
           </h2>
           <p className="text-black/60 max-w-xl mx-auto">
-            We're more than just coffee. We're a gathering place, a creative
-            space, and a proud supporter of local artists and makers.
+            {subtitle || "We're more than just coffee. We're a gathering place, a creative space, and a proud supporter of local artists and makers."}
           </p>
         </div>
 
         <div className="grid @md:grid-cols-4 gap-6">
-          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative">
-            <Image               src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?q=80&w=2071&auto=format&fit=crop"
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              alt="Cafe culture"
-              referrerPolicy="no-referrer"
-            fill />
-          </div>
-          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative @md:pt-12">
-            <Image               src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=2074&auto=format&fit=crop"
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              alt="Latte art"
-              referrerPolicy="no-referrer"
-            fill />
-          </div>
-          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative">
-            <Image               src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop"
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              alt="Cafe vibe"
-              referrerPolicy="no-referrer"
-            fill />
-          </div>
-          <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative @md:pt-12">
-            <Image               src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2070&auto=format&fit=crop"
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              alt="Pastry"
-              referrerPolicy="no-referrer"
-            fill />
-          </div>
+          {(communityImages || [
+            { url: "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?q=80&w=2071&auto=format&fit=crop", alt: "Cafe culture" },
+            { url: "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=2074&auto=format&fit=crop", alt: "Latte art" },
+            { url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop", alt: "Cafe vibe" },
+            { url: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2070&auto=format&fit=crop", alt: "Pastry" },
+          ]).map((imgObj: any, i: number) => (
+            <div key={i} className={`aspect-square rounded-2xl overflow-hidden shadow-lg group relative ${i % 2 === 1 ? '@md:pt-12' : ''}`}>
+              <Image
+                src={typeof imgObj === 'string' ? imgObj : imgObj.url}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                alt={typeof imgObj === 'string' ? '' : (imgObj.alt || '')}
+                referrerPolicy="no-referrer"
+                fill
+              />
+            </div>
+          ))}
         </div>
 
         <div className="mt-20 grid @md:grid-cols-3 gap-8 @md:gap-12 max-w-5xl mx-auto">
@@ -458,19 +482,19 @@ export const NW_RENDERERS = {
       </div>
     </section>
   ),
-  NWFooter: ({ text }: any) => (
+  NWFooter: ({ text, instagram, facebook, twitter }: any) => (
     <footer className="py-12 bg-[#1B1F16] text-white/50 border-t border-white/10 text-center px-6">
       <div className="w-full max-w-7xl mx-auto flex flex-col items-center">
         <Coffee className="w-8 h-8 text-[#8B5E3C] mb-6" />
         <p className="max-w-md mx-auto text-sm">{text}</p>
         <div className="flex gap-4 mt-8">
-          <Link href="#" className="hover:text-white transition-colors">
+          <Link href={instagram || "#"} className="hover:text-white transition-colors">
             <Instagram className="w-5 h-5" />
           </Link>
-          <Link href="#" className="hover:text-white transition-colors">
+          <Link href={facebook || "#"} className="hover:text-white transition-colors">
             <Facebook className="w-5 h-5" />
           </Link>
-          <Link href="#" className="hover:text-white transition-colors">
+          <Link href={twitter || "#"} className="hover:text-white transition-colors">
             <Twitter className="w-5 h-5" />
           </Link>
         </div>
