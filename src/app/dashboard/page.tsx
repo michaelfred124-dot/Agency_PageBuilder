@@ -541,6 +541,41 @@ export default function DashboardLayout() {
     }
   }, [user, router]);
 
+  // Handle checkout success and provision new site
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const checkoutSuccess = params.get('checkout_success');
+    const submissionId = params.get('submission');
+    const tier = params.get('tier');
+    const template = params.get('template');
+
+    if (checkoutSuccess && submissionId && tier) {
+      const provisionSite = async () => {
+        try {
+          const res = await fetch('/api/provision-site', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tier,
+              templateKey: template || 'restaurant',
+              submissionId,
+            }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            // Refresh sites list and edit the new one
+            window.location.href = '/dashboard';
+          } else {
+            console.error('Provision failed:', data.error);
+          }
+        } catch (err) {
+          console.error('Error provisioning site:', err);
+        }
+      };
+      provisionSite();
+    }
+  }, []);
+
   useEffect(() => {
     if (!user) return;
 

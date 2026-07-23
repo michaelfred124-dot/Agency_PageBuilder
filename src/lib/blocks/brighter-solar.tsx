@@ -403,27 +403,32 @@ export const BS_SCHEMAS = {
     description: "Brighter Solar Header",
     fields: [
       { name: 'businessName', label: 'Business Name', type: 'text' },
-      { name: 'navLinks', label: 'Nav Links', type: 'array', arrayFields: [
-        { name: 'text', label: 'Text', type: 'text' }
-      ]}
+      { name: 'tagline', label: 'Tagline', type: 'text' },
+      { name: 'ctaText', label: 'CTA Button Text', type: 'text' },
     ],
     defaultProps: {
       businessName: "BRIGHTER",
+      tagline: "SOLAR CLEANING",
+      ctaText: "GET A FREE QUOTE",
       navLinks: ["HOME", "SERVICES", "ABOUT US", "REVIEWS", "PRICING", "CONTACT"]
     }
   },
   BSHero: {
     description: "Brighter Solar Hero Section",
     fields: [
-      { name: 'headline', label: 'Headline', type: 'text' },
+      { name: 'headline', label: 'Headline', type: 'textarea' },
       { name: 'subheading', label: 'Subheading', type: 'text' },
       { name: 'description', label: 'Description', type: 'textarea' },
-      { name: 'backgroundImage', label: 'Background Image', type: 'text' }
+      { name: 'primaryButton', label: 'Primary Button Text', type: 'text' },
+      { name: 'secondaryButton', label: 'Secondary Button Text', type: 'text' },
+      { name: 'backgroundImage', label: 'Background Image', type: 'image' }
     ],
     defaultProps: {
       headline: "MORE SUN.\nMORE POWER.\nMORE SAVINGS.",
       subheading: "CLEAN PANELS. MAX POWER.",
       description: "Professional solar panel cleaning that removes dirt, dust & grime so your system performs at its best.",
+      primaryButton: "GET A FREE QUOTE",
+      secondaryButton: "SEE OUR SERVICES",
       backgroundImage: "https://images.unsplash.com/photo-1592833159155-c62df1b65634?auto=format&fit=crop&w=2070&q=80"
     }
   },
@@ -540,10 +545,22 @@ export const BS_SCHEMAS = {
   BSFooter: {
     description: "Brighter Solar Footer",
     fields: [
-      { name: 'businessName', label: 'Business Name', type: 'text' }
+      { name: 'businessName', label: 'Business Name', type: 'text' },
+      { name: 'tagline', label: 'Tagline', type: 'text' },
+      { name: 'description', label: 'Description', type: 'textarea' },
+      { name: 'phone', label: 'Phone Number', type: 'text' },
+      { name: 'email', label: 'Email Address', type: 'text' },
+      { name: 'address', label: 'Service Area / Address', type: 'text' },
+      { name: 'hours', label: 'Hours (use \\n for line breaks)', type: 'textarea' },
     ],
     defaultProps: {
-      businessName: "BRIGHTER"
+      businessName: "BRIGHTER",
+      tagline: "SOLAR CLEANING",
+      description: "Professional solar panel cleaning services that help you get the most out of your investment.",
+      phone: "(555) 123-4567",
+      email: "info@brightersolar.com",
+      address: "Serving Your Local Area",
+      hours: "Mon - Sat: 7AM - 5PM\nSun: Closed"
     }
   }
 };

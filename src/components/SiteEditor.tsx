@@ -616,28 +616,36 @@ function SortableSection({
 
           if (clickedImg) {
             e.stopPropagation();
-            const src = clickedImg.src;
+            // Decode Next.js image optimization URLs (/_next/image?url=<encoded>) back to original
+            let src = clickedImg.src;
+            try {
+              if (src.includes('/_next/image')) {
+                const urlParam = new URL(src).searchParams.get('url');
+                if (urlParam) src = decodeURIComponent(urlParam);
+              }
+            } catch {}
             const path = findPropPath(section.props, src, 'image');
-            if (path) {
-              // Highlight the selected image
-              document.querySelectorAll('.canvas-selected-image').forEach(el => {
-                el.classList.remove('canvas-selected-image');
-              });
-              clickedImg.classList.add('canvas-selected-image');
-
-              // Remove highlight on clicking elsewhere
-              const handleImgDeselect = (ev: MouseEvent) => {
-                if (ev.target !== clickedImg) {
-                  clickedImg.classList.remove('canvas-selected-image');
-                  document.removeEventListener('click', handleImgDeselect);
-                }
-              };
-              setTimeout(() => {
-                document.addEventListener('click', handleImgDeselect);
-              }, 10);
-
-              onSelectImageField?.(section.id, path);
-            }
+            // Highlight the selected image
+            document.querySelectorAll('.canvas-selected-image').forEach(el => {
+              el.classList.remove('canvas-selected-image');
+            });
+            clickedImg.classList.add('canvas-selected-image');
+            // Remove highlight on clicking elsewhere
+            const handleImgDeselect = (ev: MouseEvent) => {
+              if (ev.target !== clickedImg) {
+                clickedImg.classList.remove('canvas-selected-image');
+                document.removeEventListener('click', handleImgDeselect);
+              }
+            };
+            setTimeout(() => {
+              document.addEventListener('click', handleImgDeselect);
+            }, 10);
+            // Always open image picker — use matched path or first image-like prop as fallback
+            const imgPropPath = path || Object.keys(section.props).find(k => {
+              const v = section.props[k];
+              return typeof v === 'string' && (v.startsWith('http://') || v.startsWith('https://')) && /\.(jpg|jpeg|png|webp|gif|svg)/i.test(v);
+            }) || 'image';
+            onSelectImageField?.(section.id, imgPropPath);
           } else if (clickedButton || clickedText) {
             const activeEl = clickedButton || clickedText;
             if (!activeEl) return;
@@ -3840,7 +3848,8 @@ export default function SiteEditor({
                   ) : (
                     // Section-Level Content Controls
                     COMPONENT_SCHEMAS[selectedSection.type].fields.map((field: any) => {
-                      const isImageField = field.name.toLowerCase().includes('image') || field.name.toLowerCase().includes('url') || field.name === 'bgImage';
+                      const IMAGE_FIELD_KEYWORDS = ['image', 'img', 'photo', 'avatar', 'thumbnail', 'cover', 'background', 'bg', 'hero', 'banner', 'logo', 'icon', 'picture', 'src'];
+                      const isImageField = field.type === 'image' || IMAGE_FIELD_KEYWORDS.some(kw => field.name.toLowerCase().includes(kw)) || field.name.toLowerCase() === 'url';
                       return (
                         <div key={field.name} className="flex flex-col gap-1.5">
                           <label className="font-semibold text-[10px] text-gray-500 uppercase tracking-wider font-sans">{field.label}</label>
@@ -3979,6 +3988,61 @@ export default function SiteEditor({
                             </div>
                           )}
                           
+                          {field.type === 'image' && (
+                            <div className="flex flex-col gap-2">
+                              <div
+                                className="w-full h-24 bg-gray-100 rounded-lg border border-gray-200 overflow-hidden relative group cursor-pointer flex items-center justify-center hover:border-blue-400 transition-colors"
+                                onClick={() => {
+                                  setMediaSelectorTarget({ id: selectedSection.id, propName: field.name });
+                                  setActiveLeftTool('media');
+                                }}
+                              >
+                                {selectedSection.props[field.name] ? (
+                                  <>
+                                    <img src={selectedSection.props[field.name]} className="w-full h-full object-cover" alt="Preview" referrerPolicy="no-referrer" />
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                      <span className="text-white text-[10px] font-semibold bg-black/50 px-2 py-1 rounded">Browse Library</span>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <div className="text-gray-400 flex flex-col items-center">
+                                    <ImageIcon className="w-5 h-5 mb-1 opacity-50" />
+                                    <span className="text-[9px] font-semibold">Click to browse library</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => pickAndUploadImage((url) => updateProp(field.name, url))}
+                                  disabled={mediaUploading}
+                                  className="flex-1 flex items-center justify-center gap-1 bg-black text-white py-1.5 rounded-md text-[9px] font-bold uppercase tracking-wider hover:bg-black/85 transition-colors disabled:opacity-60"
+                                >
+                                  {mediaUploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3" />}
+                                  Upload
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setMediaSelectorTarget({ id: selectedSection.id, propName: field.name });
+                                    setActiveLeftTool('media');
+                                  }}
+                                  className="flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 text-gray-700 py-1.5 rounded-md text-[9px] font-bold uppercase tracking-wider hover:border-gray-400 transition-colors"
+                                >
+                                  <FolderOpen className="w-3 h-3" /> Library
+                                </button>
+                              </div>
+                              <input
+                                id={`inspector-input-${field.name}`}
+                                type="text"
+                                value={selectedSection.props[field.name] || ''}
+                                onChange={(e) => updateProp(field.name, e.target.value)}
+                                className="w-full bg-white border border-gray-200 rounded text-[10px] px-2 py-1.5 focus:border-blue-400 focus:outline-none"
+                                placeholder="Or paste URL..."
+                              />
+                            </div>
+                          )}
+
                           {field.type === 'textarea' && (
                             <textarea 
                               id={`inspector-input-${field.name}`}

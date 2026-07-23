@@ -4,6 +4,9 @@ import ClientLayout from '@/components/ClientLayout';
 export const metadata = {
   title: 'Michaelfred Designs',
   description: 'Custom, high-performance website and application builder built for modern business authority.',
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
@@ -12,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -33,7 +36,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased selection:bg-[#FF7F11] selection:text-white">
+      <body className="font-sans antialiased selection:bg-[#FF7F11] selection:text-white" suppressHydrationWarning>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

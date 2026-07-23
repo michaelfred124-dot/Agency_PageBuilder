@@ -284,7 +284,10 @@ export const PH_SCHEMAS: Record<string, any> = {
       { name: 'sub', label: 'Subtitle', type: 'textarea' },
       { name: 'phone', label: 'Phone Number', type: 'text' },
       { name: 'ctaText', label: 'Book CTA Text', type: 'text' },
-      { name: 'bgImage', label: 'Background Image URL', type: 'text' },
+      { name: 'bgImage', label: 'Background Image', type: 'image' },
+      { name: 'badges', label: 'Trust Badges', type: 'array', arrayFields: [
+        { name: 'text', label: 'Badge Text', type: 'text' },
+      ]},
     ],
     defaultProps: {
       headline: 'Fast, Reliable Home Services\nYou Can Trust',
@@ -292,6 +295,7 @@ export const PH_SCHEMAS: Record<string, any> = {
       phone: '(555) 123-4567',
       ctaText: 'Book a Service Call',
       bgImage: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=2070&q=80',
+      badges: ['Licensed & Bonded', '5-Star Rated', '24/7 Emergency', 'Free Estimates'],
     },
   },
   PHStats: {

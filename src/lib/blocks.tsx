@@ -106,7 +106,7 @@ export const COMPONENT_SCHEMAS: Record<string, any> = {
       { name: 'buttonStyle', label: 'Button Style (filled/outlined/pill/brutalist/link)', type: 'text' },
       { name: 'theme', label: 'Theme (light/dark/sand/emerald/custom)', type: 'text' },
       { name: 'layoutPreset', label: 'Layout (standard/centered/split/box)', type: 'text' },
-      { name: 'image', label: 'Hero Image (for split/box)', type: 'text' }
+      { name: 'image', label: 'Hero Image (for split/box)', type: 'image' }
     ],
     defaultProps: {
       title: "Build the Future",
@@ -124,7 +124,7 @@ export const COMPONENT_SCHEMAS: Record<string, any> = {
     fields: [
       { name: 'title', label: 'Title', type: 'textarea' },
       { name: 'subtitle', label: 'Subtitle', type: 'textarea' },
-      { name: 'bgImage', label: 'Background Image', type: 'text' },
+      { name: 'bgImage', label: 'Background Image', type: 'image' },
     ],
     defaultProps: {
       title: "Beautiful landscapes.\nBuilt for your life.",
@@ -137,7 +137,7 @@ export const COMPONENT_SCHEMAS: Record<string, any> = {
     fields: [
       { name: 'title', label: 'Title', type: 'textarea' },
       { name: 'subtitle', label: 'Subtitle', type: 'textarea' },
-      { name: 'bgImage', label: 'Background Image', type: 'text' },
+      { name: 'bgImage', label: 'Background Image', type: 'image' },
     ],
     defaultProps: {
       title: "Local coffee.\nMade for your mornings.",
@@ -150,7 +150,7 @@ export const COMPONENT_SCHEMAS: Record<string, any> = {
     fields: [
       { name: 'title', label: 'Title', type: 'textarea' },
       { name: 'subtitle', label: 'Subtitle', type: 'textarea' },
-      { name: 'bgImage', label: 'Background Image', type: 'text' },
+      { name: 'bgImage', label: 'Background Image', type: 'image' },
     ],
     defaultProps: {
       title: "Timeless Imagery.\nAuthentic Stories.",

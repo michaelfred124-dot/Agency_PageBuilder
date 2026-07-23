@@ -81,9 +81,13 @@ function OnboardingForm() {
     logoText: ''
   });
 
-  // DFY State
-  const planName = searchParams.get('plan') || 'DIY Template';
-  const isDfy = planName.toLowerCase().includes('managed') || planName.toLowerCase().includes('custom') || planName.toLowerCase().includes('fully');
+  // Plan detection
+  const planName = searchParams.get('plan') || 'DIY Starter';
+  const tier = planName.includes('DIY') ? 'diy'
+    : planName.includes('Lite') ? 'lite'
+    : planName.includes('Managed') ? 'managed'
+    : 'custom';
+  const isDfy = tier === 'managed' || tier === 'custom';
   
   const [dfyStep, setDfyStep] = useState(1);
   const [dfyAnswers, setDfyAnswers] = useState({
@@ -236,16 +240,41 @@ function OnboardingForm() {
       // Save pointer to trigger editor
       sessionStorage.setItem('instant_edit_site_id', newId);
 
-      // Persist the brief to the CRM so it doesn't only live in this browser's
-      // localStorage — best-effort, never blocks the onboarding flow itself.
+      // Persist to CRM
       fetch('/api/onboarding/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planTier: 'DIY', answers: formData }),
+        body: JSON.stringify({ planTier: tier, answers: formData }),
       }).catch(() => {});
 
-      // Advance to success page step
-      setStep(4);
+      // For DIY, go straight to editor. For paid tiers, route to Stripe checkout.
+      if (tier === 'diy') {
+        setStep(4);
+      } else {
+        setStep(3); // Show loading
+        try {
+          const res = await fetch('/api/checkout/create-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tier,
+              templateKey: selectedTemplate || 'restaurant',
+              onboardingData: formData,
+            }),
+          });
+          const data = await res.json();
+          if (data.url) {
+            window.location.href = data.url;
+          } else {
+            alert('Error creating checkout session. Please try again.');
+            setStep(2);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Error creating checkout session. Please try again.');
+          setStep(2);
+        }
+      }
     } catch (err) {
       console.error(err);
       alert('An error occurred while generating your site. Please try again.');
@@ -253,25 +282,50 @@ function OnboardingForm() {
     }
   };
 
-  const handleDfySubmit = () => {
+  const handleDfySubmit = async () => {
     if (!dfyAnswers.businessName.trim()) {
       alert("Please enter your business name.");
       return;
     }
     setDfyStep(7); // Loading submission
 
-    // Persist the full brief to the CRM so the agency owner actually sees it —
-    // previously this only ever went to localStorage. Best-effort: doesn't
-    // block or alter the existing timed loading-screen flow below.
+    // Persist the full brief to the CRM
     fetch('/api/onboarding/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ planTier: 'DFY', answers: dfyAnswers }),
+      body: JSON.stringify({ planTier: tier, answers: dfyAnswers }),
     }).catch(() => {});
 
+    // Route to Stripe checkout for Template Managed tier
+    if (tier === 'managed') {
+      try {
+        const res = await fetch('/api/checkout/create-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tier: 'managed',
+            templateKey: selectedTemplate || 'restaurant',
+            onboardingData: dfyAnswers,
+          }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Error creating checkout session. Please try again.');
+          setDfyStep(6);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error creating checkout session. Please try again.');
+        setDfyStep(6);
+      }
+      return;
+    }
+
+    // Fallback for other tiers (shouldn't reach here with new flow)
     setTimeout(() => {
-      // Create new Custom DFY Site Record
-      const newId = `site-dfy-${Date.now()}`;
+      const newId = `site-${Date.now()}`;
       const newSiteRecord = {
         id: newId,
         name: dfyAnswers.businessName,
@@ -281,7 +335,7 @@ function OnboardingForm() {
         image: presets.find(p => p.templateKey === (selectedTemplate || 'restaurant'))?.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600',
         lastUpdate: 'Brief submitted',
         templateKey: selectedTemplate || 'restaurant',
-        planTier: 'DFY',
+        planTier: tier,
         dfyDetails: dfyAnswers
       };
 
@@ -296,8 +350,7 @@ function OnboardingForm() {
       }
       const updated = [...currentSites, newSiteRecord];
       localStorage.setItem('my-sites', JSON.stringify(updated));
-      
-      // Complete step
+
       setDfyStep(8);
     }, 2000);
   };

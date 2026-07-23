@@ -1,156 +1,182 @@
 "use client";
 import { motion } from 'motion/react';
-import { RefreshCcw, HandCoins, Users, Rocket } from 'lucide-react';
-import { COLORS } from '@/constants';
-import AnimatedShapes from './AnimatedShapes';
+import Image from 'next/image';
+import { RefreshCcw, HandCoins, Users, Rocket, ArrowRight } from 'lucide-react';
 
-const QUALITIES = [
-  {
-    icon: RefreshCcw,
-    title: 'Pause or Cancel Anytime',
-    description: 'No long-term contracts. Don\'t have enough work for the month? Simply pause your subscription and resume when you do.',
-    color: COLORS.green
-  },
-  {
-    icon: HandCoins,
-    title: 'Flat Monthly Rate',
-    description: 'No surprise bills, hourly rates, or endless negotiations. You pay the exact same flat fee every single month.',
-    color: COLORS.blue
-  },
-  {
-    icon: Users,
-    title: 'Your Dedicated Team',
-    description: 'Stop playing roulette with freelancers. Get design and development from a senior-level team that learns your brand perfectly.',
-    color: COLORS.yellow
-  },
-  {
-    icon: Rocket,
-    title: 'Lightning Fast',
-    description: 'Submit a request and get it back in an average of 48 hours. We iterate rapidly until you are 100% satisfied with the result.',
-    color: COLORS.pink
-  }
-];
+import ParallaxSectionBg from '@/components/ParallaxSectionBg';
 
 export default function AgencyAdvantages() {
   return (
-    <section className="py-20 lg:py-32 bg-white text-[#1a1a1a] px-4 lg:px-6 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-full h-full opacity-[0.03] pointer-events-none">
-        <svg width="100%" height="100%">
-          <pattern id="grid-advantages" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a1a1a" strokeWidth="1.5" />
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#grid-advantages)" />
-        </svg>
-      </div>
+    <section className="py-20 lg:py-28 bg-[#080B12] text-white px-4 lg:px-6 relative overflow-hidden">
+      
+      {/* Full-Section Real Photographic Background with Parallax */}
+      <ParallaxSectionBg 
+        src="/advantages_nature_bg.jpg" 
+        alt="Aurora Borealis Sky Background"
+        opacity={0.85}
+        overlayGradient="from-[#080B12] via-transparent to-[#080B12]"
+      />
 
-      {/* Decorative Floating Shapes */}
-      <AnimatedShapes />
+      {/* Alternating Royal Blue & Indigo Ambient Glows */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-indigo-500/25 via-blue-600/20 to-sky-400/20 blur-[170px] rounded-full pointer-events-none z-0" />
 
-      <div className="max-w-[1400px] mx-auto relative z-10">
-        <div className="flex flex-col space-y-4 mb-16 lg:mb-24 text-center items-center">
-          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-[#D4AF37]">The Advantages</span>
-          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight leading-none max-w-4xl text-[#1a1a1a]">
-            Why choose <span className="text-[#FF7F11]">our agency?</span>
+      <div className="max-w-[1340px] mx-auto relative z-10">
+        
+        {/* Header */}
+        <div className="flex flex-col space-y-3 mb-16 lg:mb-20 text-center items-center">
+          <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-bold text-sky-300 bg-sky-950/70 px-3.5 py-1.5 rounded-full border border-sky-400/40 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+            The Agency Advantage
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-none max-w-3xl">
+            Why Companies Choose <br />
+            <span className="bg-gradient-to-r from-sky-200 via-teal-300 to-emerald-300 bg-clip-text text-transparent">mfd.agency</span>
           </h2>
+          <p className="max-w-xl text-slate-200 text-base md:text-lg font-normal pt-2">
+            Experience the speed and polish of a dedicated design agency without the traditional overhead or long timeline delays.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        {/* Frosted Glass Dynamic Grid - Standout Glass Blocks */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          
+          {/* Card 1: Pause or Cancel */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-2 p-8 lg:p-12 rounded-3xl luxury-card relative overflow-hidden group cursor-pointer"
+            className="md:col-span-7 bg-gradient-to-br from-slate-800/85 via-slate-900/90 to-[#1E293B]/85 backdrop-blur-xl rounded-3xl p-8 lg:p-10 border border-sky-400/30 shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:bg-slate-800/95 hover:border-sky-300/60 hover:shadow-[0_20px_45px_rgba(56,189,248,0.22)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group cursor-pointer relative overflow-hidden"
           >
-            <div className="relative z-10 w-full md:w-3/5">
-              <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:scale-110 transition-transform duration-300"
-              >
-                <RefreshCcw className="w-6 h-6" strokeWidth={2.5} />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-sky-400/60 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
+
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400/25 via-blue-500/20 to-slate-700/40 border border-sky-300/40 flex items-center justify-center text-sky-200 group-hover:from-sky-400 group-hover:to-teal-400 group-hover:text-slate-950 transition-all duration-300 shadow-md">
+                  <RefreshCcw className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-extrabold text-sky-300 uppercase tracking-widest bg-sky-950/70 px-3 py-1 rounded-full border border-sky-400/40">
+                  100% Flexible
+                </span>
               </div>
-              <h3 className="text-xl lg:text-3xl font-extrabold uppercase tracking-tight mb-4 text-[#1a1a1a]">
+
+              <h3 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight mb-3 group-hover:text-sky-200 transition-colors">
                 Pause or Cancel Anytime
               </h3>
-              <p className="text-[#1a1a1a]/50 font-normal text-base leading-relaxed">
-                No long-term contracts. Don't have enough work for the month? Simply pause your subscription and resume when you do.
+              <p className="text-slate-200 text-base leading-relaxed max-w-lg">
+                No long-term contracts. Don't have enough work for the month? Simply pause your subscription and resume whenever your brand needs fresh design iterations.
               </p>
             </div>
-            
-            <div className="absolute right-0 bottom-0 top-0 w-2/5 hidden md:block">
-               <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover border-l border-black/10 grayscale group-hover:grayscale-0 transition-all duration-500" alt="Collaboration" referrerPolicy="no-referrer" />
+
+            <div className="mt-8 pt-6 border-t border-sky-400/20 flex items-center gap-2 text-xs font-bold text-sky-300 group-hover:text-teal-200 transition-colors">
+              <span>Flexible Subscription Model</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </motion.div>
 
+          {/* Card 2: Flat Monthly Rate */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="col-span-1 p-8 lg:p-12 rounded-3xl luxury-card flex flex-col justify-between cursor-pointer"
+            className="md:col-span-5 bg-gradient-to-br from-slate-800/85 via-slate-900/90 to-[#1E293B]/85 backdrop-blur-xl rounded-3xl p-8 lg:p-10 border border-teal-400/30 shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:bg-slate-800/95 hover:border-teal-300/60 hover:shadow-[0_20px_45px_rgba(45,212,191,0.22)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group cursor-pointer relative overflow-hidden"
           >
-             <div>
-              <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:scale-110 transition-transform duration-300"
-              >
-                <HandCoins className="w-6 h-6" strokeWidth={2.5} />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-400/60 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
+
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-400/25 via-emerald-500/20 to-slate-700/40 border border-teal-300/40 flex items-center justify-center text-teal-200 group-hover:from-teal-400 group-hover:to-emerald-400 group-hover:text-slate-950 transition-all duration-300 shadow-md">
+                  <HandCoins className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-extrabold text-teal-300 uppercase tracking-widest bg-teal-950/70 px-3 py-1 rounded-full border border-teal-400/40">
+                  Predictable Cost
+                </span>
               </div>
-              <h3 className="text-xl lg:text-2xl font-extrabold uppercase tracking-tight mb-4 text-[#1a1a1a]">
+
+              <h3 className="text-2xl font-extrabold text-white tracking-tight mb-3 group-hover:text-teal-200 transition-colors">
                 Flat Monthly Rate
               </h3>
-              <p className="text-[#1a1a1a]/50 font-normal text-base leading-relaxed mb-6">
-                No surprise bills, hourly rates, or endless negotiations. You pay the exact same flat fee every single month.
+              <p className="text-slate-200 text-base leading-relaxed">
+                No surprise hourly bills or endless scope negotiations. You pay the exact same predictable fee every month.
               </p>
-             </div>
-             <div className="w-full h-28 rounded-xl border border-black/10 border-dashed overflow-hidden flex items-center justify-center bg-black/[0.02]">
-                <span className="text-xl font-extrabold text-[#D4AF37]">$0 Hidden fees</span>
-             </div>
+            </div>
+
+            <div className="mt-8 p-4 rounded-2xl bg-slate-800/80 border border-teal-400/30 flex items-center justify-between text-slate-100 font-bold text-sm">
+              <span>Transparent Pricing</span>
+              <span className="text-xs bg-gradient-to-r from-sky-400 to-teal-400 text-slate-950 px-3 py-1 rounded-full font-extrabold shadow-sm">$0 Hidden Fees</span>
+            </div>
           </motion.div>
 
+          {/* Card 3: Dedicated Senior Team */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="col-span-1 p-8 lg:p-12 rounded-3xl luxury-card cursor-pointer"
+            className="md:col-span-5 bg-gradient-to-br from-slate-800/85 via-slate-900/90 to-[#1E293B]/85 backdrop-blur-xl rounded-3xl p-8 lg:p-10 border border-emerald-400/30 shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:bg-slate-800/95 hover:border-emerald-300/60 hover:shadow-[0_20px_45px_rgba(52,211,153,0.22)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group cursor-pointer relative overflow-hidden"
           >
-             <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:scale-110 transition-transform duration-300"
-              >
-                <Users className="w-6 h-6" strokeWidth={2.5} />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
+
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400/25 via-teal-500/20 to-slate-700/40 border border-emerald-300/40 flex items-center justify-center text-emerald-200 group-hover:from-emerald-400 group-hover:to-teal-400 group-hover:text-slate-950 transition-all duration-300 shadow-md">
+                  <Users className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-extrabold text-emerald-300 uppercase tracking-widest bg-emerald-950/70 px-3 py-1 rounded-full border border-emerald-400/40">
+                  Senior Engineers
+                </span>
               </div>
-              <h3 className="text-xl lg:text-2xl font-extrabold uppercase tracking-tight mb-4 text-[#1a1a1a]">
+
+              <h3 className="text-2xl font-extrabold text-white tracking-tight mb-3 group-hover:text-emerald-200 transition-colors">
                 Your Dedicated Team
               </h3>
-              <p className="text-[#1a1a1a]/50 font-normal text-base leading-relaxed">
-                Stop playing roulette with freelancers. Get design and development from a senior-level team that learns your brand perfectly.
+              <p className="text-slate-200 text-base leading-relaxed">
+                Stop playing roulette with unverified freelancers. Get design and Next.js development from a senior team aligned with your brand.
               </p>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-emerald-400/20 flex items-center gap-2 text-xs font-bold text-emerald-300 group-hover:text-teal-200 transition-colors">
+              <span>Seamless Brand Parity</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
           </motion.div>
 
+          {/* Card 4: 48h Turnaround */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="md:col-span-2 p-8 lg:p-12 rounded-3xl luxury-card relative overflow-hidden group cursor-pointer"
+            className="md:col-span-7 bg-gradient-to-br from-slate-800/85 via-slate-900/90 to-[#1E293B]/85 backdrop-blur-xl rounded-3xl p-8 lg:p-10 border border-sky-400/30 shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:bg-slate-800/95 hover:border-sky-300/60 hover:shadow-[0_20px_45px_rgba(56,189,248,0.22)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group cursor-pointer relative overflow-hidden"
           >
-            <div className="relative z-10 w-full md:w-1/2">
-              <div 
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-8 border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.1)] group-hover:scale-110 transition-transform duration-300"
-              >
-                <Rocket className="w-6 h-6" strokeWidth={2.5} />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-sky-400/60 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
+
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400/25 via-blue-500/20 to-slate-700/40 border border-sky-300/40 flex items-center justify-center text-sky-200 group-hover:from-sky-400 group-hover:to-teal-400 group-hover:text-slate-950 transition-all duration-300 shadow-md">
+                  <Rocket className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-extrabold text-sky-300 uppercase tracking-widest bg-sky-950/70 px-3 py-1 rounded-full border border-sky-400/40">
+                  48h Turnaround
+                </span>
               </div>
-              <h3 className="text-xl lg:text-3xl font-extrabold uppercase tracking-tight mb-4 text-[#1a1a1a]">
-                Lightning Fast
+
+              <h3 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight mb-3 group-hover:text-sky-200 transition-colors">
+                Lightning Fast Delivery
               </h3>
-              <p className="text-[#1a1a1a]/50 font-normal text-base leading-relaxed">
+              <p className="text-slate-200 text-base leading-relaxed max-w-lg">
                 Submit a request and get it back in an average of 48 hours. We iterate rapidly until you are 100% satisfied with the result.
               </p>
             </div>
-            
-            <div className="absolute right-0 bottom-0 top-0 w-1/2 hidden md:block">
-               <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover border-l border-black/10 grayscale group-hover:grayscale-0 transition-all duration-500" alt="Performance dashboard" referrerPolicy="no-referrer" />
+
+            <div className="mt-8 pt-6 border-t border-sky-400/20 flex items-center gap-2 text-xs font-bold text-sky-300 group-hover:text-teal-200 transition-colors">
+              <span>Rapid Iteration Process</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </motion.div>
+
         </div>
+
       </div>
     </section>
   );

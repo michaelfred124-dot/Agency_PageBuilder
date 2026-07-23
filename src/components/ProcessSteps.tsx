@@ -1,9 +1,4 @@
 "use client";
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { motion } from 'motion/react';
 import { COLORS } from '@/constants';
 import Link from 'next/link';
@@ -13,121 +8,101 @@ const PROCESS_STEPS = [
     num: '01',
     title: 'Subscribe & Request',
     description: 'Choose a plan and gain immediate access to your dedicated project board. Invite your team and start adding as many design and development requests as you need.',
-    color: COLORS.green,
+    color: '#38BDF8',
     image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=2070&auto=format&fit=crop'
   },
   {
     num: '02',
     title: 'Design & Iterate',
     description: 'We pick up your first request and get to work. You\'ll receive initial design concepts within an average of 48 hours. We revise and refine until you are 100% satisfied.',
-    color: COLORS.blue,
+    color: '#2DD4BF',
     image: 'https://images.unsplash.com/photo-1618761714954-0b8cd0026356?q=80&w=2070&auto=format&fit=crop'
   },
   {
     num: '03',
     title: 'Develop & Deploy',
     description: 'Once approved, our team builds your request using modern tech stacks (React, Next.js, Tailwind). We ensure it is lightning fast, accessible, and perfectly responsive.',
-    color: COLORS.pink,
+    color: '#34D399',
     image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop'
   },
   {
     num: '04',
     title: 'Manage & Scale',
-    description: 'Your polished site goes live. Keep your subscription active to seamlessly request new pages, continuous updates, technical SEO improvements, and ongoing maintenance.',
-    color: COLORS.purple,
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop'
-  },
-  {
-    num: '05',
-    title: 'Own Your Code',
-    description: 'After 1 year of continuous service, the choice is yours. Keep your subscription for hands-off management, or export your entire codebase and take full ownership of your site.',
-    color: COLORS.orange,
+    description: 'Launch your website with total peace of mind. We handle hosting, continuous performance monitoring, updates, and maintenance so you can focus on growing your business.',
+    color: '#60A5FA',
     image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop'
   }
 ];
 
 export default function ProcessSteps() {
   return (
-    <section id="process" className="py-20 lg:py-32 bg-transparent px-4 lg:px-6 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto relative">
+    <section id="process" className="py-20 lg:py-32 bg-[#080B12] text-white px-4 lg:px-6 relative overflow-hidden">
+      
+      {/* Ambient Glows */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-r from-sky-500/20 via-teal-400/18 to-emerald-400/15 blur-[170px] rounded-full pointer-events-none z-0" />
+
+      <div className="max-w-[1340px] mx-auto relative z-10">
         <div className="flex flex-col mb-16 lg:mb-24 text-center items-center">
-          <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400 mb-4">The Process</span>
-          <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 leading-none max-w-4xl">
-            How We <br />Work
+          <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-bold text-white bg-white/10 px-3.5 py-1.5 rounded-full border border-white/25 shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-4">
+            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+            The Process
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-none max-w-4xl">
+            How We <span className="bg-gradient-to-r from-sky-200 via-teal-300 to-emerald-300 bg-clip-text text-transparent">Work</span>
           </h2>
-          <p className="max-w-2xl text-zinc-600 text-base md:text-lg leading-relaxed font-normal mt-6">
+          <p className="max-w-2xl text-slate-300 text-base md:text-lg leading-relaxed font-normal mt-4">
             We offer an alternative to unpredictable freelancers and expensive traditional agencies. Pay a flat monthly fee and get unlimited design and development requests delivered sequentially.
           </p>
         </div>
 
         <div className="relative mt-16 lg:mt-24">
-          {/* Swirly Connecting Line (Desktop Only) */}
-          <div className="hidden lg:block absolute left-1/2 top-10 bottom-10 w-16 -translate-x-1/2 z-0">
-             <svg width="100%" height="100%">
-              <defs>
-                <pattern id="swirl" x="0" y="0" width="64" height="128" patternUnits="userSpaceOnUse">
-                  <path d="M 32 0 Q 64 32 32 64 T 32 128" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" />
-                </pattern>
-              </defs>
-              <rect x="0" y="0" width="64" height="100%" fill="url(#swirl)" />
-             </svg>
-          </div>
-
           <div className="flex flex-col space-y-16 lg:space-y-24">
             {PROCESS_STEPS.map((step, i) => (
-              <div key={step.num} className={`relative flex flex-col lg:flex-row items-center w-full gap-6 lg:gap-0 ${i % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
+              <div key={step.num} className={`relative flex flex-col lg:flex-row items-center w-full gap-8 lg:gap-12 ${i % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
                 
-                {/* Timeline Dot (Desktop Only) */}
-                <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-8 h-8 rounded-full border-2 border-zinc-950 bg-white z-10 items-center justify-center shadow-[1.5px_1.5px_0px_rgba(9,9,11,1)]">
-                  <div className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: step.color }} />
-                </div>
-
-                {/* Image and Number Wrapper */}
+                {/* Image Card */}
                 <motion.div 
-                  initial={{ opacity: 0, x: i % 2 !== 0 ? 50 : -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8 }}
-                  className={`flex-1 w-full flex ${i % 2 !== 0 ? 'lg:justify-start lg:pl-16' : 'lg:justify-end lg:pr-16'} justify-center relative z-20 h-[300px] lg:h-[450px]`}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                  className="w-full lg:w-1/2 relative aspect-[16/10] rounded-3xl overflow-hidden border border-white/25 shadow-[0_15px_35px_rgba(0,0,0,0.5)] group"
                 >
-                  <div className="relative w-full max-w-[500px] h-full rounded-3xl overflow-hidden border-2 border-zinc-950 shadow-[4px_4px_0px_rgba(9,9,11,1)] group">
-                    <img 
-                      src={(step.image) || undefined} 
-                      alt={step.title} 
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute inset-0 bg-black/20" />
-                    <span
-                      className="absolute bottom-4 left-4 lg:bottom-8 lg:left-8 text-[70px] lg:text-[100px] font-black leading-[0.8] drop-shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] uppercase tracking-tighter z-10"
-                      style={{ color: step.color, WebkitTextStroke: '1.5px #222' }}
-                    >
-                      {step.num}
-                    </span>
+                  <img 
+                    src={step.image} 
+                    alt={step.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#080B12] via-[#080B12]/30 to-transparent" />
+                  
+                  {/* Step Badge */}
+                  <div className="absolute top-6 left-6 w-12 h-12 rounded-2xl bg-white/15 border border-white/30 backdrop-blur-xl flex items-center justify-center font-black text-lg text-white shadow-lg">
+                    {step.num}
                   </div>
                 </motion.div>
 
-                {/* Content Card */}
+                {/* Content Glass Card */}
                 <motion.div 
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className={`flex-1 w-full z-20 flex ${i % 2 !== 0 ? 'lg:justify-end lg:pr-8' : 'lg:justify-start lg:pl-8'}`}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="w-full lg:w-1/2 p-8 lg:p-10 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/25 shadow-[0_15px_35px_rgba(0,0,0,0.4)] relative overflow-hidden"
                 >
-                  <div 
-                    className="p-8 lg:p-10 border-2 border-zinc-950 rounded-3xl bg-white w-full max-w-lg transition-transform hover:-translate-y-1 duration-300"
-                    style={{
-                      boxShadow: `4px 4px 0px rgba(9,9,11,1)`,
-                    }}
-                  >
-                    <h3 className="text-xl lg:text-3xl font-extrabold uppercase tracking-tight mb-4 text-zinc-950 leading-none">
-                      {step.title}
-                    </h3>
-                    <p className="text-zinc-650 font-normal text-sm lg:text-base leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
+                  {/* Top Light Accent Line */}
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+
+                  <span className="text-xs font-extrabold uppercase tracking-widest text-white/80 mb-2 block">
+                    Step {step.num}
+                  </span>
+                  
+                  <h3 className="text-2xl lg:text-3xl font-extrabold text-white mb-4">
+                    {step.title}
+                  </h3>
+                  
+                  <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                    {step.description}
+                  </p>
                 </motion.div>
 
               </div>
@@ -136,16 +111,14 @@ export default function ProcessSteps() {
         </div>
 
         {/* Action Button */}
-        <div className="mt-32 flex justify-center pb-20">
+        <div className="mt-20 flex justify-center">
           <Link href="/pricing">
-            <motion.div
-              whileHover={{ scale: 1.03, translateY: -2 }}
-              className="px-10 py-4 border-2 border-zinc-950 text-zinc-950 hover:bg-zinc-950 hover:text-white font-bold uppercase tracking-widest rounded-full shadow-[4px_4px_0px_rgba(9,9,11,1)] hover:shadow-[6px_6px_0px_rgba(9,9,11,1)] transition-all inline-block w-fit text-center text-sm cursor-pointer bg-white"
-            >
-              Get Started
-            </motion.div>
+            <button className="px-8 py-4 bg-white hover:bg-white/90 text-slate-950 font-extrabold text-xs uppercase tracking-widest rounded-full transition-all shadow-xl hover:scale-105 cursor-pointer">
+              View Pricing & Plans
+            </button>
           </Link>
         </div>
+
       </div>
     </section>
   );

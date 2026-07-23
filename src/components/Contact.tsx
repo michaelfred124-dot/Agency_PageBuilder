@@ -1,75 +1,103 @@
 "use client";
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { motion } from 'motion/react';
-import { COLORS } from '@/constants';
-import { Send } from 'lucide-react';
+import { Send, Mail, MapPin } from 'lucide-react';
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-20 lg:py-32 bg-[#F7F8FA] px-4 lg:px-6">
-      <div className="max-w-[1400px] mx-auto">
+    <section id="contact" className="py-20 lg:py-32 bg-[#080B12] text-white px-4 lg:px-6 relative overflow-hidden">
+      
+      {/* Background ambient light */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[950px] h-[550px] bg-gradient-to-r from-sky-500/20 via-teal-400/18 to-emerald-400/15 blur-[180px] rounded-full pointer-events-none z-0" />
+
+      <div className="max-w-[1340px] mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          
+          {/* Contact Left Column */}
           <div className="flex flex-col space-y-6 lg:space-y-8">
-            <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-zinc-400">Contact</span>
-            <h2 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight text-zinc-950 leading-none">
-              Let's Work<br />Together!
+            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-bold text-sky-300 bg-sky-950/80 px-4 py-2 rounded-full border border-sky-400/40 shadow-[0_0_20px_rgba(56,189,248,0.25)] w-fit">
+              <span className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse" />
+              Get In Touch
+            </span>
+
+            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-none">
+              Let's Build <br />
+              <span className="bg-gradient-to-r from-sky-200 via-teal-300 to-emerald-300 bg-clip-text text-transparent">Together</span>
             </h2>
-            <p className="text-base lg:text-lg text-zinc-600 font-normal max-w-md">
-              If you’re working on an exciting project and need someone with strong animation and production skills, I’d love to connect.
+
+            <p className="text-base lg:text-lg text-slate-300 font-normal max-w-md leading-relaxed">
+              Have a question or ready to launch your custom high-performance website? Fill out the form or reach out directly.
             </p>
-            <div className="flex flex-col space-y-2 lg:space-y-4 pt-4 lg:pt-8">
-              <div className="text-xs lg:text-sm font-bold uppercase tracking-widest text-zinc-400">Based in</div>
-              <div className="text-lg lg:text-xl font-extrabold text-zinc-900 uppercase">Los Angeles, CA</div>
+
+            <div className="flex flex-col space-y-4 pt-4">
+              <div className="flex items-center gap-3 text-slate-300">
+                <div className="w-10 h-10 rounded-xl bg-sky-950/80 border border-sky-400/30 flex items-center justify-center text-sky-300">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase font-extrabold tracking-widest text-slate-400">Based in</div>
+                  <div className="text-base font-bold text-white">Los Angeles, CA</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 text-slate-300">
+                <div className="w-10 h-10 rounded-xl bg-sky-950/80 border border-sky-400/30 flex items-center justify-center text-teal-300">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase font-extrabold tracking-widest text-slate-400">Direct Email</div>
+                  <div className="text-base font-bold text-white">michaelfreddesigns@gmail.com</div>
+                </div>
+              </div>
             </div>
           </div>
 
+          {/* Contact Right Form Glass Card */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="p-6 lg:p-12 rounded-3xl border-2 border-zinc-950 bg-white"
-            style={{ 
-              boxShadow: `4px 4px 0px rgba(9,9,11,1)`,
-            }}
+            className="p-8 lg:p-12 rounded-3xl border border-sky-400/30 bg-gradient-to-br from-slate-800/85 via-slate-900/90 to-[#1E293B]/85 backdrop-blur-xl shadow-2xl relative overflow-hidden"
           >
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-sky-400/60 to-transparent" />
+
             <form className="flex flex-col space-y-6">
               <div className="flex flex-col space-y-2">
-                <label className="text-xs uppercase font-bold tracking-wider text-zinc-400 ml-2">Your Name</label>
+                <label className="text-xs uppercase font-extrabold tracking-wider text-sky-300">Your Name</label>
                 <input 
                   type="text" 
-                  placeholder="Tell me who you are"
-                  className="w-full p-4 bg-zinc-50 border border-zinc-200 rounded-xl font-normal placeholder:text-zinc-400 focus:bg-white focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 focus:outline-none transition-all duration-300"
+                  placeholder="Tell us who you are"
+                  className="w-full p-4 bg-slate-950/80 border border-sky-400/30 rounded-xl text-white font-normal placeholder:text-slate-500 focus:bg-slate-950 focus:border-sky-300 focus:ring-1 focus:ring-sky-300 focus:outline-none transition-all duration-300"
                 />
               </div>
+
               <div className="flex flex-col space-y-2">
-                <label className="text-xs uppercase font-bold tracking-wider text-zinc-400 ml-2">Email Address</label>
+                <label className="text-xs uppercase font-extrabold tracking-wider text-sky-300">Email Address</label>
                 <input 
                   type="email" 
-                  placeholder="Where can I reach you?"
-                  className="w-full p-4 bg-zinc-50 border border-zinc-200 rounded-xl font-normal placeholder:text-zinc-400 focus:bg-white focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 focus:outline-none transition-all duration-300"
+                  placeholder="Where can we reach you?"
+                  className="w-full p-4 bg-slate-950/80 border border-sky-400/30 rounded-xl text-white font-normal placeholder:text-slate-500 focus:bg-slate-950 focus:border-sky-300 focus:ring-1 focus:ring-sky-300 focus:outline-none transition-all duration-300"
                 />
               </div>
+
               <div className="flex flex-col space-y-2">
-                <label className="text-xs uppercase font-bold tracking-wider text-zinc-400 ml-2">Your Message</label>
+                <label className="text-xs uppercase font-extrabold tracking-wider text-sky-300">Your Message</label>
                 <textarea 
-                  placeholder="How can I help you?"
+                  placeholder="How can we help build your vision?"
                   rows={4}
-                  className="w-full p-4 bg-zinc-50 border border-zinc-200 rounded-xl font-normal placeholder:text-zinc-400 focus:bg-white focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 focus:outline-none transition-all duration-300 resize-none"
+                  className="w-full p-4 bg-slate-950/80 border border-sky-400/30 rounded-xl text-white font-normal placeholder:text-slate-500 focus:bg-slate-950 focus:border-sky-300 focus:ring-1 focus:ring-sky-300 focus:outline-none transition-all duration-300 resize-none"
                 />
               </div>
+
               <button 
                 type="submit"
-                className="w-full py-4 bg-zinc-950 text-white font-bold uppercase tracking-wider text-xs rounded-full hover:bg-zinc-900 shadow-md shadow-zinc-950/10 hover:translate-y-[-1px] transition-all flex items-center justify-center gap-3 cursor-pointer"
+                className="w-full py-4 bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 hover:from-sky-300 hover:to-emerald-300 text-slate-950 font-extrabold uppercase tracking-widest text-xs rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer shadow-lg hover:scale-105"
               >
-                Send Message
+                <span>Send Message</span>
                 <Send className="w-4 h-4" />
               </button>
             </form>
           </motion.div>
+
         </div>
       </div>
     </section>

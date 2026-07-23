@@ -1,51 +1,72 @@
 "use client";
+import React from 'react';
 import { motion } from 'motion/react';
-import { Check } from 'lucide-react';
+import { Check, Sparkles, ShieldCheck, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { COLORS } from '@/constants';
 import { getSupabaseBrowserClient } from '@/lib/supabase';
+import ParallaxSectionBg from '@/components/ParallaxSectionBg';
 
 const PLANS = [
   {
-    name: 'DIY Template',
-    price: '$20',
+    name: 'DIY Starter',
+    price: '$10',
     interval: '/mo',
-    description: 'Barebones template to get your website started.',
+    description: 'Pick a template, edit it yourself.',
     features: [
-      'Barebones template selection',
+      'Template selection',
+      'Self-edit dashboard',
       'Contact form included',
-      'Self-hosted',
-      'Basic email support'
+      'Documentation & community support'
     ],
-    color: COLORS.green,
+    popular: false,
+    gradient: 'from-slate-800/85 via-slate-900/90 to-[#1E293B]/85',
+    cta: 'Get Started',
   },
   {
-    name: 'Managed Template',
-    price: '$50',
+    name: 'Template Lite',
+    price: '$15',
     interval: '/mo',
-    description: 'Hosted template with regular maintenance.',
+    description: 'Managed hosting + 2 design edits/month.',
     features: [
-      'Select from templates',
-      'Fast, secure hosting',
-      'E-commerce included',
-      'Unlimited updates (up to 2 hrs)'
+      'Template selection & setup',
+      '2 design requests per month',
+      'Managed hosting & security',
+      'Email support'
     ],
-    color: COLORS.orange,
+    popular: false,
+    gradient: 'from-slate-800/85 via-slate-900/90 to-[#1E293B]/85',
+    cta: 'Get Started',
+  },
+  {
+    name: 'Template Managed',
+    price: '$60',
+    interval: '/mo',
+    description: 'Unlimited edits, monthly strategy calls.',
+    features: [
+      'We pick & launch your template',
+      'Unlimited design requests',
+      'Managed hosting & security',
+      'Monthly strategy call + email support'
+    ],
     popular: true,
+    gradient: 'from-sky-950/90 via-slate-900/95 to-[#1E293B]/90 border-sky-400/60 shadow-[0_20px_50px_rgba(56,189,248,0.2)]',
+    cta: 'Get Started',
   },
   {
     name: 'Fully Custom',
-    price: '$100',
+    price: '$150',
     interval: '/mo',
-    description: 'Complete custom build and growth plan.',
+    description: '100% custom design + integrations.',
     features: [
-      'Fully custom website',
-      'Fast, secure hosting',
-      'Unlimited updates',
-      'SEO support & growth plan'
+      'Fully custom website from scratch',
+      'Unlimited design requests & revisions',
+      '100% hosted, managed & protected',
+      'Weekly design calls + priority support'
     ],
-    color: COLORS.blue,
+    popular: false,
+    gradient: 'from-slate-800/85 via-slate-900/90 to-[#1E293B]/85',
+    cta: 'Email for Quote',
   }
 ];
 
@@ -53,6 +74,10 @@ export default function PricingPage() {
   const router = useRouter();
 
   const handleGetStarted = async (planName: string) => {
+    if (planName === 'Fully Custom') {
+      window.location.href = 'mailto:michaelfred124@gmail.com?subject=Custom Website Inquiry';
+      return;
+    }
     const supabase = getSupabaseBrowserClient();
     const { data: { session } } = await supabase.auth.getSession();
     const onboardingUrl = `/onboarding?plan=${encodeURIComponent(planName)}`;
@@ -64,54 +89,70 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="pt-24 lg:pt-32 bg-[#F1EDE1] min-h-screen">
-      <section className="py-20 px-4 lg:px-6">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-col space-y-4 mb-16 lg:mb-24 text-center items-center">
-            <span className="text-xs lg:text-sm uppercase tracking-[0.4em] font-bold text-black/40">Pricing</span>
-            <h1 className="text-[clamp(3rem,8vw,7rem)] font-black uppercase tracking-tighter text-black leading-[0.9]">
-              Simple, Transparent <br/>Pricing
+    <div className="pt-24 lg:pt-32 bg-[#080B12] text-white min-h-screen relative overflow-hidden">
+      {/* Background ambient light */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[550px] bg-gradient-to-r from-sky-500/25 via-teal-400/20 to-emerald-400/20 blur-[180px] rounded-full pointer-events-none z-0" />
+
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none z-10" />
+
+      <section className="py-20 px-4 lg:px-6 relative z-10">
+        <div className="max-w-[1340px] mx-auto">
+          
+          {/* Header */}
+          <div className="flex flex-col space-y-4 mb-16 lg:mb-20 text-center items-center">
+            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-bold text-sky-300 bg-sky-950/80 px-4 py-2 rounded-full border border-sky-400/40 shadow-[0_0_20px_rgba(56,189,248,0.25)]">
+              <span className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse" />
+              Transparent Pricing
+            </span>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-none max-w-3xl">
+              Simple, Transparent <br />
+              <span className="bg-gradient-to-r from-sky-200 via-teal-300 to-emerald-300 bg-clip-text text-transparent">Subscription Plans</span>
             </h1>
-            <p className="text-xl md:text-2xl text-black/80 font-medium max-w-2xl mt-6">
+
+            <p className="max-w-2xl text-slate-300 text-base md:text-lg font-normal mt-4 leading-relaxed">
               No hidden fees, no surprise invoices. Pause or cancel your subscription at any time.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+          {/* Pricing Grid */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
             {PLANS.map((plan, i) => (
               <motion.div
                 key={plan.name}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.2 }}
-                className={`p-6 lg:p-8 rounded-[32px] border-8 border-black shadow-[10px_10px_0px_rgba(34,34,34,1)] relative bg-white flex flex-col`}
+                transition={{ delay: i * 0.15 }}
+                className={`p-8 lg:p-10 rounded-3xl border border-sky-400/30 backdrop-blur-xl bg-gradient-to-br ${plan.gradient} shadow-2xl relative flex flex-col justify-between group hover:border-sky-300/60 transition-all`}
               >
                 {plan.popular && (
-                  <div 
-                    className="absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 text-xs lg:text-sm font-bold uppercase tracking-widest rounded-full border-4 border-black text-white whitespace-nowrap"
-                    style={{ backgroundColor: COLORS.black }}
-                  >
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest rounded-full bg-gradient-to-r from-sky-400 to-teal-400 text-slate-950 shadow-md">
                     Most Popular
                   </div>
                 )}
-                
-                <h3 className="text-2xl lg:text-3xl font-black uppercase tracking-tighter mb-2" style={{ color: plan.color }}>
-                  {plan.name}
-                </h3>
-                <p className="text-black/60 font-medium mb-8 text-sm">
-                  {plan.description}
-                </p>
-                <div className="flex items-baseline gap-1 mb-8">
-                  <span className="text-5xl lg:text-6xl font-black tracking-tighter">{plan.price}</span>
-                  <span className="text-lg font-bold text-black/40">{plan.interval}</span>
-                </div>
 
-                <div className="flex-1">
-                  <ul className="space-y-4 mb-12 text-black">
+                {/* Top accent line */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-sky-400/60 to-transparent" />
+                
+                <div>
+                  <h3 className="text-2xl font-extrabold text-white mb-2">
+                    {plan.name}
+                  </h3>
+                  <p className="text-slate-300 text-xs leading-relaxed mb-6">
+                    {plan.description}
+                  </p>
+
+                  <div className="flex items-baseline gap-1 mb-8">
+                    <span className="text-5xl font-extrabold text-white tracking-tight">{plan.price}</span>
+                    <span className="text-sm font-bold text-slate-400">{plan.interval}</span>
+                  </div>
+
+                  <ul className="space-y-4 mb-8 text-slate-200 text-sm">
                     {plan.features.map(feature => (
-                      <li key={feature} className="flex items-start gap-3 font-bold text-[15px] leading-tight">
-                        <div className="w-5 h-5 mt-0.5 rounded-full bg-black/10 flex items-center justify-center shrink-0">
-                          <Check className="w-3 h-3 text-black" strokeWidth={4} />
+                      <li key={feature} className="flex items-center gap-3 font-medium">
+                        <div className="w-5 h-5 rounded-full bg-sky-400/20 border border-sky-400/40 flex items-center justify-center text-teal-300 shrink-0">
+                          <Check className="w-3.5 h-3.5" />
                         </div>
                         {feature}
                       </li>
@@ -119,62 +160,32 @@ export default function PricingPage() {
                   </ul>
                 </div>
 
-                <button 
+                <button
                   onClick={() => handleGetStarted(plan.name)}
-                  className="w-full py-4 text-lg font-black uppercase tracking-widest rounded-xl border-4 border-black hover:bg-black hover:text-white transition-all shadow-[6px_6px_0px_rgba(34,34,34,1)] hover:shadow-[10px_10px_0px_rgba(34,34,34,1)] hover:-translate-y-1 mt-auto text-center block"
-                  style={{ backgroundColor: plan.popular ? plan.color : 'white', color: plan.popular ? 'white' : 'black' }}
+                  className={`w-full py-4 text-xs font-extrabold uppercase tracking-widest rounded-full transition-all cursor-pointer shadow-lg hover:scale-105 ${
+                    plan.popular
+                      ? 'bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 text-slate-950 hover:from-sky-300 hover:to-emerald-300'
+                      : 'bg-slate-800/90 text-white border border-sky-400/30 hover:bg-slate-700'
+                  }`}
                 >
-                  Get Started
+                  {plan.cta}
                 </button>
               </motion.div>
             ))}
           </div>
 
-          <div className="max-w-4xl mx-auto mt-16 text-center p-8 lg:p-12 border-[6px] border-black rounded-[32px] bg-white shadow-[10px_10px_0px_rgba(34,34,34,1)]">
-            <h4 className="text-3xl font-black uppercase tracking-tighter text-black mb-4">Own Your Code</h4>
-            <p className="text-black/80 font-medium text-lg lg:text-xl leading-relaxed">
-              We don't hold your website hostage. After 1 year of continuous payments, you have the option to choose whether you want to stay with our managed services for ongoing support and hosting, or <span className="font-bold underline decoration-[3px] underline-offset-4" style={{ textDecorationColor: COLORS.orange }}>export your code entirely</span>. Once exported, the website is 100% yours to manage, host, and modify as you please. No hard feelings—we know things change, and we're still friends. We can even help you set up new hosting and configuration.
+          {/* Own Your Code Callout */}
+          <div className="max-w-4xl mx-auto mt-16 p-8 lg:p-12 rounded-3xl bg-slate-900/90 border border-sky-400/30 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-400/60 to-transparent" />
+            
+            <h4 className="text-2xl lg:text-3xl font-extrabold text-white mb-4">
+              Own Your Code
+            </h4>
+            <p className="text-slate-300 font-normal text-base leading-relaxed">
+              We don't hold your website hostage. After 1 year of continuous payments, you have the option to stay with our managed services for ongoing support and hosting, or export your code entirely to host anywhere you please.
             </p>
           </div>
 
-          <div className="mt-32 max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-black">
-                Optional <span style={{ color: COLORS.orange }}>Add-ons</span>
-              </h2>
-              <p className="text-xl text-black/80 font-medium max-w-2xl mx-auto mt-4">
-                Enhance your website with extra services tailored to your needs.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-              {[
-                { name: "SEO Optimization", price: "$200/mo", description: "Advanced on-page SEO and monthly reporting." },
-                { name: "Blog Management", price: "$300/mo", description: "2 SEO-optimized blog posts per month." },
-                { name: "Logo Design", price: "$400", description: "Custom logo design and branding guidelines." },
-                { name: "Custom Email Setup", price: "$50", description: "Professional email setup via Google Workspace." },
-                { name: "Extra Pages", price: "$150/page", description: "Need more than what's included? Add pages a la carte." },
-                { name: "Copywriting", price: "$200/page", description: "Professional copywriting to convert visitors into customers." },
-              ].map((addon, i) => (
-                <motion.div
-                  key={addon.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  whileHover={{ y: -4, x: -4, boxShadow: `10px 10px 0px ${COLORS.black}` }}
-                  className="p-8 border-[4px] lg:border-6 border-black rounded-[24px] bg-white transition-all cursor-default"
-                  style={{ boxShadow: `6px 6px 0px ${COLORS.black}` }}
-                >
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-2">
-                    <h4 className="text-2xl font-black uppercase tracking-tighter text-black">{addon.name}</h4>
-                    <span className="font-bold text-black border-[3px] border-black rounded-full px-4 py-1 text-sm bg-black/5 whitespace-nowrap self-start">{addon.price}</span>
-                  </div>
-                  <p className="text-black/60 font-medium">{addon.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
     </div>
