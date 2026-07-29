@@ -15,7 +15,7 @@ const PORTFOLIO_GRID = [
   { url: 'https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2071&auto=format&fit=crop', cat: 'Couples / Colorado', span: '' },
   { url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop', cat: 'Couples / Colorado', span: 'row-span-2' },
   { url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop', cat: 'Landscapes / Colorado', span: '' },
-  { url: 'https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop', cat: 'Portraits / Colorado', span: '' },
+  { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop', cat: 'Portraits / Colorado', span: '' },
 ];
 
 const TESTIMONIALS = [

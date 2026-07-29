@@ -1,144 +1,126 @@
-# Michaelfred Designs Agency — Code Guide
+# Michaelfred Designs — Agent & Contributor Guide
 
-## Overview
-This is a Next.js portfolio & website builder showcasing custom client sites. The site builder uses a **traditional flowing layout** — sections stack full-width from top to bottom, touching edge-to-edge, just like a standard website builder. Each site in `/src/app/work/[site-name]/` is built as a complete, multi-page Next.js app with its own layout, nav, and styling.
+This repo is a **WaaS SaaS platform**: a Next.js + Stripe + WordPress provisioning system that automatically builds and delivers client websites.
 
-## Layout & Styling Standards
+## What This Codebase Does
 
-### Traditional Flowing Layout (Default)
-The site builder and all sites use a **traditional flowing layout** — sections stack full-width from top to bottom, touching edge-to-edge. This matches standard website builders and is how all sites are displayed.
+1. **Sales funnel** (`/pricing` → Stripe checkout → `/welcome` intake)
+2. **Order management** (`/admin/orders` kanban board)
+3. **Automatic provisioning** (clone master Divi site on Cloudways per customer)
+4. **Portfolio showcase** (static hand-coded `/work` sites, not part of the product)
 
-**Implementation:**
-- Editor canvas (`BentoCanvas.tsx`): `flex flex-col gap-0` for stacked sections
-- Published sites (`BentoPublishedGrid.tsx`): `flex flex-col` for flowing vertical layout
-- Sections are full-width (`w-full`) with `height: auto`
-- No gaps or spacing between sections — they touch
-- Individual sections define their own internal padding/spacing
+## Key Systems
 
-**Pattern:**
-- Clean, continuous vertical flow
-- Each section is a complete, full-width block
-- Sections can have their own backgrounds, images, content
-- Users drag/drop sections to reorder in the flowing order
-- Matches how tools like Webflow, Wix, Squarespace work
+### 1. Subscription & Payment Flow
+- `src/lib/plans.ts` — pricing source of truth (3/5/10-page tiers + add-ons)
+- `src/app/pricing/page.tsx` — renders plans, CTAs call checkout
+- `src/app/api/checkout/plan/route.ts` — server-side pricing, Stripe session, DB insert
+- `src/app/api/webhooks/stripe/route.ts` — payment confirmation, activate order
 
-## Site Structure
+### 2. Intake Questionnaire
+- `src/app/welcome/page.tsx` — 14-field form after payment
+- `src/app/api/intake/route.ts` — saves questionnaire, renames WordPress site if ready
 
-Each site in `/src/app/work/` follows this pattern:
-```
-/work/site-name/
-  page.tsx              # Home page
-  layout.tsx            # Shared layout + footer
-  /services/page.tsx    # (optional)
-  /about/page.tsx       # (optional)
-  /reviews/page.tsx     # (optional)
-  /contact/page.tsx     # (optional)
-  /components/templates/[abbr]/Nav.tsx  # Site navigation
-```
+### 3. WordPress Provisioning
+- `src/lib/wordpress/` — state machine + host adapters
+  - `provider.ts` — host-agnostic interface
+  - `cloudways.ts` — Cloudways clone adapter
+  - `wpRest.ts` — WordPress REST API helpers
+  - `provision.ts` — resumable state machine (queued → cloning → configuring → ready)
+- `src/app/api/provision/run/route.ts` — cron worker (every 2 min)
+- `src/app/api/admin/provision/route.ts` — manual retry endpoint
 
-### Color Constants
-Define at the top of each page file:
-```tsx
-const BLUE = '#1B6EB5';
-const LIGHT = '#EBF4FF';
-```
+### 4. Orders Dashboard
+- `src/app/admin/orders/page.tsx` — kanban board over 6 order statuses
+- `src/app/api/admin/orders/route.ts` — fetch/update orders and notes
 
-Use inline `style={{ color: BLUE }}` rather than Tailwind color classes for brand colors.
+### 5. Email
+- `src/lib/email.ts` — transactional email helpers (Resend API)
+  - `welcomeSubscriberEmail()` — post-payment intake link
+  - `wordpressReadyEmail()` — credentials after provisioning
+  - `notifyIntakeCompleteEmail()` — admin alert
+  - `notifyProvisioningFailedEmail()` — admin alert on hard failure
 
-### Images
-- Use Next.js `Image` component with `fill` prop for full-width backgrounds
-- Always include `referrerPolicy="no-referrer"` for Unsplash URLs
-- Store screenshots in `/public/screenshots/`
+## Common Tasks & Where to Look
 
-### Icons & Accents
-- Use Lucide React icons
-- Import only what's needed
-- Remove unused imports to avoid lint hints
+| Task | Files |
+|---|---|
+| Change subscription prices | `src/lib/plans.ts` |
+| Adjust intake form fields | `src/app/welcome/page.tsx`, `src/app/api/intake/route.ts` |
+| Add a new order status | `src/app/admin/orders/page.tsx` (STAGES constant + state machine) |
+| Debug provisioning state | `src/lib/wordpress/provision.ts` + run `/api/provision/run` manually |
+| Add a second hosting provider | Write a new adapter in `src/lib/wordpress/[newhost].ts`, implement the `WordPressHost` interface |
+| Update WordPress credential email | `src/lib/email.ts` → `wordpressReadyEmail()` |
+| Check for stale references | Grep for deleted components: `SiteEditor`, `ClientSiteEditor`, `PublishWizardModal`, `tenants`, `/preview`, `/site`, `BentoCanvas`, `draftService` |
+| Update admin alerts | `src/lib/email.ts` → `notifyIntakeCompleteEmail()`, `notifyProvisioningFailedEmail()` |
+| Change provisioning retry count | `src/lib/wordpress/provision.ts` → `MAX_ATTEMPTS` |
+| Test provisioning locally | Set env vars, create a test order in the DB with `wp_status='queued'`, call `/api/provision/run?Authorization=Bearer {CRON_SECRET}` manually |
 
-### Styling Approach
-- Tailwind CSS for layout and spacing
-- Inline `style={}` for brand color variables (defined at top)
-- No magic numbers — use consistent spacing (px-6, py-20, gap-8, etc.)
-- Mobile-first: `grid-cols-2 md:grid-cols-4` pattern
+## Database Schema
 
-## Recent Projects
+**Main table:** `website_subscriptions`
 
-### Paws & Pamper (Complete)
-- 5-page site: home, services, about, reviews, contact
-- Blue/white professional grooming brand (`BLUE = '#1B6EB5'`, `LIGHT = '#EBF4FF'`)
-- All pages rebuilt in flowing layout with consistent color palette
+- `status`: pending_payment → active → intake_complete → building → live → cancelled
+- `wp_status`: queued → cloning → configuring → ready (or failed)
+- All WordPress columns (`wp_*`) are NULL until `wp_status` reaches 'ready'
+- `intake` (JSONB): customer answers from `/api/intake`, only populated after they complete the form
 
-### Sterling Law Group (Complete)
-- Cinematic hero + trust strip + editorial layout
-- Dark luxury aesthetic (`BG = '#09090B'`, `GOLD = '#C9A84C'`)
+## Deleted Components (Don't Re-Add)
 
-## Screenshots
-- Run `npm run screenshot` to capture all work pages
-- Updates `/public/screenshots/*.jpg`
-- Automatically referenced in dashboard & onboarding preview cards
+These are the page builder and related infrastructure, deleted 2026-07-28:
+- `src/components/SiteEditor.tsx`, `BentoCanvas.tsx`, `AdminSiteEditorClient.tsx`, etc.
+- `src/lib/blocks/` contains only **portfolio block families** (for `/work` showcase); it's not part of the WaaS product
+- `src/app/tenants/`, `src/app/site/`, `src/app/preview/`, `src/app/admin/editor/`
+- `/api/site`, `/api/admin/sites` routes
+- `draftService.ts`, `undoRedoStore.ts`
+- Bento cluster (`BentoPreviewRenderer`, `bentoStore`, etc.)
 
-## Page Builder Block System
+**Why they're gone:** The WaaS model uses WordPress (Divi) as the client editor, not an in-app page builder. The portfolio still uses the block system for showcase sites, but that's separate from the product.
 
-### Block Component Structure
-Blocks are reusable Next.js components that live in `/src/lib/blocks/[category]/`. Each block exports:
+## Environment & Secrets
 
-1. **Component** — The React functional component
-2. **schema** — Props interface (tells the editor what fields to show)
-3. **defaultProps** — Pre-filled starting values
-4. **presets** — 3-5 style variations (light/dark/bold)
-5. **category** — 'hero', 'content', 'cta', 'form', 'social', 'footer', etc.
+**Critical:** These must be set in Vercel for production (and `.env.local` for dev):
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+- `CLOUDWAYS_EMAIL`, `CLOUDWAYS_API_KEY`, `CLOUDWAYS_SERVER_ID`, `CLOUDWAYS_MASTER_APP_ID`
+- `WP_MASTER_ADMIN_USER`, `WP_MASTER_APP_PASSWORD`
+- `RESEND_API_KEY`
+- `CRON_SECRET`
 
-**Example:**
+Never commit secrets. Never log passwords (they're sensitive customer data).
+
+## Testing
+
+1. **Checkout flow:** Use Stripe test card `4242 4242 4242 4242`, $30/$50/$100 amounts
+2. **Provisioning:** After checkout, watch `/admin/orders` → site should progress through statuses
+3. **Manual cron:** Call `/api/provision/run?Authorization=Bearer {CRON_SECRET}` to trigger a step (no auth check in dev, so `?Authorization=dummy` works)
+4. **State machine:** Edit a row in `website_subscriptions` to `wp_status='queued'` to replay provisioning for an order
+
+## Architecture Notes
+
+- **No multi-tenancy in WordPress:** Each customer gets their own cloned site on Cloudways. They log in to their WordPress dashboard directly, not through this app.
+- **Idempotent provisioning:** Every step of the state machine can be retried safely. If a Cloudways API call times out, the next cron tick resumes.
+- **Stripe webhook is not a bottleneck:** We upsert immediately, but defer cloning to cron so Stripe never times out. This is why `wp_status` defaults to 'queued'.
+- **Email is best-effort:** All email sends have `.catch(() => {})` so a mail failure can't fail the webhook or the provisioning step.
+- **Host abstraction:** The `WordPressHost` interface allows swapping Cloudways for GridPane, RunCloud, or Hetzner + custom scripts without touching the state machine.
+
+## Deployment
+
+- **Cron:** `vercel.json` registers `/api/provision/run` to run every 2 minutes. Hobby plan may not run it; upgrade to Pro or use the manual button.
+- **Env:** Add all secrets to Vercel's Project Settings → Environment Variables.
+- **Webhook:** Configure Stripe webhook to post to `/api/webhooks/stripe` and subscribe to `checkout.session.completed`.
+- **Database:** Both migration files must be run before the first order.
+
+## Future: Multi-Host Support
+
+To add a new host (e.g., GridPane), create `src/lib/wordpress/gridpane.ts`:
+
 ```typescript
-// src/lib/blocks/hero/HeroImageLeft.tsx
-export const HeroImageLeft = ({ title, subtitle, image, cta, bgColor }) => (...)
-
-export const schema = {
-  title: { type: 'text', label: 'Headline', required: true },
-  subtitle: { type: 'textarea', label: 'Subheading' },
-  image: { type: 'image', label: 'Hero Image' },
-  cta: { type: 'text', label: 'Button Text' },
-  bgColor: { type: 'color', label: 'Background' },
+export class GridpaneHost implements WordPressHost {
+  readonly name = 'gridpane';
+  async cloneMaster(label: string): Promise<CloneHandle> { ... }
+  async getOperation(operationId: string): Promise<OperationStatus> { ... }
+  async findApp(opts: { ... }): Promise<HostedApp | null> { ... }
 }
-
-export const defaultProps = {
-  title: 'Your Headline Here',
-  subtitle: 'Short subheading',
-  cta: 'Get Started',
-  bgColor: '#ffffff',
-}
-
-export const presets = [
-  { name: 'Light', values: { bgColor: '#fff', ... } },
-  { name: 'Dark', values: { bgColor: '#1a1a1a', ... } },
-]
 ```
 
-### Block Registry
-- `/src/lib/blockRegistry.ts` catalogs all blocks by category
-- Auto-discovered from directory structure
-- Enables block library UI and drag-drop
-
-### Field Types Supported
-- `text` — Single-line text input
-- `textarea` — Multi-line text with formatting
-- `color` — Color picker
-- `image` — Image upload + Unsplash integration
-- `select` — Dropdown options
-- `number` — Number input (spacing, sizes)
-- `url` — Link input
-- `toggle` — Boolean checkbox
-- `richtext` — HTML editor
-
-### Designer Tips
-- Keep props minimal (< 8 props per block)
-- Use TailwindCSS for styling
-- Make blocks responsive by default
-- Add helpful placeholder text
-- Use consistent spacing/colors
-
-## Notes
-- Keep sections continuous and connected — no floating cards by default
-- Traditional flowing layout is the standard
-- Each site should feel like a complete, professional website, not a collection of isolated components
-- See `PAGE_BUILDER_PLAN.md` for detailed architecture and roadmap
+Then pass it to `advanceOne(new GridpaneHost())` when ready. The rest of the pipeline is unchanged.

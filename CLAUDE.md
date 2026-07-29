@@ -1,154 +1,209 @@
 # Michaelfred Designs Agency — Code Guide
 
 ## Overview
-This is a Next.js web-design agency platform. **The designer hand-codes each client site in code; clients get a simple on-canvas editor for text and images only** (Payload-CMS-like, Elementor-style inline editing). There is no client-facing drag-drop page builder anymore. Each showcase site in `/src/app/work/[site-name]/` is a complete, multi-page Next.js app with its own layout, nav, and styling, using a **traditional flowing layout** — sections stack full-width top to bottom, edge-to-edge.
 
-## Code-First Client Site Workflow (THE core architecture)
+This is a **WaaS (Websites as a Service) SaaS platform**: customers subscribe to page counts ($30–$100/mo), get WordPress + Divi sites automatically provisioned on Cloudways, and receive a client dashboard for text/image edits.
 
-1. **Design in code**: build the site as a block family in `src/lib/blocks/<family>.tsx` following the `voltvikings.tsx` pattern — exported section components that accept `isEditable` / `onPropChange` props (wire `EditableText` for inline text), plus `*_SCHEMAS` (field metadata: `name`/`label`/`type: 'text'|'textarea'|'image'|...` + `defaultProps`) and `*_RENDERERS` exports, registered in `src/lib/blocks.tsx` (`ComponentType` union, `COMPONENT_SCHEMAS`, `Renderers`).
-2. **Register the template**: add a `TEMPLATES.<key>` section array and (for multi-page) `TEMPLATE_PAGES.<key>` entry in `src/lib/templates.ts`; add catalog metadata (name/screenshot) in `src/lib/templateCatalog.ts`. The showcase page under `/work/` should be a one-liner: `<TemplatePageRenderer templateKey="<key>" />`.
-3. **Assign to a client**: Admin CRM (`/admin/clients` → user drawer → Sites tab → "Assign New Site") calls `POST /api/admin/client` (`action: 'create'` with `owner_id` + `template_key`), which deep-clones the template's pages into `sites_data` rows for a new tenant.
-4. **Client edits**: `/dashboard` opens `src/components/dashboard/ClientSiteEditor.tsx` for tenant-backed sites — click text to edit inline, click images to swap (upload via `POST /api/upload` → Supabase Storage `site-images` bucket, or stock search). Saves go through `PATCH /api/site/[tenantId]`, which **enforces text/image-only server-side** (merges only string props; structure is immutable from the client side).
-5. **Live rendering**: unchanged — `tenants` + `sites_data` rendered by `/tenants/[domain]/[[...slug]]` via middleware subdomain/custom-domain rewrites.
+The only code-driven sites in the repo are **portfolio/showcase projects** in `/src/app/work/` — these use a Next.js block system and are NOT part of the product.
 
-**Deprecated (do not invest in):** the drag-drop `SiteEditor.tsx` (still used for local-only drafts, pending removal), `draftService.ts`/`drafts` table, `undoRedoStore.ts`, the Bento chain (except the `BentoPublishedGrid` legacy fallback in the tenant route).
+## Architecture: WaaS Subscription → WordPress Provisioning
 
-## Layout & Styling Standards
-
-### Traditional Flowing Layout (Default)
-The site builder and all sites use a **traditional flowing layout** — sections stack full-width from top to bottom, touching edge-to-edge. This matches standard website builders and is how all sites are displayed.
-
-**Implementation:**
-- Editor canvas (`BentoCanvas.tsx`): `flex flex-col gap-0` for stacked sections
-- Published sites (`BentoPublishedGrid.tsx`): `flex flex-col` for flowing vertical layout
-- Sections are full-width (`w-full`) with `height: auto`
-- No gaps or spacing between sections — they touch
-- Individual sections define their own internal padding/spacing
-
-**Pattern:**
-- Clean, continuous vertical flow
-- Each section is a complete, full-width block
-- Sections can have their own backgrounds, images, content
-- Users drag/drop sections to reorder in the flowing order
-- Matches how tools like Webflow, Wix, Squarespace work
-
-## Site Structure
-
-Each site in `/src/app/work/` follows this pattern:
 ```
-/work/site-name/
-  page.tsx              # Home page
-  layout.tsx            # Shared layout + footer
-  /services/page.tsx    # (optional)
-  /about/page.tsx       # (optional)
-  /reviews/page.tsx     # (optional)
-  /contact/page.tsx     # (optional)
-  /components/templates/[abbr]/Nav.tsx  # Site navigation
+/pricing
+    ↓ Stripe subscription
+/api/checkout/plan
+    ↓ session → webhook
+/api/webhooks/stripe (checkout.session.completed)
+    ↓ create order row with wp_status='queued'
+/api/provision/run (cron: every 2 min, or manual button)
+    ↓ state machine: queued → cloning → configuring → ready
+Cloudways API
+    ↓ clone master Divi site
+WordPress REST API
+    ↓ create client admin account, set site title
+/api/intake
+    ↓ 14-field questionnaire after payment
+/admin/orders
+    ↓ kanban board: track 6 statuses, retry failed sites
 ```
 
-### Color Constants
-Define at the top of each page file:
-```tsx
-const BLUE = '#1B6EB5';
-const LIGHT = '#EBF4FF';
+## Subscription & Payment
+
+**Files:**
+- `src/lib/plans.ts` — **single source of truth** for pricing (3-page/$30, 5-page/$50, 10-page/$100, add-ons)
+- `src/app/pricing/page.tsx` — renders from `PLANS`, CTAs call `/api/checkout/plan`
+- `src/app/api/checkout/plan/route.ts` — prices server-side (never from request body), creates Stripe Checkout session, writes `website_subscriptions` row with `wp_status='queued'` and `status='pending_payment'`
+
+**Security:** The server prices from `plans.ts` and ignores price data in the request, so clients cannot tamper.
+
+## Stripe Webhook & Order Activation
+
+**File:** `src/app/api/webhooks/stripe/route.ts`
+
+On `checkout.session.completed`:
+- Upserts `website_subscriptions` row (idempotent on `stripe_session_id`)
+- Sets `status='active'` (payment confirmed)
+- Sends welcome email with `/welcome?session_id=...` intake link
+- `wp_status` stays `'queued'` — provisioning is not inline
+
+## Intake Questionnaire
+
+**File:** `src/app/api/intake/route.ts` + `src/app/welcome/page.tsx`
+
+After payment, the customer fills a 14-field form:
+- Business name, contact info, phone
+- Industry, what they do, target customers
+- Brand colors, logo, existing site, inspiration sites
+- Domain name, social links, add-ons of interest, anything else
+
+`POST /api/intake` saves to `website_subscriptions.intake` (JSONB), sets `status='intake_complete'`, and renames the WordPress site if provisioning is already done.
+
+## Automatic WordPress Provisioning
+
+**Files:**
+- `src/lib/wordpress/provider.ts` — host-agnostic interface (cloning is abstraction over Cloudways/GridPane/RunCloud)
+- `src/lib/wordpress/cloudways.ts` — Cloudways adapter
+- `src/lib/wordpress/wpRest.ts` — WordPress REST calls (create admin, set title)
+- `src/lib/wordpress/provision.ts` — resumable state machine
+- `src/app/api/provision/run/route.ts` — cron endpoint (`/api/provision/run`, fired by Vercel every 2 min)
+- `src/app/api/admin/provision/route.ts` — manual retry button for `/admin/orders`
+
+**How it works:**
+
+1. **Queued** — order created, waiting to clone
+2. **Cloning** — API call to Cloudways to clone the master Divi site (takes ~1–3 min); polling the operation
+3. **Configuring** — clone finished, liveness check (newly cloned WP can 502 briefly), create client admin account via WordPress REST, set site title, send credentials email
+4. **Ready** — site is live, client has login, admin is notified of intake
+
+**Why not inline?** Cloning takes minutes. A Stripe webhook can't block that long without timing out and causing retries on a successful payment. Instead, the webhook marks the order paid, and a cron task drives the state machine one step per tick.
+
+**Idempotency:** Every step is safe to retry. If a tick crashes mid-step, the next tick picks up where it left off.
+
+**Failure handling:** After 10 retries, the order moves to `status='failed'` and admin gets an email.
+
+## Orders Dashboard
+
+**File:** `src/app/admin/orders/page.tsx` + `src/app/api/admin/orders/route.ts`
+
+Kanban board over 6 statuses:
+- `pending_payment` — checkout started, not completed (abandoned checkout follow-up)
+- `active` — paid, awaiting intake
+- `intake_complete` — questionnaire done, ready to build
+- `building` — in progress
+- `live` — deployed
+- `cancelled` — terminated
+
+Each card shows:
+- Customer name (from intake.businessName or email)
+- Plan name + MRR
+- WordPress site URL + admin login (if provisioned)
+- Intake answers in a detail drawer
+- Status dropdown
+- Notes (saved on blur)
+- Retry button (for failed provisioning)
+
+**MRR total** in the header (sum of `active`, `intake_complete`, `building`, `live` orders).
+
+## Environment Variables
+
+```bash
+# Stripe
+STRIPE_SECRET_KEY=sk_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Cloudways provisioning
+CLOUDWAYS_EMAIL=you@example.com
+CLOUDWAYS_API_KEY=...
+CLOUDWAYS_SERVER_ID=...          # run: npm run cloudways:ids
+CLOUDWAYS_MASTER_APP_ID=...      # (same command)
+
+# WordPress master site
+WP_MASTER_ADMIN_USER=admin
+WP_MASTER_APP_PASSWORD=...       # Application Password from Users → Profile
+
+# Transactional email
+RESEND_API_KEY=re_...
+EMAIL_FROM_ADDRESS=Michaelfred Designs <notifications@michaelfreddesigns.com>
+
+# Cron security
+CRON_SECRET=...                  # any long random string; sent by Vercel Cron in Authorization header
+
+# Public/admin URLs
+NEXT_PUBLIC_SITE_URL=https://www.michaelfreddesigns.com
+ADMIN_EMAILS=you@example.com     # comma-separated; for admin alerts
 ```
 
-Use inline `style={{ color: BLUE }}` rather than Tailwind color classes for brand colors.
+## Portfolio (Legacy Block System)
 
-### Images
-- Use Next.js `Image` component with `fill` prop for full-width backgrounds
-- Always include `referrerPolicy="no-referrer"` for Unsplash URLs
-- Store screenshots in `/public/screenshots/`
+**Files:**
+- `src/lib/blocks/` — 27 block families (brighter-solar, easydoesit, voltvikings, etc.), each with `.tsx` component and `.schemas.ts` metadata
+- `src/lib/templates.ts` — catalog of 27 TEMPLATES (section arrays) and TEMPLATE_PAGES (multi-page layouts)
+- `src/lib/templateCatalog.ts` — metadata (name, screenshot URL) for dashboard preview
+- `src/app/work/[site-name]/` — ~17 showcase sites, most rendering via `<TemplatePageRenderer templateKey="..." />`
 
-### Icons & Accents
-- Use Lucide React icons
-- Import only what's needed
-- Remove unused imports to avoid lint hints
+**Why it survives:** The portfolio is your proof of work. It's static, hand-coded, deployed with the app. Clients never interact with it.
 
-### Styling Approach
-- Tailwind CSS for layout and spacing
-- Inline `style={}` for brand color variables (defined at top)
-- No magic numbers — use consistent spacing (px-6, py-20, gap-8, etc.)
-- Mobile-first: `grid-cols-2 md:grid-cols-4` pattern
+**Why it's kept separate:** The block system was designed for a page builder that we deleted. The portfolio is the only artifact from that era still in use. It's safe to leave as-is because:
+1. Changes to it don't affect the product
+2. Removing it would blank your showcase
+3. It's not deployed to clients
 
-## Recent Projects
+If you later rebuild the showcase in WordPress, you can delete `src/lib/blocks/` and `src/lib/templates.ts` entirely.
 
-### Paws & Pamper (Complete)
-- 5-page site: home, services, about, reviews, contact
-- Blue/white professional grooming brand (`BLUE = '#1B6EB5'`, `LIGHT = '#EBF4FF'`)
-- All pages rebuilt in flowing layout with consistent color palette
+## Database
 
-### Sterling Law Group (Complete)
-- Cinematic hero + trust strip + editorial layout
-- Dark luxury aesthetic (`BG = '#09090B'`, `GOLD = '#C9A84C'`)
+**Table:** `website_subscriptions` (Supabase)
 
-## Screenshots
-- Run `npm run screenshot` to capture all work pages
-- Updates `/public/screenshots/*.jpg`
-- Automatically referenced in dashboard & onboarding preview cards
+Columns:
+- `id` (UUID)
+- `stripe_session_id` (UNIQUE, UNIQUE)
+- `stripe_subscription_id` (Stripe sub ID after activation)
+- `stripe_customer_id` (Stripe customer ID)
+- `customer_email`, `customer_name` (from Stripe checkout)
+- `plan_id`, `plan_name`, `monthly_cents` (from `src/lib/plans.ts`)
+- `status` (pending_payment | active | intake_complete | building | live | cancelled)
+- `intake` (JSONB, 14 fields from form)
+- `intake_completed_at` (when /api/intake succeeded)
+- `tenant_id` (legacy, unused — WordPress doesn't use tenants)
+- `internal_notes` (admin can edit)
+- **WordPress provisioning columns:**
+  - `wp_status` (queued | cloning | configuring | ready | failed | skipped)
+  - `wp_server_id`, `wp_app_id`, `wp_app_label` (Cloudways IDs)
+  - `wp_operation_id` (clone job ID while polling)
+  - `wp_url`, `wp_admin_url` (public site + login after ready)
+  - `wp_admin_user`, `wp_admin_password` (client's login, for the email)
+  - `wp_error` (last error message if failed)
+  - `wp_attempts`, `wp_last_attempt_at` (retry accounting)
+  - `wp_provisioned_at` (timestamp when state reached 'ready')
 
-## Page Builder Block System
+**RLS:** enabled with **zero policies** (all access via service-role key behind admin auth check).
 
-### Block Component Structure
-Blocks are reusable Next.js components that live in `/src/lib/blocks/[category]/`. Each block exports:
+## Deprecated (Deleted)
 
-1. **Component** — The React functional component
-2. **schema** — Props interface (tells the editor what fields to show)
-3. **defaultProps** — Pre-filled starting values
-4. **presets** — 3-5 style variations (light/dark/bold)
-5. **category** — 'hero', 'content', 'cta', 'form', 'social', 'footer', etc.
+- `SiteEditor.tsx` — drag-drop page builder component
+- `ClientSiteEditor.tsx` — client text/image editor (replaced by WordPress dashboard)
+- `/app/tenants` — multi-tenant rendering (clients don't visit this; they go to their WordPress site)
+- `/app/site` — local dev rendering
+- `/app/preview` — draft preview
+- `/app/admin/editor` — admin site builder
+- `/api/site` — tenant site API
+- `/api/admin/sites` — admin sites API
+- `draftService.ts`, `undoRedoStore.ts` — editor state management
+- Bento cluster — `BentoCanvas`, `BentoPreviewRenderer`, `bentoStore`, etc.
 
-**Example:**
-```typescript
-// src/lib/blocks/hero/HeroImageLeft.tsx
-export const HeroImageLeft = ({ title, subtitle, image, cta, bgColor }) => (...)
+None of these are used by the product anymore.
 
-export const schema = {
-  title: { type: 'text', label: 'Headline', required: true },
-  subtitle: { type: 'textarea', label: 'Subheading' },
-  image: { type: 'image', label: 'Hero Image' },
-  cta: { type: 'text', label: 'Button Text' },
-  bgColor: { type: 'color', label: 'Background' },
-}
+## Vercel Configuration
 
-export const defaultProps = {
-  title: 'Your Headline Here',
-  subtitle: 'Short subheading',
-  cta: 'Get Started',
-  bgColor: '#ffffff',
-}
+**File:** `vercel.json`
 
-export const presets = [
-  { name: 'Light', values: { bgColor: '#fff', ... } },
-  { name: 'Dark', values: { bgColor: '#1a1a1a', ... } },
-]
-```
+Registers a cron job that calls `/api/provision/run` every 2 minutes. On the Hobby plan this may not fire at all; upgrade to Pro or use the manual button in `/admin/orders`.
 
-### Block Registry
-- `/src/lib/blockRegistry.ts` catalogs all blocks by category
-- Auto-discovered from directory structure
-- Enables block library UI and drag-drop
+## Getting Started
 
-### Field Types Supported
-- `text` — Single-line text input
-- `textarea` — Multi-line text with formatting
-- `color` — Color picker
-- `image` — Image upload + Unsplash integration
-- `select` — Dropdown options
-- `number` — Number input (spacing, sizes)
-- `url` — Link input
-- `toggle` — Boolean checkbox
-- `richtext` — HTML editor
-
-### Designer Tips
-- Keep props minimal (< 8 props per block)
-- Use TailwindCSS for styling
-- Make blocks responsive by default
-- Add helpful placeholder text
-- Use consistent spacing/colors
-
-## Notes
-- Keep sections continuous and connected — no floating cards by default
-- Traditional flowing layout is the standard
-- Each site should feel like a complete, professional website, not a collection of isolated components
-- See `PAGE_BUILDER_PLAN.md` for detailed architecture and roadmap
+1. Run `supabase/WEBSITE_SUBSCRIPTIONS.sql` + `supabase/WORDPRESS_PROVISIONING.sql` in the SQL Editor.
+2. Set all env vars (above).
+3. Build a master Divi site on Cloudways (your 5-page template).
+4. Run `npm run cloudways:ids` to find your server and app IDs.
+5. Test with Stripe test card in `/pricing`.
+6. Watch `/admin/orders` as the provisioning state machine runs.

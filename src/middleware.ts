@@ -15,7 +15,7 @@ const AGENCY_PATHS = [
   '/dashboard',
   '/admin',
   '/login',
-  '/onboarding',
+  '/welcome',
   '/services',
   '/pricing',
   '/process',

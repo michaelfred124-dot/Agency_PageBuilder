@@ -64,198 +64,15 @@ import {
   YAxis,
   Tooltip
 } from 'recharts';
-import SiteEditor from '@/components/SiteEditor';
-import ClientSiteEditor from '@/components/dashboard/ClientSiteEditor';
+import ClientIntake from '@/components/dashboard/ClientIntake';
 import StoreManager from '@/components/dashboard/StoreManager';
 import { TEMPLATES, TEMPLATE_PAGES } from '@/lib/templates';
 import DomainManagerModal from '@/components/DomainManagerModal';
 import DomainManager from '@/components/DomainManager';
 import PricingModal from '@/components/PricingModal';
-import PublishWizardModal from '@/components/PublishWizardModal';
 import { getSupabaseBrowserClient } from '@/lib/supabase';
 
-const MY_SITES = [
-  {
-    id: 'template-easy-does-it',
-    name: 'Easy Does It Detailing',
-    url: 'easydoesitdetail.com',
-    previewUrl: '/preview/template-easy-does-it',
-    status: 'Template',
-    image: '/screenshots/easy-does-it.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'easy_does_it'
-  },
-  {
-    id: 'template-lauren-wilson',
-    name: 'Lauren Wilson Photo',
-    url: 'laurenwilsonphoto.com',
-    previewUrl: '/preview/template-lauren-wilson',
-    status: 'Template',
-    image: '/screenshots/lauren-wilson.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'lauren'
-  },
-  {
-    id: 'template-greenscape-landscaping',
-    name: 'Greenscape Landscaping',
-    url: 'greenscapelandscaping.com',
-    previewUrl: '/preview/template-greenscape-landscaping',
-    status: 'Template',
-    image: '/screenshots/greenscape-landscaping.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'greenscape'
-  },
-  {
-    id: 'template-northwood-coffee',
-    name: 'Northwood Coffee Co.',
-    url: 'northwoodcoffee.com',
-    previewUrl: '/preview/template-northwood-coffee',
-    status: 'Template',
-    image: '/screenshots/northwood-coffee.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'northwood'
-  },
-  {
-    id: 'template-brighter-solar',
-    name: 'Brighter Solar',
-    url: 'brightersolarcleaning.com',
-    previewUrl: '/preview/template-brighter-solar',
-    status: 'Template',
-    image: '/screenshots/brighter-solar.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'brighter_solar'
-  },
-  {
-    id: 'template-volt-vikings',
-    name: 'Volt Vikings',
-    url: 'voltvikings.com',
-    previewUrl: '/preview/template-volt-vikings',
-    status: 'Template',
-    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400&auto=format&fit=crop',
-    lastUpdate: 'Just now',
-    templateKey: 'voltvikings'
-  },
-  {
-    id: 'template-sterling-law',
-    name: 'Sterling Law Group',
-    url: 'sterlinglawgroup.com',
-    previewUrl: '/preview/template-sterling-law',
-    status: 'Template',
-    image: '/screenshots/sterling-law.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'law_firm'
-  },
-  {
-    id: 'template-ridge-line-auto',
-    name: 'Ridge Line Auto Service',
-    url: 'ridgelineauto.com',
-    previewUrl: '/preview/template-ridge-line-auto',
-    status: 'Template',
-    image: '/screenshots/ridge-line-auto.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'auto_repair'
-  },
-  {
-    id: 'template-atelier-hair',
-    name: 'Atelier Hair Studio',
-    url: 'atelierhair.com',
-    previewUrl: '/preview/template-atelier-hair',
-    status: 'Template',
-    image: '/screenshots/atelier-hair.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'hair_salon'
-  },
-  {
-    id: 'template-meridian-properties',
-    name: 'Meridian Properties',
-    url: 'meridianproperties.com',
-    previewUrl: '/preview/template-meridian-properties',
-    status: 'Template',
-    image: '/screenshots/meridian-properties.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'real_estate'
-  },
-  {
-    id: 'template-iron-edge-fitness',
-    name: 'Iron Edge Fitness',
-    url: 'ironedgefitness.com',
-    previewUrl: '/preview/template-iron-edge-fitness',
-    status: 'Template',
-    image: '/screenshots/iron-edge-fitness.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'personal_trainer'
-  },
-  {
-    id: 'template-clarity-dental',
-    name: 'Clarity Dental Studio',
-    url: 'claritydental.com',
-    previewUrl: '/preview/template-clarity-dental',
-    status: 'Template',
-    image: '/screenshots/clarity-dental.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'dental'
-  },
-  {
-    id: 'template-paws-pamper',
-    name: 'Paws & Pamper Pet Spa',
-    url: 'pawsandpamper.com',
-    previewUrl: '/preview/template-paws-pamper',
-    status: 'Template',
-    image: '/screenshots/paws-pamper.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'dog_grooming'
-  },
-  {
-    id: 'template-golden-thread',
-    name: 'The Golden Thread Events',
-    url: 'goldenthreadevents.com',
-    previewUrl: '/preview/template-golden-thread',
-    status: 'Template',
-    image: '/screenshots/golden-thread.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'wedding_planner'
-  },
-  {
-    id: 'template-spotless-home',
-    name: 'Spotless Home Co.',
-    url: 'spotlesshomeco.com',
-    previewUrl: '/preview/template-spotless-home',
-    status: 'Template',
-    image: '/screenshots/spotless-home.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'home_cleaning'
-  },
-  {
-    id: 'template-solstice-yoga',
-    name: 'Solstice Yoga & Wellness',
-    url: 'solsticeyoga.com',
-    previewUrl: '/preview/template-solstice-yoga',
-    status: 'Template',
-    image: '/screenshots/solstice-yoga.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'yoga_studio'
-  },
-  {
-    id: 'template-valley-prohome',
-    name: 'Valley ProHome Services',
-    url: 'valleyprohome.com',
-    previewUrl: '/preview/template-valley-prohome',
-    status: 'Template',
-    image: '/screenshots/valley-prohome.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'prohome_services'
-  },
-  {
-    id: 'template-maison-boutique',
-    name: 'Maison Boutique',
-    url: 'maisonboutique.com',
-    previewUrl: '/preview/template-maison-boutique',
-    status: 'Template',
-    image: '/screenshots/maison-boutique.jpg',
-    lastUpdate: 'Just now',
-    templateKey: 'maison_boutique'
-  }
-];
+const MY_SITES: any[] = [];
 
 const ANALYTICS_DATA = [
   { name: 'Mon', views: 400, visitors: 240 },
@@ -333,11 +150,10 @@ export default function DashboardLayout() {
   const [callTime, setCallTime] = useState('Morning (9am - 12pm)');
   const [callReason, setCallReason] = useState('');
   const [callStatusMsg, setCallStatusMsg] = useState('');
-  const [isUpgrading, setIsUpgrading] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Tier-Based Onboarding States
-  const [selectedPlanTier, setSelectedPlanTier] = useState<'DIY' | 'DFY'>('DIY'); // DIY = $20/mo, DFY = Agency Managed
+  // Legacy self-serve onboarding modal state. Nothing sets onboardingStep above
+  // 0 any more — clients now go through ClientIntake on the Overview instead.
   const [onboardingTemplateKey, setOnboardingTemplateKey] = useState<string | null>(null);
   const [onboardingStep, setOnboardingStep] = useState<number>(0); // 0 = closed, 1 = name/tagline, 2 = contact/logo, 3 = generating
   const [onboardingAnswers, setOnboardingAnswers] = useState({
@@ -367,8 +183,13 @@ export default function DashboardLayout() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const paid = localStorage.getItem('diy_plan_paid') === 'true';
-      setIsOnboardedPaid(paid);
+      const paid = localStorage.getItem('diy_plan_paid');
+      if (paid !== null) {
+        setIsOnboardedPaid(paid === 'true');
+      } else {
+        setIsOnboardedPaid(true);
+        localStorage.setItem('diy_plan_paid', 'true');
+      }
 
       const savedPhase = localStorage.getItem('dfy_active_phase');
       if (savedPhase) setDfyActivePhase(parseInt(savedPhase));
@@ -386,6 +207,7 @@ export default function DashboardLayout() {
 
       const savedSignoff = localStorage.getItem('dfy_final_signoff');
       if (savedSignoff) setDfyFinalSignoff(savedSignoff === 'true');
+
     }
   }, []);
 
@@ -540,41 +362,6 @@ export default function DashboardLayout() {
       }
     }
   }, [user, router]);
-
-  // Handle checkout success and provision new site
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const checkoutSuccess = params.get('checkout_success');
-    const submissionId = params.get('submission');
-    const tier = params.get('tier');
-    const template = params.get('template');
-
-    if (checkoutSuccess && submissionId && tier) {
-      const provisionSite = async () => {
-        try {
-          const res = await fetch('/api/provision-site', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              tier,
-              templateKey: template || 'restaurant',
-              submissionId,
-            }),
-          });
-          const data = await res.json();
-          if (data.success) {
-            // Refresh sites list and edit the new one
-            window.location.href = '/dashboard';
-          } else {
-            console.error('Provision failed:', data.error);
-          }
-        } catch (err) {
-          console.error('Error provisioning site:', err);
-        }
-      };
-      provisionSite();
-    }
-  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -1016,242 +803,6 @@ export default function DashboardLayout() {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  if (editingSite) {
-    // Sites backed by a real tenant (designed by the agency, assigned to this
-    // client) open the simple on-canvas editor: text + image edits only.
-    // Structure and layout stay locked to the designer's work.
-    if (editingSite.tenantId) {
-      return (
-        <ClientSiteEditor
-          tenantId={editingSite.tenantId}
-          onBack={() => setEditingSite(null)}
-        />
-      );
-    }
-
-    let initialSections = TEMPLATES.blank;
-    let initialPages = undefined;
-    let initialTheme = null;
-    
-    if (typeof window !== 'undefined') {
-      const savedPages = localStorage.getItem(`site-pages-${editingSite.id}`);
-      const savedSections = localStorage.getItem(`site-sections-${editingSite.id}`);
-      const savedTheme = localStorage.getItem(`site-theme-${editingSite.id}`);
-      
-      if (savedPages) {
-        try {
-          initialPages = JSON.parse(savedPages);
-        } catch(e) {
-          console.error(e);
-        }
-      } else if (savedSections) {
-        try {
-          initialSections = JSON.parse(savedSections);
-        } catch (e) {
-          console.error(e);
-        }
-      } else if (editingSite.aiSections) {
-        initialPages = [
-          {
-            id: 'home',
-            name: 'Home',
-            slug: '/',
-            sections: editingSite.aiSections
-          }
-        ];
-        if (editingSite.aiTheme) {
-          initialTheme = editingSite.aiTheme;
-        }
-      } else if (editingSite.templateKey && TEMPLATE_PAGES[editingSite.templateKey]) {
-        const defaultPages = TEMPLATE_PAGES[editingSite.templateKey];
-        initialPages = defaultPages.map(p => ({
-          id: p.slug === '/' ? 'home' : `page-${p.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
-          name: p.name,
-          slug: p.slug,
-          sections: p.sections.map(s => ({
-            ...s,
-            id: `item-${s.type.toLowerCase()}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`
-          }))
-        }));
-      } else if (editingSite.templateKey && TEMPLATES[editingSite.templateKey]) {
-        initialSections = TEMPLATES[editingSite.templateKey];
-      }
-      
-      if (savedTheme && !initialTheme) {
-        try {
-          initialTheme = JSON.parse(savedTheme);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    } else if (editingSite.templateKey && TEMPLATES[editingSite.templateKey]) {
-      initialSections = TEMPLATES[editingSite.templateKey];
-    }
-
-    const handlePublishSite = async (pages: any, theme: any, skipDomainModal: boolean = false) => {
-      const existingSubdomain = editingSite.subdomain || '';
-      const subdomain = existingSubdomain || editingSite.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-
-      try {
-        let tenantData: any = null;
-        let liveUrl = '';
-        let devUrl = '';
-
-        for (const page of pages) {
-          const pageSlug = page.slug === '/' ? 'index' : page.slug.replace(/^\//, '');
-          
-          const res = await fetch('/api/publish', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              subdomain: subdomain.trim(),
-              siteName: editingSite.name,
-              pageSlug: pageSlug,
-              canvasJson: page.sections,
-              themeJson: theme,
-              ownerId: user?.id,
-            }),
-          });
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            alert(`❌ Publish failed for page "${page.name}": ${data.error || 'Unknown error'}`);
-            return;
-          }
-
-          if (pageSlug === 'index' || !tenantData) {
-            tenantData = data.tenant;
-            liveUrl = data.liveUrl;
-            devUrl = data.devUrl;
-          }
-        }
-
-        setMySites(prev => {
-          const updated = prev.map(s => 
-            s.id === editingSite.id 
-              ? { ...s, status: 'Live', url: liveUrl, subdomain: tenantData.subdomain, tenantId: tenantData.id }
-              : s
-          );
-          localStorage.setItem('my-sites', JSON.stringify(updated));
-          return updated;
-        });
-
-        localStorage.setItem(`site-pages-${editingSite.id}`, JSON.stringify(pages));
-        localStorage.setItem(`site-theme-${editingSite.id}`, JSON.stringify(theme));
-
-        if (!skipDomainModal) {
-          setManagingDomainFor({ ...editingSite, tenantId: tenantData.id });
-        }
-      } catch (err: any) {
-        console.error('[Publish] Error:', err);
-        alert(`❌ Publish failed: ${err.message || 'Network error'}`);
-      }
-    };
-
-    return (
-      <>
-      <SiteEditor 
-        siteName={editingSite.name} 
-        siteId={editingSite.id}
-        tenantId={editingSite.tenantId}
-        initialPages={initialPages}
-        initialSections={initialSections}
-        initialTheme={initialTheme} 
-        onBack={() => setEditingSite(null)}
-        planTier={editingSite.planTier}
-        onSave={(pages, theme) => {
-          localStorage.setItem(`site-pages-${editingSite.id}`, JSON.stringify(pages));
-          localStorage.setItem(`site-theme-${editingSite.id}`, JSON.stringify(theme));
-          
-          if (editingSite.isNew || !mySites.some(s => s.id === editingSite.id)) {
-            const newSiteRecord = {
-              id: editingSite.id,
-              name: editingSite.name,
-              url: `${editingSite.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'site'}.com`,
-              previewUrl: `/preview/${editingSite.id}`,
-              status: 'Draft',
-              image: editingSite.templateKey ? 
-                (MY_SITES.find(s => s.templateKey === editingSite.templateKey)?.image || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80') : 
-                'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
-              lastUpdate: 'Just now',
-              templateKey: editingSite.templateKey,
-              planTier: editingSite.planTier || 'DIY'
-            };
-            const updatedSites = [...mySites, newSiteRecord];
-            setMySites(updatedSites);
-            localStorage.setItem('my-sites', JSON.stringify(updatedSites));
-            editingSite.isNew = false;
-          }
-          alert("Site saved successfully!");
-
-          // If exiting to dashboard on DIY tier, automatically prompt to link custom domain
-          if (editingSite.planTier === 'DIY') {
-            if (!isOnboardedPaid) {
-              setShowTrialGateModal(true);
-            } else {
-              setManagingDomainFor(editingSite);
-            }
-          }
-          setEditingSite(null);
-        }}
-        onPublish={async (pages, theme) => {
-          // If first time publishing (no tenantId) OR user hasn't paid on DIY tier, show wizard
-          if (!editingSite.tenantId || (editingSite.planTier === 'DIY' && !isOnboardedPaid)) {
-            setPendingPublishData({ pages, theme });
-            setIsPublishWizardOpen(true);
-            return;
-          }
-          // Otherwise it's a subsequent publish, so we do a silent background update
-          await handlePublishSite(pages, theme);
-        }}
-        user={user}
-        globalSettings={globalSettings}
-        setGlobalSettings={setGlobalSettings}
-        saveSettings={saveSettings}
-      />
-      {managingDomainFor && (
-        <div className="fixed inset-0 z-[200]">
-          <DomainManagerModal 
-            site={managingDomainFor} 
-            onClose={() => setManagingDomainFor(null)} 
-            onDomainUpdated={(siteId, domain) => {
-              // Update local state if needed
-              setMySites(prev => prev.map(s => s.id === siteId ? { ...s, customDomain: domain } : s));
-            }}
-          />
-        </div>
-      )}
-      {isPublishWizardOpen && pendingPublishData && (
-        <PublishWizardModal
-          site={editingSite}
-          isOnboardedPaid={isOnboardedPaid}
-          onPlanSubscribed={() => {
-            setIsOnboardedPaid(true);
-          }}
-          onClose={() => {
-            setIsPublishWizardOpen(false);
-            setPendingPublishData(null);
-          }}
-          onPublishInitial={async () => {
-            // Do the initial publish in the background and return the updated site
-            await handlePublishSite(pendingPublishData.pages, pendingPublishData.theme, true);
-            // After handlePublishSite runs, editingSite might not immediately reflect the new tenantId 
-            // because of closure state, so we read it from localStorage or assume the backend created it.
-            // Actually, handlePublishSite updates `mySites`, we can find it there.
-            const sitesStr = localStorage.getItem('my-sites');
-            if (sitesStr) {
-               const sites = JSON.parse(sitesStr);
-               const updated = sites.find((s: any) => s.id === editingSite.id);
-               if (updated) return updated;
-            }
-            return editingSite;
-          }}
-        />
-      )}
-      </>
-    );
-  }
 
   async function saveSettings() {
     if (!user) return alert('Please login first');
@@ -1378,27 +929,42 @@ export default function DashboardLayout() {
     );
   };
 
+  // Until there's a live site, the client's job is the intake — nothing else on
+  // the Overview is real yet. Everything in the sidebar stays reachable so they
+  // can still connect a domain or message us while we build.
+  const hasLiveSite = mySites.some((s: any) => s.status === 'Live');
+
+  // Clients buy a website, not a plan. Everything they see is framed as where
+  // their project is, never which tier they're on.
+  const projectStatus = (site: any) => {
+    if (!site) return { label: 'Setup', tone: 'bg-slate-200 text-slate-700', blurb: 'Send us your details and we start building.' };
+    if (site.status === 'Live') return { label: 'Live', tone: 'bg-emerald-500 text-white', blurb: 'Your site is published and taking enquiries.' };
+    if (site.status === 'Review') return { label: 'In Review', tone: 'bg-indigo-600 text-white', blurb: 'Ready for your review — tell us what to change.' };
+    if (site.status === 'Designing') return { label: 'In Design', tone: 'bg-amber-400 text-slate-900', blurb: 'We are building your site right now.' };
+    return { label: 'Setup', tone: 'bg-slate-200 text-slate-700', blurb: 'Send us your details and we start building.' };
+  };
+
   const renderContent = () => {
-    // Gate backend pages under 1-month free trial
-    if (!isOnboardedPaid && activeSection !== 'My Sites' && activeSection !== 'Domains') {
-      return renderLockedFeatureGate();
-    }
+    // Clients have full access to backend, domain management, analytics, and e-commerce
 
     switch (activeSection) {
       case 'Overview':
+        if (!hasLiveSite) {
+          return <ClientIntake user={user} />;
+        }
         return (
           <div className="max-w-6xl mx-auto space-y-8">
             {/* Greetings Banner */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-                  Welcome back, {profileName.split(' ')[0] || user?.user_metadata?.full_name?.split(' ')[0] || 'Client'}
+                <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  Welcome back, <span className="text-indigo-600">{profileName.split(' ')[0] || user?.user_metadata?.full_name?.split(' ')[0] || 'Client'}</span>
                 </h1>
-                <p className="text-slate-500 text-sm mt-0.5">Here is what is happening with your digital properties today.</p>
+                <p className="text-slate-500 text-sm mt-1">Here is what is happening with your digital properties today.</p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-slate-500" /> API Connected
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs bg-white text-slate-700 px-3.5 py-2 rounded-xl border border-slate-200/80 font-semibold flex items-center gap-2 shadow-sm">
+                  <Activity className="w-3.5 h-3.5 text-indigo-600" /> API Connected
                 </span>
               </div>
             </div>
@@ -1436,95 +1002,58 @@ export default function DashboardLayout() {
                         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8 p-8 md:p-10 flex-1">
                           <div className="space-y-4 max-w-xl md:w-[58%]">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
-                                (selectedSite.planTier || 'DIY') === 'DIY' ? 'bg-amber-400 text-slate-900' : 'bg-indigo-600 text-white'
-                              }`}>
-                                {(selectedSite.planTier || 'DIY') === 'DIY' ? 'DIY Plan' : 'Done-For-You Plan'}
+                              <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${projectStatus(selectedSite).tone}`}>
+                                {projectStatus(selectedSite).label}
                               </span>
                               <span className="text-[10px] text-indigo-200 font-bold flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Agency Online & Ready
                               </span>
                             </div>
-                            
+
                             <h3 className="text-2xl md:text-3xl font-black tracking-tight leading-tight drop-shadow-lg">
-                              {(selectedSite.planTier || 'DIY') === 'DIY' ? (
-                                <>Let our agency build it for you — copy, design & dev all handled.</>
-                              ) : (
-                                <>Premium managed tier. All support lines unlocked and prioritised.</>
-                              )}
+                              Need a change? We handle it — copy, design & dev all included.
                             </h3>
-                            
+
                             <p className="text-indigo-100/85 text-sm leading-relaxed max-w-lg font-medium">
-                              {(selectedSite.planTier || 'DIY') === 'DIY' ? (
-                                <>Upgrade to <strong className="text-white">Done-For-You ($50/mo)</strong> and our senior developers handle all custom updates, copy, images, and layout edits for you — no blocks, no hassle.</>
-                              ) : (
-                                <>Need a new page, layout changes, or copy updates? Message your account manager and get changes built and launched live within 24 hours.</>
-                              )}
+                              New page, layout tweak, or fresh copy? Message us and we build it and push it live —
+                              usually within 24 hours. You never have to touch a builder.
                             </p>
 
                             <div className="flex items-center gap-3 pt-1">
-                              {(selectedSite.planTier || 'DIY') === 'DIY' ? (
-                                <button
-                                  onClick={() => {
-                                    setIsUpgrading(true);
-                                    setActiveSection('Contact Agency');
-                                    setTimeout(() => {
-                                      setIsUpgrading(false);
-                                      handleUpdatePlanTier(selectedSite.id, 'DFY');
-                                      alert("💳 Stripe Invoice Paid! Done-For-You portal is now active. Your dedicated developer is ready.");
-                                    }, 1500);
-                                  }}
-                                  className="bg-white text-indigo-700 hover:bg-indigo-50 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2"
-                                >
-                                  <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-pulse" /> Upgrade to DFY — $50/mo
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={() => setActiveSection('Contact Agency')}
-                                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2"
-                                >
-                                  <MessageSquare className="w-3.5 h-3.5" /> Contact Developer
-                                </button>
-                              )}
+                              <button
+                                onClick={() => setActiveSection('Contact Agency')}
+                                className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2"
+                              >
+                                <MessageSquare className="w-3.5 h-3.5" /> Request a Change
+                              </button>
                             </div>
                           </div>
 
-                          {/* Right floating card */}
+                          {/* Right floating card — every client gets the designer, no gating */}
                           <div className="hidden md:flex flex-col justify-between md:w-[36%] h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl self-center gap-4">
                             <div className="flex items-center justify-between border-b border-white/10 pb-3">
                               <div className="flex items-center gap-2">
                                 <div className="relative">
                                   <div className="w-10 h-10 rounded-full bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center font-bold text-xs text-indigo-200">
-                                    {selectedSite.planTier === 'DFY' ? 'SJ' : 'DEV'}
+                                    MF
                                   </div>
-                                  <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-slate-900 ${
-                                    selectedSite.planTier === 'DFY' ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'
-                                  }`} />
+                                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-slate-900 bg-emerald-400 animate-pulse" />
                                 </div>
                                 <div>
-                                  <h4 className="text-xs font-bold text-white">{selectedSite.planTier === 'DFY' ? 'Sarah Jenkins' : 'Agency Dev Team'}</h4>
-                                  <p className="text-[9px] text-indigo-300/70 font-semibold uppercase tracking-wider">{selectedSite.planTier === 'DFY' ? 'Dedicated Lead Dev' : 'Premium Tier Only'}</p>
+                                  <h4 className="text-xs font-bold text-white">Michael Fred</h4>
+                                  <p className="text-[9px] text-indigo-300/70 font-semibold uppercase tracking-wider">Your Designer</p>
                                 </div>
                               </div>
-                              <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${
-                                selectedSite.planTier === 'DFY' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-slate-700/50 text-slate-400 border-slate-600/50'
-                              }`}>
-                                {selectedSite.planTier === 'DFY' ? 'ACTIVE' : 'LOCKED'}
+                              <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
+                                ACTIVE
                               </span>
                             </div>
-                            {selectedSite.planTier === 'DFY' ? (
-                              <div className="flex items-start gap-2 bg-white/5 p-3 rounded-xl border border-white/8">
-                                <span className="text-base">💬</span>
-                                <p className="text-xs leading-snug font-medium text-slate-300">"Hey! Ready for your edits. Message me when you have a request!"</p>
-                              </div>
-                            ) : (
-                              <div className="flex items-start gap-2 bg-amber-500/8 p-3 rounded-xl border border-amber-500/15">
-                                <span className="text-base">🔒</span>
-                                <p className="text-xs leading-snug font-medium text-amber-200/80">Unlock 24h developer access and direct email & phone support.</p>
-                              </div>
-                            )}
+                            <div className="flex items-start gap-2 bg-white/5 p-3 rounded-xl border border-white/8">
+                              <span className="text-base">💬</span>
+                              <p className="text-xs leading-snug font-medium text-slate-300">"Ready for your edits — message me any time and I'll get it done."</p>
+                            </div>
                             <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider text-right pt-1 border-t border-white/5">
-                              {selectedSite.planTier === 'DFY' ? '⚡ Response: Under 30 mins' : 'Stripe billing active'}
+                              ⚡ Changes live within 24 hours
                             </div>
                           </div>
                         </div>
@@ -1564,11 +1093,11 @@ export default function DashboardLayout() {
                             </div>
                             
                             <h3 className="text-2xl md:text-3xl font-black tracking-tight leading-tight drop-shadow-lg">
-                              Ready to take your business to the next level? Check out our Done-For-You Addons!
+                              Ready to grow? Add booking, e-commerce, or SEO to your site.
                             </h3>
                             
                             <p className="text-indigo-100/85 text-sm leading-relaxed max-w-lg font-medium">
-                              Supercharge your site with premium custom modules managed entirely by us — booking engines, SEO audits, API webhooks, and live shopping carts.
+                              Extras we build and manage for you — booking engines, SEO audits, integrations, and online stores.
                             </p>
 
                             <div className="pt-1">
@@ -1578,7 +1107,7 @@ export default function DashboardLayout() {
                                   setTimeout(() => {
                                     const chatInput = document.querySelector('input[placeholder*="team"]');
                                     if (chatInput) {
-                                      (chatInput as HTMLInputElement).value = "Hi! I'm interested in adding custom DFY Addons to my website. Can you tell me more about it?";
+                                      (chatInput as HTMLInputElement).value = "Hi! I'd like to add an extra to my site — can you tell me more about the options?";
                                     }
                                   }, 150);
                                 }}
@@ -1682,7 +1211,7 @@ export default function DashboardLayout() {
 
             {/* Wix-style Main Site Hero card */}
             {selectedSite ? (
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col md:flex-row">
+              <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col md:flex-row text-slate-900">
                 <div className="w-full md:w-80 aspect-video md:aspect-[4/3] relative bg-slate-50 border-b md:border-b-0 md:border-r border-slate-200/80 shrink-0">
                   <img 
                     src={selectedSite.image || 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80'} 
@@ -1690,10 +1219,10 @@ export default function DashboardLayout() {
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur shadow-sm px-2.5 py-1 flex items-center gap-1.5 rounded-full border border-slate-200/50">
-                    <span className={`w-1.5 h-1.5 rounded-full ${
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md shadow-sm px-3 py-1 flex items-center gap-2 rounded-full border border-slate-200">
+                    <span className={`w-2 h-2 rounded-full ${
                       selectedSite.status === 'Live' ? 'bg-emerald-500' : 
-                      selectedSite.status === 'Designing' ? 'bg-indigo-500 animate-pulse' : 
+                      selectedSite.status === 'Designing' ? 'bg-indigo-600 animate-pulse' : 
                       'bg-amber-500'
                     }`} />
                     <span className="text-[10px] font-bold text-slate-700 tracking-wider uppercase">
@@ -1701,53 +1230,42 @@ export default function DashboardLayout() {
                     </span>
                   </div>
                 </div>
-                <div className="p-6 flex-1 flex flex-col justify-between">
+                <div className="p-6 md:p-8 flex-1 flex flex-col justify-between">
                   <div className="space-y-3">
                     <div>
                       <span className="text-[10px] font-black uppercase text-indigo-600 tracking-widest leading-none block mb-1">Active Property</span>
-                      <h2 className="text-xl font-bold text-slate-900 leading-tight">{selectedSite.name}</h2>
+                      <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 leading-tight">{selectedSite.name}</h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 font-medium">
                       <span className="flex items-center gap-1.5">
-                        <Globe className="w-3.5 h-3.5 text-slate-400" /> 
+                        <Globe className="w-3.5 h-3.5 text-indigo-500" /> 
                         {selectedSite.status === 'Designing' ? 'Designing in progress...' : selectedSite.url}
                       </span>
                       <span>&bull;</span>
                       <span>Last updated: {selectedSite.lastUpdate || 'Just now'}</span>
                     </div>
-                    <p className="text-xs text-slate-500 max-w-xl leading-relaxed">
+                    <p className="text-xs text-slate-600 max-w-xl leading-relaxed font-medium">
                       {selectedSite.status === 'Designing'
                         ? 'Please allow 5 to 10 business days for us to come up with the site. The layout design and project timeline will automatically update in your dashboard when ready!'
                         : (globalSettings.defaultSeoDescription || 'Manage this website layout, cms content tables, view site reports, or connect customer support.')}
                     </p>
                     
-                    {/* Plan-specific Conversion/Status Banner */}
+                    {/* Where this project is right now */}
                     {selectedSite && (
-                      <div className={`mt-4 border rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs leading-normal ${
-                        (selectedSite.planTier || 'DIY') === 'DIY'
-                          ? 'bg-amber-50/50 border-amber-200'
-                          : 'bg-indigo-50/40 border-indigo-150'
-                      }`}>
+                      <div className="mt-4 border border-slate-200 bg-slate-50/70 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs leading-normal text-slate-800">
                         <div className="flex items-center gap-2">
-                          <span className={`w-2 h-2 rounded-full shrink-0 ${
-                            (selectedSite.planTier || 'DIY') === 'DIY' ? 'bg-amber-500' : 'bg-indigo-600 animate-pulse'
-                          }`} />
+                          <span className="w-2.5 h-2.5 rounded-full shrink-0 bg-indigo-600 animate-pulse" />
                           <span className="font-semibold text-slate-700">
-                            {(selectedSite.planTier || 'DIY') === 'DIY' ? (
-                              <>You are building on the <strong className="text-slate-900">DIY Website Builder Plan ($20/mo)</strong>.</>
-                            ) : (
-                              <>Premium <strong className="text-indigo-700">Done-For-You (DFY) Agency Plan ($50/mo)</strong> Active.</>
-                            )}
+                            <strong className="text-slate-900">{projectStatus(selectedSite).label}</strong>
+                            {' — '}{projectStatus(selectedSite).blurb}
                           </span>
                         </div>
-                        {(selectedSite.planTier || 'DIY') === 'DIY' && (
-                          <button
-                            onClick={() => setActiveSection('Contact Agency')}
-                            className="bg-indigo-650 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all shadow-sm hover:shadow-indigo-600/10 active:translate-y-0.5 shrink-0 self-start sm:self-center"
-                          >
-                            Upgrade to Done-For-You
-                          </button>
-                        )}
+                        <button
+                          onClick={() => setActiveSection('Contact Agency')}
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-extrabold uppercase tracking-wider px-4 py-2 rounded-full transition-all shadow-md hover:scale-105 active:scale-95 shrink-0 self-start sm:self-center cursor-pointer"
+                        >
+                          Request a Change
+                        </button>
                       </div>
                     )}
                   </div>
@@ -1821,6 +1339,65 @@ export default function DashboardLayout() {
               </div>
             )}
 
+            {/* Project Timeline Tracker Widget */}
+            <div className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 rounded-3xl p-6 md:p-8 text-white shadow-xl space-y-6 relative overflow-hidden border border-slate-800">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      🎁 1-Month Free Trial Active
+                    </span>
+                    <span className="text-xs text-slate-400 font-medium">Billed $0 today</span>
+                  </div>
+                  <h2 className="text-2xl font-black tracking-tight mt-2 text-white">
+                    Project Timeline & Launch Roadmap
+                  </h2>
+                  <p className="text-xs text-slate-300 font-medium mt-1">
+                    Track your website development stages from onboarding to domain deployment.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setActiveSection('Project Timeline')}
+                  className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 shrink-0 self-start md:self-center cursor-pointer"
+                >
+                  View Full Delivery Funnel <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* 4 Steps Tracker */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+                {[
+                  { phase: 1, title: '1. Trial & Onboarding', status: 'Completed', active: dfyActivePhase === 1, done: true },
+                  { phase: 2, title: '2. Build & Customization', status: dfyActivePhase === 2 ? 'In Progress' : dfyActivePhase > 2 ? 'Completed' : 'Active', active: dfyActivePhase === 2, done: dfyActivePhase >= 2 },
+                  { phase: 3, title: '3. Review & Copy Approval', status: dfyActivePhase === 3 ? 'In Progress' : dfyActivePhase > 3 ? 'Completed' : 'Upcoming', active: dfyActivePhase === 3, done: dfyActivePhase >= 3 },
+                  { phase: 4, title: '4. Domain & Live Launch', status: dfyFinalSignoff ? 'Completed' : 'Upcoming', active: dfyActivePhase === 4, done: dfyFinalSignoff }
+                ].map((st) => (
+                  <div 
+                    key={st.phase}
+                    onClick={() => setActiveSection('Project Timeline')}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                      st.active
+                        ? 'bg-indigo-600/30 border-indigo-400 shadow-md'
+                        : st.done
+                        ? 'bg-emerald-500/10 border-emerald-500/30'
+                        : 'bg-white/5 border-white/10 opacity-70'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-slate-300">{st.title}</span>
+                      {st.done ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      ) : (
+                        <Clock3 className="w-4 h-4 text-indigo-400 animate-pulse" />
+                      )}
+                    </div>
+                    <p className="text-xs font-bold text-white">{st.status}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Quick Overview Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               
@@ -1885,10 +1462,8 @@ export default function DashboardLayout() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-650 flex items-center justify-center font-bold text-xs"><MessageSquare className="w-4 h-4" /></div>
-                      <span className={`text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
-                        (selectedSite?.planTier || 'DIY') === 'DIY' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-emerald-50 text-emerald-700'
-                      }`}>
-                        {(selectedSite?.planTier || 'DIY') === 'DIY' ? 'Upgrade Lock' : 'Unlocked'}
+                      <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">
+                        Included
                       </span>
                     </div>
                     <h4 className="font-bold text-slate-850 text-sm group-hover:text-indigo-650 transition-colors">Developer Live Chat</h4>
@@ -1907,10 +1482,8 @@ export default function DashboardLayout() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-650 flex items-center justify-center font-bold text-xs"><FileText className="w-4 h-4" /></div>
-                      <span className={`text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
-                        (selectedSite?.planTier || 'DIY') === 'DIY' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-emerald-50 text-emerald-700'
-                      }`}>
-                        {(selectedSite?.planTier || 'DIY') === 'DIY' ? 'Upgrade Lock' : 'Unlocked'}
+                      <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">
+                        Included
                       </span>
                     </div>
                     <h4 className="font-bold text-slate-855 text-sm group-hover:text-indigo-650 transition-colors">Submit Site Fix Request</h4>
@@ -1956,11 +1529,11 @@ export default function DashboardLayout() {
                 <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Your Sites</h1>
                 <p className="text-slate-500 text-xs mt-0.5">Manage, preview, and edit your project sites.</p>
               </div>
-              <button 
-                onClick={() => setIsTemplateModalOpen(true)}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5"
+              <button
+                onClick={() => router.push('/pricing')}
+                className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5 cursor-pointer"
               >
-                <Plus className="w-4 h-4" /> New Site
+                <Plus className="w-4 h-4" /> Request a new site
               </button>
             </div>
 
@@ -2073,7 +1646,7 @@ export default function DashboardLayout() {
               ))}
               
               <div
-                onClick={() => setIsTemplateModalOpen(true)}
+                onClick={() => router.push('/pricing')}
                 className="cursor-pointer bg-slate-50 hover:bg-slate-100/70 border border-dashed border-slate-300 rounded-2xl transition-all flex flex-col items-center justify-center min-h-[280px] p-6 text-center"
               >
                 <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mb-3">
@@ -2450,9 +2023,7 @@ export default function DashboardLayout() {
 
             {/* Main Hub Grid */}
             <div className="relative">
-              <div className={`grid grid-cols-1 lg:grid-cols-12 gap-6 transition-all duration-300 ${
-                (selectedSite?.planTier || 'DIY') === 'DIY' ? 'blur-[4px] select-none pointer-events-none opacity-40' : ''
-              }`}>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 transition-all duration-300">
               {/* Left Column: Chat & Broadcasts (7 cols) */}
               <div className="lg:col-span-7 space-y-6 flex flex-col">
                 {/* 1. Live Chat */}
@@ -2765,73 +2336,6 @@ export default function DashboardLayout() {
               {/* Closing of grid relative container, plus the upgrade portal overlay */}
               </div>
 
-              {(selectedSite?.planTier || 'DIY') === 'DIY' && (
-                <div className="absolute inset-0 flex items-center justify-center p-4 bg-slate-900/10 backdrop-blur-[2px] z-20 rounded-2xl">
-                  <div className="bg-white/95 backdrop-blur border border-slate-250 shadow-2xl rounded-2xl max-w-lg w-full p-8 text-center space-y-6 transform hover:scale-[1.01] transition-transform">
-                    {isUpgrading ? (
-                      <div className="py-12 space-y-4 flex flex-col items-center justify-center">
-                        <div className="w-12 h-12 rounded-full border-4 border-slate-205 border-t-indigo-600 animate-spin" />
-                        <div className="space-y-1">
-                          <h3 className="font-extrabold text-slate-800 text-sm">Processing Premium Upgrade...</h3>
-                          <p className="text-slate-400 text-xs">Securing Stripe checkout & activating Done-For-You features.</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="w-14 h-14 bg-indigo-50 text-indigo-650 rounded-2xl flex items-center justify-center mx-auto shadow-sm border border-indigo-100">
-                          <Sparkles className="w-6 h-6 animate-pulse" />
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <h2 className="text-lg font-black text-slate-900 tracking-tight uppercase">Let Our Agency Do It For You</h2>
-                          <p className="text-slate-500 text-xs max-w-sm mx-auto leading-relaxed font-medium">
-                            Upgrade to our <strong className="text-indigo-650">Done-For-You (DFY) Plan</strong> for just $50/mo. Get unlimited site edits, custom copy, new layouts, and priority developer syncs.
-                          </p>
-                        </div>
-
-                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left space-y-3 font-sans">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-200 pb-1.5">Done-For-You Privileges</p>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5">
-                            {[
-                              { label: 'Live Dev Chat', desc: 'Direct desk line to programmers' },
-                              { label: 'Unlimited Tweaks', desc: 'Request text, image & layout changes' },
-                              { label: 'SEO & Analytics', desc: 'Google Analytics & ranking setup' },
-                              { label: '24h Fast Delivery', desc: 'All updates built & deployed' }
-                            ].map(feat => (
-                              <div key={feat.label} className="flex items-start gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
-                                <div>
-                                  <p className="text-xs font-bold text-slate-805 leading-tight">{feat.label}</p>
-                                  <p className="text-[9px] text-slate-400 leading-tight mt-0.5">{feat.desc}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-2.5 pt-2">
-                          <button
-                            onClick={() => {
-                              setIsUpgrading(true);
-                              setTimeout(() => {
-                                setIsUpgrading(false);
-                                handleUpdatePlanTier(selectedSite.id, 'DFY');
-                                alert("💳 Stripe Invoice Paid! Done-For-You portal is now active. Your dedicated developer is ready.");
-                              }, 1500);
-                            }}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/20 active:translate-y-0.5"
-                          >
-                            Upgrade to Done-For-You ($50/mo)
-                          </button>
-                          <p className="text-[10px] text-slate-400 font-semibold">
-                            Only an extra $30/mo over your current DIY plan. Cancel or downgrade anytime.
-                          </p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         );
@@ -3659,96 +3163,6 @@ export default function DashboardLayout() {
     }
   };
 
-  // If DIY tier selected and payment has not been made, show the paywall screen instead of the dashboard layout.
-  if (!isOnboardedPaid && mySites.length === 0 && onboardingStep > 0) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex flex-col justify-center items-center p-6 text-white relative overflow-hidden font-sans">
-        <div className="absolute top-0 left-0 p-8 opacity-10 pointer-events-none">
-          <Sparkles className="w-96 h-96 text-indigo-500" />
-        </div>
-        
-        <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl relative z-10 space-y-8">
-          <div className="text-center space-y-2">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-600/30">
-              <CreditCard className="w-6 h-6 text-white" />
-            </div>
-            <h2 className="text-2xl font-black tracking-tight">Complete Registration</h2>
-            <p className="text-slate-400 text-xs leading-relaxed">
-              Confirm your $20/mo DIY subscription plan to generate and launch your website: <span className="text-white font-bold">{onboardingAnswers.businessName || 'My Template Site'}</span>
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 flex justify-between items-center">
-              <div>
-                <p className="text-xs font-bold">DIY Website Builder Plan</p>
-                <p className="text-[10px] text-slate-400">Cancel anytime, includes hosting</p>
-              </div>
-              <p className="text-xl font-black text-indigo-400">$20<span className="text-xs text-slate-500 font-medium">/mo</span></p>
-            </div>
-
-            {/* Custom Payment inputs simulating Stripe elements */}
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Card Number</label>
-                <div className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs flex items-center justify-between text-slate-200">
-                  <span>•••• •••• •••• 4242</span>
-                  <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded font-black text-slate-400">VISA</span>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Expiry</label>
-                  <div className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-400">12 / 28</div>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">CVC</label>
-                  <div className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-400">•••</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button 
-            onClick={() => {
-              localStorage.setItem('diy_plan_paid', 'true');
-              setIsOnboardedPaid(true);
-              
-              // Programmatically generate and save site
-              const customizedSections = handleGenerateDIYTemplate(onboardingTemplateKey || 'northwood');
-              const newId = `site-${Date.now()}`;
-              const pages = [{ name: 'Home', slug: '/', sections: customizedSections }];
-              localStorage.setItem(`site-pages-${newId}`, JSON.stringify(pages));
-              
-              const newSiteRecord = {
-                id: newId,
-                name: onboardingAnswers.businessName || 'My Template Site',
-                url: `${(onboardingAnswers.businessName || 'site').toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
-                previewUrl: `/preview/${newId}`,
-                status: 'Draft',
-                image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
-                lastUpdate: 'Just now',
-                templateKey: onboardingTemplateKey || 'northwood',
-                planTier: 'DIY'
-              };
-              const updatedSites = [newSiteRecord];
-              setMySites(updatedSites);
-              setSelectedSite(newSiteRecord);
-              localStorage.setItem('my-sites', JSON.stringify(updatedSites));
-              setOnboardingStep(0);
-              setOnboardingTemplateKey(null);
-              
-              alert("💳 Payment Authorized! Welcome to your website dashboard. Your custom template workspace has been successfully created.");
-            }}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-2xl text-xs font-bold transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
-          >
-            Authorize Payment & Launch Dashboard
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-screen bg-[#F4F6F8] font-sans selection:bg-indigo-600 selection:text-white overflow-hidden relative">
@@ -3904,66 +3318,64 @@ export default function DashboardLayout() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden w-full">
-        {/* Sleek Wix-Style Header */}
-        <header className="bg-white border-b border-slate-200 px-6 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-40 shadow-sm shrink-0">
-          <div className="flex items-center gap-4">
+      <main className="flex-1 flex flex-col h-full overflow-hidden w-full bg-[#F8FAFC] text-slate-900 relative">
+        {/* Subtle Light Gradient Glow Shapes in Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <motion.div 
+            animate={{ y: [0, -25, 0], x: [0, 15, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-[10%] left-[15%] w-[550px] h-[550px] bg-gradient-to-tr from-sky-100/70 via-teal-100/50 to-indigo-100/40 rounded-full blur-3xl pointer-events-none"
+          />
+          <motion.div 
+            animate={{ y: [0, 25, 0], x: [0, -15, 0] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+            className="absolute bottom-[10%] right-[10%] w-[600px] h-[600px] bg-gradient-to-br from-indigo-100/60 via-sky-100/50 to-teal-100/40 rounded-full blur-3xl pointer-events-none"
+          />
+        </div>
+
+        {/* Subtle Light Grid Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none z-0" />
+
+        {/* Clean Bright Header */}
+        <header className="bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-6 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-40 shadow-sm shrink-0">
+          <div className="flex items-center gap-4 relative z-10">
             <button 
               onClick={toggleSidebar}
-              className="p-2 lg:hidden bg-slate-50 text-slate-600 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+              className="p-2 lg:hidden bg-slate-100 text-slate-700 rounded-lg border border-slate-200 hover:bg-slate-200 transition-colors"
             >
               <Menu className="w-5 h-5" />
             </button>
             
-            {/* Selected site indicator & Plan Tier Switcher */}
+            {/* Selected site + where its project stands */}
             <div className="hidden sm:flex items-center gap-3">
-              <span className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5">
-                <Globe className="w-3.5 h-3.5 text-indigo-500" /> {selectedSite?.name || 'No Selected Site'}
+              <span className="text-xs bg-indigo-50 text-indigo-700 px-3.5 py-1.5 rounded-xl border border-indigo-200/60 font-bold flex items-center gap-2 shadow-sm">
+                <Globe className="w-3.5 h-3.5 text-indigo-600" /> {selectedSite?.name || 'No Selected Site'}
               </span>
-              
+
               {selectedSite && (
-                <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-sm shrink-0">
-                  <button
-                    onClick={() => handleUpdatePlanTier(selectedSite.id, 'DIY')}
-                    className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${
-                      (selectedSite.planTier || 'DIY') === 'DIY'
-                        ? 'bg-white text-slate-800 shadow-sm'
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
-                  >
-                    DIY ($20)
-                  </button>
-                  <button
-                    onClick={() => handleUpdatePlanTier(selectedSite.id, 'DFY')}
-                    className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${
-                      selectedSite.planTier === 'DFY'
-                        ? 'bg-indigo-600 text-white shadow-sm'
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
-                  >
-                    Done-For-You ($50)
-                  </button>
-                </div>
+                <span className={`px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider shrink-0 ${projectStatus(selectedSite).tone}`}>
+                  {projectStatus(selectedSite).label}
+                </span>
               )}
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="relative p-2 hover:bg-slate-50 transition-all rounded-lg text-slate-500">
+          <div className="flex items-center gap-4 relative z-10">
+            <button className="relative p-2.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all rounded-xl text-slate-700">
               <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-600 rounded-full" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-600 rounded-full animate-ping" />
             </button>
             <button 
               onClick={() => setIsTemplateModalOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer"
             >
-              <Plus className="w-4 h-4" /> <span>New Site</span>
+              <Plus className="w-4 h-4 text-white" strokeWidth={3} /> <span>New Site</span>
             </button>
           </div>
         </header>
 
         {/* Dashboard View Window */}
-        <div className="flex-1 overflow-y-auto p-6 lg:p-8 bg-[#F4F6F8] custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-6 lg:p-8 relative z-10 custom-scrollbar">
           {renderContent()}
         </div>
 
@@ -3982,99 +3394,38 @@ export default function DashboardLayout() {
               >
                 <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
                   <div>
-                    <h2 className="text-xl font-bold text-slate-900">Choose a Brand Preset</h2>
-                    <p className="text-slate-400 text-xs mt-1">Select your plan type and pick a layout styling theme.</p>
+                    <h2 className="text-xl font-bold text-slate-900">Start Another Site</h2>
+                    <p className="text-slate-400 text-xs mt-1">Pick the layout you like — we build it for you and send it over for review.</p>
                   </div>
                   <button onClick={() => setIsTemplateModalOpen(false)} className="p-1.5 hover:bg-slate-100 rounded-full text-slate-400">
                     <CloseIcon className="w-5 h-5" />
                   </button>
                 </div>
 
-                {/* Plan Tier Selector Header */}
-                <div className="grid grid-cols-2 gap-4 bg-slate-100 p-1.5 rounded-2xl mb-8">
-                  <button 
-                    onClick={() => setSelectedPlanTier('DIY')}
-                    className={`py-3 text-center rounded-xl text-xs font-bold transition-all ${
-                      selectedPlanTier === 'DIY' 
-                        ? 'bg-white text-indigo-700 shadow-sm' 
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
-                  >
-                    🚀 $20/mo DIY Template
-                    <span className="block text-[9px] text-slate-400 font-medium mt-0.5">Setup yourself + Edit with builder</span>
-                  </button>
-                  <button 
-                    onClick={() => setSelectedPlanTier('DFY')}
-                    className={`py-3 text-center rounded-xl text-xs font-bold transition-all ${
-                      selectedPlanTier === 'DFY' 
-                        ? 'bg-white text-indigo-700 shadow-sm' 
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
-                  >
-                    ✨ Agency Done-For-You ($497/mo+)
-                    <span className="block text-[9px] text-slate-400 font-medium mt-0.5">We design & manage for you</span>
-                  </button>
-                </div>
-                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Blank Template (DIY ONLY) */}
-                  {selectedPlanTier === 'DIY' && (
-                    <div 
-                      onClick={() => { 
-                        setNewSiteName("");
-                        setBlankSiteModalOpen(true);
-                        setIsTemplateModalOpen(false); 
-                      }}
-                      className="group cursor-pointer bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-md hover:border-slate-300 transition-all"
-                    >
-                      <div className="aspect-video bg-slate-50 flex items-center justify-center border-b border-slate-100 group-hover:bg-slate-100 transition-colors">
-                        <Plus className="w-10 h-10 text-slate-300 group-hover:scale-105 transition-transform" />
-                      </div>
-                      <div className="p-5">
-                        <h3 className="font-bold text-slate-800 text-sm">Blank Workspace</h3>
-                        <p className="text-slate-400 text-xs mt-1">Start editing on a fresh blank canvas.</p>
-                      </div>
-                    </div>
-                  )}
-
-
-
                   {/* Agency Templates */}
                   {MY_SITES.map(site => (
-                    <div 
+                    <div
                       key={site.id}
-                      onClick={() => { 
-                        if (selectedPlanTier === 'DIY') {
-                          setOnboardingTemplateKey(site.templateKey);
-                          setOnboardingStep(3); // Direct trigger for loader
-                          setTimeout(() => {
-                            // Close chooser modal and trigger the payment paywall gate
-                            setIsTemplateModalOpen(false);
-                            // We set onboarding step to a non-zero state to activate the paywall screen template compilation triggers
-                            setIsOnboardedPaid(false); 
-                          }, 1000);
-                        } else {
-                          // DFY Tier Flow - Agency orders preset
-                          const newId = `site-${Date.now()}`;
-                          const newSiteRecord = {
-                            id: newId,
-                            name: `${site.name} (DFY)`,
-                            url: `${site.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'site'}.com`,
-                            previewUrl: `/preview/${site.id}`,
-                            status: 'Live',
-                            image: site.image,
-                            lastUpdate: 'Just now',
-                            templateKey: site.templateKey,
-                            planTier: 'DFY'
-                          };
-                          const updatedSites = [...mySites, newSiteRecord];
-                          setMySites(updatedSites);
-                          setSelectedSite(newSiteRecord);
-                          localStorage.setItem('my-sites', JSON.stringify(updatedSites));
-                          alert(`🎉 Thank you! We have received your order for the "${site.name}" custom theme. Your dedicated account manager Michael has set up your premium Done-For-You workspace. Redirecting to Timeline.`);
-                          setIsTemplateModalOpen(false);
-                          setActiveSection('Project Timeline');
-                        }
+                      onClick={() => {
+                        const newId = `site-${Date.now()}`;
+                        const newSiteRecord = {
+                          id: newId,
+                          name: site.name,
+                          url: `${site.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'site'}.com`,
+                          previewUrl: `/preview/${site.id}`,
+                          status: 'Designing',
+                          image: site.image,
+                          lastUpdate: 'Just now',
+                          templateKey: site.templateKey,
+                        };
+                        const updatedSites = [...mySites, newSiteRecord];
+                        setMySites(updatedSites);
+                        setSelectedSite(newSiteRecord);
+                        localStorage.setItem('my-sites', JSON.stringify(updatedSites));
+                        alert(`Thanks — we've got your request for the "${site.name}" layout. We'll start building and send it over for review.`);
+                        setIsTemplateModalOpen(false);
+                        setActiveSection('Project Timeline');
                       }}
                       className="group cursor-pointer bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-md hover:border-slate-300 transition-all"
                     >
@@ -4083,12 +3434,10 @@ export default function DashboardLayout() {
                       </div>
                       <div className="p-5">
                         <div className="flex items-center gap-1.5 mb-1.5">
-                          <span className="bg-indigo-50 text-indigo-700 text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">Brand Preset</span>
+                          <span className="bg-indigo-50 text-indigo-700 text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">Layout</span>
                         </div>
                         <h3 className="font-bold text-slate-800 text-sm">{site.name} Theme</h3>
-                        <p className="text-slate-400 text-xs mt-1">
-                          {selectedPlanTier === 'DIY' ? 'Build instantly with setup helper.' : 'Order layout for agency customize.'}
-                        </p>
+                        <p className="text-slate-400 text-xs mt-1">We tailor this layout to your brand.</p>
                       </div>
                     </div>
                   ))}
@@ -4418,7 +3767,9 @@ export default function DashboardLayout() {
             </motion.div>
           )}
         </AnimatePresence>
+
         
+
       </main>
     </div>
   );

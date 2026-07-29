@@ -1,0 +1,12 @@
+// Schema data for the solstice block family.
+// Kept out of solstice.tsx (a "use client" module) so server code — notably the AI
+// generation pipeline — can actually read it. See AI_ONBOARDING_PLAN.md.
+
+export const SY_SCHEMAS: Record<string, any> = {
+  SYHero: { description: 'Yoga studio earthy full-screen hero', fields: [{ name: 'title', label: 'Title', type: 'textarea' }, { name: 'subtitle', label: 'Subtitle', type: 'text' }, { name: 'bgImage', label: 'Background Image URL', type: 'text' }], defaultProps: { title: 'Find Your\nCenter Here.', subtitle: 'All-levels yoga and wellness studio rooted in community.', bgImage: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=2070' } },
+  SYEthos: { description: 'Studio value pillars on sand background', fields: [{ name: 'features', label: 'Features', type: 'array', arrayFields: [{ name: 'iconName', label: 'Icon Name', type: 'text' }, { name: 'title', label: 'Title', type: 'text' }, { name: 'desc', label: 'Description', type: 'textarea' }] }], defaultProps: { features: [] } },
+  SYBook: { description: 'Sage green booking split section', fields: [{ name: 'title', label: 'Title', type: 'text' }, { name: 'subtitle', label: 'Subtitle', type: 'text' }, { name: 'image', label: 'Photo URL', type: 'text' }], defaultProps: { title: 'Book Your Class Online', subtitle: 'First week unlimited for $25.', image: '' } },
+  SYTestimonials: { description: 'Student testimonials on warm white background', fields: [{ name: 'testimonials', label: 'Testimonials', type: 'array', arrayFields: [{ name: 'text', label: 'Review Text', type: 'textarea' }, { name: 'author', label: 'Author', type: 'text' }, { name: 'rating', label: 'Rating (1-5)', type: 'text' }] }], defaultProps: { testimonials: [] } },
+  SYFindUs: { description: 'Studio location split with contact info', fields: [{ name: 'address', label: 'Street Address', type: 'text' }, { name: 'cityState', label: 'City, State', type: 'text' }, { name: 'phone', label: 'Phone', type: 'text' }, { name: 'email', label: 'Email', type: 'text' }, { name: 'image', label: 'Location Photo URL', type: 'text' }], defaultProps: { address: '814 Solstice Lane', cityState: 'Denver, CO 80203', phone: '(720) 555-0142', email: 'hello@solsticeyoga.com', image: '' } },
+  SYFooter: { description: 'Warm dark yoga studio footer', fields: [{ name: 'text', label: 'Footer Text', type: 'text' }], defaultProps: { text: '© 2026 Solstice Yoga & Wellness · All are welcome here.' } },
+};

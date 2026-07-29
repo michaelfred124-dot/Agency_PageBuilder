@@ -126,7 +126,7 @@ export default function HeroShowcase({ projects, onClose }: HeroShowcaseProps) {
                 />
               ) : (
                 <img
-                  src={project.image || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"}
+                  src={project.image || "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80"}
                   className="w-full h-full object-cover opacity-60"
                   alt=""
                   referrerPolicy="no-referrer"

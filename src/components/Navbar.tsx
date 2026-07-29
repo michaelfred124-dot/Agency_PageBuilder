@@ -127,7 +127,7 @@ export default function Navbar() {
         id="navbar"
         suppressHydrationWarning
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-slate-950/85 backdrop-blur-xl py-3.5 border-b border-sky-400/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)]' : 'bg-transparent py-5 lg:py-7'
+          scrolled ? 'bg-white/85 backdrop-blur-xl py-3.5 border-b border-slate-200/80 shadow-sm' : 'bg-transparent py-5 lg:py-7'
         }`}
       >
         <div className="max-w-[1340px] mx-auto px-6 flex justify-between items-center relative">
@@ -138,11 +138,11 @@ export default function Navbar() {
           >
             <Link href="/" className="flex items-center gap-2.5 group">
               <div 
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-950 font-extrabold text-sm bg-gradient-to-tr from-sky-300 via-teal-300 to-emerald-300 shadow-md shadow-teal-500/20 transition-transform group-hover:scale-105"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-950 font-extrabold text-sm bg-gradient-to-tr from-sky-400 via-teal-400 to-emerald-400 shadow-sm transition-transform group-hover:scale-105"
               >
                 ✦
               </div>
-              <span className="font-extrabold text-white text-lg tracking-tight select-none">ACTULUS<span className="text-teal-300">.</span></span>
+              <span className="font-extrabold text-slate-900 text-lg tracking-tight select-none">ACTULUS<span className="text-teal-600">.</span></span>
             </Link>
           </motion.div>
 
@@ -159,10 +159,10 @@ export default function Navbar() {
                   href={link.href}
                   prefetch={false}
                   suppressHydrationWarning
-                  className="text-[14px] font-medium text-slate-200 hover:text-sky-300 transition-colors py-2 px-1 relative group"
+                  className="text-[14px] font-semibold text-slate-700 hover:text-sky-600 transition-colors py-2 px-1 relative group"
                 >
                   {link.name}
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-sky-500 via-teal-500 to-emerald-500 transition-all duration-300 group-hover:w-full" />
                 </Link>
               </motion.div>
             ))}
@@ -174,7 +174,7 @@ export default function Navbar() {
               <button
                 onClick={handleAuthClick}
                 suppressHydrationWarning
-                className="text-[14px] font-semibold text-slate-200 hover:text-sky-300 transition-colors cursor-pointer select-none"
+                className="text-[14px] font-semibold text-slate-700 hover:text-sky-600 transition-colors cursor-pointer select-none"
               >
                 {user ? (
                   <span className="flex items-center gap-1.5 max-w-[150px]">
@@ -193,22 +193,22 @@ export default function Navbar() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
-                    className="absolute right-0 mt-4 w-72 bg-slate-900/95 backdrop-blur-2xl border border-sky-400/30 rounded-2xl p-5 shadow-2xl z-50 text-white flex flex-col space-y-4"
+                    className="absolute right-0 mt-4 w-72 bg-white border border-slate-200 rounded-2xl p-5 shadow-2xl z-50 flex flex-col space-y-4"
                   >
                     {/* User profile section */}
-                    <div className="border-b border-sky-400/20 pb-3 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full border border-sky-400/30 bg-sky-950/50 flex items-center justify-center font-bold text-sky-300 text-sm overflow-hidden shrink-0">
+                    <div className="border-b border-slate-200 pb-3 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full border border-sky-200 bg-sky-50 flex items-center justify-center font-bold text-sky-600 text-sm overflow-hidden shrink-0">
                         {user.user_metadata?.avatar_url ? (
                           <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                         ) : (
-                          <UserIcon className="w-5 h-5 text-sky-300" />
+                          <UserIcon className="w-5 h-5 text-sky-600" />
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-bold text-sm truncate leading-tight text-white">
+                        <p className="font-bold text-sm truncate leading-tight text-slate-900">
                           {user.user_metadata?.full_name || 'Client Account'}
                         </p>
-                        <p className="text-[11px] text-slate-300 truncate mt-0.5">
+                        <p className="text-[11px] text-slate-500 truncate mt-0.5">
                           {user.email}
                         </p>
                       </div>
@@ -219,18 +219,18 @@ export default function Navbar() {
                       <Link 
                         href="/dashboard"
                         onClick={() => setShowPopout(false)}
-                        className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-800/80 transition-colors text-slate-200 hover:text-white"
+                        className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors text-slate-700 hover:text-slate-950"
                       >
-                        <LayoutDashboard className="w-4 h-4 text-sky-400" /> Go to Dashboard
+                        <LayoutDashboard className="w-4 h-4 text-sky-500" /> Go to Dashboard
                       </Link>
 
                       {isAdmin && (
                         <Link 
                           href="/admin"
                           onClick={() => setShowPopout(false)}
-                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-800/80 transition-colors text-slate-200 hover:text-white"
+                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors text-slate-700 hover:text-slate-950"
                         >
-                          <ShieldCheck className="w-4 h-4 text-teal-400" /> Go to CRM Portal
+                          <ShieldCheck className="w-4 h-4 text-teal-500" /> Go to CRM Portal
                         </Link>
                       )}
 
@@ -240,22 +240,22 @@ export default function Navbar() {
                           target="_blank" 
                           rel="noopener noreferrer"
                           onClick={() => setShowPopout(false)}
-                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-800/80 transition-colors text-slate-200 hover:text-white"
+                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors text-slate-700 hover:text-slate-950"
                         >
-                          <Globe className="w-4 h-4 text-emerald-400" /> Go to Live Site
+                          <Globe className="w-4 h-4 text-emerald-500" /> Go to Live Site
                         </a>
                       ) : (
                         <span className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold text-slate-400 cursor-not-allowed">
-                          <Globe className="w-4 h-4 text-slate-500" /> No Live Site Yet
+                          <Globe className="w-4 h-4 text-slate-400" /> No Live Site Yet
                         </span>
                       )}
                     </div>
 
                     {/* Popout footer buttons */}
-                    <div className="border-t border-sky-400/20 pt-3">
+                    <div className="border-t border-slate-200 pt-3">
                       <button
                         onClick={handleSignOut}
-                        className="w-full flex items-center justify-center gap-2 py-2 bg-slate-800/60 hover:bg-rose-950/40 border border-rose-500/30 text-xs font-bold text-rose-400 rounded-xl transition-all cursor-pointer"
+                        className="w-full flex items-center justify-center gap-2 py-2 bg-slate-50 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-xs font-bold text-slate-700 hover:text-rose-600 rounded-xl transition-all cursor-pointer"
                       >
                         <LogOut className="w-4 h-4" /> Sign Out
                       </button>

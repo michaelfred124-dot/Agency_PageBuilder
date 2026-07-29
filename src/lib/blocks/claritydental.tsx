@@ -217,16 +217,7 @@ export function CDFooter(props: any) {
   );
 }
 
-export const CD_SCHEMAS: Record<string, any> = {
-  CDHeader: { description: 'Dental clinic white header with rounded CTA', fields: [{ name: 'businessName', label: 'Business Name', type: 'text' }, { name: 'navLinks', label: 'Nav Links', type: 'array', arrayFields: [{ name: 'item', label: 'Link', type: 'text' }] }], defaultProps: { businessName: 'CLARITY DENTAL', navLinks: ['HOME', 'SERVICES', 'ABOUT US', 'PATIENT INFO', 'BOOK NOW'] } },
-  CDHero: { description: 'Dental hero with sky blue gradient', fields: [{ name: 'headline', label: 'Headline', type: 'textarea' }, { name: 'subheading', label: 'Badge Text', type: 'text' }, { name: 'description', label: 'Description', type: 'textarea' }, { name: 'backgroundImage', label: 'Background Image URL', type: 'text' }], defaultProps: { headline: 'YOUR SMILE.\nOUR PASSION.\nPERFECTED.', subheading: 'GENTLE CARE. STUNNING RESULTS.', description: '', backgroundImage: '' } },
-  CDStats: { description: 'Light blue stats bar', fields: [{ name: 'stats', label: 'Stats', type: 'array', arrayFields: [{ name: 'value', label: 'Value', type: 'text' }, { name: 'label', label: 'Label', type: 'text' }] }], defaultProps: { stats: [] } },
-  CDServices: { description: 'Dental service cards on light background', fields: [{ name: 'heading', label: 'Section Heading', type: 'text' }, { name: 'services', label: 'Services', type: 'array', arrayFields: [{ name: 'title', label: 'Title', type: 'text' }, { name: 'icon', label: 'Icon', type: 'text' }, { name: 'desc', label: 'Description', type: 'textarea' }] }], defaultProps: { heading: 'Comprehensive Dental Services', services: [] } },
-  CDTestimonials: { description: 'Patient testimonials on mint background', fields: [{ name: 'heading', label: 'Heading', type: 'text' }, { name: 'reviews', label: 'Reviews', type: 'array', arrayFields: [{ name: 'name', label: 'Name', type: 'text' }, { name: 'role', label: 'Role', type: 'text' }, { name: 'quote', label: 'Quote', type: 'textarea' }] }], defaultProps: { heading: 'Real Patients. Real Smiles.', reviews: [] } },
-  CDPricing: { description: 'Membership plan pricing cards', fields: [{ name: 'heading', label: 'Heading', type: 'text' }, { name: 'plans', label: 'Plans', type: 'array', arrayFields: [{ name: 'title', label: 'Plan Name', type: 'text' }, { name: 'price', label: 'Price', type: 'text' }, { name: 'icon', label: 'Icon', type: 'text' }, { name: 'isPopular', label: 'Most Popular?', type: 'text' }] }], defaultProps: { heading: 'Membership Plans', plans: [] } },
-  CDCTA: { description: 'Sky blue CTA section', fields: [{ name: 'heading', label: 'Heading', type: 'textarea' }, { name: 'buttonText', label: 'Button Text', type: 'text' }], defaultProps: { heading: "Ready for a Smile You Love?\nBook Your Visit Today.", buttonText: 'REQUEST AN APPOINTMENT' } },
-  CDFooter: { description: 'Dental footer with dark blue background', fields: [{ name: 'businessName', label: 'Business Name', type: 'text' }], defaultProps: { businessName: 'CLARITY DENTAL' } },
-};
+export { CD_SCHEMAS } from './claritydental.schemas';
 
 export const CD_RENDERERS: Record<string, (props: any) => React.ReactNode> = {
   CDHeader: (props) => <CDHeader {...props} />,

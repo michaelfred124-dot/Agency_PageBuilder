@@ -55,7 +55,7 @@ export default function LaurenWilsonTemplate() {
       <section className="relative min-h-[90vh] py-32 flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image 
-            src="https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop" 
             className="w-full h-full object-cover grayscale brightness-[0.45]" 
             alt="Photography Hero" 
             referrerPolicy="no-referrer"
@@ -110,18 +110,18 @@ export default function LaurenWilsonTemplate() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="col-span-1 space-y-6">
                <div className="aspect-[4/3] overflow-hidden group relative border border-[#E4E0D5]">
-                 <Image src={(PORTFOLIO_IMAGES[0].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+                 <Image src={(PORTFOLIO_IMAGES[0].url) || "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
                  <div className="absolute inset-0 bg-[#1A1A1A]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <span className="text-white text-[10px] font-bold uppercase tracking-widest border border-white/40 px-4 py-2">View Case</span>
                  </div>
                </div>
                <div className="aspect-[4/5] overflow-hidden group relative border border-[#E4E0D5]">
-                 <Image src={(PORTFOLIO_IMAGES[3].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+                 <Image src={(PORTFOLIO_IMAGES[3].url) || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
                </div>
             </div>
             <div className="col-span-1">
                <div className="h-full min-h-[500px] overflow-hidden group relative border border-[#E4E0D5]">
-                 <Image src={(PORTFOLIO_IMAGES[1].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+                 <Image src={(PORTFOLIO_IMAGES[1].url) || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
                  <div className="absolute inset-0 bg-[#1A1A1A]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <span className="text-white text-[10px] font-bold uppercase tracking-widest border border-white/40 px-4 py-2">Weddings</span>
                  </div>
@@ -132,7 +132,7 @@ export default function LaurenWilsonTemplate() {
                  <Image src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2071&auto=format&fit=crop" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
                </div>
                <div className="aspect-[4/3] overflow-hidden group relative border border-[#E4E0D5]">
-                 <Image src={(PORTFOLIO_IMAGES[2].url) || "https://images.unsplash.com/photo-1542385151-efd9000785a0?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
+                 <Image src={(PORTFOLIO_IMAGES[2].url) || "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" alt="Work" referrerPolicy="no-referrer" fill />
                </div>
             </div>
           </div>

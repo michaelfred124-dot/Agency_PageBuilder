@@ -296,7 +296,7 @@ export const TEMPLATES: Record<string, SectionData[]> = {
       props: {
         title: "Capturing authentic\nmoments.",
         subtitle: "Documentary-style photography for weddings, couples, and brands.",
-        bgImage: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop"
+        bgImage: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop"
       }
     },
     {
@@ -2225,3 +2225,494 @@ export const TEMPLATE_PAGES: Record<string, { name: string; slug: string; sectio
     }
   ]
 };
+
+TEMPLATE_PAGES.lauren = [
+  {
+    name: 'Home',
+    slug: '/',
+    sections: TEMPLATES.lauren
+  },
+  {
+    name: 'Services',
+    slug: '/services',
+    sections: [
+      TEMPLATES.lauren[0],
+      TEMPLATES.lauren[2],
+      TEMPLATES.lauren[5],
+      TEMPLATES.lauren[6]
+    ]
+  },
+  {
+    name: 'Portfolio',
+    slug: '/portfolio',
+    sections: [
+      TEMPLATES.lauren[0],
+      TEMPLATES.lauren[3],
+      TEMPLATES.lauren[5],
+      TEMPLATES.lauren[6]
+    ]
+  },
+  {
+    name: 'About',
+    slug: '/about',
+    sections: [
+      TEMPLATES.lauren[0],
+      TEMPLATES.lauren[1],
+      TEMPLATES.lauren[4],
+      TEMPLATES.lauren[6]
+    ]
+  },
+  {
+    name: 'Contact',
+    slug: '/contact',
+    sections: [
+      TEMPLATES.lauren[0],
+      TEMPLATES.lauren[5],
+      TEMPLATES.lauren[6]
+    ]
+  }
+];
+
+const templateKeyAliases: Record<string, string> = {
+  'lauren-wilson': 'lauren',
+  'lauren_wilson': 'lauren',
+  'lauren-wilson-photo': 'lauren',
+  'easy-does-it': 'easy_does_it',
+  'brighter-solar': 'brighter_solar',
+  'volt-vikings': 'voltvikings',
+  'sterling-law': 'law_firm',
+  'sterling-law-group': 'law_firm',
+  'ridge-line-auto': 'auto_repair',
+  'atelier-hair': 'hair_salon',
+  'meridian-properties': 'real_estate',
+  'iron-edge-fitness': 'personal_trainer',
+  'clarity-dental': 'dental',
+  'paws-pamper': 'dog_grooming',
+  'paws-and-pamper': 'dog_grooming',
+  'golden-thread': 'wedding_planner',
+  'golden-thread-events': 'wedding_planner',
+  'spotless-home': 'home_cleaning',
+  'solstice-yoga': 'yoga_studio',
+  'valley-prohome': 'prohome_services',
+  'maison-boutique': 'maison_boutique',
+  'ember-rye': 'ember_rye',
+  'solene-boutique': 'solene_boutique',
+  'stylish-store': 'stylish_store',
+  'precise-building-services': 'precise_building_services'
+};
+
+for (const [alias, target] of Object.entries(templateKeyAliases)) {
+  if (TEMPLATES[target]) {
+    TEMPLATES[alias] = TEMPLATES[target];
+  }
+  if (TEMPLATE_PAGES[target]) {
+    TEMPLATE_PAGES[alias] = TEMPLATE_PAGES[target];
+  }
+}
+
+export interface SemiAiTemplateOption {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  badge: string;
+  icon: string;
+  accentColor: string;
+  layoutStyle: string;
+  defaultPages: { name: string; slug: string; sections: SectionData[] }[];
+}
+
+export const SEMI_AI_TEMPLATES: SemiAiTemplateOption[] = [
+  {
+    id: 'wireframe_ecommerce',
+    name: 'Modern E-Commerce Boutique',
+    category: 'Retail & Online Store',
+    description: 'Clean retail layout with hero spotlight, featured product grid, value badges, customer reviews, and Stripe checkout.',
+    badge: '🛍️ E-Commerce Store',
+    icon: 'ShoppingBag',
+    accentColor: '#4F46E5',
+    layoutStyle: 'High-converting retail grid',
+    defaultPages: [
+      {
+        name: 'Home',
+        slug: '/',
+        sections: [
+          {
+            id: 'nav-1',
+            type: 'CorporateTopNav',
+            props: {
+              logoText: 'STORE NAME',
+              links: [
+                { label: 'Home', url: '/' },
+                { label: 'Shop', url: '/shop' },
+                { label: 'About', url: '/about' },
+                { label: 'Reviews', url: '/reviews' },
+                { label: 'Contact', url: '/contact' }
+              ],
+              ctaText: 'Shop Catalog'
+            }
+          },
+          {
+            id: 'hero-1',
+            type: 'Hero',
+            props: {
+              title: 'Discover Our Latest Collection',
+              subtitle: 'Handcrafted products made with premium materials. Free shipping on orders over $50.',
+              ctaText: 'Shop New Arrivals',
+              ctaUrl: '/shop',
+              image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80',
+              bgColor: '#FFFFFF'
+            }
+          },
+          {
+            id: 'features-1',
+            type: 'Feature',
+            props: {
+              title: 'Why Customers Love Us',
+              subtitle: 'Built with quality and care in mind.',
+              features: [
+                { title: 'Free Express Shipping', description: 'Fast nationwide delivery directly to your door.' },
+                { title: '30-Day Easy Returns', description: 'Hassle-free 100% money back guarantee.' },
+                { title: '24/7 Support', description: 'Friendly customer care team ready to help anytime.' }
+              ]
+            }
+          },
+          {
+            id: 'products-1',
+            type: 'ProductGrid',
+            props: {
+              title: 'Featured Products',
+              subtitle: 'Tap any product to order directly.',
+              products: [
+                { id: 'p1', title: 'Signature Product A', price: '49.00', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80', description: 'Premium quality essential item.' },
+                { id: 'p2', title: 'Luxury Edition B', price: '79.00', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80', description: 'Crafted for daily style and utility.' },
+                { id: 'p3', title: 'Essential Set C', price: '34.00', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80', description: 'Best-selling bundle item.' }
+              ]
+            }
+          },
+          {
+            id: 'reviews-1',
+            type: 'TestimonialList',
+            props: {
+              title: 'What Our Customers Say',
+              subtitle: 'Over 1,000+ verified 5-star customer reviews.',
+              testimonials: [
+                { name: 'Sarah Jenkins', role: 'Verified Buyer', quote: 'Absolutely love the quality! Super fast shipping and beautiful packaging.', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80' },
+                { name: 'Marcus Chen', role: 'Verified Buyer', quote: 'The customer service is unmatched. Will definitely be buying again!', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80' }
+              ]
+            }
+          },
+          {
+            id: 'footer-1',
+            type: 'RFooter',
+            props: {
+              logoText: 'STORE NAME',
+              tagline: 'Quality goods for your everyday life.',
+              copyrightText: '© 2026 Store Name. All rights reserved.'
+            }
+          }
+        ]
+      },
+      {
+        name: 'Shop',
+        slug: '/shop',
+        sections: [
+          {
+            id: 'shop-nav-1',
+            type: 'CorporateTopNav',
+            props: {
+              logoText: 'STORE NAME',
+              links: [
+                { label: 'Home', url: '/' },
+                { label: 'Shop', url: '/shop' },
+                { label: 'About', url: '/about' },
+                { label: 'Reviews', url: '/reviews' },
+                { label: 'Contact', url: '/contact' }
+              ]
+            }
+          },
+          {
+            id: 'shop-products-1',
+            type: 'ProductGrid',
+            props: {
+              title: 'Full Product Catalog',
+              subtitle: 'Select items below to checkout instantly.',
+              products: [
+                { id: 'p1', title: 'Signature Product A', price: '49.00', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80', description: 'Premium quality essential item.' },
+                { id: 'p2', title: 'Luxury Edition B', price: '79.00', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80', description: 'Crafted for daily style and utility.' },
+                { id: 'p3', title: 'Essential Set C', price: '34.00', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80', description: 'Best-selling bundle item.' },
+                { id: 'p4', title: 'Special Edition D', price: '99.00', image: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80', description: 'Limited run artisanal batch.' }
+              ]
+            }
+          },
+          { id: 'shop-footer-1', type: 'RFooter', props: { logoText: 'STORE NAME' } }
+        ]
+      },
+      {
+        name: 'About',
+        slug: '/about',
+        sections: [
+          { id: 'about-nav-1', type: 'CorporateTopNav', props: { logoText: 'STORE NAME' } },
+          { id: 'about-hero-1', type: 'Hero', props: { title: 'Our Story & Mission', subtitle: 'Dedicated to bringing you thoughtful design and lasting craftsmanship.', image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80' } },
+          { id: 'about-footer-1', type: 'RFooter', props: { logoText: 'STORE NAME' } }
+        ]
+      },
+      {
+        name: 'Reviews',
+        slug: '/reviews',
+        sections: [
+          { id: 'reviews-nav-1', type: 'CorporateTopNav', props: { logoText: 'STORE NAME' } },
+          { id: 'reviews-grid-1', type: 'TestimonialList', props: { title: 'Customer Feedback', subtitle: 'Real stories from real customers.' } },
+          { id: 'reviews-footer-1', type: 'RFooter', props: { logoText: 'STORE NAME' } }
+        ]
+      },
+      {
+        name: 'Contact',
+        slug: '/contact',
+        sections: [
+          { id: 'contact-nav-1', type: 'CorporateTopNav', props: { logoText: 'STORE NAME' } },
+          { id: 'contact-form-1', type: 'ContactForm', props: { title: 'Get In Touch', subtitle: 'Questions about orders or products? We are here to help!' } },
+          { id: 'contact-footer-1', type: 'RFooter', props: { logoText: 'STORE NAME' } }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'wireframe_restaurant',
+    name: 'Restaurant, Cafe & Food Menus',
+    category: 'Dining, Food & Bakery',
+    description: 'Cinematic food hero, structured menu boards, reservations CTA, dish gallery, customer reviews, and online order options.',
+    badge: '🍽️ Food & Menus',
+    icon: 'Utensils',
+    accentColor: '#D97706',
+    layoutStyle: 'Editorial food & beverage layout',
+    defaultPages: [
+      {
+        name: 'Home',
+        slug: '/',
+        sections: [
+          { id: 'r-nav-1', type: 'LuxuryCenteredNav', props: { brandName: 'RESTAURANT NAME', tagline: 'FINE DINING & COCKTAILS', ctaText: 'Reserve Table' } },
+          { id: 'r-hero-1', type: 'Hero', props: { title: 'Artisanal Cuisine & Warm Hospitality', subtitle: 'Fresh seasonal ingredients sourced locally from organic farms.', ctaText: 'View Menu', ctaUrl: '/menu', image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80' } },
+          { id: 'r-menu-1', type: 'ClassicMenu', props: { title: 'Popular Specialties', items: [{ name: 'Chef Special Main', price: '$28', description: 'Pan-seared with fresh herbs & seasonal vegetables.' }, { name: 'House Signature Dish', price: '$24', description: 'Handcrafted recipe served with signature sauce.' }] } },
+          { id: 'r-footer-1', type: 'RFooter', props: { logoText: 'RESTAURANT NAME' } }
+        ]
+      },
+      {
+        name: 'Menu',
+        slug: '/menu',
+        sections: [
+          { id: 'm-nav-1', type: 'LuxuryCenteredNav', props: { brandName: 'RESTAURANT NAME' } },
+          { id: 'm-board-1', type: 'ClassicMenu', props: { title: 'Dinner & Drinks Menu' } },
+          { id: 'm-footer-1', type: 'RFooter', props: { logoText: 'RESTAURANT NAME' } }
+        ]
+      },
+      {
+        name: 'About',
+        slug: '/about',
+        sections: [
+          { id: 'a-nav-1', type: 'LuxuryCenteredNav', props: { brandName: 'RESTAURANT NAME' } },
+          { id: 'a-hero-1', type: 'Hero', props: { title: 'Our Culinary Journey', subtitle: 'Crafting memorable dining experiences.' } },
+          { id: 'a-footer-1', type: 'RFooter', props: { logoText: 'RESTAURANT NAME' } }
+        ]
+      },
+      {
+        name: 'Reviews',
+        slug: '/reviews',
+        sections: [
+          { id: 'rev-nav-1', type: 'LuxuryCenteredNav', props: { brandName: 'RESTAURANT NAME' } },
+          { id: 'rev-grid-1', type: 'TestimonialList', props: { title: 'Guest Experiences' } },
+          { id: 'rev-footer-1', type: 'RFooter', props: { logoText: 'RESTAURANT NAME' } }
+        ]
+      },
+      {
+        name: 'Contact',
+        slug: '/contact',
+        sections: [
+          { id: 'c-nav-1', type: 'LuxuryCenteredNav', props: { brandName: 'RESTAURANT NAME' } },
+          { id: 'c-form-1', type: 'ContactForm', props: { title: 'Table Reservations & Inquiries' } },
+          { id: 'c-footer-1', type: 'RFooter', props: { logoText: 'RESTAURANT NAME' } }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'wireframe_service',
+    name: 'Professional Services & Booking',
+    category: 'Consulting, Legal & Contracting',
+    description: 'Trust-focused layout with value proposition hero, service packages grid, pricing tiers, client testimonials, and booking form.',
+    badge: '💼 Professional Services',
+    icon: 'Briefcase',
+    accentColor: '#1E40AF',
+    layoutStyle: 'Corporate trust & conversion layout',
+    defaultPages: [
+      {
+        name: 'Home',
+        slug: '/',
+        sections: [
+          { id: 's-nav-1', type: 'CorporateTopNav', props: { logoText: 'BUSINESS NAME', ctaText: 'Book Consultation' } },
+          { id: 's-hero-1', type: 'Hero', props: { title: 'Expert Solutions For Your Business', subtitle: 'Trusted professionals delivering reliable results.', ctaText: 'Explore Services' } },
+          { id: 's-grid-1', type: 'Feature', props: { title: 'Our Core Services' } },
+          { id: 's-footer-1', type: 'RFooter', props: { logoText: 'BUSINESS NAME' } }
+        ]
+      },
+      {
+        name: 'Services',
+        slug: '/services',
+        sections: [
+          { id: 's-snav-1', type: 'CorporateTopNav', props: { logoText: 'BUSINESS NAME' } },
+          { id: 's-sgrid-1', type: 'Feature', props: { title: 'Detailed Service Packages' } },
+          { id: 's-sfooter-1', type: 'RFooter', props: { logoText: 'BUSINESS NAME' } }
+        ]
+      },
+      {
+        name: 'About',
+        slug: '/about',
+        sections: [
+          { id: 's-anav-1', type: 'CorporateTopNav', props: { logoText: 'BUSINESS NAME' } },
+          { id: 's-ahero-1', type: 'Hero', props: { title: 'About Our Firm', subtitle: 'Over 15 years of industry excellence.' } },
+          { id: 's-afooter-1', type: 'RFooter', props: { logoText: 'BUSINESS NAME' } }
+        ]
+      },
+      {
+        name: 'Reviews',
+        slug: '/reviews',
+        sections: [
+          { id: 's-rnav-1', type: 'CorporateTopNav', props: { logoText: 'BUSINESS NAME' } },
+          { id: 's-rgrid-1', type: 'TestimonialList', props: { title: 'Client Reviews' } },
+          { id: 's-rfooter-1', type: 'RFooter', props: { logoText: 'BUSINESS NAME' } }
+        ]
+      },
+      {
+        name: 'Contact',
+        slug: '/contact',
+        sections: [
+          { id: 's-cnav-1', type: 'CorporateTopNav', props: { logoText: 'BUSINESS NAME' } },
+          { id: 's-cform-1', type: 'ContactForm', props: { title: 'Schedule Your Free Consultation' } },
+          { id: 's-cfooter-1', type: 'RFooter', props: { logoText: 'BUSINESS NAME' } }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'wireframe_spa',
+    name: 'Luxury Salon & Wellness Spa',
+    category: 'Beauty, Health & Spa',
+    description: 'Serene editorial layout featuring treatment packages, photo gallery, client reviews, team bios, and appointment booking.',
+    badge: '🌿 Spa & Wellness',
+    icon: 'Sparkles',
+    accentColor: '#059669',
+    layoutStyle: 'Elegant wellness & beauty grid',
+    defaultPages: [
+      {
+        name: 'Home',
+        slug: '/',
+        sections: [
+          { id: 'spa-nav-1', type: 'FloatingPillNav', props: { brandName: 'SPA & SALON', ctaText: 'Book Appointment' } },
+          { id: 'spa-hero-1', type: 'Hero', props: { title: 'Rejuvenate Your Mind & Body', subtitle: 'Luxury spa treatments and hair styling designed for ultimate relaxation.', ctaText: 'View Treatments' } },
+          { id: 'spa-treatments-1', type: 'ModernCardMenu', props: { title: 'Signature Treatments' } },
+          { id: 'spa-footer-1', type: 'RFooter', props: { logoText: 'SPA & SALON' } }
+        ]
+      },
+      {
+        name: 'Treatments',
+        slug: '/services',
+        sections: [
+          { id: 'spa-tnav-1', type: 'FloatingPillNav', props: { brandName: 'SPA & SALON' } },
+          { id: 'spa-tgrid-1', type: 'ModernCardMenu', props: { title: 'Full Treatment Menu & Pricing' } },
+          { id: 'spa-tfooter-1', type: 'RFooter', props: { logoText: 'SPA & SALON' } }
+        ]
+      },
+      {
+        name: 'About',
+        slug: '/about',
+        sections: [
+          { id: 'spa-anav-1', type: 'FloatingPillNav', props: { brandName: 'SPA & SALON' } },
+          { id: 'spa-ahero-1', type: 'Hero', props: { title: 'Welcome To Our Sanctuary', subtitle: 'Your peace and well-being are our highest priority.' } },
+          { id: 'spa-afooter-1', type: 'RFooter', props: { logoText: 'SPA & SALON' } }
+        ]
+      },
+      {
+        name: 'Reviews',
+        slug: '/reviews',
+        sections: [
+          { id: 'spa-rnav-1', type: 'FloatingPillNav', props: { brandName: 'SPA & SALON' } },
+          { id: 'spa-rgrid-1', type: 'TestimonialList', props: { title: 'Client Words & Reviews' } },
+          { id: 'spa-rfooter-1', type: 'RFooter', props: { logoText: 'SPA & SALON' } }
+        ]
+      },
+      {
+        name: 'Contact',
+        slug: '/contact',
+        sections: [
+          { id: 'spa-cnav-1', type: 'FloatingPillNav', props: { brandName: 'SPA & SALON' } },
+          { id: 'spa-cform-1', type: 'ContactForm', props: { title: 'Book Your Session' } },
+          { id: 'spa-cfooter-1', type: 'RFooter', props: { logoText: 'SPA & SALON' } }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'wireframe_agency',
+    name: 'Agency, Creative & SaaS Studio',
+    category: 'Digital Studio & Software',
+    description: 'Bold modern aesthetic with interactive feature grid, portfolio showcase, pricing tables, client testimonials, and lead contact form.',
+    badge: '🚀 Studio & SaaS',
+    icon: 'Rocket',
+    accentColor: '#7C3AED',
+    layoutStyle: 'Bold modern tech layout',
+    defaultPages: [
+      {
+        name: 'Home',
+        slug: '/',
+        sections: [
+          { id: 'ag-nav-1', type: 'BrutalistNav', props: { brandName: 'STUDIO NAME', ctaText: 'Start Project' } },
+          { id: 'ag-hero-1', type: 'Hero', props: { title: 'We Build Digital Experiences That Scale', subtitle: 'Custom web development, brand strategy, and product design.', ctaText: 'View Work' } },
+          { id: 'ag-features-1', type: 'Feature', props: { title: 'Our Capabilities' } },
+          { id: 'ag-footer-1', type: 'RFooter', props: { logoText: 'STUDIO NAME' } }
+        ]
+      },
+      {
+        name: 'Portfolio',
+        slug: '/work',
+        sections: [
+          { id: 'ag-pnav-1', type: 'BrutalistNav', props: { brandName: 'STUDIO NAME' } },
+          { id: 'ag-pgrid-1', type: 'Feature', props: { title: 'Recent Client Projects' } },
+          { id: 'ag-pfooter-1', type: 'RFooter', props: { logoText: 'STUDIO NAME' } }
+        ]
+      },
+      {
+        name: 'About',
+        slug: '/about',
+        sections: [
+          { id: 'ag-anav-1', type: 'BrutalistNav', props: { brandName: 'STUDIO NAME' } },
+          { id: 'ag-ahero-1', type: 'Hero', props: { title: 'Who We Are', subtitle: 'A team of passionate creators and engineers.' } },
+          { id: 'ag-afooter-1', type: 'RFooter', props: { logoText: 'STUDIO NAME' } }
+        ]
+      },
+      {
+        name: 'Reviews',
+        slug: '/reviews',
+        sections: [
+          { id: 'ag-rnav-1', type: 'BrutalistNav', props: { brandName: 'STUDIO NAME' } },
+          { id: 'ag-rgrid-1', type: 'TestimonialList', props: { title: 'Client Praise' } },
+          { id: 'ag-rfooter-1', type: 'RFooter', props: { logoText: 'STUDIO NAME' } }
+        ]
+      },
+      {
+        name: 'Contact',
+        slug: '/contact',
+        sections: [
+          { id: 'ag-cnav-1', type: 'BrutalistNav', props: { brandName: 'STUDIO NAME' } },
+          { id: 'ag-cform-1', type: 'ContactForm', props: { title: 'Tell Us About Your Project' } },
+          { id: 'ag-cfooter-1', type: 'RFooter', props: { logoText: 'STUDIO NAME' } }
+        ]
+      }
+    ]
+  }
+];
+
+for (const tpl of SEMI_AI_TEMPLATES) {
+  TEMPLATE_PAGES[tpl.id] = tpl.defaultPages;
+  TEMPLATES[tpl.id] = tpl.defaultPages[0]?.sections || [];
+}
+

@@ -1,12 +1,12 @@
 "use client";
+
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Filter } from 'lucide-react';
 import { COLORS } from '@/constants';
 import { getSupabaseBrowserClient } from '@/lib/supabase';
-import ParallaxSectionBg from '@/components/ParallaxSectionBg';
+import { motion } from 'framer-motion';
 
 const FALLBACK_SITES = [
   {
@@ -78,6 +78,16 @@ const FALLBACK_SITES = [
 export default function FeaturedSites() {
   const router = useRouter();
   const [sites, setSites] = useState<any[]>(FALLBACK_SITES);
+  const [selectedTab, setSelectedTab] = useState<string>('All');
+
+  const TABS = [
+    'All',
+    'Local Services',
+    'E-Commerce',
+    'Legal & Professional',
+    'Fitness & Wellness',
+    'Creative & Studio'
+  ];
 
   useEffect(() => {
     const fetchSites = async () => {
@@ -89,7 +99,6 @@ export default function FeaturedSites() {
         .order('created_at', { ascending: false });
         
       if (!error && data && data.length > 0) {
-        // Map DB portfolio items to the expected format
         const mappedSites = data.map(p => ({
           title: p.title,
           category: p.category || 'Featured Work',
@@ -104,79 +113,117 @@ export default function FeaturedSites() {
     fetchSites();
   }, []);
 
+  const filteredSites = sites.filter(site => {
+    if (selectedTab === 'All') return true;
+    const cat = (site.category || '').toLowerCase();
+    const tab = selectedTab.toLowerCase();
+    if (tab.includes('services') && (cat.includes('grooming') || cat.includes('landscaping') || cat.includes('clean') || cat.includes('service') || cat.includes('detailing'))) return true;
+    if (tab.includes('commerce') && (cat.includes('fashion') || cat.includes('retail') || cat.includes('store') || cat.includes('coffee') || cat.includes('e-commerce'))) return true;
+    if (tab.includes('legal') && (cat.includes('legal') || cat.includes('law') || cat.includes('energy') || cat.includes('solar') || cat.includes('professional'))) return true;
+    if (tab.includes('fitness') && (cat.includes('fitness') || cat.includes('gym') || cat.includes('dental') || cat.includes('health') || cat.includes('wellness') || cat.includes('salon'))) return true;
+    if (tab.includes('creative') && (cat.includes('creative') || cat.includes('photo') || cat.includes('director') || cat.includes('events') || cat.includes('wedding'))) return true;
+    return cat.includes(tab);
+  });
+
   return (
-    <section className="py-24 lg:py-32 bg-[#080B12] text-white relative overflow-hidden">
+    <section className="py-20 lg:py-28 bg-[#F8FAFC] text-slate-900 relative overflow-hidden font-sans">
       
-      {/* Full-Section Real Photographic Background with Parallax */}
-      <ParallaxSectionBg 
-        src="/portfolio_nature_bg.jpg" 
-        alt="Alpine Mountain Dusk Background"
-        opacity={0.88}
-        overlayGradient="from-[#080B12] via-red-950/45 to-[#080B12]"
-      />
+      {/* Floating Animated Gradient Glow Shapes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <motion.div 
+          animate={{ y: [0, -30, 0], x: [0, 20, 0] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] left-[10%] w-[500px] h-[500px] bg-gradient-to-tr from-sky-100/50 via-teal-100/35 to-emerald-100/30 rounded-full pointer-events-none border border-white/50 shadow-[0_0_50px_rgba(186,230,253,0.3)]"
+        />
+        <motion.div 
+          animate={{ y: [0, 35, 0], x: [0, -25, 0] }}
+          transition={{ duration: 13, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[10%] right-[10%] w-[480px] h-[480px] bg-gradient-to-br from-indigo-100/45 via-sky-100/35 to-teal-100/30 rounded-full pointer-events-none border border-white/50 shadow-[0_0_50px_rgba(167,243,208,0.3)]"
+        />
+      </div>
 
-      {/* Brighter Crimson Red & Warm Orange Ambient Glows (matching user reference screenshot) */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[600px] bg-gradient-to-r from-red-600/40 via-orange-600/35 to-rose-700/30 blur-[180px] rounded-full pointer-events-none z-0" />
+      {/* Header Block */}
+      <div className="max-w-7xl mx-auto px-6 relative z-10 text-center flex flex-col items-center mb-10">
+        <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-extrabold text-sky-700 bg-white px-4 py-1.5 rounded-full border border-sky-200 shadow-sm">
+          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+          Featured Work Showcase
+        </span>
+        
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 mt-4">
+          Explore Production <br />
+          <span className="bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">Client Sites & Demos</span>
+        </h2>
+        
+        <p className="max-w-2xl text-slate-600 text-sm md:text-base font-medium mt-3">
+          Filter through our live portfolio of full-flowing website designs built for high conversion.
+        </p>
 
-      {/* Giant Stacked Watermark Background Typography (matching user reference screenshot) */}
-      <div className="absolute top-[28%] left-1/2 -translate-x-1/2 -translate-y-1/2 select-none pointer-events-none z-0 text-center w-full">
-        <div className="text-[16vw] font-black text-white/[0.11] tracking-tighter uppercase leading-[0.8] block drop-shadow-2xl font-sans">
-          FEATURED <br /> WORK
+        {/* Category Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto max-w-full no-scrollbar py-2 px-3 bg-white/80 border border-slate-200/80 rounded-full shadow-sm backdrop-blur-md mt-6">
+          {TABS.map(tab => (
+            <button
+              key={tab}
+              onClick={() => setSelectedTab(tab)}
+              className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all whitespace-nowrap cursor-pointer ${
+                selectedTab === tab
+                  ? 'bg-slate-950 text-white shadow-md'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Infinite Autoplay Loop Wrapper (circling on top of background) */}
-      <div className="w-full overflow-hidden py-12 relative flex items-center justify-center z-10 mask-marquee">
-        {/* Subtle diagonal tilt for design flair */}
+      {/* Infinite Autoplay Loop Wrapper */}
+      <div className="w-full overflow-hidden py-8 relative flex items-center justify-center z-10 mask-marquee">
         <div className="w-full flex items-center rotate-[-2.5deg] origin-center scale-[1.02] overflow-visible">
           <div className="mercury-marquee flex gap-8 lg:gap-10 px-6">
-            {/* Render double length to ensure seamless infinite looping */}
-            {[...sites, ...sites].map((site, i) => (
+            {[...(filteredSites.length > 0 ? filteredSites : sites), ...(filteredSites.length > 0 ? filteredSites : sites)].map((site, i) => (
               <div 
                 key={i} 
                 onClick={() => site.link && router.push(site.link)}
-                className="group relative w-[290px] md:w-[380px] h-[370px] bg-white/10 backdrop-blur-2xl border border-white/25 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 hover:-translate-y-3 hover:bg-white/15 hover:border-white/40 hover:shadow-[0_25px_60px_rgba(255,255,255,0.15)] cursor-pointer shrink-0 flex flex-col"
+                className="group relative w-[290px] md:w-[380px] h-[370px] bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-md transition-all duration-500 hover:-translate-y-3 hover:shadow-xl cursor-pointer shrink-0 flex flex-col text-slate-900"
               >
-                {/* Browser Chrome Header Bar - White Glassmorphism */}
-                <div className="bg-white/10 backdrop-blur-md px-4 py-2.5 border-b border-white/15 flex items-center justify-between z-20 shrink-0">
+                {/* Browser Chrome Header Bar */}
+                <div className="bg-slate-900 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between z-20 shrink-0">
                   <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
                   </div>
-                  <div className="text-[10px] font-mono text-white/90 bg-white/15 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/25 truncate max-w-[170px]">
+                  <div className="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-0.5 rounded-full border border-slate-700/60 truncate max-w-[170px]">
                     {site.title.toLowerCase().replace(/[^a-z0-9]/g, '')}.michaelfreddesigns.com
                   </div>
                 </div>
 
-                {/* Website Window Container: High-Res Screenshot with object-top alignment */}
-                <div className="relative w-full h-[250px] overflow-hidden bg-slate-950">
+                {/* Website Window Container */}
+                <div className="relative w-full h-[220px] overflow-hidden bg-slate-100 border-b border-slate-200/80">
                   <img 
                     src={site.image} 
                     alt={site.title} 
                     className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#080B12] via-[#080B12]/20 to-transparent pointer-events-none z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent pointer-events-none z-10" />
                 </div>
                 
-                {/* Bottom Overlay Content */}
-                <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 flex justify-between items-end z-20">
+                {/* Bottom Card Content */}
+                <div className="p-5 flex justify-between items-center z-20 bg-white">
                   <div className="text-left">
                     <span 
-                      className="px-3 py-1 text-[9px] font-extrabold uppercase rounded-full tracking-wider mb-2 inline-block text-white bg-white/20 backdrop-blur-md border border-white/30 shadow-sm"
+                      className="px-2.5 py-0.5 text-[10px] font-extrabold uppercase rounded-full tracking-wider mb-1 inline-block text-sky-700 bg-sky-50 border border-sky-200"
                     >
                       {site.category}
                     </span>
-                    <h3 className="text-xl md:text-2xl font-extrabold text-white leading-tight drop-shadow-md">
+                    <h3 className="text-lg font-extrabold text-slate-950 group-hover:text-sky-600 transition-colors">
                       {site.title}
                     </h3>
                   </div>
-                  {site.link && (
-                    <div className="w-10 h-10 rounded-full bg-white text-slate-950 flex items-center justify-center -rotate-45 group-hover:rotate-0 transition-transform duration-500 shadow-md shrink-0">
-                      <ArrowUpRight className="w-5 h-5 text-slate-950" strokeWidth={2.5} />
-                    </div>
-                  )}
+                  <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 group-hover:bg-slate-950 group-hover:text-white transition-all shadow-sm">
+                    <ArrowUpRight className="w-4 h-4" />
+                  </div>
                 </div>
               </div>
             ))}
@@ -184,29 +231,15 @@ export default function FeaturedSites() {
         </div>
       </div>
 
-      {/* Centered Header Block (below the carousel) */}
-      <div className="max-w-[1400px] mx-auto px-6 relative z-10 text-center flex flex-col items-center mt-16 lg:mt-20">
-        <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-bold text-sky-300 bg-sky-950/70 px-3.5 py-1.5 rounded-full border border-sky-400/40 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-          <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-          Portfolio
-        </span>
-        <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mt-4 leading-none">
-          Featured <span className="bg-gradient-to-r from-sky-200 via-teal-300 to-emerald-300 bg-clip-text text-transparent">Work</span>
-        </h2>
-        <p className="max-w-xl text-slate-200 text-sm md:text-base font-normal mt-4 leading-relaxed">
-          Explore some of our recent custom website designs and dynamic application interfaces, built headlessly for speed, design parity, and local search authority.
-        </p>
-
-        {/* Action Button - Centered Below Title & Text */}
-        <div className="mt-10 flex justify-center">
-          <Link href="/work">
-            <button className="px-8 py-4 bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 hover:from-sky-300 hover:to-emerald-300 text-slate-950 rounded-full font-extrabold uppercase tracking-widest text-xs transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer">
-              View All Projects
-            </button>
-          </Link>
-        </div>
+      {/* Footer Action */}
+      <div className="max-w-7xl mx-auto px-6 relative z-10 text-center flex flex-col items-center mt-10">
+        <Link href={`/work?category=${encodeURIComponent(selectedTab)}`}>
+          <button className="px-8 py-3.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-extrabold uppercase tracking-widest rounded-full shadow-xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer border border-slate-800">
+            <span>Explore All {filteredSites.length} Sites in {selectedTab}</span>
+            <ArrowUpRight className="w-4 h-4 text-white" />
+          </button>
+        </Link>
       </div>
-
     </section>
   );
 }

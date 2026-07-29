@@ -144,8 +144,8 @@ const STOCK_PHOTOS: StockPhoto[] = [
   // PHOTOGRAPHY & ART & PORTFOLIO
   {
     id: 'p1',
-    url: 'https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=1200',
-    thumb: 'https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=400',
+    url: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200',
+    thumb: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400',
     author: 'Aman Upadhyay',
     link: 'https://unsplash.com/photos/aU_1hc',
     category: 'photography',

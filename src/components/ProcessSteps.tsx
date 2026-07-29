@@ -38,8 +38,8 @@ export default function ProcessSteps() {
   return (
     <section id="process" className="py-20 lg:py-32 bg-[#080B12] text-white px-4 lg:px-6 relative overflow-hidden">
       
-      {/* Ambient Glows */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-r from-sky-500/20 via-teal-400/18 to-emerald-400/15 blur-[170px] rounded-full pointer-events-none z-0" />
+      {/* Background ambient light */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-r from-sky-500/20 via-teal-400/18 to-emerald-400/15 rounded-full pointer-events-none z-0 border border-white/50 shadow-[0_0_50px_rgba(186,230,253,0.3)]" />
 
       <div className="max-w-[1340px] mx-auto relative z-10">
         <div className="flex flex-col mb-16 lg:mb-24 text-center items-center">

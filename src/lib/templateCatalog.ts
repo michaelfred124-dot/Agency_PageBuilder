@@ -14,7 +14,7 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
   { key: 'northwood', name: 'Northwood Coffee Co.', desc: 'Cozy design ideal for cafés, restaurants, and local diners.', image: '/screenshots/northwood-coffee.jpg' },
   { key: 'restaurant', name: 'Osteria Bella Restaurant', desc: 'Bold, elegant layout for full-service restaurants and eateries.', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=400' },
   { key: 'greenscape', name: 'Greenscape Landscaping', desc: 'Fresh, professional layout for handymen, cleaners, and lawn care.', image: '/screenshots/greenscape-landscaping.jpg' },
-  { key: 'lauren', name: 'Lauren Wilson Photo', desc: 'Minimalist creative space for photographers, artists, and portfolios.', image: '/screenshots/lauren-wilson.jpg' },
+  { key: 'lauren', name: 'Lauren Wilson Photo', desc: 'Minimalist creative space for photographers, artists, and portfolios.', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600' },
   { key: 'brighter_solar', name: 'Brighter Solar Energy', desc: 'Sleek conversion-driven layout for eco businesses and clean energy.', image: '/screenshots/brighter-solar.jpg' },
   { key: 'voltvikings', name: 'Volt Vikings Electricians', desc: 'High-impact premium layout for local home service and contracting businesses.', image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400&auto=format&fit=crop' },
   { key: 'law_firm', name: 'Sterling Law Group', desc: 'Professional, trust-building layout for law firms and legal services.', image: '/screenshots/sterling-law.jpg' },

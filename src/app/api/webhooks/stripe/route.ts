@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { buyDomainViaRegistrar, RegistrarContact } from '@/lib/domainPricing';
+import { notifyNewSubscriptionEmail, welcomeSubscriberEmail } from '@/lib/email';
 
 export async function POST(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -45,12 +46,90 @@ export async function POST(req: NextRequest) {
       if (session.metadata?.type === 'store_order') {
         await fulfillStoreOrder(session);
       }
+
+      if (session.metadata?.type === 'website_subscription') {
+        await fulfillWebsiteSubscription(session);
+      }
     }
 
     return NextResponse.json({ received: true });
   } catch (error: any) {
     console.error('Stripe webhook error:', error);
     return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });
+  }
+}
+
+/**
+ * Activate a website subscription and send the customer their intake link.
+ *
+ * Upserts rather than updates: the checkout route inserts a pending row first,
+ * but if that insert failed we still must not lose a paying customer.
+ */
+async function fulfillWebsiteSubscription(session: Stripe.Checkout.Session) {
+  const supabase = getSupabaseServerClient();
+
+  const email = session.customer_details?.email || null;
+  const name = session.customer_details?.name || null;
+  const planName = session.metadata?.planName || 'Website Plan';
+  const monthlyCents = Number(session.metadata?.monthlyCents || 0);
+
+  const { data: sub, error } = await supabase
+    .from('website_subscriptions')
+    .upsert(
+      {
+        stripe_session_id: session.id,
+        stripe_subscription_id:
+          typeof session.subscription === 'string' ? session.subscription : session.subscription?.id || null,
+        stripe_customer_id:
+          typeof session.customer === 'string' ? session.customer : session.customer?.id || null,
+        customer_email: email,
+        customer_name: name,
+        plan_id: session.metadata?.planId || 'unknown',
+        plan_name: planName,
+        monthly_cents: monthlyCents,
+        status: 'active',
+      },
+      { onConflict: 'stripe_session_id' },
+    )
+    .select()
+    .single();
+
+  if (error) {
+    console.error('[Subscription Webhook] Could not record subscription:', error);
+    return;
+  }
+
+  console.log(`[Subscription Webhook] ${planName} activated for ${email || 'unknown email'}`);
+
+  // WordPress provisioning starts here implicitly, and deliberately so: rows are
+  // created with wp_status='queued', but /api/provision/run only picks up orders
+  // whose payment status has reached 'active'. Flipping that status above is
+  // what releases this order to the provisioner. We do NOT clone inline —
+  // a clone takes minutes and would blow Stripe's webhook timeout, causing
+  // Stripe to retry a delivery that already succeeded.
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.michaelfreddesigns.com';
+  const adminEmail = process.env.ADMIN_EMAILS?.split(',')[0]?.trim();
+
+  // Notifications are best-effort — a mail failure must never fail the webhook,
+  // or Stripe will retry a delivery that already succeeded.
+  if (adminEmail) {
+    notifyNewSubscriptionEmail({
+      to: adminEmail,
+      planName,
+      monthlyTotal: `$${(monthlyCents / 100).toFixed(0)}`,
+      customerEmail: email || 'unknown',
+      customerName: name || undefined,
+    }).catch(() => {});
+  }
+
+  if (email) {
+    welcomeSubscriberEmail({
+      to: email,
+      name: name || undefined,
+      planName,
+      intakeUrl: `${siteUrl}/welcome?session_id=${session.id}`,
+    }).catch(() => {});
   }
 }
 

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
-import { LayoutDashboard, Users, Settings, LogOut, ShieldCheck, ChevronLeft, Image as ImageIcon, Briefcase, FileText, DollarSign, PlusCircle } from 'lucide-react';
+import { LayoutDashboard, Users, Settings, LogOut, ShieldCheck, ChevronLeft, Image as ImageIcon, Briefcase, FileText, DollarSign, PlusCircle, Inbox } from 'lucide-react';
 
 export default async function AdminLayout({
   children,
@@ -54,6 +54,10 @@ export default async function AdminLayout({
           <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 text-slate-900 font-medium transition-colors">
             <LayoutDashboard className="w-4 h-4" />
             Overview
+          </Link>
+          <Link href="/admin/orders" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+            <Inbox className="w-4 h-4" />
+            Orders
           </Link>
           <Link href="/admin/templates" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors">
             <FileText className="w-4 h-4" />
