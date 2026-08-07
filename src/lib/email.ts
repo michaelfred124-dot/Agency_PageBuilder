@@ -1,15 +1,44 @@
 /**
- * Thin transactional email wrapper (Resend HTTP API — no SDK dependency).
+ * Thin transactional email wrapper (SMTP via nodemailer).
  *
- * No-ops with a console warning if RESEND_API_KEY isn't set, so nothing
- * breaks before the key is configured; every call site should treat
- * failures as non-fatal (log and continue), never block the caller's
- * actual write (a lead/onboarding submission must still succeed even if
+ * No-ops with a console warning if SMTP credentials aren't set. Every call site
+ * should treat failures as non-fatal (log and continue), never block the caller's
+ * actual write (a payment or onboarding submission must still succeed even if
  * the notification email fails).
  */
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_ADDRESS = process.env.EMAIL_FROM_ADDRESS || 'Michaelfred Designs <notifications@michaelfreddesigns.com>';
+import nodemailer from 'nodemailer';
+
+const FROM_ADDRESS = process.env.EMAIL_FROM_ADDRESS || 'Michaelfred Designs <noreply@michaelfreddesigns.com>';
+
+let transporter: nodemailer.Transporter | null = null;
+
+function getTransporter(): nodemailer.Transporter | null {
+  if (transporter) return transporter;
+
+  const host = process.env.SMTP_HOST;
+  const port = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 587;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  if (!host || !user || !pass) {
+    console.warn('[email] SMTP not configured (SMTP_HOST, SMTP_USER, SMTP_PASS required)');
+    return null;
+  }
+
+  try {
+    transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465,
+      auth: { user, pass },
+    });
+    return transporter;
+  } catch (err) {
+    console.error('[email] Failed to create SMTP transporter:', err);
+    return null;
+  }
+}
 
 interface SendEmailArgs {
   to: string;
@@ -18,31 +47,23 @@ interface SendEmailArgs {
 }
 
 export async function sendEmail({ to, subject, html }: SendEmailArgs): Promise<{ sent: boolean; error?: string }> {
-  if (!RESEND_API_KEY) {
-    console.warn(`[email] RESEND_API_KEY not set — skipping email to ${to}: "${subject}"`);
-    return { sent: false, error: 'RESEND_API_KEY not configured' };
+  const transport = getTransporter();
+  if (!transport) {
+    console.warn(`[email] SMTP not configured — skipping email to ${to}: "${subject}"`);
+    return { sent: false, error: 'SMTP not configured' };
   }
 
   try {
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ from: FROM_ADDRESS, to, subject, html }),
+    await transport.sendMail({
+      from: FROM_ADDRESS,
+      to,
+      subject,
+      html,
     });
-
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error(`[email] Resend send failed (${res.status}):`, errText);
-      return { sent: false, error: errText };
-    }
-
     return { sent: true };
   } catch (err: any) {
-    console.error('[email] Resend request error:', err);
-    return { sent: false, error: err?.message || 'Unknown email error' };
+    console.error('[email] SMTP send failed:', err?.message || err);
+    return { sent: false, error: err?.message || 'Email send failed' };
   }
 }
 

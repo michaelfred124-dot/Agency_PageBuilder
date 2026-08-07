@@ -60,21 +60,66 @@ const ADDONS = [
 
 export default function Pricing() {
   return (
-    <section className="py-20 lg:py-32 bg-[#080B12] text-white px-4 lg:px-6 relative overflow-hidden z-10">
+    <section className="py-20 lg:py-32 bg-[#FAF9FF] text-slate-900 px-4 lg:px-6 relative overflow-hidden z-10 font-sans">
       
-      {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[550px] bg-gradient-to-r from-sky-500/20 via-teal-400/20 to-emerald-500/20 blur-[170px] rounded-full pointer-events-none z-0" />
+      {/* VIBRANT ORGANIC BACKGROUND BLOBS & GEOMETRIC SHAPES (Hero Theme Match) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {/* Left Side Purple Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, 5, 0], scale: [1, 1.04, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] -left-28 w-[520px] h-[520px] text-[#6528D9] opacity-80 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M410,290Q380,330,340,380Q300,430,240,420Q180,410,130,370Q80,330,80,260Q80,190,130,135Q180,80,250,90Q320,100,380,140Q440,180,410,290Z" />
+        </motion.svg>
+        
+        {/* Right Side Orange Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, -6, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 17, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[10%] -right-24 w-[480px] h-[480px] text-[#FF7700] opacity-75 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M420,280Q380,310,345,365Q310,420,240,415Q170,410,125,365Q80,320,90,250Q100,180,140,135Q180,90,250,90Q320,90,385,135Q450,180,420,280Z" />
+        </motion.svg>
+
+        {/* Floating Geometry: Amber Outline Circle */}
+        <motion.div
+          animate={{ y: [0, -18, 0], rotate: [0, 180, 360] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[28%] left-[7%] w-14 h-14 border-4 border-[#FFB703] rounded-full opacity-80 hidden lg:block"
+        />
+
+        {/* Floating Geometry: Wireframe Orange Triangle */}
+        <motion.svg
+          animate={{ y: [0, 20, 0], rotate: [0, -45, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[22%] right-[7%] w-12 h-12 text-[#FF7700] opacity-75 hidden lg:block"
+          viewBox="0 0 100 100"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="6"
+        >
+          <polygon points="50,10 90,85 10,85" />
+        </motion.svg>
+
+        {/* Dot Matrix Arrays */}
+        <div className="absolute top-[18%] right-[4%] w-36 h-44 dot-grid-purple opacity-50 hidden md:block" />
+        <div className="absolute bottom-[18%] left-[4%] w-32 h-40 dot-grid-orange opacity-50 hidden md:block" />
+      </div>
 
       <div className="max-w-[1340px] mx-auto relative z-10">
         <div className="text-center mb-16 lg:mb-20 flex flex-col items-center">
-          <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-bold text-sky-300 bg-white/10 px-3.5 py-1.5 rounded-full border border-white/25 shadow-[0_0_15px_rgba(255,255,255,0.15)]">
-            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-            Transparent Pricing
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-[#FF5500] bg-white px-5 py-2 rounded-full border border-orange-200/90 shadow-sm">
+            PRICING & PLANS →
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mt-4">
-            Simple Page-Based <span className="bg-gradient-to-r from-sky-200 via-teal-300 to-emerald-300 bg-clip-text text-transparent">Plans</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight mt-4">
+            Simple Page-Based <span className="bg-gradient-to-r from-[#6528D9] via-[#8B5CF6] to-[#FF5500] bg-clip-text text-transparent">Plans</span>
           </h2>
-          <p className="max-w-2xl text-slate-200 text-base md:text-lg font-normal mt-4">
+          <p className="max-w-2xl text-slate-600 text-base md:text-lg font-medium mt-4">
             Flat monthly rates based on page count. Upgrade or add extra pages anytime with automatic tier savings!
           </p>
         </div>
@@ -87,95 +132,54 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className={`p-8 lg:p-10 border border-white/25 rounded-3xl bg-white/10 backdrop-blur-2xl relative flex flex-col justify-between hover:bg-white/15 hover:border-white/40 shadow-2xl transition-all duration-300`}
+              className={`p-8 lg:p-10 rounded-3xl relative flex flex-col justify-between transition-all duration-300 ${
+                plan.popular 
+                  ? 'bg-purple-vibrant border-2 border-[#7C3AED] text-white shadow-2xl scale-[1.03]' 
+                  : 'bg-white border border-slate-200/80 text-slate-900 shadow-md hover:shadow-xl'
+              }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 border border-white/40 rounded-full font-extrabold uppercase tracking-widest text-xs text-slate-950 bg-white shadow-md">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full font-black uppercase tracking-widest text-xs text-white bg-[#FF5500] shadow-md">
                   Most Popular
                 </div>
               )}
 
-              {/* Top Accent Line */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-2xl font-extrabold text-white">
-                    {plan.name}
-                  </h3>
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/15 text-teal-300 border border-white/25 text-[10px] font-bold uppercase">
-                    {plan.pagesCount} Pages
-                  </span>
-                </div>
-                <p className="text-slate-300 font-medium text-xs mb-6">{plan.description}</p>
-                
-                <div className="mb-8 flex items-baseline gap-1">
-                  <span className="text-5xl font-extrabold text-white tracking-tight">{plan.price}</span>
-                  <span className="text-slate-400 font-bold text-xs">/month</span>
+                <h3 className={`text-xl font-black mb-2 ${plan.popular ? 'text-white' : 'text-slate-950'}`}>
+                  {plan.name}
+                </h3>
+                <p className={`text-xs font-medium mb-6 ${plan.popular ? 'text-purple-100' : 'text-slate-500'}`}>
+                  {plan.description}
+                </p>
+
+                <div className="mb-6">
+                  <span className={`text-4xl lg:text-5xl font-black ${plan.popular ? 'text-[#FFB703]' : 'text-slate-950'}`}>{plan.price}</span>
+                  <span className={`text-xs font-bold ${plan.popular ? 'text-purple-200' : 'text-slate-500'}`}>/month</span>
                 </div>
 
-                <div className="space-y-4 mb-10">
-                  {plan.features.map((feature, j) => (
-                    <div key={j} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-white/15 border border-white/25 flex items-center justify-center shrink-0">
-                        <Check className="w-3.5 h-3.5 text-teal-300" strokeWidth={3} />
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, fIdx) => (
+                    <li key={fIdx} className="flex items-start gap-2.5 text-xs font-medium">
+                      <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${plan.popular ? 'bg-white/20 text-white' : 'bg-orange-100 text-[#FF5500]'}`}>
+                        <Check className="w-2.5 h-2.5" strokeWidth={3} />
                       </div>
-                      <span className="font-semibold text-xs text-slate-200">{feature}</span>
-                    </div>
+                      <span className={plan.popular ? 'text-purple-50' : 'text-slate-700'}>{feature}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
-              <Link href={`/pricing`}>
-                <button className="w-full py-3.5 border border-white/25 rounded-full font-bold uppercase tracking-wider text-xs transition-all text-slate-950 bg-white hover:bg-slate-100 shadow-md cursor-pointer">
+              <Link href="/pricing" className="w-full">
+                <button className={`w-full py-3.5 rounded-full text-xs font-black uppercase tracking-widest cursor-pointer transition-all ${
+                  plan.popular 
+                    ? 'btn-orange-pill shadow-xl' 
+                    : 'bg-slate-950 hover:bg-slate-800 text-white shadow-md'
+                }`}>
                   Get Started
                 </button>
               </Link>
             </motion.div>
           ))}
-        </div>
-
-        {/* Automatic Tier Upgrade Rule Callout */}
-        <div className="max-w-4xl mx-auto mt-14 p-6 lg:p-8 rounded-3xl bg-white/10 backdrop-blur-2xl border border-white/25 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center gap-6">
-          <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center text-teal-300 shrink-0">
-            <Info className="w-6 h-6" />
-          </div>
-          <div>
-            <h4 className="text-lg font-extrabold text-white flex items-center gap-2">
-              Automatic Tier Upgrade Rule (Best Price Guarantee)
-            </h4>
-            <p className="text-slate-300 text-xs md:text-sm leading-relaxed mt-1 font-medium">
-              Add extra pages anytime for <strong className="text-teal-300">+$10/mo per page</strong>. Whenever your total page count reaches <strong>5 pages</strong> ($50/mo) or <strong>10 pages</strong> ($75/mo), your subscription automatically shifts to that tier so you always get the lowest rate per page!
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-20 max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-bold text-sky-300 bg-white/10 px-3.5 py-1.5 rounded-full border border-white/25 mb-3">
-              <Plus className="w-3.5 h-3.5 text-teal-400" /> Add-On Services
-            </span>
-            <h3 className="text-3xl md:text-4xl font-extrabold text-white">
-              Optional Package <span className="bg-gradient-to-r from-sky-200 via-teal-300 to-emerald-300 bg-clip-text text-transparent">Add-Ons</span>
-            </h3>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {ADDONS.map((addon) => (
-              <div
-                key={addon.name}
-                className="p-6 border border-white/25 rounded-2xl bg-white/10 backdrop-blur-2xl hover:bg-white/15 transition-all"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="text-base font-extrabold text-white">{addon.name}</h4>
-                  <span className="font-extrabold text-slate-950 bg-white border border-white/25 rounded-full px-3 py-0.5 text-xs shadow-sm">
-                    {addon.price}
-                  </span>
-                </div>
-                <p className="text-slate-300 font-medium text-xs leading-relaxed">{addon.description}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>

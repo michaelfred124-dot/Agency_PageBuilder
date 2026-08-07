@@ -78,35 +78,63 @@ export default function BuilderFeatures() {
   };
 
   return (
-    <section className="py-24 lg:py-32 bg-[#F8FAFC] text-slate-900 px-4 lg:px-6 relative overflow-hidden">
+    <section className="py-24 lg:py-32 bg-[#FAF9FF] text-slate-900 px-4 lg:px-6 relative overflow-hidden font-sans">
       
-      {/* Floating Animated Gradient Glow Shapes in Background (Low Opacity) */}
+      {/* VIBRANT ORGANIC BACKGROUND BLOBS & GEOMETRIC SHAPES (Hero Theme Match) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div 
-          animate={{ y: [0, -30, 0], x: [0, 20, 0] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[12%] left-[4%] w-[500px] h-[500px] bg-gradient-to-tr from-sky-100/50 via-teal-100/35 to-emerald-100/30 rounded-full pointer-events-none border border-white/50 shadow-[0_0_50px_rgba(186,230,253,0.3)]"
+        {/* Left Side Purple Organic Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, -5, 0], scale: [1, 1.04, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] -left-28 w-[520px] h-[520px] text-[#6528D9] opacity-80 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M410,290Q380,330,340,380Q300,430,240,420Q180,410,130,370Q80,330,80,260Q80,190,130,135Q180,80,250,90Q320,100,380,140Q440,180,410,290Z" />
+        </motion.svg>
+        
+        {/* Right Side Orange Organic Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, 6, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[8%] -right-24 w-[490px] h-[490px] text-[#FF7700] opacity-75 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M420,280Q380,310,345,365Q310,420,240,415Q170,410,125,365Q80,320,90,250Q100,180,140,135Q180,90,250,90Q320,90,385,135Q450,180,420,280Z" />
+        </motion.svg>
+
+        {/* Floating Geometry: Amber Outline Circle */}
+        <motion.div
+          animate={{ y: [0, -18, 0], rotate: [0, 180, 360] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[32%] right-[6%] w-14 h-14 border-4 border-[#FFB703] rounded-full opacity-80 hidden lg:block"
         />
-        <motion.div 
-          animate={{ y: [0, 35, 0], x: [0, -25, 0] }}
-          transition={{ duration: 13, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-[20%] right-[4%] w-[480px] h-[480px] bg-gradient-to-br from-indigo-100/45 via-sky-100/35 to-teal-100/30 rounded-full pointer-events-none border border-white/50 shadow-[0_0_50px_rgba(167,243,208,0.3)]"
+
+        {/* Floating Geometry: Purple Outline Circle */}
+        <motion.div
+          animate={{ y: [0, 16, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[25%] left-[7%] w-10 h-10 border-4 border-[#6528D9] rounded-full opacity-70 hidden lg:block"
         />
+
+        {/* Dot Matrix Arrays */}
+        <div className="absolute top-[18%] right-[4%] w-36 h-44 dot-grid-purple opacity-50 hidden md:block" />
+        <div className="absolute bottom-[20%] left-[3%] w-32 h-40 dot-grid-orange opacity-50 hidden md:block" />
       </div>
 
       <div className="max-w-[1340px] mx-auto relative z-10">
         
         {/* Header Block */}
         <div className="flex flex-col space-y-3 mb-16 lg:mb-20 text-center items-center">
-          <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-extrabold text-sky-700 bg-white px-3.5 py-1.5 rounded-full border border-sky-200 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-            Visual Page Builder
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-[#FF5500] bg-white px-5 py-2 rounded-full border border-orange-200/90 shadow-sm">
+            PAGE BUILDER & WORKSPACE →
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none max-w-4xl text-slate-950">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none max-w-4xl text-slate-950">
             The Power of Next.js, <br />
-            <span className="bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">Engineered for Growth</span>
+            <span className="bg-gradient-to-r from-[#6528D9] via-[#8B5CF6] to-[#FF5500] bg-clip-text text-transparent">Engineered for Growth</span>
           </h2>
-          <p className="max-w-2xl text-slate-600 text-base md:text-lg font-medium pt-2">
+          <p className="max-w-2xl text-slate-600 text-base md:text-lg font-medium pt-2 leading-relaxed">
             No technical knowledge needed. Drag-and-drop continuous sections, edit text inline, adjust themes live, and manage domain connections in one workspace.
           </p>
         </div>
@@ -123,7 +151,7 @@ export default function BuilderFeatures() {
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                <span className="text-[10px] font-extrabold text-sky-700 tracking-wider uppercase ml-2 hidden sm:inline">LIVE BUILDER SIMULATOR</span>
+                <span className="text-[10px] font-black text-[#6528D9] tracking-wider uppercase ml-2 hidden sm:inline">LIVE BUILDER SIMULATOR</span>
               </div>
               
               {/* Viewport Selectors */}
@@ -164,20 +192,20 @@ export default function BuilderFeatures() {
                     <span>Editing: {PRESETS[activePresetIndex].name}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-2 py-0.5 rounded">Auto-Saved</span>
+                    <span className="text-[10px] bg-orange-100 text-[#FF5500] font-black px-2 py-0.5 rounded">Auto-Saved</span>
                   </div>
                 </div>
 
                 {/* Floating Builder Element Toolbox Panel */}
                 <div className="absolute top-12 left-4 z-20 hidden sm:flex flex-col gap-2 bg-white/95 backdrop-blur-md p-2.5 rounded-xl border border-slate-200 shadow-xl">
-                  <div className="text-[9px] font-bold uppercase text-slate-400 px-1">Theme Style</div>
+                  <div className="text-[9px] font-black uppercase text-slate-400 px-1">Theme Style</div>
                   {PRESETS.map((preset, idx) => (
                     <button
                       key={preset.name}
                       onClick={() => setActivePresetIndex(idx)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold text-left transition-all cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-black text-left transition-all cursor-pointer ${
                         activePresetIndex === idx 
-                          ? 'bg-slate-950 text-white shadow-sm' 
+                          ? 'btn-orange-pill shadow-sm' 
                           : 'text-slate-600 hover:bg-slate-100'
                       }`}
                     >
@@ -210,7 +238,7 @@ export default function BuilderFeatures() {
 
                   <div className="flex gap-3">
                     <button 
-                      className="px-5 py-2.5 rounded-full text-xs font-bold shadow-md transition-transform hover:scale-105 cursor-pointer"
+                      className="px-6 py-3 rounded-full text-xs font-black shadow-lg transition-transform hover:scale-105 cursor-pointer"
                       style={{ backgroundColor: PRESETS[activePresetIndex].buttonBg, color: PRESETS[activePresetIndex].buttonText }}
                     >
                       Get Started Today
@@ -235,14 +263,14 @@ export default function BuilderFeatures() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
                   whileHover={{ x: 4, y: -2 }}
-                  className="p-6 bg-white rounded-2xl border border-slate-200/80 flex gap-5 items-start cursor-pointer hover:shadow-md transition-all relative overflow-hidden group text-slate-900 shadow-sm"
+                  className="p-6 bg-white rounded-2xl border border-slate-200/80 flex gap-5 items-start cursor-pointer hover:shadow-xl transition-all relative overflow-hidden group text-slate-900 shadow-sm"
                 >
-                  <div className="p-3 border border-sky-100 bg-sky-50 rounded-xl shrink-0 text-sky-600 group-hover:bg-slate-950 group-hover:text-white transition-colors shadow-sm">
+                  <div className="p-3 border border-purple-100 bg-purple-50 rounded-xl shrink-0 text-[#6528D9] group-hover:bg-[#6528D9] group-hover:text-white transition-colors shadow-sm">
                     <IconComponent className="w-5 h-5" strokeWidth={2} />
                   </div>
                   
                   <div className="space-y-1.5">
-                    <h3 className="font-extrabold text-base text-slate-950 flex items-center gap-2 group-hover:text-sky-600 transition-colors">
+                    <h3 className="font-black text-base text-slate-950 flex items-center gap-2 group-hover:text-[#FF5500] transition-colors">
                       {item.title}
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-medium">
@@ -257,26 +285,26 @@ export default function BuilderFeatures() {
         </div>
 
         {/* Bottom CTA bar inside features */}
-        <div className="mt-20 rounded-[32px] p-8 md:p-12 text-center flex flex-col items-center bg-gradient-to-br from-sky-50 via-teal-50 to-emerald-50 border border-sky-200/80 relative overflow-hidden shadow-xl text-slate-900">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-sky-200/40 rounded-full pointer-events-none -mr-20 -mt-20" />
+        <div className="mt-20 rounded-[32px] p-8 md:p-12 text-center flex flex-col items-center bg-purple-vibrant border border-[#7C3AED] relative overflow-hidden shadow-2xl text-white">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full pointer-events-none -mr-20 -mt-20 border border-white/10" />
           
-          <h3 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 max-w-2xl leading-none text-slate-950 relative z-10">
+          <h3 className="text-2xl md:text-4xl font-black tracking-tight mb-4 max-w-2xl leading-none text-white relative z-10">
             Ready to build your local authority?
           </h3>
-          <p className="text-sm md:text-base font-medium text-slate-600 mb-8 max-w-xl relative z-10">
+          <p className="text-sm md:text-base font-medium text-purple-100 mb-8 max-w-xl relative z-10 leading-relaxed">
             Choose a starting layout, plug in your brand information, and launch a fast, professional site in under 15 minutes.
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 relative z-10">
             <a 
-              href="/dashboard"
-              className="px-7 py-3.5 bg-slate-950 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-widest rounded-full transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+              href="/pricing"
+              className="btn-orange-pill px-8 py-4 text-white font-black text-xs uppercase tracking-widest rounded-full cursor-pointer shadow-xl"
             >
-              Start Building Free
+              Start Building Now
             </a>
             <a 
               href="/pricing"
-              className="px-7 py-3.5 border border-slate-200 text-slate-800 bg-white hover:bg-slate-50 rounded-full font-semibold text-xs transition-all cursor-pointer shadow-sm"
+              className="px-8 py-4 border border-white/30 text-white hover:bg-white/10 rounded-full font-black text-xs uppercase tracking-widest transition-all cursor-pointer"
             >
               Compare Plans
             </a>

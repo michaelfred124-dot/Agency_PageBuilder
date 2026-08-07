@@ -18,12 +18,12 @@ const FALLBACK_SITES = [
     link: '/work/paws-and-pamper'
   },
   {
-    title: 'Sterling Law Group',
-    category: 'Luxury Legal Practice',
-    image: '/screenshots/sterling-law.jpg',
-    tags: ['Cinematic Hero', 'Trust Strip'],
-    color: '#C9A84C',
-    link: '/work/sterling-law-group'
+    title: 'Precise Building Services',
+    category: 'Construction & Engineering',
+    image: '/screenshots/precise-building.jpg',
+    tags: ['Custom Next.js', 'Construction'],
+    color: '#FFC219',
+    link: '/work/precise-building-services'
   },
   {
     title: 'Greenscape Landscaping',
@@ -126,32 +126,61 @@ export default function FeaturedSites() {
   });
 
   return (
-    <section className="py-20 lg:py-28 bg-[#F8FAFC] text-slate-900 relative overflow-hidden font-sans">
+    <section className="py-20 lg:py-28 bg-[#FAF9FF] text-slate-900 relative overflow-hidden font-sans">
       
-      {/* Floating Animated Gradient Glow Shapes */}
+      {/* Floating Organic Shapes & Geometry in Background (Hero Theme Match) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div 
-          animate={{ y: [0, -30, 0], x: [0, 20, 0] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[10%] left-[10%] w-[500px] h-[500px] bg-gradient-to-tr from-sky-100/50 via-teal-100/35 to-emerald-100/30 rounded-full pointer-events-none border border-white/50 shadow-[0_0_50px_rgba(186,230,253,0.3)]"
+        {/* Left Side Purple Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, 5, 0], scale: [1, 1.04, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[8%] -left-28 w-[500px] h-[500px] text-[#6528D9] opacity-80 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M410,290Q380,330,340,380Q300,430,240,420Q180,410,130,370Q80,330,80,260Q80,190,130,135Q180,80,250,90Q320,100,380,140Q440,180,410,290Z" />
+        </motion.svg>
+        
+        {/* Right Side Orange Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, -6, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 17, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[6%] -right-24 w-[480px] h-[480px] text-[#FF7700] opacity-75 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M420,280Q380,310,345,365Q310,420,240,415Q170,410,125,365Q80,320,90,250Q100,180,140,135Q180,90,250,90Q320,90,385,135Q450,180,420,280Z" />
+        </motion.svg>
+
+        {/* Floating Geometry: Amber Outline Circle */}
+        <motion.div
+          animate={{ y: [0, -18, 0], rotate: [0, 180, 360] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[25%] left-[8%] w-12 h-12 border-4 border-[#FFB703] rounded-full opacity-80 hidden lg:block"
         />
-        <motion.div 
-          animate={{ y: [0, 35, 0], x: [0, -25, 0] }}
-          transition={{ duration: 13, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-[10%] right-[10%] w-[480px] h-[480px] bg-gradient-to-br from-indigo-100/45 via-sky-100/35 to-teal-100/30 rounded-full pointer-events-none border border-white/50 shadow-[0_0_50px_rgba(167,243,208,0.3)]"
+
+        {/* Floating Geometry: Purple Outline Circle */}
+        <motion.div
+          animate={{ y: [0, 16, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[20%] right-[10%] w-10 h-10 border-4 border-[#6528D9] rounded-full opacity-70 hidden lg:block"
         />
+
+        {/* Dot Matrix Arrays */}
+        <div className="absolute top-[15%] right-[5%] w-36 h-40 dot-grid-purple opacity-50 hidden md:block" />
+        <div className="absolute bottom-[15%] left-[4%] w-32 h-36 dot-grid-orange opacity-50 hidden md:block" />
       </div>
 
       {/* Header Block */}
       <div className="max-w-7xl mx-auto px-6 relative z-10 text-center flex flex-col items-center mb-10">
-        <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] font-extrabold text-sky-700 bg-white px-4 py-1.5 rounded-full border border-sky-200 shadow-sm">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-          Featured Work Showcase
+        <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest font-black text-[#FF5500] bg-white px-5 py-1.5 rounded-full border border-orange-200/90 shadow-sm">
+          <Sparkles className="w-3.5 h-3.5 text-[#FF5500]" />
+          FEATURED WORK SHOWCASE →
         </span>
         
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 mt-4">
           Explore Production <br />
-          <span className="bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">Client Sites & Demos</span>
+          <span className="bg-gradient-to-r from-[#6528D9] via-[#8B5CF6] to-[#FF5500] bg-clip-text text-transparent">Client Sites & Demos</span>
         </h2>
         
         <p className="max-w-2xl text-slate-600 text-sm md:text-base font-medium mt-3">
@@ -159,15 +188,15 @@ export default function FeaturedSites() {
         </p>
 
         {/* Category Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto max-w-full no-scrollbar py-2 px-3 bg-white/80 border border-slate-200/80 rounded-full shadow-sm backdrop-blur-md mt-6">
+        <div className="flex items-center gap-1.5 overflow-x-auto max-w-full no-scrollbar py-2 px-3 bg-white/90 border border-slate-200/90 rounded-full shadow-sm backdrop-blur-md mt-6">
           {TABS.map(tab => (
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
               className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all whitespace-nowrap cursor-pointer ${
                 selectedTab === tab
-                  ? 'bg-slate-950 text-white shadow-md'
-                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
+                  ? 'btn-orange-pill shadow-md'
+                  : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
               }`}
             >
               {tab}
@@ -213,15 +242,15 @@ export default function FeaturedSites() {
                 <div className="p-5 flex justify-between items-center z-20 bg-white">
                   <div className="text-left">
                     <span 
-                      className="px-2.5 py-0.5 text-[10px] font-extrabold uppercase rounded-full tracking-wider mb-1 inline-block text-sky-700 bg-sky-50 border border-sky-200"
+                      className="px-2.5 py-0.5 text-[10px] font-black uppercase rounded-full tracking-wider mb-1 inline-block text-[#6528D9] bg-purple-50 border border-purple-200/80"
                     >
                       {site.category}
                     </span>
-                    <h3 className="text-lg font-extrabold text-slate-950 group-hover:text-sky-600 transition-colors">
+                    <h3 className="text-lg font-black text-slate-950 group-hover:text-[#FF5500] transition-colors">
                       {site.title}
                     </h3>
                   </div>
-                  <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 group-hover:bg-slate-950 group-hover:text-white transition-all shadow-sm">
+                  <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 group-hover:bg-[#FF5500] group-hover:text-white group-hover:border-[#FF5500] transition-all shadow-sm">
                     <ArrowUpRight className="w-4 h-4" />
                   </div>
                 </div>
@@ -234,7 +263,7 @@ export default function FeaturedSites() {
       {/* Footer Action */}
       <div className="max-w-7xl mx-auto px-6 relative z-10 text-center flex flex-col items-center mt-10">
         <Link href={`/work?category=${encodeURIComponent(selectedTab)}`}>
-          <button className="px-8 py-3.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-extrabold uppercase tracking-widest rounded-full shadow-xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer border border-slate-800">
+          <button className="btn-orange-pill px-9 py-4 text-white text-xs font-black uppercase tracking-widest rounded-full shadow-xl flex items-center gap-2 transition-all cursor-pointer">
             <span>Explore All {filteredSites.length} Sites in {selectedTab}</span>
             <ArrowUpRight className="w-4 h-4 text-white" />
           </button>

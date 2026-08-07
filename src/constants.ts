@@ -65,18 +65,18 @@ export const SERVICES: Skill[] = [
 
 export const PROJECTS: Project[] = [
   {
+    title: 'Precise Building Services',
+    description: 'Master craftsmanship, commercial & residential construction, structural steel, and remodeling.',
+    tags: ['Custom Next.js', 'Construction', 'Local Business'],
+    image: '/screenshots/precise-building.jpg',
+    link: '/work/precise-building-services',
+  },
+  {
     title: 'Paws & Pamper Pet Spa',
     description: 'Friendly, warm dog grooming website with cage-free ethos, booking, and community reviews.',
     tags: ['Custom Next.js', 'Pet Grooming', 'Local Business'],
     image: '/screenshots/paws-pamper.jpg',
     link: '/work/paws-and-pamper',
-  },
-  {
-    title: 'Sterling Law Group',
-    description: 'Professional, trust-driving law firm website with practice areas, stats, and case results.',
-    tags: ['Cinematic Hero', 'Law Firm', 'Professional Services'],
-    image: '/screenshots/sterling-law.jpg',
-    link: '/work/sterling-law-group',
   },
   {
     title: 'Greenscape Landscaping',

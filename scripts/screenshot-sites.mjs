@@ -25,6 +25,7 @@ const SITES = [
   { id: 'solstice-yoga',           path: '/work/solstice-yoga' },
   { id: 'valley-prohome',          path: '/work/valley-prohome' },
   { id: 'maison-boutique',         path: '/work/maison-boutique' },
+  { id: 'precise-building',        path: '/work/precise-building-services' },
 ];
 
 const BASE_URL = 'http://localhost:3000';

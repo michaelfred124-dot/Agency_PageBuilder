@@ -39,95 +39,124 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="pt-24 lg:pt-32 bg-[#F8FAFC] text-slate-900 min-h-screen relative overflow-hidden">
-      {/* Background ambient light */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[550px] bg-gradient-to-r from-sky-200/40 via-teal-200/40 to-emerald-200/40 blur-[180px] rounded-full pointer-events-none z-0" />
+    <div className="pt-28 lg:pt-36 bg-[#FAF9FF] text-slate-900 min-h-screen relative overflow-hidden font-sans">
+      
+      {/* VIBRANT ORGANIC BACKGROUND BLOBS & GEOMETRIC SHAPES */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {/* Top-Left Deep Purple Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, 6, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-24 -left-24 w-[520px] h-[520px] text-[#6528D9] opacity-85 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M410,290Q380,330,340,380Q300,430,240,420Q180,410,130,370Q80,330,80,260Q80,190,130,135Q180,80,250,90Q320,100,380,140Q440,180,410,290Z" />
+        </motion.svg>
 
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.035)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none z-10" />
+        {/* Top-Right Vibrant Orange Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, -6, 0] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-16 -right-20 w-[480px] h-[480px] text-[#FF7700] opacity-80 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M420,280Q380,310,345,365Q310,420,240,415Q170,410,125,365Q80,320,90,250Q100,180,140,135Q180,90,250,90Q320,90,385,135Q450,180,420,280Z" />
+        </motion.svg>
 
-      <section className="py-20 px-4 lg:px-6 relative z-10">
+        {/* Floating Geometry: Amber Outline Circle */}
+        <div className="absolute top-[28%] left-[7%] w-14 h-14 border-4 border-[#FFB703] rounded-full opacity-75 animate-float-slow hidden md:block" />
+
+        {/* Floating Geometry: Wireframe Orange Triangle */}
+        <svg className="absolute top-[18%] right-[12%] w-10 h-10 text-[#FF7700] opacity-75 animate-float-reverse hidden md:block" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6">
+          <polygon points="50,10 90,85 10,85" />
+        </svg>
+
+        {/* Bottom Dot Matrix Grid */}
+        <div className="absolute bottom-[8%] right-[4%] w-44 h-36 dot-grid-purple opacity-60 hidden md:block" />
+        <div className="absolute bottom-[12%] left-[4%] w-36 h-36 dot-grid-orange opacity-50 hidden md:block" />
+      </div>
+
+      <section className="py-16 px-4 lg:px-6 relative z-10">
         <div className="max-w-[1340px] mx-auto">
 
-          {/* Header */}
-          <div className="flex flex-col space-y-4 mb-16 lg:mb-20 text-center items-center">
-            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-bold text-sky-700 bg-sky-50 px-4 py-2 rounded-full border border-sky-200 shadow-sm">
-              <span className="w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse" />
-              Transparent Page Pricing
+          {/* Header (Reference Style) */}
+          <div className="flex flex-col space-y-3 mb-14 lg:mb-16 text-center items-center">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-[#FF5500] bg-white px-5 py-2 rounded-full border border-orange-200/90 shadow-sm">
+              PRICING <ArrowRight className="w-3.5 h-3.5 text-[#FF5500]" />
             </span>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-none max-w-3xl">
-              Simple Page-Based <br />
-              <span className="bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">Subscription Plans</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-tight max-w-3xl">
+              We Have Several Tariffs for Our Clients
             </h1>
 
-            <p className="max-w-2xl text-slate-600 text-base md:text-lg font-normal mt-4 leading-relaxed">
-              Transparent monthly rates based on page count. Add extra pages or add-on services anytime with automatic tier savings!
+            <p className="max-w-xl text-slate-600 text-sm md:text-base font-medium mt-2 leading-relaxed">
+              Choose the perfect page count for your business. Includes continuous maintenance, updates, and zero lock-in.
             </p>
           </div>
 
-          {/* Pricing Grid */}
+          {/* Pricing Grid (Reference Card Style) */}
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
-            {PLANS.map((plan, i) => (
-              <motion.div
-                key={plan.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.15 }}
-                className={`p-8 lg:p-10 rounded-3xl border bg-white ${CARD_STYLES[plan.id] || ''} shadow-sm relative flex flex-col justify-between group hover:shadow-xl hover:-translate-y-1 transition-all`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest rounded-full bg-slate-900 text-white shadow-md border border-slate-800">
-                    Most Popular
-                  </div>
-                )}
-
-                {/* Top accent line */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-2xl font-extrabold text-slate-900">
-                      {plan.name}
-                    </h3>
-                    <span className="px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 text-[10px] font-bold uppercase">
-                      {plan.pagesCount} Pages
-                    </span>
-                  </div>
-                  <p className="text-slate-600 text-xs leading-relaxed mb-6 font-medium">
-                    {plan.description}
-                  </p>
-
-                  <div className="flex items-baseline gap-1 mb-8">
-                    <span className="text-5xl font-extrabold text-slate-900 tracking-tight">{formatCents(plan.monthlyCents)}</span>
-                    <span className="text-sm font-bold text-slate-500">/mo</span>
-                  </div>
-
-                  <ul className="space-y-4 mb-8 text-slate-700 text-sm">
-                    {plan.features.map(feature => (
-                      <li key={feature} className="flex items-center gap-3 font-medium">
-                        <div className="w-5 h-5 rounded-full bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600 shrink-0">
-                          <Check className="w-3.5 h-3.5 text-teal-600" />
-                        </div>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <button
-                  onClick={() => handleGetStarted(plan.id)}
-                  disabled={loadingPlan !== null}
-                  className={`w-full py-4 text-xs font-extrabold uppercase tracking-widest rounded-full transition-all cursor-pointer shadow-sm hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 ${
-                    plan.popular
-                      ? 'bg-slate-950 text-white hover:bg-slate-800'
-                      : 'bg-white text-slate-900 border border-slate-200 hover:bg-slate-50'
+            {PLANS.map((plan, i) => {
+              const isFeatured = plan.popular;
+              return (
+                <motion.div
+                  key={plan.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.15 }}
+                  className={`p-8 lg:p-10 rounded-3xl border transition-all duration-300 relative flex flex-col justify-between group ${
+                    isFeatured 
+                      ? 'bg-purple-vibrant text-white border-[#7C3AED] shadow-2xl scale-105 z-20' 
+                      : 'bg-white text-slate-900 border-slate-200 shadow-md hover:shadow-xl hover:-translate-y-1 z-10'
                   }`}
                 >
-                  {loadingPlan === plan.id ? 'Redirecting…' : `Get the ${plan.pagesCount}-page site`}
-                </button>
-              </motion.div>
-            ))}
+                  {isFeatured && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1 text-[10px] font-black uppercase tracking-widest rounded-full bg-[#FF7700] text-white shadow-lg">
+                      MOST POPULAR TIER
+                    </div>
+                  )}
+
+                  <div>
+                    <div className="text-center mb-6">
+                      <h3 className={`text-xl font-black uppercase tracking-wider ${isFeatured ? 'text-white' : 'text-[#FF5500]'}`}>
+                        {plan.name}
+                      </h3>
+                      <p className={`text-xs mt-1 font-medium ${isFeatured ? 'text-purple-200' : 'text-slate-500'}`}>
+                        For growing local businesses ({plan.pagesCount} Pages)
+                      </p>
+                    </div>
+
+                    <div className="flex items-baseline justify-center gap-1 my-6 pb-6 border-b border-slate-200/20">
+                      <span className={`text-5xl font-black tracking-tight ${isFeatured ? 'text-[#FFB703]' : 'text-[#FF5500]'}`}>
+                        {formatCents(plan.monthlyCents)}
+                      </span>
+                      <span className={`text-xs font-bold ${isFeatured ? 'text-purple-200' : 'text-slate-500'}`}>
+                        / Per Month
+                      </span>
+                    </div>
+
+                    <ul className="space-y-3.5 mb-8 text-xs font-semibold">
+                      {plan.features.map(feature => (
+                        <li key={feature} className="flex items-center gap-2.5">
+                          <Check className={`w-4 h-4 shrink-0 ${isFeatured ? 'text-[#FFB703]' : 'text-emerald-500'}`} strokeWidth={3} />
+                          <span className={isFeatured ? 'text-purple-100' : 'text-slate-700'}>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <button
+                    onClick={() => handleGetStarted(plan.id)}
+                    disabled={loadingPlan !== null}
+                    className="w-full btn-orange-pill py-4 text-xs font-black uppercase tracking-widest rounded-full cursor-pointer shadow-md disabled:opacity-60"
+                  >
+                    {loadingPlan === plan.id ? 'Redirecting…' : 'Try 1 week for free'}
+                  </button>
+                </motion.div>
+              );
+            })}
           </div>
 
           {error && (

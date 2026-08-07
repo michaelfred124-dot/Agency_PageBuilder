@@ -1,731 +1,1269 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import { 
-  Menu, X, Phone, Mail, MapPin, Star, Check, ArrowRight, ShieldCheck, 
-  Settings, Award, Sparkles, ChevronRight, ChevronLeft 
+  Building2, Home, Wrench, ClipboardCheck, CheckCircle2, ShieldCheck, 
+  Award, Scale, Users, MapPin, Phone, Mail, Clock, ArrowRight, 
+  ChevronRight, ChevronLeft, Star, ExternalLink, Filter, Send, X,
+  Maximize2, Eye, Layers, Compass, Check, Hammer
 } from "lucide-react";
 
-// Brand colors
-export const PB_BLUE = "#1D6EB5";
-export const PB_YELLOW = "#FFCA00";
-export const PB_DARK = "#0B1A30";
-export const PB_LIGHT = "#F8FAFC";
+// Apex Construction Brand Tokens
+export const APEX_NAVY = "#0B1528";
+export const APEX_NAVY_LIGHT = "#152238";
+export const APEX_NAVY_DARK = "#060D1A";
+export const APEX_GOLD = "#E58B00";
+export const APEX_GOLD_HOVER = "#D97706";
+export const APEX_GOLD_LIGHT = "#FEF3C7";
+export const APEX_GRAY = "#64748B";
+export const APEX_LIGHT_BG = "#F8FAFC";
 
-// Reveal Animation placeholder
-export const Reveal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <div>{children}</div>;
+// Backward compatibility tokens
+export const PB_BLUE = APEX_NAVY;
+export const PB_YELLOW = APEX_GOLD;
+export const PB_DARK = APEX_NAVY_DARK;
+export const PB_LIGHT = APEX_LIGHT_BG;
+
+// Stylized 'A' Logo representing building roof & steel structure
+export const ApexLogo: React.FC<{ size?: "sm" | "md" | "lg"; light?: boolean; onClick?: () => void }> = ({ 
+  size = "md", 
+  light = false,
+  onClick 
+}) => {
+  const iconSize = size === "sm" ? 28 : size === "lg" ? 44 : 36;
+  return (
+    <div 
+      onClick={onClick} 
+      className={`inline-flex items-center gap-3 select-none ${onClick ? "cursor-pointer group" : ""}`}
+    >
+      <div 
+        className="relative flex items-center justify-center rounded transition-transform duration-300 group-hover:scale-105"
+        style={{ width: iconSize, height: iconSize }}
+      >
+        <svg 
+          viewBox="0 0 100 100" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="w-full h-full drop-shadow-md"
+        >
+          {/* Outer triangle 'A' frame */}
+          <polygon 
+            points="50,10 90,88 10,88" 
+            fill={light ? "#FFFFFF" : APEX_NAVY} 
+            stroke={APEX_GOLD} 
+            strokeWidth="5" 
+          />
+          {/* Inner roof truss & skyscraper lines */}
+          <line x1="50" y1="18" x2="50" y2="88" stroke={APEX_GOLD} strokeWidth="4" />
+          <line x1="32" y1="52" x2="68" y2="52" stroke={APEX_GOLD} strokeWidth="4" />
+          <line x1="24" y1="68" x2="76" y2="68" stroke={APEX_GOLD} strokeWidth="4" />
+          <line x1="16" y1="84" x2="84" y2="84" stroke={APEX_GOLD} strokeWidth="3" />
+          {/* Glowing peak tip */}
+          <polygon points="50,10 58,28 42,28" fill={APEX_GOLD} />
+        </svg>
+      </div>
+      <div className="flex flex-col">
+        <span 
+          className={`font-black tracking-wider uppercase leading-none font-display ${
+            size === "sm" ? "text-sm" : size === "lg" ? "text-xl" : "text-base"
+          } ${light ? "text-white" : "text-[#0B1528]"}`}
+        >
+          APEX
+        </span>
+        <span 
+          className={`font-bold tracking-[0.25em] text-[9px] uppercase leading-tight ${
+            light ? "text-[#E58B00]" : "text-[#E58B00]"
+          }`}
+        >
+          CONSTRUCTION
+        </span>
+      </div>
+    </div>
+  );
 };
 
-// 1. PBHeader Component
-export const PBHeader = ({ 
-  businessName = "Precise Building Services", 
-  phone = "202.827.2214", 
-  ctaText = "Schedule Now",
-  onNavigate
-}: any) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const links = [
-    { label: "Home", page: "home" },
-    { label: "Services", page: "services" },
-    { label: "Commercial", page: "services" },
-    { label: "Service Areas", page: "home" },
-    { label: "About Us", page: "home" },
-    { label: "Careers", page: "careers" },
-    { label: "Contact Us", page: "contact" }
+// Common Page Header
+export const ApexHeader: React.FC<{ 
+  currentPage?: string; 
+  onNavigate?: (page: string) => void;
+  onOpenQuote?: () => void;
+  compact?: boolean;
+}> = ({ 
+  currentPage = "home", 
+  onNavigate, 
+  onOpenQuote,
+  compact = false 
+}) => {
+  const navItems = [
+    { id: "home", label: "HOME" },
+    { id: "services", label: "SERVICES" },
+    { id: "portfolio", label: "PORTFOLIO" },
+    { id: "about", label: "ABOUT" },
+    { id: "contact", label: "CONTACT" },
   ];
 
-  const handleLinkClick = (page: string) => {
-    if (onNavigate) onNavigate(page);
-    setIsOpen(false);
-  };
-
   return (
-    <header className="w-full bg-white border-b border-slate-100 sticky top-0 z-50 rounded-none">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        {/* Logo */}
-        <div 
-          onClick={() => handleLinkClick("home")} 
-          className="flex items-center gap-2.5 cursor-pointer select-none"
-        >
-          <div 
-            className="w-10 h-10 flex items-center justify-center font-black text-xl text-white rounded-none shadow-[2px_2px_0px_rgba(0,0,0,1)] border-2 border-black"
-            style={{ backgroundColor: PB_BLUE }}
-          >
-            P
-          </div>
-          <div className="flex flex-col">
-            <span className="font-black text-sm tracking-tighter text-slate-900 uppercase leading-none">
-              {businessName.split(" ").slice(0, 2).join(" ")}
-            </span>
-            <span className="text-[9px] font-black tracking-widest text-slate-400 uppercase leading-none mt-1">
-              {businessName.split(" ").slice(2).join(" ") || "ELECTRICAL DIVISION"}
-            </span>
-          </div>
-        </div>
+    <header className={`w-full bg-white border-b border-slate-200 sticky top-0 z-30 transition-all ${compact ? "py-2 px-4" : "py-3.5 px-6"}`}>
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <ApexLogo size={compact ? "sm" : "md"} onClick={() => onNavigate?.("home")} />
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden @5xl:flex lg:flex items-center gap-7 text-xs font-bold text-slate-600 uppercase tracking-wider">
-          {links.map((link) => (
-            <button
-              key={link.label}
-              onClick={() => handleLinkClick(link.page)}
-              className="hover:text-slate-900 transition-colors cursor-pointer border-b-2 border-transparent hover:border-black/10 py-1"
-            >
-              {link.label}
-            </button>
-          ))}
+        {/* Navigation Menu */}
+        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+          {navItems.map((item) => {
+            const isActive = currentPage === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => onNavigate?.(item.id)}
+                className={`px-3 py-1.5 text-xs font-bold tracking-wider transition-all cursor-pointer rounded ${
+                  isActive 
+                    ? "text-[#E58B00] bg-amber-50/80 font-black border-b-2 border-[#E58B00]" 
+                    : "text-slate-700 hover:text-[#E58B00] hover:bg-slate-50"
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
         </nav>
 
-        {/* Contact/CTA */}
-        <div className="hidden @5xl:flex lg:flex items-center gap-4">
-          <a 
-            href={`tel:${phone}`} 
-            className="flex items-center gap-2 text-xs font-black text-slate-900 tracking-wider"
+        {/* CTA Button */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => onOpenQuote ? onOpenQuote() : onNavigate?.("contact")}
+            className="px-4 py-2 bg-[#E58B00] hover:bg-[#D97706] text-white font-extrabold text-xs tracking-wider uppercase rounded shadow-md hover:shadow-lg transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-none border-2 border-black flex items-center justify-center" style={{ backgroundColor: PB_YELLOW }}>
-              <Phone className="w-4 h-4 text-black" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[9px] font-bold text-slate-400 uppercase leading-none">Call day or night</span>
-              <span className="text-sm font-black mt-0.5">{phone}</span>
-            </div>
-          </a>
-          <button 
-            onClick={() => handleLinkClick("contact")}
-            className="px-5 py-3 border-2 border-black font-black text-xs uppercase tracking-widest hover:bg-slate-50 transition-all rounded-none cursor-pointer"
-            style={{ backgroundColor: PB_YELLOW, boxShadow: "3px 3px 0px rgba(0,0,0,1)" }}
-          >
-            {ctaText}
+            <span>GET A FREE QUOTE</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
-
-        {/* Mobile Toggle */}
-        <button 
-          onClick={() => setIsOpen(!isOpen)} 
-          className="@5xl:hidden lg:hidden p-2 text-slate-700 hover:text-black border-2 border-black rounded-none"
-        >
-          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
       </div>
-
-      {/* Mobile Drawer */}
-      {isOpen && (
-        <div className="@5xl:hidden lg:hidden border-t border-slate-200 bg-white p-6 space-y-4">
-          <nav className="flex flex-col gap-4 text-xs font-bold text-slate-600 uppercase tracking-wider">
-            {links.map((link) => (
-              <button
-                key={link.label}
-                onClick={() => handleLinkClick(link.page)}
-                className="text-left py-2 hover:text-black transition-colors"
-              >
-                {link.label}
-              </button>
-            ))}
-          </nav>
-          <div className="pt-4 border-t border-slate-100 flex flex-col gap-4">
-            <a 
-              href={`tel:${phone}`} 
-              className="flex items-center gap-3 text-xs font-black text-slate-950"
-            >
-              <Phone className="w-4 h-4 text-slate-500" />
-              <span>{phone} (Call Day or Night)</span>
-            </a>
-            <button 
-              onClick={() => handleLinkClick("contact")}
-              className="w-full py-3.5 border-2 border-black font-black text-xs uppercase tracking-widest text-center rounded-none"
-              style={{ backgroundColor: PB_YELLOW }}
-            >
-              {ctaText}
-            </button>
-          </div>
-        </div>
-      )}
     </header>
   );
 };
 
-// 2. PBHero Component
-export const PBHero = ({
-  title = "Residential & Commercial Electrical Repair & Service",
-  subtitle = "Licensed Electricians Serving Washington DC and Surrounding Areas",
-  ctaText = "Request Service",
-  image = "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070",
-  onNavigate
-}: any) => {
+// Common Page Footer
+export const ApexFooter: React.FC<{ 
+  onNavigate?: (page: string) => void;
+  compact?: boolean;
+}> = ({ 
+  onNavigate,
+  compact = false 
+}) => {
   return (
-    <section className="w-full min-h-[580px] relative flex items-center justify-start bg-slate-950 text-white py-20 px-6 rounded-none overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0 w-full h-full opacity-30">
-        <img 
-          src={image} 
-          alt="Electrician Work Van" 
-          className="w-full h-full object-cover"
-          referrerPolicy="no-referrer"
-        />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/40 to-transparent pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div className="lg:col-span-8 flex flex-col items-start text-left">
-          {/* Logo Crosshair Symbol */}
-          <div className="flex items-center gap-3 mb-6 bg-white/10 backdrop-blur-md px-4 py-2 border border-white/10 rounded-none">
-            <span className="w-2.5 h-2.5 bg-yellow-400 animate-pulse rounded-none" />
-            <span className="text-[10px] font-black tracking-widest uppercase text-yellow-400">Licensed • Bonded • Insured</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl md:text-6.5xl font-black font-display tracking-tight leading-[1.05] mb-6 max-w-3xl">
-            {title}
-          </h1>
-          <p className="text-white/80 text-base md:text-lg leading-relaxed max-w-xl font-medium mb-10">
-            {subtitle}
+    <footer className="w-full bg-[#0B1528] text-white border-t border-slate-800">
+      <div className={`max-w-7xl mx-auto ${compact ? "p-6" : "px-6 py-12"} grid grid-cols-1 md:grid-cols-4 gap-8`}>
+        {/* Col 1: Brand & Bio */}
+        <div className="space-y-4">
+          <ApexLogo light size="md" onClick={() => onNavigate?.("home")} />
+          <p className="text-xs text-slate-400 leading-relaxed max-w-xs">
+            Commercial & residential construction leaders delivering master engineering, turnkey management, and superior architectural craftsmanship.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <button 
-              onClick={() => onNavigate?.("contact")}
-              className="px-8 py-4 border-2 border-black font-black text-xs uppercase tracking-widest text-black hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 rounded-none cursor-pointer"
-              style={{ backgroundColor: PB_YELLOW, boxShadow: "4px 4px 0px rgba(0,0,0,1)" }}
-            >
-              <span>{ctaText}</span>
-              <ArrowRight className="w-4 h-4 stroke-[3px]" />
-            </button>
-          </div>
-        </div>
-
-        {/* Google Guaranteed badge on Hero bottom right */}
-        <div className="lg:col-span-4 flex justify-start lg:justify-end self-end">
-          <div className="bg-white text-slate-900 p-5 border-3 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] rounded-none flex items-center gap-4">
-            <div className="w-12 h-12 bg-emerald-500 rounded-none flex items-center justify-center text-white shrink-0">
-              <ShieldCheck className="w-7 h-7" />
-            </div>
-            <div className="text-left">
-              <div className="flex items-center gap-1 text-amber-500 mb-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                ))}
-              </div>
-              <span className="block text-xs font-black text-slate-900 tracking-tight uppercase leading-none">Google Guaranteed</span>
-              <span className="text-[10px] text-slate-500 font-extrabold leading-none mt-1 block">5.0 Star Rated Local Electricians</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// 3. PBTrustStrip Component
-export const PBTrustStrip = () => {
-  const logos = [
-    { name: "thirdweb", icon: "💎" },
-    { name: "Fluid", icon: "💧" },
-    { name: "paraform", icon: "⧉" },
-    { name: "dotwork", icon: "⚫" },
-    { name: "Heineken", icon: "★" },
-    { name: "Electrada", icon: "⚡" },
-    { name: "Mercor", icon: "◆" }
-  ];
-
-  return (
-    <section className="w-full bg-slate-50 border-y border-slate-200/60 py-8 px-6 text-center rounded-none">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-5 font-display block">
-          Trusted by 30,000+ local residential & commercial customers
-        </span>
-        <div className="flex flex-wrap gap-x-12 gap-y-6 items-center justify-center opacity-65">
-          {logos.map((logo) => (
-            <div key={logo.name} className="flex items-center gap-2 text-slate-800 font-black text-sm uppercase tracking-widest select-none">
-              <span className="text-lg">{logo.icon}</span>
-              <span>{logo.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// 4. PBServicesGrid Component
-export const PBServicesGrid = ({ onNavigate }: any) => {
-  const cards = [
-    {
-      id: "trouble",
-      num: "01",
-      title: "Electrical Troubleshooting",
-      desc: "Diagnostics, flickering lights, circuit breaker tripping, wiring errors resolved.",
-      image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600",
-      cta: "Get a Free Estimate"
-    },
-    {
-      id: "safety",
-      num: "02",
-      title: "Electrical Safety",
-      desc: "Panel inspections, GFCI outlet installations, code violation corrections.",
-      image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=600",
-      cta: "Schedule Inspection"
-    },
-    {
-      id: "upgrades",
-      num: "03",
-      title: "Electrical Upgrades",
-      desc: "Smart home integrations, 200A panel upgrades, EV charger installations.",
-      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=600",
-      cta: "Learn Upgrades"
-    }
-  ];
-
-  return (
-    <section className="w-full py-20 px-6 bg-white text-center rounded-none">
-      <div className="max-w-7xl mx-auto">
-        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-3 font-display">YOUR TRUSTED LOCAL ELECTRICIAN</span>
-        <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight font-display mb-14 uppercase">
-          Electrical Repair & Install Services
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-          {cards.map((card) => (
-            <div 
-              key={card.id} 
-              className="flex flex-col bg-white border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] rounded-none overflow-hidden group hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="aspect-[4/3] w-full relative overflow-hidden shrink-0 border-b-2 border-black bg-slate-100">
-                <img 
-                  src={card.image} 
-                  alt={card.title} 
-                  className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-75" 
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute top-4 left-4 w-9 h-9 border-2 border-black bg-white flex items-center justify-center font-black text-xs">
-                  {card.num}
-                </div>
-              </div>
-              <div className="p-6 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-lg font-black text-slate-900 mb-3">{card.title}</h3>
-                  <p className="text-xs text-slate-500 font-medium leading-relaxed mb-6">{card.desc}</p>
-                </div>
-                <div>
-                  <button 
-                    onClick={() => onNavigate?.("contact")}
-                    className="w-full py-3.5 border-2 border-black font-black text-[10px] uppercase tracking-widest text-center transition-colors rounded-none hover:bg-slate-50 cursor-pointer flex items-center justify-center gap-1.5"
-                    style={{ backgroundColor: PB_YELLOW }}
-                  >
-                    <span>{card.cta}</span>
-                    <ArrowRight className="w-3.5 h-3.5 stroke-[2.5px]" />
-                  </button>
-                  
-                  {card.id === "trouble" && (
-                    <div className="mt-3 relative">
-                      <select 
-                        onChange={(e) => onNavigate?.(e.target.value)}
-                        className="w-full bg-slate-900 border-2 border-black text-white text-[10px] font-black uppercase tracking-widest py-3 px-4 rounded-none focus:outline-none appearance-none cursor-pointer text-center"
-                      >
-                        <option value="">Other Electrical Services</option>
-                        <option value="services">Commercial Services</option>
-                        <option value="services">Residential Rewiring</option>
-                        <option value="services">Emergency Assistance</option>
-                      </select>
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-white text-[8px]">▼</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// 5. PBBlueBanner Component
-export const PBBlueBanner = ({ onNavigate }: any) => {
-  return (
-    <section 
-      className="w-full text-white py-16 px-6 text-center relative overflow-hidden rounded-none border-y-2 border-black"
-      style={{ backgroundColor: PB_BLUE }}
-    >
-      {/* Visual highlights */}
-      <div className="absolute -top-32 -left-32 w-80 h-80 rounded-full opacity-20 blur-[100px] bg-white pointer-events-none" />
-      <div className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full opacity-25 blur-[100px] bg-white pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto relative z-10 flex flex-col items-center">
-        <h2 className="text-3xl md:text-5xl font-black font-display tracking-tight uppercase mb-4">
-          Do It <span className="italic text-yellow-300">Right</span> The First Time
-        </h2>
-        <p className="text-white/80 text-xs font-black uppercase tracking-widest mb-10 max-w-md">
-          Emergency dispatch or scheduled appointments available 24/7.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
-          <button 
-            onClick={() => onNavigate?.("contact")}
-            className="w-full sm:w-auto px-8 py-4 border-2 border-black font-black text-xs uppercase tracking-widest text-slate-950 hover:scale-[1.02] transition-transform rounded-none cursor-pointer"
-            style={{ backgroundColor: PB_YELLOW, boxShadow: "3px 3px 0px rgba(0,0,0,1)" }}
-          >
-            Schedule Service Now
-          </button>
-          <a 
-            href="tel:202.827.2214"
-            className="w-full sm:w-auto px-8 py-4 border-2 border-white font-black text-xs uppercase tracking-widest text-white hover:bg-white/10 transition-colors rounded-none text-center"
-          >
-            Call Us: 202.827.2214
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// 6. PBWhyChooseUs Component
-export const PBWhyChooseUs = ({ onNavigate, image }: any) => {
-  const points = [
-    {
-      title: "We're local.",
-      desc: "Based right in Washington DC. Our service vans are stocked and ready to respond immediately to local calls."
-    },
-    {
-      title: "We're licensed and certified.",
-      desc: "All technicians are master electricians or highly certified. We strictly follow NEC safety standards."
-    },
-    {
-      title: "We're dependable.",
-      desc: "We guarantee clear pricing and lifetime warranty on our craftsmanship. No surprise fees, ever."
-    }
-  ];
-
-  return (
-    <section className="w-full py-20 px-6 bg-slate-50 text-left rounded-none border-b border-slate-200/50">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
-        {/* Text Area */}
-        <div className="lg:col-span-6">
-          <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600 block mb-3 font-display">PRECISE & CONCISE ELECTRICAL SERVICES</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight font-display mb-8 uppercase">
-            Why Choose Us
-          </h2>
-
-          <div className="space-y-6 mb-10">
-            {points.map((pt, i) => (
-              <div key={i} className="flex gap-4 items-start">
-                <div 
-                  className="w-6 h-6 border-2 border-black flex items-center justify-center shrink-0 mt-0.5 rounded-none"
-                  style={{ backgroundColor: PB_YELLOW }}
-                >
-                  <Check className="w-3.5 h-3.5 text-black stroke-[3px]" />
-                </div>
-                <div>
-                  <h3 className="font-extrabold text-sm text-slate-900 mb-1">{pt.title}</h3>
-                  <p className="text-xs text-slate-500 font-semibold leading-relaxed">{pt.desc}</p>
-                </div>
+          <div className="flex items-center gap-3 pt-2">
+            {["linkedin", "twitter", "facebook", "instagram"].map((social) => (
+              <div 
+                key={social}
+                className="w-7 h-7 rounded bg-slate-800 hover:bg-[#E58B00] text-slate-300 hover:text-white flex items-center justify-center text-xs transition-colors cursor-pointer"
+              >
+                {social[0].toUpperCase()}
               </div>
             ))}
           </div>
-
-          <button 
-            onClick={() => onNavigate?.("contact")}
-            className="px-6 py-3.5 border-2 border-black font-black text-[10px] uppercase tracking-widest text-slate-950 hover:bg-slate-50 transition-colors rounded-none cursor-pointer flex items-center gap-2"
-            style={{ backgroundColor: PB_YELLOW, boxShadow: "3px 3px 0px rgba(0,0,0,1)" }}
-          >
-            <span>Request Service</span>
-            <ArrowRight className="w-4 h-4 stroke-[2.5px]" />
-          </button>
         </div>
 
-        {/* Image Area */}
-        <div className="lg:col-span-6">
-          <div className="border-3 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-none overflow-hidden bg-slate-100 aspect-[4/3] w-full">
-            <img 
-              src={image || "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
-              alt="Custom kitchen with designer pendant lighting"
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-          </div>
+        {/* Col 2: Navigation Links */}
+        <div>
+          <h4 className="text-xs font-bold uppercase tracking-widest text-[#E58B00] mb-4">
+            Navigation
+          </h4>
+          <ul className="space-y-2 text-xs text-slate-300">
+            {["Home", "Services", "Portfolio", "About Us", "Contact"].map((label) => {
+              const id = label.toLowerCase().replace(" us", "");
+              return (
+                <li key={label}>
+                  <button 
+                    onClick={() => onNavigate?.(id)} 
+                    className="hover:text-[#E58B00] transition-colors cursor-pointer text-left"
+                  >
+                    {label}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
-      </div>
-    </section>
-  );
-};
-
-// 7. PBNoPower Component
-export const PBNoPower = ({ onNavigate, image }: any) => {
-  return (
-    <section className="w-full py-20 px-6 bg-white text-left rounded-none border-b border-slate-200/50">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
-        {/* Image Area */}
-        <div className="lg:col-span-6 order-2 lg:order-1">
-          <div className="border-3 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-none overflow-hidden bg-slate-100 aspect-[4/3] w-full">
-            <img 
-              src={image || "https://images.unsplash.com/photo-1581092160607-ee22621dd758?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
-              alt="Electrician working on electrical circuit box panel"
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-          </div>
+        {/* Col 3: Services */}
+        <div>
+          <h4 className="text-xs font-bold uppercase tracking-widest text-[#E58B00] mb-4">
+            Our Services
+          </h4>
+          <ul className="space-y-2 text-xs text-slate-300">
+            <li>Commercial Construction</li>
+            <li>Residential Custom Builds</li>
+            <li>Renovations & Additions</li>
+            <li>Civil Project Management</li>
+            <li>Structural Engineering</li>
+          </ul>
         </div>
 
-        {/* Text Area */}
-        <div className="lg:col-span-6 order-1 lg:order-2">
-          <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600 block mb-3 font-display">ANY SIZE ELECTRICAL JOB — BIG OR SMALL</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight font-display mb-6 uppercase">
-            No Power? No Problem.
-          </h2>
-          <p className="text-slate-500 font-semibold leading-relaxed text-xs mb-8">
-            Let's face it. We need power for everything these days. When you're offline, you're disconnected from everyone and everything. Precise Building Services understands this is a high-level emergency worthy of urgent, rapid response. 
-            <br /><br />
-            If you've lost power, we should be your first call. We'll troubleshoot the breaker board, identify lines, and get you safely plugged back in fast.
-          </p>
-
-          <button 
-            onClick={() => onNavigate?.("contact")}
-            className="px-6 py-3.5 border-2 border-black font-black text-[10px] uppercase tracking-widest text-slate-950 hover:bg-slate-50 transition-colors rounded-none cursor-pointer flex items-center gap-2"
-            style={{ backgroundColor: PB_YELLOW, boxShadow: "3px 3px 0px rgba(0,0,0,1)" }}
-          >
-            <span>Request Service</span>
-            <ArrowRight className="w-4 h-4 stroke-[2.5px]" />
-          </button>
-        </div>
-
-      </div>
-    </section>
-  );
-};
-
-// 8. PBGoToElectrician Component
-export const PBGoToElectrician = ({ onNavigate, image }: any) => {
-  return (
-    <section className="w-full py-20 px-6 bg-slate-50 text-left rounded-none">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
-        {/* Text Area */}
-        <div className="lg:col-span-6">
-          <div className="flex gap-3 mb-4 text-[10px] font-black text-indigo-600 uppercase font-display">
-            <span>Precise</span>
-            <span>/</span>
-            <span>Residential</span>
-            <span>/</span>
-            <span>Commercial</span>
-          </div>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight font-display mb-6 uppercase leading-tight">
-            Precise Building Services — Your Go-To Electrician
-          </h2>
-          <p className="text-slate-500 font-semibold leading-relaxed text-xs mb-8">
-            When you're looking for a Washington DC electrician who is trustworthy and knowledgeable, you can't find a better squad than Precise Building Services. We pride ourselves on being the hometown crew, providing excellent service to our neighbors and local businesses.
-            <br /><br />
-            We're here to handle everything: from panel code upgrades to smart home installations and wiring inspections. Our emergency team is available 24/7.
-          </p>
-
-          <a 
-            href="tel:202.827.2214"
-            className="inline-block px-6 py-3.5 border-2 border-black bg-white text-slate-950 font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-colors rounded-none text-center"
-            style={{ boxShadow: "3px 3px 0px rgba(0,0,0,1)" }}
-          >
-            Call Us: 202.827.2214
-          </a>
-        </div>
-
-        {/* Image Area */}
-        <div className="lg:col-span-6">
-          <div className="border-3 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-none overflow-hidden bg-slate-100 aspect-[4/3] w-full">
-            <img 
-              src={image || "https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
-              alt="Modern home exterior illuminated at night"
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        </div>
-
-      </div>
-    </section>
-  );
-};
-
-// 9. PBReviews Component
-export const PBReviews = () => {
-  const reviews = [
-    {
-      id: 1,
-      author: "Santino Min",
-      text: "Luis and his team were very professional and made the installation seamless. I appreciate their honesty and timing. I will definitely work with them again. THANK YOU for such amazing work!",
-      rating: 5
-    },
-    {
-      id: 2,
-      author: "Richard",
-      text: "Precise Building Services installed our ChargePoint station perfectly. When the contractor accidentally pulled out, they came back and fixed it for free. Their electricians were skilled and professional.",
-      rating: 5
-    },
-    {
-      id: 3,
-      author: "Adriene Wolmer",
-      text: "Luis and Jose were excellent! Super professional and courteous. From scheduling with Tamara, getting our estimate, their arrival and installation, all was perfect! These guys are great, don't hesitate to schedule.",
-      rating: 5
-    }
-  ];
-
-  const [activeIdx, setActiveIdx] = useState(0);
-
-  const handlePrev = () => {
-    setActiveIdx((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setActiveIdx((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
-  };
-
-  return (
-    <section 
-      className="w-full py-20 px-6 text-center text-white rounded-none relative overflow-hidden"
-      style={{ backgroundColor: PB_BLUE }}
-    >
-      <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
-        <span className="text-[10px] font-black uppercase tracking-widest text-yellow-300 block mb-3 font-display">OUR CLIENTS BRIGHTEN OUR DAY!</span>
-        <h2 className="text-3xl md:text-5xl font-black tracking-tight font-display mb-12 uppercase">
-          Thank You Washington DC Area
-        </h2>
-
-        {/* Carousel Slide */}
-        <div className="w-full min-h-[220px] flex items-center justify-center mb-8">
-          <div className="bg-white text-slate-900 p-8 border-3 border-black shadow-[6px_6px_0px_rgba(0,0,0,1)] rounded-none text-left w-full max-w-2xl relative">
-            <div className="flex justify-between items-center mb-4">
-              <span className="font-extrabold text-sm">{reviews[activeIdx].author}</span>
-              <div className="flex items-center gap-0.5 text-amber-500">
-                {[...Array(reviews[activeIdx].rating)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                ))}
-              </div>
+        {/* Col 4: Contact Summary */}
+        <div>
+          <h4 className="text-xs font-bold uppercase tracking-widest text-[#E58B00] mb-4">
+            Contact Apex
+          </h4>
+          <div className="space-y-2.5 text-xs text-slate-300">
+            <div className="flex items-start gap-2">
+              <MapPin className="w-4 h-4 text-[#E58B00] shrink-0 mt-0.5" />
+              <span>100 Apex Way, Suite 500<br />Metro City, NY 10001</span>
             </div>
-            <p className="text-xs text-slate-600 font-semibold leading-relaxed mb-4 italic">
-              "{reviews[activeIdx].text}"
-            </p>
-            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <span>Google verified reviewer</span>
-              <span className="text-slate-300">•</span>
-              <span className="text-emerald-600">Verified Client</span>
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-[#E58B00] shrink-0" />
+              <span>(555) 321-4567</span>
             </div>
-            {/* Google G Logo Badge */}
-            <div className="absolute right-6 bottom-6 w-5 h-5 bg-slate-100 rounded-none flex items-center justify-center font-bold text-[10px] text-blue-500 border border-slate-200">
-              G
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 text-[#E58B00] shrink-0" />
+              <span>contact@apexconstruction.com</span>
             </div>
           </div>
-        </div>
-
-        {/* Nav Controls */}
-        <div className="flex gap-4">
-          <button 
-            onClick={handlePrev}
-            className="w-10 h-10 border-2 border-white hover:bg-white/10 flex items-center justify-center text-white rounded-none transition-colors cursor-pointer"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button 
-            onClick={handleNext}
-            className="w-10 h-10 border-2 border-white hover:bg-white/10 flex items-center justify-center text-white rounded-none transition-colors cursor-pointer"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
         </div>
       </div>
-    </section>
-  );
-};
 
-// 10. PBFooter Component
-export const PBFooter = ({ onNavigate }: any) => {
-  return (
-    <footer className="w-full bg-slate-950 text-slate-300 py-16 px-6 text-left rounded-none border-t border-white/5">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-16">
-        
-        {/* Column 1: Links */}
-        <div className="lg:col-span-3">
-          <h4 className="text-xs font-black uppercase tracking-widest text-white mb-6 font-display">HELPFUL LINKS</h4>
-          <div className="flex flex-col gap-3 text-xs font-bold text-slate-400">
-            <button onClick={() => onNavigate?.("home")} className="text-left hover:text-white transition-colors cursor-pointer">About Us</button>
-            <button onClick={() => onNavigate?.("services")} className="text-left hover:text-white transition-colors cursor-pointer">Services</button>
-            <button onClick={() => onNavigate?.("services")} className="text-left hover:text-white transition-colors cursor-pointer">Our Services</button>
-            <button onClick={() => onNavigate?.("services")} className="text-left hover:text-white transition-colors cursor-pointer">Upgrades</button>
-            <button onClick={() => onNavigate?.("careers")} className="text-left hover:text-white transition-colors cursor-pointer">Careers</button>
-            <button onClick={() => onNavigate?.("contact")} className="text-left hover:text-white transition-colors cursor-pointer">Contact Us</button>
+      {/* Copyright Bar */}
+      <div className="border-t border-slate-800/80 py-4 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-slate-500 font-medium">
+          <span>&copy; {new Date().getFullYear()} APEX CONSTRUCTION CORP. ALL RIGHTS RESERVED.</span>
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:text-slate-300">Privacy Policy</a>
+            <span>•</span>
+            <a href="#" className="hover:text-slate-300">Terms of Service</a>
+            <span>•</span>
+            <a href="#" className="hover:text-slate-300">Licensing & Safety</a>
           </div>
-        </div>
-
-        {/* Column 2: Service Area */}
-        <div className="lg:col-span-3">
-          <h4 className="text-xs font-black uppercase tracking-widest text-white mb-6 font-display">SERVICE AREA</h4>
-          <p className="text-xs text-slate-400 font-semibold leading-relaxed">
-            Washington, DC • Silver Spring, MD • Takoma Park, MD • Bethesda, MD • Rockville, MD • Hyattsville, MD and surrounding areas.
-          </p>
-        </div>
-
-        {/* Column 3: Contact */}
-        <div className="lg:col-span-3">
-          <h4 className="text-xs font-black uppercase tracking-widest text-white mb-6 font-display">CONTACT US</h4>
-          <div className="space-y-4 text-xs font-semibold text-slate-400">
-            <div className="flex items-start gap-2.5">
-              <MapPin className="w-4 h-4 text-slate-500 mt-0.5 shrink-0" />
-              <span>7558 Baltimore Ave Suite 220<br />College Park, MD 20740</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <Phone className="w-4 h-4 text-slate-500 shrink-0" />
-              <a href="tel:202.827.2214" className="hover:text-white transition-colors">202.827.2214</a>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <Mail className="w-4 h-4 text-slate-500 shrink-0" />
-              <a href="mailto:services@precisebuildingservices.com" className="hover:text-white transition-colors">services@precisebuildingservices.com</a>
-            </div>
-          </div>
-        </div>
-
-        {/* Column 4: Certifications */}
-        <div className="lg:col-span-3 flex flex-col items-start justify-start">
-          <h4 className="text-xs font-black uppercase tracking-widest text-white mb-6 font-display">CERTIFICATION</h4>
-          <div className="bg-slate-900/60 p-4 border border-white/10 rounded-none flex items-center gap-3">
-            <div className="w-10 h-10 bg-slate-950 flex items-center justify-center font-bold text-sm text-red-500 border border-white/10 shrink-0">
-              T
-            </div>
-            <div>
-              <span className="block text-[10px] font-black uppercase tracking-tight text-white leading-none">Tesla Certified</span>
-              <span className="text-[9px] text-slate-400 font-extrabold block leading-none mt-1">Wall Connector Installation</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Under Footer */}
-      <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] font-extrabold uppercase tracking-widest text-slate-500">
-        <div className="flex items-center gap-3">
-          <div className="w-6 h-6 bg-slate-900 border border-white/10 flex items-center justify-center font-black text-xs text-white">P</div>
-          <span>PRECISE BUILDING SERVICES &copy; 2026</span>
-        </div>
-        <div className="flex gap-4">
-          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-          <span>•</span>
-          <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
         </div>
       </div>
     </footer>
   );
 };
 
-// PRECISE BLOCK RENDERERS
-export const PB_RENDERERS: Record<string, React.FC<any>> = {
-  PBHeader: (props: any) => <PBHeader {...props} />,
-  PBHero: (props: any) => <PBHero {...props} />,
-  PBTrustStrip: (props: any) => <PBTrustStrip {...props} />,
-  PBServicesGrid: (props: any) => <PBServicesGrid {...props} />,
-  PBBlueBanner: (props: any) => <PBBlueBanner {...props} />,
-  PBWhyChooseUs: (props: any) => <PBWhyChooseUs {...props} />,
-  PBNoPower: (props: any) => <PBNoPower {...props} />,
-  PBGoToElectrician: (props: any) => <PBGoToElectrician {...props} />,
-  PBReviews: (props: any) => <PBReviews {...props} />,
-  PBFooter: (props: any) => <PBFooter {...props} />
+// ==========================================
+// PAGE 1: HOME PAGE (Label: 1/5)
+// ==========================================
+export const ApexHomePage: React.FC<{ 
+  onNavigate?: (page: string) => void;
+  onOpenQuote?: () => void;
+}> = ({ onNavigate, onOpenQuote }) => {
+  return (
+    <div className="w-full bg-white text-slate-900">
+      {/* Hero Banner */}
+      <section className="relative w-full min-h-[460px] md:min-h-[520px] bg-[#0B1528] flex items-center overflow-hidden">
+        {/* Background Image with Deep Blue Overlay */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1541888946425-d0fbb18015f6?q=80&w=2070&auto=format&fit=crop"
+            alt="Modern multi-story office building construction"
+            fill
+            className="object-cover opacity-35 object-center"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1528]/95 via-[#0B1528]/80 to-transparent" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 text-left">
+          <div className="max-w-2xl space-y-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-[#E58B00]/40 rounded text-[#E58B00] text-[11px] font-black tracking-widest uppercase">
+              <span>MASTER BUILDERS & GENERAL CONTRACTORS</span>
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase font-display leading-[1.05]">
+              BUILDING YOUR <span className="text-[#E58B00]">FUTURE.</span>
+            </h1>
+
+            <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-xl font-normal">
+              Apex Construction delivers master-level commercial, residential, and industrial builds. With over two decades of structural excellence, our seasoned engineers and site managers ensure zero-defect project delivery on time and within budget.
+            </p>
+
+            <div className="pt-3 flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => onOpenQuote ? onOpenQuote() : onNavigate?.("contact")}
+                className="px-6 py-3.5 bg-[#E58B00] hover:bg-[#D97706] text-white font-extrabold text-xs uppercase tracking-widest rounded shadow-xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer"
+              >
+                <span>GET A FREE QUOTE</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => onNavigate?.("portfolio")}
+                className="px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded transition-all cursor-pointer"
+              >
+                VIEW PORTFOLIO
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Content Section 1: Our Expertise */}
+      <section className="py-16 px-6 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto text-center">
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00] block mb-2">
+            CORE CAPABILITIES
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black text-[#0B1528] tracking-tight uppercase font-display mb-3">
+            Our Expertise
+          </h2>
+          <p className="text-xs md:text-sm text-slate-500 max-w-xl mx-auto mb-12">
+            Expert construction services for commercial and residential developments executed with engineering precision.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            {/* Commercial */}
+            <div className="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
+              <div className="w-14 h-14 rounded-lg bg-amber-50 border border-amber-200 text-[#E58B00] flex items-center justify-center mb-6 group-hover:bg-[#E58B00] group-hover:text-white transition-colors">
+                <Building2 className="w-7 h-7" />
+              </div>
+              <h3 className="text-lg font-black text-[#0B1528] uppercase font-display mb-2">
+                Commercial
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                Full-scale commercial project management and construction, from high-rise office towers to corporate retail centers.
+              </p>
+              <button 
+                onClick={() => onNavigate?.("services")}
+                className="text-xs font-bold text-[#E58B00] flex items-center gap-1 hover:gap-2 transition-all cursor-pointer"
+              >
+                <span>Learn more</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Residential */}
+            <div className="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
+              <div className="w-14 h-14 rounded-lg bg-amber-50 border border-amber-200 text-[#E58B00] flex items-center justify-center mb-6 group-hover:bg-[#E58B00] group-hover:text-white transition-colors">
+                <Home className="w-7 h-7" />
+              </div>
+              <h3 className="text-lg font-black text-[#0B1528] uppercase font-display mb-2">
+                Residential
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                Custom home builds, structural additions, and multi-family developments tailored to luxury living and durability.
+              </p>
+              <button 
+                onClick={() => onNavigate?.("services")}
+                className="text-xs font-bold text-[#E58B00] flex items-center gap-1 hover:gap-2 transition-all cursor-pointer"
+              >
+                <span>Learn more</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Remodeling */}
+            <div className="bg-white p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
+              <div className="w-14 h-14 rounded-lg bg-amber-50 border border-amber-200 text-[#E58B00] flex items-center justify-center mb-6 group-hover:bg-[#E58B00] group-hover:text-white transition-colors">
+                <Wrench className="w-7 h-7" />
+              </div>
+              <h3 className="text-lg font-black text-[#0B1528] uppercase font-display mb-2">
+                Remodeling
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                High-end residential and commercial renovations, structural reconfigurations, and architectural modernizations.
+              </p>
+              <button 
+                onClick={() => onNavigate?.("services")}
+                className="text-xs font-bold text-[#E58B00] flex items-center gap-1 hover:gap-2 transition-all cursor-pointer"
+              >
+                <span>Learn more</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Content Section 2: Featured Projects */}
+      <section className="py-16 px-6 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+              <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00] block mb-2">
+                OUR WORK
+              </span>
+              <h2 className="text-3xl md:text-4xl font-black text-[#0B1528] tracking-tight uppercase font-display">
+                Featured Projects
+              </h2>
+            </div>
+            <button
+              onClick={() => onNavigate?.("portfolio")}
+              className="text-xs font-bold text-[#E58B00] hover:text-[#D97706] flex items-center gap-1 cursor-pointer"
+            >
+              <span>Explore full portfolio ({12}+ projects)</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Grid of 4 project thumbnails */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                title: "City Center Complex",
+                category: "Commercial High-Rise",
+                img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
+              },
+              {
+                title: "Residential Build",
+                category: "Custom Estate",
+                img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop",
+              },
+              {
+                title: "Office Renovation",
+                category: "Interior Modernization",
+                img: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop",
+              },
+              {
+                title: "Hospital Expansion",
+                category: "Institutional",
+                img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=800&auto=format&fit=crop",
+              },
+            ].map((p, idx) => (
+              <div 
+                key={idx}
+                onClick={() => onNavigate?.("portfolio")}
+                className="group relative h-64 rounded-lg overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all cursor-pointer"
+              >
+                <Image
+                  src={p.img}
+                  alt={p.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1528]/90 via-[#0B1528]/40 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                  <span className="text-[10px] uppercase tracking-widest text-[#E58B00] font-black block mb-1">
+                    {p.category}
+                  </span>
+                  <h4 className="text-base font-black font-display uppercase tracking-tight">
+                    {p.title}
+                  </h4>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Content Section 3: Client Testimonials */}
+      <section className="py-16 px-6 bg-slate-50">
+        <div className="max-w-7xl mx-auto text-center">
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00] block mb-2">
+            TRUST & REPUTATION
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black text-[#0B1528] tracking-tight uppercase font-display mb-12">
+            Client Testimonials
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            {[
+              {
+                quote: "Apex Construction transformed our corporate campus vision into reality with unmatched precision, speed, and strict safety compliance. They handled complex engineering with ease.",
+                name: "Sammy J. Burns",
+                title: "CEO, Burns Holdings Corp.",
+              },
+              {
+                quote: "Their residential design-build team exceeded every expectation on our multi-acre custom estate. Master builders who treat every detail with genuine dedication.",
+                name: "Elena Rostova",
+                title: "Principal Developer, Apex Estates",
+              },
+              {
+                quote: "Delivered on-time, on-budget, and zero compromises on architectural integrity. Apex has been our exclusive commercial general contractor for 4 consecutive developments.",
+                name: "David K. Vance",
+                title: "Director of Facilities, Metro Plaza",
+              },
+            ].map((t, idx) => (
+              <div 
+                key={idx}
+                className="bg-white p-7 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center gap-1 text-[#E58B00] mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-xs md:text-sm text-slate-600 italic leading-relaxed mb-6">
+                    "{t.quote}"
+                  </p>
+                </div>
+                <div className="pt-4 border-t border-slate-100">
+                  <span className="text-xs font-black text-[#0B1528] uppercase block">
+                    {t.name}
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-medium block">
+                    {t.title}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 };
 
-// PRECISE BLOCK SCHEMAS FOR PAGE BUILDER
+// ==========================================
+// PAGE 2: SERVICES PAGE (Label: 2/5)
+// ==========================================
+export const ApexServicesPage: React.FC<{ 
+  onNavigate?: (page: string) => void;
+  onOpenQuote?: () => void;
+}> = ({ onNavigate, onOpenQuote }) => {
+  const services = [
+    {
+      title: "COMMERCIAL CONSTRUCTION",
+      icon: Building2,
+      desc: "Comprehensive general contracting, civil engineering, and construction management for corporate headquarters, high-rise developments, and retail facilities.",
+      img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
+      bullets: [
+        "High-rise development",
+        "Interior buildouts",
+        "Office park construction",
+        "Sustainable design",
+        "Construction management"
+      ]
+    },
+    {
+      title: "RESIDENTIAL BUILD",
+      icon: Home,
+      desc: "Custom architectural homes, structural additions, and multi-family residential communities built with heirloom-grade craftsmanship and modern energy efficiency.",
+      img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop",
+      bullets: [
+        "Custom homes",
+        "Multi-family projects",
+        "Home design-build",
+        "Ground-up construction",
+        "Structural work"
+      ]
+    },
+    {
+      title: "RENOVATIONS & ADDITIONS",
+      icon: Wrench,
+      desc: "Transformative structural renovations, luxury kitchen and bath reconfigurations, exterior extensions, and complete tenant improvement buildouts.",
+      img: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop",
+      bullets: [
+        "Home remodeling",
+        "Additions & extensions",
+        "Kitchen & bath updates",
+        "Structural modifications",
+        "Interior design-build"
+      ]
+    },
+    {
+      title: "PROJECT MANAGEMENT",
+      icon: ClipboardCheck,
+      desc: "End-to-end owner representation, pre-construction feasibility analysis, logistical site planning, contractor supervision, and rigorous quality assurance.",
+      img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop",
+      bullets: [
+        "Concept to Completion",
+        "Site planning & logistics",
+        "Budget management",
+        "Contractor coordination",
+        "Quality assurance"
+      ]
+    }
+  ];
+
+  return (
+    <div className="w-full bg-white text-slate-900">
+      {/* Header Banner */}
+      <section className="py-14 px-6 bg-slate-50 border-b border-slate-200 text-center">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00]">
+            WHAT WE DO
+          </span>
+          <h1 className="text-4xl md:text-5xl font-black text-[#0B1528] tracking-tight uppercase font-display">
+            OUR SERVICES.
+          </h1>
+          <p className="text-xs md:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Apex Construction provides end-to-end commercial and residential building services, executing every phase from architectural planning through final handover.
+          </p>
+        </div>
+      </section>
+
+      {/* Service Grid - 4 distinct panels */}
+      <section className="py-16 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+          {services.map((s, idx) => {
+            const Icon = s.icon;
+            return (
+              <div 
+                key={idx}
+                className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
+              >
+                <div className="relative h-56 w-full overflow-hidden">
+                  <Image
+                    src={s.img}
+                    alt={s.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute top-4 left-4 w-10 h-10 rounded bg-[#0B1528] text-[#E58B00] flex items-center justify-center shadow-lg">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </div>
+
+                <div className="p-7 flex-1 flex flex-col justify-between space-y-5">
+                  <div>
+                    <h3 className="text-xl font-black text-[#0B1528] uppercase font-display mb-2">
+                      {s.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                      {s.desc}
+                    </p>
+
+                    {/* Bullet Points */}
+                    <ul className="space-y-2">
+                      {s.bullets.map((bullet, bIdx) => (
+                        <li key={bIdx} className="flex items-center gap-2.5 text-xs text-slate-700 font-medium">
+                          <CheckCircle2 className="w-4 h-4 text-[#E58B00] shrink-0" />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <button
+                      onClick={() => onOpenQuote ? onOpenQuote() : onNavigate?.("contact")}
+                      className="text-xs font-bold text-[#E58B00] hover:text-[#D97706] flex items-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                    >
+                      <span>Request Quote for {s.title.split(" ")[0]}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// ==========================================
+// PAGE 3: PORTFOLIO PAGE (Label: 3/5)
+// ==========================================
+export const ApexPortfolioPage: React.FC<{ 
+  onNavigate?: (page: string) => void;
+  onOpenQuote?: () => void;
+}> = ({ onNavigate, onOpenQuote }) => {
+  const [filter, setFilter] = useState<"All" | "Commercial" | "Residential" | "Institutional">("All");
+
+  const projects = [
+    { name: "City Center Complex", category: "Commercial", desc: "45-story commercial skyscraper featuring sustainable glass facade and LEED Gold certification.", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop" },
+    { name: "Luxury Villa", category: "Residential", desc: "Custom 8,500 sq ft contemporary residential estate with infinity pool and seismic framing.", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop" },
+    { name: "Hospital Expansion", category: "Institutional", desc: "Critical care medical wing addition with strict bio-safety and specialized MEP infrastructure.", img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=800&auto=format&fit=crop" },
+    { name: "Office Renovation", category: "Commercial", desc: "Turnkey open-concept tech office modernization covering three full corporate floor plates.", img: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop" },
+    { name: "Apex Tower", category: "Commercial", desc: "Flagship metropolitan mixed-use corporate tower with subterranean multi-tier parking.", img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop" },
+    { name: "Residential Community", category: "Residential", desc: "Master-planned residential development featuring 36 bespoke multi-family architectural homes.", img: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=800&auto=format&fit=crop" },
+    { name: "Retail Plaza", category: "Commercial", desc: "High-traffic modern shopping promenade with structural steel framing and dynamic glass canopies.", img: "https://images.unsplash.com/photo-1555636222-cae831e670b3?q=80&w=800&auto=format&fit=crop" },
+    { name: "Corporate Campus", category: "Commercial", desc: "Multi-building commercial tech campus surrounded by native landscaped water features.", img: "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=800&auto=format&fit=crop" },
+    { name: "High-End Remodel", category: "Residential", desc: "Complete structural interior renovation of a historic brownstone with bespoke millwork.", img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop" },
+    { name: "New Build Home", category: "Residential", desc: "Ground-up energy-positive family residence utilizing insulated concrete formwork.", img: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=800&auto=format&fit=crop" },
+    { name: "Renovated Space", category: "Commercial", desc: "Industrial warehouse conversion into modern creative studio and collaborative spaces.", img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=800&auto=format&fit=crop" },
+    { name: "Multi-Use Complex", category: "Institutional", desc: "University innovation center housing laboratories, lecture amphitheaters, and incubators.", img: "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=800&auto=format&fit=crop" },
+  ];
+
+  const filtered = filter === "All" ? projects : projects.filter(p => p.category === filter);
+
+  return (
+    <div className="w-full bg-white text-slate-900">
+      {/* Header Banner */}
+      <section className="py-14 px-6 bg-slate-50 border-b border-slate-200 text-center">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00]">
+            SHOWCASE OF EXCELLENCE
+          </span>
+          <h1 className="text-4xl md:text-5xl font-black text-[#0B1528] tracking-tight uppercase font-display">
+            OUR PORTFOLIO.
+          </h1>
+          <p className="text-xs md:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Explore 12 landmark commercial, residential, and institutional projects built to the highest engineering standards across the region.
+          </p>
+
+          {/* Interactive Filters */}
+          <div className="pt-6 flex flex-wrap items-center justify-center gap-2">
+            {(["All", "Commercial", "Residential", "Institutional"] as const).map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded transition-all cursor-pointer ${
+                  filter === cat
+                    ? "bg-[#0B1528] text-white shadow-sm border border-[#0B1528]"
+                    : "bg-white text-slate-600 border border-slate-200 hover:border-slate-400"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Project Grid: 12 detailed thumbnails */}
+      <section className="py-16 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filtered.map((p, idx) => (
+            <div 
+              key={idx}
+              className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all group flex flex-col"
+            >
+              <div className="relative h-60 w-full overflow-hidden">
+                <Image
+                  src={p.img}
+                  alt={p.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute top-3 left-3 px-2.5 py-1 bg-[#0B1528]/90 text-[#E58B00] text-[10px] font-black uppercase tracking-wider rounded">
+                  {p.category}
+                </div>
+              </div>
+
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-lg font-black text-[#0B1528] uppercase font-display mb-2">
+                    {p.name}
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {p.desc}
+                  </p>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#E58B00]">
+                  <span>Apex Verified Build</span>
+                  <span className="text-slate-400 font-normal">Completed</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// ==========================================
+// PAGE 4: ABOUT US PAGE (Label: 4/5)
+// ==========================================
+export const ApexAboutPage: React.FC<{ 
+  onNavigate?: (page: string) => void;
+  onOpenQuote?: () => void;
+}> = ({ onNavigate, onOpenQuote }) => {
+  return (
+    <div className="w-full bg-white text-slate-900">
+      {/* Header Banner */}
+      <section className="py-14 px-6 bg-slate-50 border-b border-slate-200 text-center">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00]">
+            WHO WE ARE
+          </span>
+          <h1 className="text-4xl md:text-5xl font-black text-[#0B1528] tracking-tight uppercase font-display">
+            ABOUT APEX CONSTRUCTION.
+          </h1>
+          <p className="text-xs md:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Pioneering the standards of modern construction with passion, integrity, and uncompromising architectural precision since 2016.
+          </p>
+        </div>
+      </section>
+
+      {/* Header Photo: Full-width construction crew */}
+      <section className="w-full relative h-[380px] md:h-[460px] overflow-hidden bg-slate-900">
+        <Image
+          src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop"
+          alt="Diverse team of construction professionals posing in safety gear"
+          fill
+          className="object-cover object-center opacity-85"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1528]/80 via-transparent to-transparent" />
+        <div className="absolute bottom-8 left-8 right-8 max-w-7xl mx-auto text-white">
+          <span className="px-3 py-1 bg-[#E58B00] text-white text-[10px] font-black uppercase tracking-widest rounded mb-2 inline-block">
+            OUR ON-SITE LEADERSHIP
+          </span>
+          <h3 className="text-2xl md:text-3xl font-black uppercase font-display">
+            Dedicated Engineers, Craftsmen & Site Supervisors
+          </h3>
+        </div>
+      </section>
+
+      {/* Content Section 1: Mission & Values */}
+      <section className="py-16 px-6 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto text-center">
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00] block mb-2">
+            GUIDING PRINCIPLES
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black text-[#0B1528] tracking-tight uppercase font-display mb-12">
+            Our Mission & Values
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            {/* Quality */}
+            <div className="bg-slate-50 p-8 rounded-lg border border-slate-200">
+              <div className="w-12 h-12 rounded-lg bg-amber-100 text-[#E58B00] flex items-center justify-center mb-5">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-black text-[#0B1528] uppercase font-display mb-2">
+                Quality
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Commitment to superior craftsmanship and rigorous execution in every detail, using premium grade materials and certified structural methods.
+              </p>
+            </div>
+
+            {/* Integrity */}
+            <div className="bg-slate-50 p-8 rounded-lg border border-slate-200">
+              <div className="w-12 h-12 rounded-lg bg-amber-100 text-[#E58B00] flex items-center justify-center mb-5">
+                <Scale className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-black text-[#0B1528] uppercase font-display mb-2">
+                Integrity
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Conducting business with total transparency and honesty in all partnerships, clear open-book estimates, and strict ethical accountability.
+              </p>
+            </div>
+
+            {/* Safety */}
+            <div className="bg-slate-50 p-8 rounded-lg border border-slate-200">
+              <div className="w-12 h-12 rounded-lg bg-amber-100 text-[#E58B00] flex items-center justify-center mb-5">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-black text-[#0B1528] uppercase font-display mb-2">
+                Safety
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Uncompromising priority on safe work environments for our team, subcontractors, and clients with continuous OSHA training and zero-incident protocols.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Content Section 2: Our History Timeline */}
+      <section className="py-16 px-6 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00] block mb-2">
+              GROWTH & MILESTONES
+            </span>
+            <h2 className="text-3xl md:text-4xl font-black text-[#0B1528] tracking-tight uppercase font-display">
+              Our History
+            </h2>
+          </div>
+
+          <div className="relative border-l-2 border-[#E58B00]/40 ml-4 md:ml-32 space-y-10 pl-6 md:pl-10">
+            {[
+              {
+                year: "Established 2016",
+                title: "Foundation & Local Commercial Framing",
+                desc: "Founded in New York with a focus on commercial framing, tenant buildouts, and residential framing precision."
+              },
+              {
+                year: "Milestone 2019",
+                title: "Expansion into Civil & High-Rise Engineering",
+                desc: "Secured our first multi-story downtown office complex and grew to over 40 full-time tradesmen and certified site managers."
+              },
+              {
+                year: "Milestone 2022",
+                title: "150+ Turnkey Projects Completed",
+                desc: "Achieved the Regional Safety Excellence Award and surpassed 150 completed commercial and luxury residential builds."
+              },
+              {
+                year: "Today",
+                title: "Industry Leader in Sustainable Construction",
+                desc: "Managing over $120M in active developments with a dedicated team of architects, engineers, and project superintendents."
+              }
+            ].map((item, idx) => (
+              <div key={idx} className="relative">
+                {/* Dot Marker */}
+                <div className="absolute -left-[31px] md:-left-[47px] top-1.5 w-4 h-4 rounded-full bg-[#E58B00] border-4 border-white shadow" />
+                <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00] block">
+                  {item.year}
+                </span>
+                <h4 className="text-base font-black text-[#0B1528] uppercase font-display mb-1">
+                  {item.title}
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Content Section 3: Meet the Leadership */}
+      <section className="py-16 px-6 bg-white">
+        <div className="max-w-7xl mx-auto text-center">
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00] block mb-2">
+            EXECUTIVE TEAM
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black text-[#0B1528] tracking-tight uppercase font-display mb-12">
+            Meet the Leadership
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Marcus Vance",
+                title: "President / CEO",
+                bio: "25+ years in civil engineering and structural development overseeing marquee metropolitan infrastructure.",
+                img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop"
+              },
+              {
+                name: "Sarah Jenkins",
+                title: "Vice President of Operations",
+                bio: "Oversees site logistics, contractor scheduling, safety compliance, and procurement across all active job sites.",
+                img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop"
+              },
+              {
+                name: "Daniel Radnovich",
+                title: "Chief Financial Officer (CFO)",
+                bio: "Specializes in project capitalization, risk management, and budget optimization for multi-million dollar builds.",
+                img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop"
+              }
+            ].map((leader, idx) => (
+              <div key={idx} className="bg-slate-50 p-6 rounded-lg border border-slate-200 text-center">
+                <div className="relative w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 border-2 border-[#E58B00]">
+                  <Image
+                    src={leader.img}
+                    alt={leader.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <h4 className="text-base font-black text-[#0B1528] uppercase font-display">
+                  {leader.name}
+                </h4>
+                <span className="text-xs font-bold text-[#E58B00] block mb-2">
+                  {leader.title}
+                </span>
+                <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
+                  {leader.bio}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// ==========================================
+// PAGE 5: CONTACT PAGE (Label: 5/5)
+// ==========================================
+export const ApexContactPage: React.FC<{ 
+  onNavigate?: (page: string) => void;
+}> = ({ onNavigate }) => {
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <div className="w-full bg-white text-slate-900">
+      {/* Header Banner */}
+      <section className="py-14 px-6 bg-slate-50 border-b border-slate-200 text-center">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#E58B00]">
+            START YOUR PROJECT
+          </span>
+          <h1 className="text-4xl md:text-5xl font-black text-[#0B1528] tracking-tight uppercase font-display">
+            GET IN TOUCH.
+          </h1>
+          <p className="text-xs md:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Have a commercial tender, custom residential build, or structural renovation in mind? Connect directly with our estimators today.
+          </p>
+        </div>
+      </section>
+
+      {/* Map & Form Section */}
+      <section className="py-16 px-6 bg-slate-100">
+        <div className="max-w-7xl mx-auto">
+          {/* Map Visualization Container */}
+          <div className="relative rounded-lg overflow-hidden border border-slate-300 shadow-md bg-[#0F1E36] min-h-[580px] flex items-center justify-center">
+            {/* Blueprint Grid / Map graphics */}
+            <div className="absolute inset-0 bg-[#0B1528] opacity-90 overflow-hidden">
+              <svg className="w-full h-full opacity-15" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E58B00" strokeWidth="1" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+              </svg>
+            </div>
+
+            {/* Custom Map Pin Center */}
+            <div className="hidden lg:flex absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 flex-col items-center z-10 animate-bounce">
+              <div className="px-3 py-1.5 bg-[#0B1528] border border-[#E58B00] rounded text-white text-[11px] font-black shadow-xl mb-1">
+                APEX HEADQUARTERS
+              </div>
+              <div className="w-8 h-8 rounded-full bg-[#E58B00] text-white flex items-center justify-center shadow-lg">
+                <MapPin className="w-5 h-5 fill-current" />
+              </div>
+            </div>
+
+            {/* Overlay Contact Box (Form + Info) */}
+            <div className="relative z-20 w-full max-w-5xl mx-4 my-8 bg-white rounded-lg border border-slate-200 shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12">
+              {/* Form (Col 1-7) */}
+              <div className="md:col-span-7 p-8 md:p-10">
+                <h3 className="text-2xl font-black text-[#0B1528] uppercase font-display mb-2">
+                  Send a Message
+                </h3>
+                <p className="text-xs text-slate-500 mb-6">
+                  Fill in your project details and an Apex construction estimator will respond within 24 hours.
+                </p>
+
+                {submitted ? (
+                  <div className="p-6 bg-amber-50 border border-amber-200 rounded text-center space-y-2">
+                    <CheckCircle2 className="w-8 h-8 text-[#E58B00] mx-auto" />
+                    <h4 className="text-sm font-black text-[#0B1528] uppercase">Message Received!</h4>
+                    <p className="text-xs text-slate-600">
+                      Thank you for contacting Apex Construction. A project specialist will be in touch shortly.
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-700 mb-1">
+                        Your Name
+                      </label>
+                      <input 
+                        required 
+                        type="text" 
+                        placeholder="John Doe"
+                        className="w-full bg-slate-50 border border-slate-200 rounded px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#E58B00] transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-700 mb-1">
+                        Email Address
+                      </label>
+                      <input 
+                        required 
+                        type="email" 
+                        placeholder="john@example.com"
+                        className="w-full bg-slate-50 border border-slate-200 rounded px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#E58B00] transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-700 mb-1">
+                        Message / Project Scope
+                      </label>
+                      <textarea 
+                        required 
+                        rows={4}
+                        placeholder="Describe your commercial build, residential construction, or remodeling needs..."
+                        className="w-full bg-slate-50 border border-slate-200 rounded px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#E58B00] transition-colors resize-none"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-3.5 bg-[#E58B00] hover:bg-[#D97706] text-white font-extrabold text-xs uppercase tracking-widest rounded shadow-md transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Submit Request</span>
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              {/* Contact Info (Col 8-12) */}
+              <div className="md:col-span-5 bg-[#0B1528] p-8 md:p-10 text-white flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-[#E58B00] uppercase font-display mb-6">
+                    Contact info
+                  </h3>
+                  <div className="space-y-5 text-xs text-slate-300">
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-5 h-5 text-[#E58B00] shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-white block">Corporate Office:</span>
+                        <span>100 Apex Way, Suite 500<br />Metro City, NY 10001</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Phone className="w-5 h-5 text-[#E58B00] shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-white block">Phone:</span>
+                        <span>(555) 321-4567</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Mail className="w-5 h-5 text-[#E58B00] shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-white block">Email:</span>
+                        <span>contact@apexconstruction.com</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Clock className="w-5 h-5 text-[#E58B00] shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-white block">Office Hours:</span>
+                        <span>Mon - Fri: 7:00 AM - 6:00 PM EST</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-slate-800">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                    Licensed & Insured General Contractor
+                  </span>
+                  <span className="text-[9px] text-[#E58B00] font-black">
+                    NYC DOB REG #8849201-B
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// ==========================================
+// QUOTE ESTIMATE MODAL
+// ==========================================
+export const ApexQuoteModal: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+}> = ({ isOpen, onClose }) => {
+  const [submitted, setSubmitted] = useState(false);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B1528]/80 backdrop-blur-sm animate-fadeIn">
+      <div className="relative w-full max-w-lg bg-white rounded-lg border border-slate-200 shadow-2xl overflow-hidden p-6 md:p-8">
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="text-center mb-6">
+          <ApexLogo size="sm" />
+          <h3 className="text-xl font-black text-[#0B1528] uppercase font-display mt-2">
+            Request a Free Quote
+          </h3>
+          <p className="text-xs text-slate-500">
+            Tell us about your project and receive a complimentary scope estimate.
+          </p>
+        </div>
+
+        {submitted ? (
+          <div className="p-6 bg-amber-50 border border-amber-200 rounded text-center space-y-3">
+            <CheckCircle2 className="w-10 h-10 text-[#E58B00] mx-auto" />
+            <h4 className="text-base font-black text-[#0B1528] uppercase">Estimate Request Sent!</h4>
+            <p className="text-xs text-slate-600">
+              An Apex senior estimator will review your specifications and contact you within 1 business day.
+            </p>
+            <button
+              onClick={onClose}
+              className="px-6 py-2.5 bg-[#0B1528] text-white text-xs font-bold uppercase tracking-wider rounded"
+            >
+              Close
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-4">
+            <div>
+              <label className="block text-[10px] font-black uppercase text-slate-700 mb-1">
+                Full Name
+              </label>
+              <input required type="text" placeholder="John Doe" className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#E58B00]" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[10px] font-black uppercase text-slate-700 mb-1">
+                  Email
+                </label>
+                <input required type="email" placeholder="john@example.com" className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#E58B00]" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase text-slate-700 mb-1">
+                  Phone
+                </label>
+                <input required type="tel" placeholder="(555) 321-4567" className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#E58B00]" />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-black uppercase text-slate-700 mb-1">
+                Project Type
+              </label>
+              <select required className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#E58B00]">
+                <option value="commercial">Commercial Construction</option>
+                <option value="residential">Custom Residential Build</option>
+                <option value="remodel">Renovation / Addition</option>
+                <option value="management">Project Management / Engineering</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-black uppercase text-slate-700 mb-1">
+                Estimated Budget / Scope
+              </label>
+              <textarea rows={2} placeholder="Approximate sq ft, timeline, or special requirements..." className="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#E58B00] resize-none" />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 bg-[#E58B00] hover:bg-[#D97706] text-white font-extrabold text-xs uppercase tracking-widest rounded shadow transition-all cursor-pointer"
+            >
+              Submit Quote Request
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ==========================================
+// PRECISE BUILDING BACKWARD COMPATIBILITY
+// ==========================================
+export const PBHeader = (props: any) => <ApexHeader {...props} />;
+export const PBHero = (props: any) => <ApexHomePage {...props} />;
+export const PBTrustStrip = () => null;
+export const PBServicesGrid = (props: any) => <ApexServicesPage {...props} />;
+export const PBBlueBanner = () => null;
+export const PBWhyChooseUs = (props: any) => <ApexAboutPage {...props} />;
+export const PBNoPower = () => null;
+export const PBGoToElectrician = () => null;
+export const PBReviews = () => null;
+export const PBFooter = (props: any) => <ApexFooter {...props} />;
+
+export const PB_RENDERERS: Record<string, React.FC<any>> = {
+  PBHeader: (props: any) => <ApexHeader {...props} />,
+  PBHero: (props: any) => <ApexHomePage {...props} />,
+  PBTrustStrip: () => null,
+  PBServicesGrid: (props: any) => <ApexServicesPage {...props} />,
+  PBBlueBanner: () => null,
+  PBWhyChooseUs: (props: any) => <ApexAboutPage {...props} />,
+  PBNoPower: () => null,
+  PBGoToElectrician: () => null,
+  PBReviews: () => null,
+  PBFooter: (props: any) => <ApexFooter {...props} />
+};
+
 export { PB_SCHEMAS } from './precisebuilding.schemas';

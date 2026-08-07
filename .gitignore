@@ -17,3 +17,7 @@ test-*.mjs
 test-quick*
 /*.png
 !/public/**/*.png
+
+# AI Web Studio nested directory
+bolt.diy/
+

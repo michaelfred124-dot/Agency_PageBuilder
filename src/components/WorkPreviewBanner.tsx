@@ -17,6 +17,7 @@ const SITE_LABELS: Record<string, string> = {
   'meridian-properties': 'Meridian Properties',
   'northwood-coffee': 'Northwood Coffee',
   'paws-and-pamper': 'Paws & Pamper',
+  'precise-building-services': 'Precise Building Services',
   'ridge-line-auto': 'Ridge Line Auto',
   'solene-boutique': 'Solène Boutique',
   'solstice-yoga': 'Solstice Yoga',

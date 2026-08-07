@@ -36,21 +36,66 @@ const PROCESS_STEPS = [
 
 export default function ProcessSteps() {
   return (
-    <section id="process" className="py-20 lg:py-32 bg-[#080B12] text-white px-4 lg:px-6 relative overflow-hidden">
+    <section id="process" className="py-20 lg:py-32 bg-[#FAF9FF] text-slate-900 px-4 lg:px-6 relative overflow-hidden font-sans">
       
-      {/* Background ambient light */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-r from-sky-500/20 via-teal-400/18 to-emerald-400/15 rounded-full pointer-events-none z-0 border border-white/50 shadow-[0_0_50px_rgba(186,230,253,0.3)]" />
+      {/* VIBRANT ORGANIC BACKGROUND BLOBS & GEOMETRIC SHAPES (Hero Theme Match) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {/* Left Side Purple Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, 5, 0], scale: [1, 1.04, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] -left-28 w-[520px] h-[520px] text-[#6528D9] opacity-80 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M410,290Q380,330,340,380Q300,430,240,420Q180,410,130,370Q80,330,80,260Q80,190,130,135Q180,80,250,90Q320,100,380,140Q440,180,410,290Z" />
+        </motion.svg>
+        
+        {/* Right Side Orange Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, -6, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 17, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[10%] -right-24 w-[480px] h-[480px] text-[#FF7700] opacity-75 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M420,280Q380,310,345,365Q310,420,240,415Q170,410,125,365Q80,320,90,250Q100,180,140,135Q180,90,250,90Q320,90,385,135Q450,180,420,280Z" />
+        </motion.svg>
+
+        {/* Floating Geometry: Amber Outline Circle */}
+        <motion.div
+          animate={{ y: [0, -18, 0], rotate: [0, 180, 360] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[25%] left-[6%] w-14 h-14 border-4 border-[#FFB703] rounded-full opacity-80 hidden lg:block"
+        />
+
+        {/* Floating Geometry: Wireframe Orange Triangle */}
+        <motion.svg
+          animate={{ y: [0, 20, 0], rotate: [0, -45, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[22%] right-[7%] w-12 h-12 text-[#FF7700] opacity-75 hidden lg:block"
+          viewBox="0 0 100 100"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="6"
+        >
+          <polygon points="50,10 90,85 10,85" />
+        </motion.svg>
+
+        {/* Dot Matrix Arrays */}
+        <div className="absolute top-[15%] right-[4%] w-36 h-44 dot-grid-purple opacity-50 hidden md:block" />
+        <div className="absolute bottom-[18%] left-[3%] w-32 h-40 dot-grid-orange opacity-50 hidden md:block" />
+      </div>
 
       <div className="max-w-[1340px] mx-auto relative z-10">
         <div className="flex flex-col mb-16 lg:mb-24 text-center items-center">
-          <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-bold text-white bg-white/10 px-3.5 py-1.5 rounded-full border border-white/25 shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-4">
-            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-            The Process
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-[#FF5500] bg-white px-5 py-2 rounded-full border border-orange-200/90 shadow-sm mb-4">
+            THE PROCESS →
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-none max-w-4xl">
-            How We <span className="bg-gradient-to-r from-sky-200 via-teal-300 to-emerald-300 bg-clip-text text-transparent">Work</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 leading-none max-w-4xl">
+            How We <span className="bg-gradient-to-r from-[#6528D9] via-[#8B5CF6] to-[#FF5500] bg-clip-text text-transparent">Work</span>
           </h2>
-          <p className="max-w-2xl text-slate-300 text-base md:text-lg leading-relaxed font-normal mt-4">
+          <p className="max-w-2xl text-slate-600 text-base md:text-lg leading-relaxed font-medium mt-4">
             We offer an alternative to unpredictable freelancers and expensive traditional agencies. Pay a flat monthly fee and get unlimited design and development requests delivered sequentially.
           </p>
         </div>
@@ -66,41 +111,38 @@ export default function ProcessSteps() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5 }}
-                  className="w-full lg:w-1/2 relative aspect-[16/10] rounded-3xl overflow-hidden border border-white/25 shadow-[0_15px_35px_rgba(0,0,0,0.5)] group"
+                  className="w-full lg:w-1/2 relative aspect-[16/10] rounded-3xl overflow-hidden border border-slate-200 shadow-xl group"
                 >
                   <img 
                     src={step.image} 
                     alt={step.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#080B12] via-[#080B12]/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent" />
                   
-                  {/* Step Badge */}
-                  <div className="absolute top-6 left-6 w-12 h-12 rounded-2xl bg-white/15 border border-white/30 backdrop-blur-xl flex items-center justify-center font-black text-lg text-white shadow-lg">
+                  {/* Step Badge in Orange */}
+                  <div className="absolute top-6 left-6 w-12 h-12 rounded-2xl bg-[#FF5500] text-white flex items-center justify-center font-black text-lg shadow-lg">
                     {step.num}
                   </div>
                 </motion.div>
 
-                {/* Content Glass Card */}
+                {/* Content Card in Deep Purple */}
                 <motion.div 
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.1 }}
-                  className="w-full lg:w-1/2 p-8 lg:p-10 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/25 shadow-[0_15px_35px_rgba(0,0,0,0.4)] relative overflow-hidden"
+                  className="w-full lg:w-1/2 p-8 lg:p-10 bg-purple-vibrant rounded-3xl text-white border border-[#7C3AED] shadow-2xl relative overflow-hidden"
                 >
-                  {/* Top Light Accent Line */}
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-
-                  <span className="text-xs font-extrabold uppercase tracking-widest text-white/80 mb-2 block">
+                  <span className="text-xs font-black uppercase tracking-widest text-[#FFB703] mb-2 block">
                     Step {step.num}
                   </span>
                   
-                  <h3 className="text-2xl lg:text-3xl font-extrabold text-white mb-4">
+                  <h3 className="text-2xl lg:text-3xl font-black text-white mb-4">
                     {step.title}
                   </h3>
                   
-                  <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                  <p className="text-purple-100 text-sm md:text-base leading-relaxed font-medium">
                     {step.description}
                   </p>
                 </motion.div>
@@ -110,10 +152,10 @@ export default function ProcessSteps() {
           </div>
         </div>
 
-        {/* Action Button */}
+        {/* Action Button (Orange Pill Gradient CTA) */}
         <div className="mt-20 flex justify-center">
           <Link href="/pricing">
-            <button className="px-8 py-4 bg-white hover:bg-white/90 text-slate-950 font-extrabold text-xs uppercase tracking-widest rounded-full transition-all shadow-xl hover:scale-105 cursor-pointer">
+            <button className="btn-orange-pill px-9 py-4 text-white font-black text-xs uppercase tracking-widest rounded-full cursor-pointer shadow-xl">
               View Pricing & Plans
             </button>
           </Link>

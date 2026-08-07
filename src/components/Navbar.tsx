@@ -126,8 +126,8 @@ export default function Navbar() {
       <nav 
         id="navbar"
         suppressHydrationWarning
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white/85 backdrop-blur-xl py-3.5 border-b border-slate-200/80 shadow-sm' : 'bg-transparent py-5 lg:py-7'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 ${
+          scrolled ? 'py-3.5 shadow-sm' : 'py-5 lg:py-7'
         }`}
       >
         <div className="max-w-[1340px] mx-auto px-6 flex justify-between items-center relative">
@@ -138,11 +138,11 @@ export default function Navbar() {
           >
             <Link href="/" className="flex items-center gap-2.5 group">
               <div 
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-950 font-extrabold text-sm bg-gradient-to-tr from-sky-400 via-teal-400 to-emerald-400 shadow-sm transition-transform group-hover:scale-105"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-extrabold text-sm bg-gradient-to-tr from-[#6528D9] via-[#8B5CF6] to-[#FF5500] shadow-sm transition-transform group-hover:scale-105"
               >
                 ✦
               </div>
-              <span className="font-extrabold text-slate-900 text-lg tracking-tight select-none">ACTULUS<span className="text-teal-600">.</span></span>
+              <span className="font-extrabold text-slate-900 text-lg tracking-tight select-none">ACTULUS<span className="text-[#FF5500]">.</span></span>
             </Link>
           </motion.div>
 
@@ -159,10 +159,10 @@ export default function Navbar() {
                   href={link.href}
                   prefetch={false}
                   suppressHydrationWarning
-                  className="text-[14px] font-semibold text-slate-700 hover:text-sky-600 transition-colors py-2 px-1 relative group"
+                  className="text-[14px] font-semibold text-slate-700 hover:text-[#6528D9] transition-colors py-2 px-1 relative group"
                 >
                   {link.name}
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-sky-500 via-teal-500 to-emerald-500 transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#6528D9] via-[#FF5500] to-[#FF8800] transition-all duration-300 group-hover:w-full" />
                 </Link>
               </motion.div>
             ))}
@@ -219,18 +219,18 @@ export default function Navbar() {
                       <Link 
                         href="/dashboard"
                         onClick={() => setShowPopout(false)}
-                        className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors text-slate-700 hover:text-slate-950"
+                        className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold hover:bg-purple-50/60 transition-colors text-slate-700 hover:text-[#6528D9]"
                       >
-                        <LayoutDashboard className="w-4 h-4 text-sky-500" /> Go to Dashboard
+                        <LayoutDashboard className="w-4 h-4 text-[#6528D9]" /> Go to Dashboard
                       </Link>
 
                       {isAdmin && (
                         <Link 
                           href="/admin"
                           onClick={() => setShowPopout(false)}
-                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors text-slate-700 hover:text-slate-950"
+                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold hover:bg-orange-50/60 transition-colors text-slate-700 hover:text-[#FF5500]"
                         >
-                          <ShieldCheck className="w-4 h-4 text-teal-500" /> Go to CRM Portal
+                          <ShieldCheck className="w-4 h-4 text-[#FF5500]" /> Go to CRM Portal
                         </Link>
                       )}
 
@@ -240,9 +240,9 @@ export default function Navbar() {
                           target="_blank" 
                           rel="noopener noreferrer"
                           onClick={() => setShowPopout(false)}
-                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-colors text-slate-700 hover:text-slate-950"
+                          className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold hover:bg-purple-50/60 transition-colors text-slate-700 hover:text-[#6528D9]"
                         >
-                          <Globe className="w-4 h-4 text-emerald-500" /> Go to Live Site
+                          <Globe className="w-4 h-4 text-[#6528D9]" /> Go to Live Site
                         </a>
                       ) : (
                         <span className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-semibold text-slate-400 cursor-not-allowed">
@@ -266,8 +266,8 @@ export default function Navbar() {
             </div>
 
             {!user && (
-              <Link href="/work">
-                <button className="px-5 py-2.5 bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 hover:from-sky-300 hover:to-emerald-300 text-slate-950 text-[13px] font-extrabold rounded-full transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer">
+              <Link href="/pricing">
+                <button className="btn-orange-pill px-6 py-2.5 text-xs font-black rounded-full cursor-pointer shadow-md">
                   Get Started
                 </button>
               </Link>

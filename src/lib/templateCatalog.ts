@@ -17,7 +17,7 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
   { key: 'lauren', name: 'Lauren Wilson Photo', desc: 'Minimalist creative space for photographers, artists, and portfolios.', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600' },
   { key: 'brighter_solar', name: 'Brighter Solar Energy', desc: 'Sleek conversion-driven layout for eco businesses and clean energy.', image: '/screenshots/brighter-solar.jpg' },
   { key: 'voltvikings', name: 'Volt Vikings Electricians', desc: 'High-impact premium layout for local home service and contracting businesses.', image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400&auto=format&fit=crop' },
-  { key: 'law_firm', name: 'Sterling Law Group', desc: 'Professional, trust-building layout for law firms and legal services.', image: '/screenshots/sterling-law.jpg' },
+  { key: 'precise_building_services', name: 'Precise Building Services', desc: 'Master craftsmanship, commercial & residential construction, structural steel, and remodeling.', image: '/screenshots/precise-building.jpg' },
   { key: 'auto_repair', name: 'Ridge Line Auto Service', desc: 'Bold, high-converting design for auto repair and mechanic shops.', image: '/screenshots/ridge-line-auto.jpg' },
   { key: 'hair_salon', name: 'Atelier Hair Studio', desc: 'Stylish, intimate layout for hair salons, barbers, and beauty studios.', image: '/screenshots/atelier-hair.jpg' },
   { key: 'real_estate', name: 'Meridian Properties', desc: 'Clean, credibility-first design for real estate agents and brokerages.', image: '/screenshots/meridian-properties.jpg' },

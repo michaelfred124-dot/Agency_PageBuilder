@@ -40,6 +40,7 @@
   ],
   "exclude": [
     "node_modules",
-    "_conflict-backup"
+    "_conflict-backup",
+    "bolt.diy"
   ]
 }

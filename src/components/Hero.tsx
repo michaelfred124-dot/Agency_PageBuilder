@@ -15,10 +15,10 @@ const TEAM_AVATARS = [
 
 const PORTFOLIO_SITES = [
   {
-    title: "Sterling Law Group",
-    category: "Legal & Corporate",
-    image: "/screenshots/sterling-law.jpg",
-    link: "/work/sterling-law-group"
+    title: "Precise Building Services",
+    category: "Construction & Engineering",
+    image: "/screenshots/precise-building.jpg",
+    link: "/work/precise-building-services"
   },
   {
     title: "Greenscape Landscaping",
@@ -42,20 +42,76 @@ const PORTFOLIO_SITES = [
 
 export default function Hero() {
   return (
-    <section className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 bg-[#F8FAFC] text-slate-900 overflow-hidden">
+    <section className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 bg-[#FAF9FF] text-slate-900 overflow-hidden">
       
-      {/* Floating Animated Gradient Glow Shapes in Background (Low Opacity) */}
+      {/* VIBRANT ORGANIC BACKGROUND BLOBS & GEOMETRIC SHAPES (Reference Style) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div 
-          animate={{ y: [0, -25, 0], x: [0, 15, 0], rotate: [0, 10, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[8%] left-[10%] w-[550px] h-[550px] bg-gradient-to-r from-sky-100/60 via-blue-100/40 to-teal-100/35 rounded-full pointer-events-none border border-white/50 shadow-[0_0_50px_rgba(186,230,253,0.3)]"
+        
+        {/* Top-Left Deep Purple Organic Fluid Blob */}
+        <motion.svg
+          animate={{ rotate: [0, 5, 0], scale: [1, 1.04, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-24 -left-28 w-[580px] h-[580px] text-[#6528D9] opacity-90 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M410,290Q380,330,340,380Q300,430,240,420Q180,410,130,370Q80,330,80,260Q80,190,130,135Q180,80,250,90Q320,100,380,140Q440,180,410,290Z" />
+        </motion.svg>
+
+        {/* Top-Right Vibrant Orange Fluid Organic Blob */}
+        <motion.svg
+          animate={{ rotate: [0, -6, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute -top-20 -right-24 w-[540px] h-[540px] text-[#FF7700] opacity-85 filter drop-shadow-xl"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M420,280Q380,310,345,365Q310,420,240,415Q170,410,125,365Q80,320,90,250Q100,180,140,135Q180,90,250,90Q320,90,385,135Q450,180,420,280Z" />
+        </motion.svg>
+
+        {/* Bottom-Right Fluid Organic Blob */}
+        <motion.svg
+          animate={{ rotate: [0, 4, 0], scale: [1, 1.03, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute -bottom-36 -right-24 w-[460px] h-[460px] text-[#6528D9] opacity-70 filter drop-shadow-lg"
+          viewBox="0 0 500 500"
+          fill="currentColor"
+        >
+          <path d="M410,290Q380,330,340,380Q300,430,240,420Q180,410,130,370Q80,330,80,260Q80,190,130,135Q180,80,250,90Q320,100,380,140Q440,180,410,290Z" />
+        </motion.svg>
+
+        {/* Floating Geometry: Amber Outline Circle */}
+        <motion.div
+          animate={{ y: [0, -20, 0], rotate: [0, 180, 360] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[22%] left-[6%] w-16 h-16 border-4 border-[#FFB703] rounded-full opacity-80"
         />
-        <motion.div 
-          animate={{ y: [0, 30, 0], x: [0, -20, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute top-[20%] right-[5%] w-[500px] h-[500px] bg-gradient-to-br from-indigo-100/50 via-sky-100/40 to-emerald-100/30 rounded-full pointer-events-none border border-white/50 shadow-[0_0_50px_rgba(167,243,208,0.3)]"
+
+        {/* Floating Geometry: Wireframe Orange Triangle */}
+        <motion.svg
+          animate={{ y: [0, 25, 0], rotate: [0, -45, 0] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[16%] right-[14%] w-12 h-12 text-[#FF7700] opacity-75"
+          viewBox="0 0 100 100"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="6"
+        >
+          <polygon points="50,10 90,85 10,85" />
+        </motion.svg>
+
+        {/* Floating Geometry: Purple Outline Circle */}
+        <motion.div
+          animate={{ y: [0, 18, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[28%] left-[10%] w-10 h-10 border-4 border-[#7C3AED] rounded-full opacity-70"
         />
+
+        {/* Dot Matrix Array - Left Side (Purple Dots) */}
+        <div className="absolute top-[35%] left-[2%] w-32 h-44 dot-grid-purple opacity-50 hidden md:block" />
+
+        {/* Dot Matrix Array - Right Side (Orange Dots) */}
+        <div className="absolute top-[40%] right-[3%] w-40 h-48 dot-grid-orange opacity-60 hidden md:block" />
       </div>
 
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
@@ -68,38 +124,37 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 + idx * 0.15 }}
-              className={`absolute ${avatar.pos} z-20 flex items-center gap-2.5 bg-white/90 backdrop-blur-md border border-slate-200/80 px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer text-slate-900`}
+              className={`absolute ${avatar.pos} z-20 flex items-center gap-2.5 bg-white/95 backdrop-blur-md border border-slate-200 px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-all cursor-pointer text-slate-900`}
             >
               <div className="w-7 h-7 rounded-full overflow-hidden relative border border-slate-200">
                 <Image src={avatar.img} alt={avatar.name} fill className="object-cover" />
               </div>
-              <span className="text-xs font-semibold text-slate-700">{avatar.quote}</span>
+              <span className="text-xs font-bold text-slate-800">{avatar.quote}</span>
             </motion.div>
           ))}
         </div>
 
-        {/* Glassmorphic Pill Tag */}
+        {/* Section Pill Header Tag in Vibrant Orange */}
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2.5 bg-white px-4 py-2 rounded-full border border-sky-200/80 shadow-sm mb-8"
+          className="inline-flex items-center gap-2 bg-white px-5 py-2 rounded-full border border-orange-200/90 shadow-sm mb-8"
         >
-          <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-          <span className="text-xs font-extrabold uppercase tracking-widest text-sky-700">
-            Website Builder for Local Businesses
+          <span className="text-[11px] font-black uppercase tracking-widest text-[#FF5500] flex items-center gap-1.5">
+            Website Builder for Local Businesses <ArrowRight className="w-3.5 h-3.5 text-[#FF5500]" />
           </span>
         </motion.div>
 
-        {/* Main Title */}
+        {/* Main Title with Rich Purple Accent */}
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-[clamp(2.75rem,6.5vw,5.75rem)] font-extrabold text-slate-950 tracking-tight leading-[1.03] max-w-4xl"
+          className="text-[clamp(2.75rem,6.5vw,5.75rem)] font-black text-slate-950 tracking-tight leading-[1.03] max-w-4xl"
         >
           High-Performance Sites for <br />
-          <span className="bg-gradient-to-r from-sky-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#6528D9] via-[#8B5CF6] to-[#FF5500] bg-clip-text text-transparent">
             Local Business Growth.
           </span>
         </motion.h1>
@@ -114,24 +169,24 @@ export default function Hero() {
           Deploy bespoke Next.js websites engineered for local search authority, instant sub-100ms loading speed, and effortless lead capture.
         </motion.p>
 
-        {/* Action Buttons */}
+        {/* Action Buttons (Orange Pill Gradient CTA) */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-9 flex flex-col sm:flex-row items-center gap-4"
         >
-          <Link href="/work">
-            <button className="px-8 py-4 bg-slate-950 hover:bg-slate-800 text-white font-extrabold text-sm rounded-full shadow-xl flex items-center gap-2.5 transition-all hover:scale-105 active:scale-95 cursor-pointer">
-              <span>Explore Custom Sites</span>
-              <ArrowRight className="w-4 h-4 ml-1 text-white" />
+          <Link href="/pricing">
+            <button className="btn-orange-pill px-9 py-4 text-white text-sm font-extrabold rounded-full flex items-center gap-2.5 cursor-pointer">
+              <span>Get Started Now</span>
+              <ArrowRight className="w-4 h-4 text-white" />
             </button>
           </Link>
 
-          <Link href="/pricing">
-            <button className="px-7 py-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-full shadow-sm flex items-center gap-2 transition-all cursor-pointer">
-              <Play className="w-3.5 h-3.5 fill-slate-800" />
-              <span>See Transparent Plans</span>
+          <Link href="/work">
+            <button className="px-8 py-4 bg-white hover:bg-slate-50 border-2 border-slate-200/90 text-slate-900 text-sm font-extrabold rounded-full shadow-sm flex items-center gap-2 transition-all cursor-pointer">
+              <Play className="w-3.5 h-3.5 fill-slate-900" />
+              <span>Explore Custom Sites</span>
             </button>
           </Link>
         </motion.div>
